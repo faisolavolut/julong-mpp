@@ -7,7 +7,7 @@ import DatepickerContext from "../contexts/DatepickerContext";
 import { Period, ShortcutsItem } from "../types";
 
 interface ItemTemplateProps {
-  children: JSX.Element;
+  children: any;
   key: number;
   item: ShortcutsItem | ShortcutsItem[];
 }
@@ -161,15 +161,13 @@ const Shortcuts: React.FC = () => {
             ))
           ) : (
             <ItemTemplate key={index} item={item}>
-              <>
-                {configs?.shortcuts && key in configs.shortcuts
-                  ? typeof configs.shortcuts[
-                      key as keyof typeof configs.shortcuts
-                    ] === "object"
-                    ? printItemText(item)
-                    : configs.shortcuts[key as keyof typeof configs.shortcuts]
-                  : printItemText(item)}
-              </>
+              {configs?.shortcuts && key in configs.shortcuts
+                ? typeof configs.shortcuts[
+                    key as keyof typeof configs.shortcuts
+                  ] === "object"
+                  ? printItemText(item)
+                  : configs.shortcuts[key as keyof typeof configs.shortcuts]
+                : printItemText(item)}
             </ItemTemplate>
           )
         )}

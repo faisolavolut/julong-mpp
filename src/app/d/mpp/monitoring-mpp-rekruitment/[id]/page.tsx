@@ -17,7 +17,7 @@ function Page() {
     <div className="w-full flex flex-row">
       <div className="flex flex-grow flex-col">
         <Form
-          onSubmit={async (fm) => {
+          onSubmit={async (fm: any) => {
             const data = fm.data;
           }}
           onLoad={async () => {

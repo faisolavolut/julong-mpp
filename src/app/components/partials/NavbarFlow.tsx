@@ -48,11 +48,11 @@ const NavFlow: React.FC = () => {
               </button>
             )}
             <Navbar.Brand href="/">
-              <img alt="" src="../julong.png" className="mr-3 h-6 sm:h-8" />
+              <img alt="" src="http://localhost:3000/julong.png" className="mr-3 h-6 sm:h-8" />
               <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
-                MPP
+                Man Power Management
               </span>
-            </Navbar.Brand>
+            </Navbar.Brand>                           
           </div>
 
           <div className="flex items-center lg:gap-3">

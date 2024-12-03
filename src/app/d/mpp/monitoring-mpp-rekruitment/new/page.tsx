@@ -13,7 +13,7 @@ function Page() {
     <div className="w-full flex flex-row">
       <div className="flex flex-grow flex-col">
         <Form
-          onSubmit={async (fm) => {
+          onSubmit={async (fm: any) => {
             const data = fm.data;
           }}
           onLoad={async () => {
@@ -246,7 +246,7 @@ function Page() {
             );
           }}
           onFooter={(fm: any) => {
-            if(!fm.data.id) return <></>
+            if(!fm?.data?.id) return <></>
             return (
               <div
                 className={cx(css`
