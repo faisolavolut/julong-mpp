@@ -24,14 +24,14 @@ type Local<T> = {
   render: () => void;
 };
 
-export const Form = <T extends Record<string, any>>({
+export const Form: React.FC<any> = ({
   children,
   header,
   onLoad,
   onSubmit,
   onFooter,
   showResize,
-}: FormProps<T>) => {
+}) => {
   const local = useLocal({
     ready: false,
     data: null as any | null,

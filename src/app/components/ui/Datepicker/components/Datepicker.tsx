@@ -17,8 +17,7 @@ import { formatDate, nextMonth, previousMonth } from "../helpers";
 import useOnClickOutside from "../hooks";
 import { Period, DatepickerType, ColorKeys } from "../types";
 
-import { Arrow, VerticalDash } from "./utils";
-import { createPortal } from "react-dom";
+import { VerticalDash } from "./utils";
 import { useLocal } from "@/lib/use-local";
 import { Popover } from "@/app/components/Popover/Popover";
 
