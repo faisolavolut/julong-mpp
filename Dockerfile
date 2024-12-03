@@ -15,7 +15,7 @@ COPY . .
 
 # Build aplikasi Next.js untuk production
 RUN npm run build
-
+ENV HOST=0.0.0.0
 # Tentukan port yang akan digunakan aplikasi
 EXPOSE 3000
 
