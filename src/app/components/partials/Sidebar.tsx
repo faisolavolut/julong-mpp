@@ -1,215 +1,380 @@
 "use client";
-
-import React from "react";
+import React, { FC } from "react";
 import Link from "next/link";
+import { Dropdown, Sidebar, TextInput, Tooltip } from "flowbite-react";
+import { useEffect, useState } from "react";
+import { useSidebarContext } from "@/context/SidebarContext";
+import classNames from "classnames";
+import { HiAdjustments, HiChartPie, HiCog } from "react-icons/hi";
+import isSmallScreen from "@/helpers/is-small-screen";
+import { css } from "@emotion/css";
+import { FaAngleUp, FaChevronDown, FaChevronUp } from "react-icons/fa";
+interface TreeMenuItem {
+  title: string;
+  href?: string;
+  children?: TreeMenuItem[];
+  icon?: any;
+}
 
-const Sidebar: React.FC = () => {
+interface TreeMenuProps {
+  data: TreeMenuItem[];
+}
+
+const SidebarTree: React.FC<TreeMenuProps> = ({ data }) => {
+  const [currentPage, setCurrentPage] = useState("");
+  if(process.browser){
+    useEffect(() => {
+      const newPage = window.location.pathname;
+      setCurrentPage(newPage);
+    }, [location.pathname]);
+  }
+  const isChildActive = (items: TreeMenuItem[]): boolean => {
+    return items.some((item) => {
+      if (item.href && currentPage.startsWith(item.href)) return true;
+      if (item.children) return isChildActive(item.children); // Rekursif
+      return false;
+    });
+  };
+  const renderTree = (items: TreeMenuItem[], depth: number = 0) => {
+    return items.map((item, index) => {
+      const hasChildren = item.children && item.children.length > 0;
+      const isActive = item.href && currentPage.startsWith(item.href);
+      const isParentActive = hasChildren && isChildActive(item.children!);
+      const [isOpen, setIsOpen] = useState(isParentActive);
+      useEffect(() => {
+        if (isParentActive) {
+          setIsOpen(true);
+        }
+      }, [isParentActive]);
+      const itemStyle = {
+        paddingLeft: `${depth * 16}px`,
+      };
+      return (
+        <React.Fragment key={item.href || item.title || index}>
+          {hasChildren ? (
+            <li>
+              <div
+                className={classNames(
+                  " py-2.5 px-4  flex-row flex items-center  cursor-pointer items-center w-full rounded-lg text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 flex flex-row",
+                  isParentActive && !depth
+                    ? " py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group bg-white shadow-lg shadow-gray-200 hover:!bg-white  transition-all duration-200  dark:bg-gray-700"
+                    : " "
+                )}
+                onClick={() => setIsOpen(!isOpen)}
+                style={itemStyle}
+              >
+                <div className="flex flex-row items-center flex-grow px-3">
+                  {!depth ? (
+                    <div
+                      className={classNames(
+                        " shadow-gray-300  text-dark-700 w-8 h-8 p-2 mr-1 rounded-lg text-center flex flex-row items-center justify-center shadow-gray-300",
+                        isParentActive
+                          ? "bg-[#313678] text-white"
+                          : "bg-white shadow-lg text-black"
+                      )}
+                    >
+                      {item.icon}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                  <div className="pl-2 flex-grow">{item.title}</div>
+                  <div className="text-xs">
+                    {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+                  </div>
+                </div>
+              </div>
+
+              <Sidebar.ItemGroup
+                className={classNames(
+                  "border-none mt-0",
+                  isOpen ? "" : "hidden"
+                )}
+              >
+                {renderTree(item.children!, depth + 1)}
+              </Sidebar.ItemGroup>
+            </li>
+          ) : (
+            <Sidebar.Item
+              href={item.href}
+              className={classNames(
+                "flex-row flex items-center cursor-pointer",
+                isActive
+                  ? " py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg  group   shadow-gray-200   transition-all duration-200  dark:bg-gray-700"
+                  : "",
+                isActive
+                  ? !depth
+                    ? " bg-white shadow-lg hover:bg-gray-200 hover:!bg-white "
+                    : "bg-gray-100"
+                  : "",
+                  css`
+                  & > span{
+                  white-space: wrap !important;}
+                  `
+              )}
+              style={itemStyle} // Terapkan gaya berdasarkan depth
+            >
+              <div className="flex flex-row items-center">
+                {!depth ? (
+                  <div
+                    className={classNames(
+                      " shadow-gray-300  text-dark-700 w-8 h-8 p-2 mr-1 rounded-lg text-center flex flex-row items-center justify-center shadow-gray-300",
+                      isActive
+                        ? "bg-[#313678] text-white"
+                        : "bg-white shadow-lg text-black"
+                    )}
+                  >
+                      {item.icon}
+                  </div>
+                ) : (
+                  <></>
+                )}
+                <div className="pl-2">{item.title}</div>
+              </div>
+            </Sidebar.Item>
+          )}
+        </React.Fragment>
+      );
+    });
+  };
+
   return (
-    <>
-      <aside
-        id="sidebar"
-        className="flex hidden fixed top-0 left-0 z-20 flex-col flex-shrink-0 pt-16 w-64 h-full duration-200 lg:flex transition-width"
-        aria-label="Sidebar"
+    <div
+      className={classNames("flex h-full lg:!block", {
+        // hidden: !isSidebarOpenOnSmallScreens,
+      })}
+    >
+      <Sidebar
+        aria-label="Sidebar with multi-level dropdown example"
+        className={classNames("relative", css``)}
       >
-        <div className="flex relative flex-col flex-1 pt-0 min-h-0 bg-gray-50">
-          <div className="flex overflow-y-auto flex-col flex-1 pt-8 pb-4">
-            <div className="flex-1 px-3 bg-gray-50" id="sidebar-items">
-              <ul className="pb-2 pt-1">
-                <li>
-                  <form action="#" method="GET" className="lg:hidden">
-                    <label htmlFor="mobile-search" className="sr-only">
-                      Search
-                    </label>
-                    <div className="relative">
-                      <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                        <svg
-                          className="w-5 h-5 text-gray-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clipRule="evenodd"
-                          ></path>
-                        </svg>
-                      </div>
-                      <input
-                        type="text"
-                        name="email"
-                        id="mobile-search"
-                        className="bg-gray-50 border border-gray-300 text-dark-500 text-sm font-light rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full pl-10 p-2.5 mb-2"
-                        placeholder="Search"
-                      />
-                    </div>
-                  </form>
-                </li>
-                <li>
-                  <Link
-                    href="/"
-                    className="flex items-center py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group transition-all duration-200"
-                  >
-                    <div className="bg-white shadow-lg shadow-gray-300 text-dark-700 w-8 h-8 p-2.5 mr-1 rounded-lg text-center grid place-items-center">
-                      <svg
-                        width="12px"
-                        height="12px"
-                        viewBox="0 0 45 40"
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                      >
-                        <title>shop</title>
-                        <g
-                          stroke="none"
-                          strokeWidth="1"
-                          fill="none"
-                          fillRule="evenodd"
-                        >
-                          <g
-                            transform="translate(-1716.000000, -439.000000)"
-                            fill="currentColor"
-                            fillRule="nonzero"
-                          >
-                            <g transform="translate(1716.000000, 291.000000)">
-                              <g transform="translate(0.000000, 148.000000)">
-                                <path
-                                  className="color-background"
-                                  d="M46.7199583,10.7414583 L40.8449583,0.949791667 C40.4909749,0.360605034 39.8540131,0 39.1666667,0 L7.83333333,0 C7.1459869,0 6.50902508,0.360605034 6.15504167,0.949791667 L0.280041667,10.7414583 C0.0969176761,11.0460037 -1.23209662e-05,11.3946378 -1.23209662e-05,11.75 C-0.00758042603,16.0663731 3.48367543,19.5725301 7.80004167,19.5833333 L7.81570833,19.5833333 C9.75003686,19.5882688 11.6168794,18.8726691 13.0522917,17.5760417 C16.0171492,20.2556967 20.5292675,20.2556967 23.494125,17.5760417 C26.4604562,20.2616016 30.9794188,20.2616016 33.94575,17.5760417 C36.2421905,19.6477597 39.5441143,20.1708521 42.3684437,18.9103691 C45.1927731,17.649886 47.0084685,14.8428276 47.0000295,11.75 C47.0000295,11.3946378 46.9030823,11.0460037 46.7199583,10.7414583 Z"
-                                  opacity="0.598981585"
-                                ></path>
-                                <path
-                                  className="color-background"
-                                  d="M39.198,22.4912623 C37.3776246,22.4928106 35.5817531,22.0149171 33.951625,21.0951667 L33.92225,21.1107282 C31.1430221,22.6838032 27.9255001,22.9318916 24.9844167,21.7998837 C24.4750389,21.605469 23.9777983,21.3722567 23.4960833,21.1018359 L23.4745417,21.1129513 C20.6961809,22.6871153 17.4786145,22.9344611 14.5386667,21.7998837 C14.029926,21.6054643 13.533337,21.3722507 13.0522917,21.1018359 C11.4250962,22.0190609 9.63246555,22.4947009 7.81570833,22.4912623 C7.16510551,22.4842162 6.51607673,22.4173045 5.875,22.2911849 L5.875,44.7220845 C5.875,45.9498589 6.7517757,46.9451667 7.83333333,46.9451667 L19.5833333,46.9451667 L19.5833333,33.6066734 L27.4166667,33.6066734 L27.4166667,46.9451667 L39.1666667,46.9451667 C40.2482243,46.9451667 41.125,45.9498589 41.125,44.7220845 L41.125,22.2822926 C40.4887822,22.4116582 39.8442868,22.4815492 39.198,22.4912623 Z"
-                                ></path>
-                              </g>
-                            </g>
-                          </g>
-                        </g>
-                      </svg>
-                    </div>
-                    <span className="ml-3 text-dark-500 text-sm font-light">
-                      Dashboard
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="https://demos.creative-tim.com/soft-ui-flowbite-pro/mailing/inbox/"
-                    className="flex items-center py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group transition-all duration-200"
-                  >
-                    <div className="bg-white shadow-lg shadow-gray-300 text-dark-700 w-8 h-8 p-2.5 mr-1 rounded-lg text-center grid place-items-center">
-                      <svg
-                        width="12px"
-                        height="12px"
-                        viewBox="0 0 40 44"
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                      >
-                        <title>document</title>
-                        <g
-                          stroke="none"
-                          strokeWidth="1"
-                          fill="none"
-                          fillRule="evenodd"
-                        >
-                          <g
-                            transform="translate(-1870.000000, -591.000000)"
-                            fill="currentColor"
-                            fillRule="nonzero"
-                          >
-                            <g transform="translate(1716.000000, 291.000000)">
-                              <g transform="translate(154.000000, 300.000000)">
-                                <path
-                                  className="color-background"
-                                  d="M40,40 L36.3636364,40 L36.3636364,3.63636364 L5.45454545,3.63636364 L5.45454545,0 L38.1818182,0 C39.1854545,0 40,0.814545455 40,1.81818182 L40,40 Z"
-                                  opacity="0.603585379"
-                                ></path>
-                                <path
-                                  className="color-background"
-                                  d="M30.9090909,7.27272727 L1.81818182,7.27272727 C0.814545455,7.27272727 0,8.08727273 0,9.09090909 L0,41.8181818 C0,42.8218182 0.814545455,43.6363636 1.81818182,43.6363636 L30.9090909,43.6363636 C31.9127273,43.6363636 32.7272727,42.8218182 32.7272727,41.8181818 L32.7272727,9.09090909 C32.7272727,8.08727273 31.9127273,7.27272727 30.9090909,7.27272727 Z M18.1818182,34.5454545 L7.27272727,34.5454545 L7.27272727,30.9090909 L18.1818182,30.9090909 L18.1818182,34.5454545 Z M25.4545455,27.2727273 L7.27272727,27.2727273 L7.27272727,23.6363636 L25.4545455,23.6363636 L25.4545455,27.2727273 Z M25.4545455,20 L7.27272727,20 L7.27272727,16.3636364 L25.4545455,16.3636364 L25.4545455,20 Z"
-                                ></path>
-                              </g>
-                            </g>
-                          </g>
-                        </g>
-                      </svg>
-                    </div>
-                    <span className="ml-3 text-dark-500 text-sm font-light">
-                      Kanban
-                    </span>
-                    <span className="bg-fuchsia-50 text-fuchsia-800 ml-auto text-sm font-medium inline-flex items-center justify-center px-2 rounded-full">
-                      Pro
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="https://demos.creative-tim.com/soft-ui-flowbite-pro/kanban/"
-                    className="flex items-center py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group transition-all duration-200"
-                  >
-                    <div className="bg-white shadow-lg shadow-gray-300 text-dark-700 w-8 h-8 p-2.5 mr-1 rounded-lg text-center grid place-items-center">
-                      <svg
-                        width="12px"
-                        height="12px"
-                        viewBox="0 0 46 42"
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                      >
-                        <title>customer-support</title>
-                        <g
-                          stroke="none"
-                          strokeWidth="1"
-                          fill="none"
-                          fillRule="evenodd"
-                        >
-                          <g
-                            transform="translate(-1717.000000, -291.000000)"
-                            fill="currentColor"
-                            fillRule="nonzero"
-                          >
-                            <g transform="translate(1716.000000, 291.000000)">
-                              <g transform="translate(1.000000, 0.000000)">
-                                <path
-                                  className="color-background"
-                                  d="M45,0 L26,0 C25.447,0 25,0.447 25,1 L25,20 C25,20.379 25.214,20.725 25.553,20.895 C25.694,20.965 25.848,21 26,21 C26.212,21 26.424,20.933 26.6,20.8 L34.333,15 L45,15 C45.553,15 46,14.553 46,14 L46,1 C46,0.447 45.553,0 45,0 Z"
-                                  opacity="0.59858631"
-                                ></path>
-                                <path
-                                  className="color-foreground"
-                                  d="M22.883,32.86 C20.761,32.012 17.324,31 13,31 C8.676,31 5.239,32.012 3.116,32.86 C1.224,33.619 0,35.438 0,37.494 L0,41 C0,41.553 0.447,42 1,42 L25,42 C25.553,42 26,41.553 26,41 L26,37.494 C26,35.438 24.776,33.619 22.883,32.86 Z"
-                                ></path>
-                                <path
-                                  className="color-foreground"
-                                  d="M13,28 C17.432,28 21,22.529 21,18 C21,13.589 17.411,10 13,10 C8.589,10 5,13.589 5,18 C5,22.529 8.568,28 13,28 Z"
-                                ></path>
-                              </g>
-                            </g>
-                          </g>
-                        </g>
-                      </svg>
-                    </div>
-                    <span className="ml-3 text-dark-500 text-sm font-light">
-                      Inbox
-                    </span>
-                    <span className="bg-fuchsia-50 text-fuchsia-800 ml-auto text-sm font-medium inline-flex items-center justify-center px-2 rounded-full">
-                      Pro
-                    </span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
+        <div className="w-full h-full relative">
+          <div className="flex h-full flex-col justify-between w-full absolute top-0 left-0">
+            <Sidebar.Items>
+              <Sidebar.ItemGroup className="border-none mt-0">
+                {renderTree(data)}
+              </Sidebar.ItemGroup>
+            </Sidebar.Items>
+            {/* <div key="menu">{renderTree(data)}</div> */}
+            <BottomMenu />
           </div>
         </div>
-      </aside>
-      <div
-        className="hidden fixed inset-0 z-10 bg-gray-900 opacity-50"
-        id="sidebarBackdrop"
-      ></div>
-    </>
+      </Sidebar>
+    </div>
+  );
+};
+const BottomMenu: FC = function () {
+  return (
+    <div className="flex items-center justify-center gap-x-5">
+      <button className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+        <span className="sr-only">Tweaks</span>
+        <HiAdjustments className="text-2xl text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white " />
+      </button>
+      <div>
+        <Tooltip content="Settings page">
+          <a
+            href="/users/settings"
+            className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            <span className="sr-only">Settings page</span>
+            <HiCog className="text-2xl text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white" />
+          </a>
+        </Tooltip>
+      </div>
+      <div>
+        <LanguageDropdown />
+      </div>
+    </div>
   );
 };
 
-export default Sidebar;
+const LanguageDropdown: FC = function () {
+  return (
+    <Dropdown
+      arrowIcon={false}
+      inline
+      label={
+        <span className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white">
+          <span className="sr-only">Current language</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 3900 3900"
+            className="h-5 w-5 rounded-full"
+          >
+            <path fill="#b22234" d="M0 0h7410v3900H0z"></path>
+            <path
+              d="M0 450h7410m0 600H0m0 600h7410m0 600H0m0 600h7410m0 600H0"
+              stroke="#fff"
+              strokeWidth="300"
+            ></path>
+            <path fill="#3c3b6e" d="M0 0h2964v2100H0z"></path>
+            <g fill="#fff">
+              <g id="d">
+                <g id="c">
+                  <g id="e">
+                    <g id="b">
+                      <path
+                        id="a"
+                        d="M247 90l70.534 217.082-184.66-134.164h228.253L176.466 307.082z"
+                      ></path>
+                      <use xlinkHref="#a" y="420"></use>
+                      <use xlinkHref="#a" y="840"></use>
+                      <use xlinkHref="#a" y="1260"></use>
+                    </g>
+                    <use xlinkHref="#a" y="1680"></use>
+                  </g>
+                  <use xlinkHref="#b" x="247" y="210"></use>
+                </g>
+                <use xlinkHref="#c" x="494"></use>
+              </g>
+              <use xlinkHref="#d" x="988"></use>
+              <use xlinkHref="#c" x="1976"></use>
+              <use xlinkHref="#e" x="2470"></use>
+            </g>
+          </svg>
+        </span>
+      }
+    >
+      <ul className="py-1" role="none">
+        <li>
+          <a
+            href="#"
+            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+          >
+            <div className="inline-flex items-center">
+              <svg
+                className="mr-2 h-4 w-4 rounded-full"
+                xmlns="http://www.w3.org/2000/svg"
+                id="flag-icon-css-us"
+                viewBox="0 0 512 512"
+              >
+                <g fillRule="evenodd">
+                  <g strokeWidth="1pt">
+                    <path
+                      fill="#bd3d44"
+                      d="M0 0h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
+                      transform="scale(3.9385)"
+                    />
+                    <path
+                      fill="#fff"
+                      d="M0 10h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
+                      transform="scale(3.9385)"
+                    />
+                  </g>
+                  <path
+                    fill="#192f5d"
+                    d="M0 0h98.8v70H0z"
+                    transform="scale(3.9385)"
+                  />
+                  <path
+                    fill="#fff"
+                    d="M8.2 3l1 2.8H12L9.7 7.5l.9 2.7-2.4-1.7L6 10.2l.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7L74 8.5l-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 7.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 24.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 21.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 38.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 35.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 52.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 49.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 66.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 63.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9z"
+                    transform="scale(3.9385)"
+                  />
+                </g>
+              </svg>
+              <span className="whitespace-nowrap">English (US)</span>
+            </div>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+          >
+            <div className="inline-flex items-center">
+              <svg
+                className="mr-2 h-4 w-4 rounded-full"
+                xmlns="http://www.w3.org/2000/svg"
+                id="flag-icon-css-de"
+                viewBox="0 0 512 512"
+              >
+                <path fill="#ffce00" d="M0 341.3h512V512H0z" />
+                <path d="M0 0h512v170.7H0z" />
+                <path fill="#d00" d="M0 170.7h512v170.6H0z" />
+              </svg>
+              Deutsch
+            </div>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+          >
+            <div className="inline-flex items-center">
+              <svg
+                className="mr-2 h-4 w-4 rounded-full"
+                xmlns="http://www.w3.org/2000/svg"
+                id="flag-icon-css-it"
+                viewBox="0 0 512 512"
+              >
+                <g fillRule="evenodd" strokeWidth="1pt">
+                  <path fill="#fff" d="M0 0h512v512H0z" />
+                  <path fill="#009246" d="M0 0h170.7v512H0z" />
+                  <path fill="#ce2b37" d="M341.3 0H512v512H341.3z" />
+                </g>
+              </svg>
+              Italiano
+            </div>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+          >
+            <div className="inline-flex items-center">
+              <svg
+                className="mr-2 h-4 w-4 rounded-full"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                id="flag-icon-css-cn"
+                viewBox="0 0 512 512"
+              >
+                <defs>
+                  <path id="a" fill="#ffde00" d="M1-.3L-.7.8 0-1 .6.8-1-.3z" />
+                </defs>
+                <path fill="#de2910" d="M0 0h512v512H0z" />
+                <use
+                  width="30"
+                  height="20"
+                  transform="matrix(76.8 0 0 76.8 128 128)"
+                  xlinkHref="#a"
+                />
+                <use
+                  width="30"
+                  height="20"
+                  transform="rotate(-121 142.6 -47) scale(25.5827)"
+                  xlinkHref="#a"
+                />
+                <use
+                  width="30"
+                  height="20"
+                  transform="rotate(-98.1 198 -82) scale(25.6)"
+                  xlinkHref="#a"
+                />
+                <use
+                  width="30"
+                  height="20"
+                  transform="rotate(-74 272.4 -114) scale(25.6137)"
+                  xlinkHref="#a"
+                />
+                <use
+                  width="30"
+                  height="20"
+                  transform="matrix(16 -19.968 19.968 16 256 230.4)"
+                  xlinkHref="#a"
+                />
+              </svg>
+              <span className="whitespace-nowrap">中文 (繁體)</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </Dropdown>
+  );
+};
+
+export default SidebarTree;

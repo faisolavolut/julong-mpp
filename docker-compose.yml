@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4500:3000"  # Mengakses aplikasi di port 3000
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    volumes:
+      - .:/app  # Menyinkronkan folder lokal dengan container, hanya untuk pengembangan
+    networks:
+      - nextjs_network
+    restart: unless-stopped
+
+networks:
+  nextjs_network:
+    driver: bridge

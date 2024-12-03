@@ -21,3 +21,29 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+.resizer {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+}
+
+.resizer.ltr {
+  right: 0;
+}
+
+.resizer.rtl {
+  left: 0;
+}
+.breadcrumb > ol > li:first-child > svg {
+  display: none;
+}
+
+
+.focus\:ring-cyan-300:focus{
+  --tw-ring-opacity: 1;
+  --tw-ring-color: #C3D5FF;
+  outline: 0px
+}
