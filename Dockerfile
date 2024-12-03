@@ -32,4 +32,4 @@ COPY --from=build /app /app
 RUN npm install --production
 
 # Jalankan aplikasi Next.js pada container
-CMD ["npm", "start"]
+CMD ["npm","run", "prod"]
