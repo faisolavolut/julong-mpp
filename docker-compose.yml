@@ -6,7 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "4500:3000"  # Mengakses aplikasi di port 3000
+      - "3000:3000"  # Map port 3000 dari kontainer ke host
+    environment:
+      - HOST=0.0.0.0
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
