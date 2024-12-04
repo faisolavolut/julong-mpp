@@ -63,7 +63,7 @@ export const Tablist: React.FC<any> = ({
     },
   });
   useEffect(() => {
-    if(typeof onLoad === "function"){
+    if (typeof onLoad === "function") {
       const res: any = onLoad({
         search: local.search,
         sort: local.sort,
@@ -73,14 +73,14 @@ export const Tablist: React.FC<any> = ({
       if (res instanceof Promise) {
         res.then((e) => {
           local.data = e;
-  
+
           local.render();
         });
       } else {
         local.data = res;
         local.render();
       }
-    }else{
+    } else {
       local.data = onLoad;
       local.render();
     }
@@ -89,18 +89,29 @@ export const Tablist: React.FC<any> = ({
   return (
     <div className="flex flex-row w-full">
       <Tabs
-        className="flex flex-col w-full h-12"
+        className="flex flex-col w-full"
         defaultValue={onValue(local.data?.[0])}
       >
-        <TabsList className="flex flex-row flex-grow relative w-full ">
-          <TabSlider className="w-full flex flex-row items-center my-4">
-            {local.data.map((e) => {
+        <TabsList className="flex flex-row flex-grow relative w-full bg-second p-0 rounded-none">
+          <TabSlider className=" ">
+            {local.data.map((e, idx) => {
+              // return <div>
+              //     {onLabel(e)}</div>
               return (
                 <TabsTrigger
                   value={onValue(e)}
-                  className="w-full p-1.5"
+                  className={cx(
+                    "p-1.5 px-4 border ",
+                    css`
+                        z-index: -1;
+                    `,
+                    !idx ? "ml-1.5" : idx++ === local.data.length ? "mr-2" : ""
+                  )}
                   key={onValue(e)}
                 >
+                  <b className="left-curve"></b>
+                  <b className="right-curve"></b>
+
                   {onLabel(e)}
                 </TabsTrigger>
               );
@@ -109,8 +120,11 @@ export const Tablist: React.FC<any> = ({
         </TabsList>
         {local.data.map((e) => {
           return (
-            <TabsContent 
-            value={onValue(e)} key={onValue(e) + "_tabcontent"}>
+            <TabsContent
+              value={onValue(e)}
+              className="bg-primary-white"
+              key={onValue(e) + "_tabcontent"}
+            >
               {tabContent(e)}
             </TabsContent>
           );

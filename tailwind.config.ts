@@ -26,6 +26,7 @@ export default {
           800: "#313678",
           900: "#313678",
         },
+        second: "#C3D5FF"
       },
       fontFamily: {
         body: [
