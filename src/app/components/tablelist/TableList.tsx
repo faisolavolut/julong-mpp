@@ -178,10 +178,10 @@ export const TableList: React.FC<any> = ({
     <>
       <div className="tbl-wrapper p-2 flex flex-grow flex-col">
         <div className="head-tbl-list block items-end justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
-          <div className="">
+          <div className="flex flex-row items-end">
             <div className="sm:flex flex flex-col space-y-2">
               {name ? (
-                <div className="mb-4">
+                <div className="">
                   <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
                     All{" "}
                     <span className="capitalize">{name ? `${name}s` : ``}</span>
@@ -472,7 +472,7 @@ export const Pagination: React.FC<any> = ({
           </span>
         </span>
 
-        <span className="flex items-center pl-2">
+        <span className="flex items-center pl-2 text-black">
           | Go to page:
           <form
             onSubmit={(e) => {

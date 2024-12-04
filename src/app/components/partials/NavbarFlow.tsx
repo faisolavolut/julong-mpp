@@ -44,7 +44,7 @@ const NavFlow: React.FC<any> = ({minimaze}) => {
             )}
             <Navbar.Brand href="/">
               <img alt="" src="http://localhost:3000/julong.png" className="mr-3 h-6 sm:h-8" />
-              <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
+              <span className="self-center whitespace-nowrap text-2xl font-semibold text-black">
                 Man Power Management
               </span>
             </Navbar.Brand>                           

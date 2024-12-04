@@ -275,7 +275,7 @@ function Page() {
               </>
             );
           }}
-          showResize={true}
+          showResize={false}
           onFooter={(fm: any) => {
             if (!fm.ready)
               return (

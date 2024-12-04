@@ -53,7 +53,7 @@ function Page() {
               ],
             };
           }}
-          showResize={true}
+          showResize={false}
           header={(fm: any) => {
             return (
               <>

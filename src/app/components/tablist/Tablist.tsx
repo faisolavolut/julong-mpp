@@ -92,7 +92,7 @@ export const Tablist: React.FC<any> = ({
         className="flex flex-col w-full"
         defaultValue={onValue(local.data?.[0])}
       >
-        <TabsList className="flex flex-row flex-grow relative w-full bg-second p-0 rounded-none">
+        <TabsList className="flex flex-row flex-grow relative w-full bg-gray-50 p-0 rounded-none">
           <TabSlider className=" ">
             {local.data.map((e, idx) => {
               // return <div>
@@ -109,8 +109,8 @@ export const Tablist: React.FC<any> = ({
                   )}
                   key={onValue(e)}
                 >
-                  <b className="left-curve"></b>
-                  <b className="right-curve"></b>
+                  {/* <b className="left-curve"></b>
+                  <b className="right-curve"></b> */}
 
                   {onLabel(e)}
                 </TabsTrigger>

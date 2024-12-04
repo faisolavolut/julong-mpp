@@ -19,11 +19,9 @@ function Page() {
     <div className="w-full flex flex-row">
       <div className="flex flex-grow flex-col">
         <Form
-          mode={"view"}
           onSubmit={async (fm: any) => {
             const data = fm.data;
           }}
-          showResize={true}
           onLoad={async () => {
             return {
               id,
@@ -307,7 +305,7 @@ function Page() {
                   tabContent={(data: any) => {
                     return (
                       <>
-                        <div className="w-full flex flex-row">
+                        <div className="w-full flex flex-row py-6">
                           <div className="flex flex-grow flex-col h-[500px]">
                             <TableList
                               name={"Line"}
