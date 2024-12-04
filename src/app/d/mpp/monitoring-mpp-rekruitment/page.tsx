@@ -89,7 +89,7 @@ function Page() {
                     <Button
                       className="bg-primary-500"
                       onClick={() => {
-                        navigate(`/d/mpp/monitoring-mpp-rekruitment/${row.id}`);
+                        navigate(`/d/mpp/monitoring-mpp-rekruitment/${row.id}/view`);
                       }}
                     >
                       <div className="flex items-center gap-x-2">

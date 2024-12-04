@@ -17,6 +17,7 @@ function Page() {
     <div className="w-full flex flex-row">
       <div className="flex flex-grow flex-col">
         <Form
+          mode="view"
           onSubmit={async (fm: any) => {
             const data = fm.data;
           }}
@@ -65,33 +66,11 @@ function Page() {
                         <Breadcrumb.Item href="/d/mpp/monitoring-mpp-hrd">
                           Manpower Planning
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item>Add New</Breadcrumb.Item>
+                        <Breadcrumb.Item>Detail</Breadcrumb.Item>
                       </Breadcrumb>
                     </div>
                   </div>
                   <div className="flex flex-row space-x-2">
-                    <Button
-                      className="bg-primary-500"
-                      onClick={() => {
-                        fm.submit();
-                      }}
-                    >
-                      <div className="flex items-center gap-x-3">
-                        <IoMdSave className="text-xl" />
-                        Approve
-                      </div>
-                    </Button>
-                    <Button
-                      className="bg-red-500"
-                      onClick={() => {
-                        fm.submit();
-                      }}
-                    >
-                      <div className="flex items-center gap-x-3">
-                        <IoMdSave className="text-xl" />
-                        Reject
-                      </div>
-                    </Button>
                   </div>
                 </div>
               </>
@@ -313,39 +292,22 @@ function Page() {
                     return (
                       <>
                         <div className="w-full flex flex-row">
-                          <div className={cx("flex flex-grow flex-col h-[500px]", css`.tbl{
-                            position: relative}`)}>
+                          <div
+                            className={cx(
+                              "flex flex-grow flex-col h-[500px]",
+                              css`
+                                .tbl {
+                                  position: relative;
+                                }
+                              `
+                            )}
+                          >
                             <TableList
                               name={"Line"}
                               header={{
                                 sideRight: (tbl: any) => {
                                   return (
-                                    <>
-                                      <div className="flex flex-row flex-grow space-x-2">
-                                        <Button
-                                          className="bg-primary-500"
-                                          onClick={async () => {
-                                            tbl.addRow({total: 1})
-                                            fm.render();
-                                          }}
-                                        >
-                                          <div className="flex items-center gap-x-3">
-                                            <HiPlus className="text-xl" />
-                                            <span className="capitalize">
-                                              Add New
-                                            </span>
-                                          </div>
-                                        </Button>
-                                        <Button className="bg-primary-500">
-                                          <div className="flex items-center gap-x-3">
-                                            <IoMdSave className="text-xl" />
-                                            <span className="capitalize">
-                                              Save
-                                            </span>
-                                          </div>
-                                        </Button>
-                                      </div>
-                                    </>
+                                    <></>
                                   );
                                 },
                               }}

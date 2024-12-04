@@ -1,6 +1,19 @@
 "use client";
 import { Field } from "@/app/components/form/Field";
 import { Form } from "@/app/components/form/Form";
+import { Alert } from "@/app/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/app/components/ui/alert-dialog";
+import { btn } from "@/app/components/ui/button";
 import { useLocal } from "@/lib/use-local";
 import {
   Avatar,
@@ -25,14 +38,12 @@ function Page() {
     <div className="w-full flex flex-row">
       <div className="flex flex-grow flex-col">
         <Form
-          onSubmit={async () => {
-            console.log("HALOOO???");
-          }}
+          onSubmit={async () => {}}
           onLoad={async () => {
             return {
               organization: 1,
               job: 1,
-              name: "pak de"
+              name: "pak de",
             };
           }}
           header={(fm: any) => {
@@ -53,28 +64,33 @@ function Page() {
                     </div>
                   </div>
                   <div className="flex flex-row space-x-2">
-                    <Button
-                      className="bg-red-500"
+                    <Alert
+                      type={"delete"}
+                      onClick={() => {
+                        // fm.submit();
+                      }}
+                    >
+                      <div className={cx("bg-red-500", btn())}>
+                        <div className="flex items-center gap-x-3">
+                          <MdDelete className="text-xl" />
+                          Delete
+                        </div>
+                      </div>
+                    </Alert>
+
+                    <Alert
+                      type={"save"}
                       onClick={() => {
                         fm.submit();
                       }}
                     >
-                      <div className="flex items-center gap-x-3">
-                        <MdDelete className="text-xl" />
-                        Delete
+                      <div className={cx("bg-primary-500", btn())}>
+                        <div className="flex items-center gap-x-3">
+                          <IoMdSave className="text-xl" />
+                          Save
+                        </div>
                       </div>
-                    </Button>
-                    <Button
-                      className="bg-primary-500"
-                      onClick={() => {
-                        fm.submit();
-                      }}
-                    >
-                      <div className="flex items-center gap-x-3">
-                        <IoMdSave className="text-xl" />
-                        Save
-                      </div>
-                    </Button>
+                    </Alert>
                   </div>
                 </div>
               </>
@@ -92,7 +108,7 @@ function Page() {
                         label={"Organization"}
                         type={"dropdown"}
                         onLoad={async () => {
-                          console.log("MASUKL")
+                          console.log("MASUKL");
                           return [
                             {
                               value: 1,

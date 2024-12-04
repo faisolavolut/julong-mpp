@@ -9,6 +9,7 @@ import { HiAdjustments, HiChartPie, HiCog } from "react-icons/hi";
 import isSmallScreen from "@/helpers/is-small-screen";
 import { css } from "@emotion/css";
 import { FaAngleUp, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { Minimize } from "lucide-react";
 interface TreeMenuItem {
   title: string;
   href?: string;
@@ -18,16 +19,19 @@ interface TreeMenuItem {
 
 interface TreeMenuProps {
   data: TreeMenuItem[];
+  minimaze: () => void;
+  mini: boolean;
 }
 
-const SidebarTree: React.FC<TreeMenuProps> = ({ data }) => {
+const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
   const [currentPage, setCurrentPage] = useState("");
-  if(process.browser){
+  if (process.browser) {
     useEffect(() => {
       const newPage = window.location.pathname;
       setCurrentPage(newPage);
     }, [location.pathname]);
   }
+
   const isChildActive = (items: TreeMenuItem[]): boolean => {
     return items.some((item) => {
       if (item.href && currentPage.startsWith(item.href)) return true;
@@ -47,7 +51,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data }) => {
         }
       }, [isParentActive]);
       const itemStyle = {
-        paddingLeft: `${depth * 16}px`,
+        paddingLeft: !mini ? `${depth * 16}px` : "0px",
       };
       return (
         <React.Fragment key={item.href || item.title || index}>
@@ -60,17 +64,23 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data }) => {
                     ? " py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group bg-white shadow-lg shadow-gray-200 hover:!bg-white  transition-all duration-200  dark:bg-gray-700"
                     : " "
                 )}
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => {
+                  if (mini) {
+                    minimaze();
+                  }
+                  setIsOpen(!isOpen);
+                }}
                 style={itemStyle}
               >
                 <div className="flex flex-row items-center flex-grow px-3">
                   {!depth ? (
                     <div
                       className={classNames(
-                        " shadow-gray-300  text-dark-700 w-8 h-8 p-2 mr-1 rounded-lg text-center flex flex-row items-center justify-center shadow-gray-300",
+                        " shadow-gray-300  text-dark-700 w-8 h-8 rounded-lg text-center flex flex-row items-center justify-center shadow-gray-300",
                         isParentActive
                           ? "bg-[#313678] text-white"
-                          : "bg-white shadow-lg text-black"
+                          : "bg-white shadow-lg text-black",
+                        !mini ? "mr-1  p-2" : " text-lg"
                       )}
                     >
                       {item.icon}
@@ -78,17 +88,25 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data }) => {
                   ) : (
                     <></>
                   )}
-                  <div className="pl-2 flex-grow">{item.title}</div>
-                  <div className="text-xs">
-                    {isOpen ? <FaChevronUp /> : <FaChevronDown />}
-                  </div>
+
+                  {!mini ? (
+                    <>
+                      <div className="pl-2 flex-grow">{item.title}</div>
+                      <div className="text-xs">
+                        {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
 
               <Sidebar.ItemGroup
                 className={classNames(
                   "border-none mt-0",
-                  isOpen ? "" : "hidden"
+                  isOpen ? "" : "hidden",
+                  mini ? "hidden" : ""
                 )}
               >
                 {renderTree(item.children!, depth + 1)}
@@ -107,10 +125,13 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data }) => {
                     ? " bg-white shadow-lg hover:bg-gray-200 hover:!bg-white "
                     : "bg-gray-100"
                   : "",
-                  css`
-                  & > span{
-                  white-space: wrap !important;}
-                  `
+                css`
+                  & > span {
+                    white-space: wrap !important;
+                  }
+                `,
+
+                mini ? "px-0 py-2" : ""
               )}
               style={itemStyle} // Terapkan gaya berdasarkan depth
             >
@@ -118,18 +139,25 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data }) => {
                 {!depth ? (
                   <div
                     className={classNames(
-                      " shadow-gray-300  text-dark-700 w-8 h-8 p-2 mr-1 rounded-lg text-center flex flex-row items-center justify-center shadow-gray-300",
+                      " shadow-gray-300  text-dark-700 w-8 h-8  rounded-lg text-center flex flex-row items-center justify-center shadow-gray-300",
                       isActive
                         ? "bg-[#313678] text-white"
-                        : "bg-white shadow-lg text-black"
+                        : "bg-white shadow-lg text-black",
+                      !mini ? "mr-1  p-2" : " text-lg"
                     )}
                   >
-                      {item.icon}
+                    {item.icon}
                   </div>
                 ) : (
                   <></>
                 )}
-                <div className="pl-2">{item.title}</div>
+                {!mini ? (
+                  <>
+                    <div className="pl-2">{item.title}</div>
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </Sidebar.Item>
           )}
@@ -139,14 +167,10 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data }) => {
   };
 
   return (
-    <div
-      className={classNames("flex h-full lg:!block", {
-        // hidden: !isSidebarOpenOnSmallScreens,
-      })}
-    >
+    <div className={classNames("flex h-full lg:!block", {})}>
       <Sidebar
         aria-label="Sidebar with multi-level dropdown example"
-        className={classNames("relative", css``)}
+        className={classNames("relative", mini ? "w-20" : "", css``)}
       >
         <div className="w-full h-full relative">
           <div className="flex h-full flex-col justify-between w-full absolute top-0 left-0">
@@ -156,7 +180,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data }) => {
               </Sidebar.ItemGroup>
             </Sidebar.Items>
             {/* <div key="menu">{renderTree(data)}</div> */}
-            <BottomMenu />
+            {!mini ? <BottomMenu /> : <></>}
           </div>
         </div>
       </Sidebar>

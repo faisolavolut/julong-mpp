@@ -25,6 +25,7 @@ function Page() {
     <div className="w-full flex flex-row">
       <div className="flex flex-grow flex-col">
         <Form
+        mode="view"
           onSubmit={async () => {
             console.log("HALOOO???");
           }}

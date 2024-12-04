@@ -31,6 +31,7 @@ export const Form: React.FC<any> = ({
   onSubmit,
   onFooter,
   showResize,
+  mode
 }) => {
   const local = useLocal({
     ready: false,
@@ -39,6 +40,7 @@ export const Form: React.FC<any> = ({
       await onSubmit(local);
     },
     render: () => {},
+    mode
   });
 
   useEffect(() => {
