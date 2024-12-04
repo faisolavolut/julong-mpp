@@ -74,7 +74,7 @@ function Page() {
                     <Button
                       className="bg-primary-500"
                       onClick={() => {
-                        navigate(`/d/master-data/plafon/${row.id}`);
+                        navigate(`/d/master-data/plafon/${row.id}/edit`);
                       }}
                     >
                       <div className="flex items-center gap-x-2">

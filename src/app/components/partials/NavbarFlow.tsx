@@ -27,7 +27,7 @@ import {
 } from "react-icons/hi";
 import classNames from "classnames";
 import { css } from "@emotion/css";
-const NavFlow: React.FC = () => {
+const NavFlow: React.FC<any> = ({minimaze}) => {
   return (
     <Navbar fluid>
       <div className="w-full p-1 lg:px-5 lg:pl-3">
@@ -35,15 +35,10 @@ const NavFlow: React.FC = () => {
           <div className="flex items-center">
             {true && (
               <button
-                // onClick={() => setOpenOnSmallScreens(!isOpenOnSmallScreens)}
+                onClick={minimaze}
                 className="mr-3 cursor-pointer rounded p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:inline"
               >
                 <span className="sr-only">Toggle sidebar</span>
-                {/* {isOpenOnSmallScreens && isSmallScreen() ? (
-                  <HiX className="h-6 w-6" />
-                ) : (
-                  <HiMenuAlt1 className="h-6 w-6" />
-                )} */}
                 <HiMenuAlt1 className="h-6 w-6" />
               </button>
             )}

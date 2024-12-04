@@ -14,6 +14,7 @@ export const Field: React.FC<any> = ({
   hidden_label
 }) => {
   let result = null;
+  const is_disable = fm.mode === "view" ? true : disabled
   return (
     <>
       <div className={cx("flex flex-col")}>
@@ -37,7 +38,7 @@ export const Field: React.FC<any> = ({
               name={name}
               onLoad={onLoad}
               placeholder={placeholder}
-              disabled={disabled}
+              disabled={is_disable}
             />
           </>
         ) : (
@@ -48,7 +49,7 @@ export const Field: React.FC<any> = ({
               placeholder={placeholder}
               required={required}
               type={type}
-              disabled={disabled}
+              disabled={is_disable}
             />
           </>
         )}
