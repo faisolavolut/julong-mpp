@@ -27,7 +27,7 @@ ENV HOSTNAME="0.0.0.0"
 WORKDIR /app
 
 # Copy file build dari tahap sebelumnya
-COPY --from=build /app /app
+# COPY --from=build /app /app
 
 # Install hanya runtime dependencies
 RUN npm install --production
