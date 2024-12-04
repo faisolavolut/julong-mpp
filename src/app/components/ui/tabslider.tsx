@@ -31,12 +31,10 @@ const TabSlider: React.FC<any> = ({ children, className }) => {
   }, [wrapper]);
   useEffect(() => {
     if (item.current) {
-      console.log({item});
-      
-      console.log(item.current.
-        scrollWidth > widthWrapper)
-      if (item.current.
-        scrollWidth > widthWrapper) {
+      console.log({ item });
+
+      console.log(item.current.scrollWidth > widthWrapper);
+      if (item.current.scrollWidth > widthWrapper) {
         setIsScroll(true);
       }
     }
@@ -54,8 +52,9 @@ const TabSlider: React.FC<any> = ({ children, className }) => {
         // ref={containerRef}
       >
         <button
-          className={cx("top-0 left-0 p-1 mx-0.5 bg-gray-50/40 text-gray-800 rounded-lg flex flex-row items-center justify-center w-6  hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600",
-            isScroll ? "visible" : "invisible",
+          className={cx(
+            "top-0 left-0 p-1 mx-0.5 bg-gray-50/40 text-gray-800 rounded-lg flex flex-row items-center justify-center w-6  hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600",
+            isScroll ? "visible" : "invisible"
           )}
           onClick={() => emblaApi && emblaApi.scrollPrev()}
         >
@@ -78,20 +77,12 @@ const TabSlider: React.FC<any> = ({ children, className }) => {
             <></>
           )}
         </div>
-
-        {/* <div ref={emblaRef} className="overflow-hidden ">
-          
-        </div> */}
-        {/* {isOverflowing ? (
-          
-        ) : (
-          <></>
-        )} */}
         <button
-
-className={cx("top-0 left-0 p-1 mx-0.5 bg-gray-50/40 text-gray-800 rounded-lg flex flex-row items-center justify-center w-6  hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600",
-  isScroll ? "visible" : "invisible",
-)}          onClick={() => emblaApi && emblaApi.scrollNext()}
+          className={cx(
+            "top-0 left-0 p-1 mx-0.5 bg-gray-50/40 text-gray-800 rounded-lg flex flex-row items-center justify-center w-6  hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600",
+            isScroll ? "visible" : "invisible"
+          )}
+          onClick={() => emblaApi && emblaApi.scrollNext()}
         >
           <FaAngleRight />
         </button>
