@@ -2,70 +2,99 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 const TabSlider: React.FC<any> = ({ children, className }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    containScroll: "trimSnaps",
-  });
-  const containerRef = useRef<HTMLDivElement>(null);
-  const conItem = useRef<HTMLDivElement>(null);
+  // const containerRef = useRef<HTMLDivElement>(null);
   const [canScrollNext, setCanScrollNext] = useState(false);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({});
+
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setCanScrollNext(emblaApi.canScrollNext());
     setCanScrollPrev(emblaApi.canScrollPrev());
   }, [emblaApi]);
+  const wrapper = useRef<HTMLDivElement>(null);
+  const item = useRef<HTMLDivElement>(null);
+  const [widthWrapper, setWidthWrapper] = useState(0);
+  const [isScroll, setIsScroll] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (wrapper.current) {
+      setWidthWrapper(wrapper?.current?.clientWidth);
+      setTimeout(() => {
+        setReady(true);
+      }, 1000);
+    }
+  }, [wrapper]);
+  useEffect(() => {
+    if (item.current) {
+      console.log({item});
+      
+      console.log(item.current.
+        scrollWidth > widthWrapper)
+      if (item.current.
+        scrollWidth > widthWrapper) {
+        setIsScroll(true);
+      }
+    }
+  }, [item.current]);
 
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.on("select", onSelect);
     onSelect(); // Initialize state
   }, [emblaApi, onSelect]);
-  useEffect(() => {
-    if (containerRef.current && conItem.current) {
-      const isOverflow =
-        conItem.current.scrollWidth > containerRef.current.clientWidth;
-      setIsOverflowing(isOverflow);
-    }
-  }, [conItem, containerRef]);
-
   return (
-    <div className="flex flex-grow flex-row w-full" >
+    <div className="flex flex-grow flex-row w-full">
       <div
-        className={cx(
-          "relative flex flex-row items-center w-full",
-          className
-        )}ref={containerRef}
+        className={cx("relative flex flex-row items-center w-full", className)}
+        // ref={containerRef}
       >
-        {isOverflowing ? (
-          <button
-            className="top-0 left-0 px-2 flex flex-row items-center justify-center w-8 h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
-            onClick={() => emblaApi && emblaApi.scrollPrev()}
-            disabled={!canScrollPrev}
-          >
-            ❮
-          </button>
-        ) : (
-          <></>
-        )}
-        <div ref={emblaRef} className="overflow-hidden">
-          <div className="flex flex-row space-x-2" ref={conItem}>
-            {children}
-          </div>
+        <button
+          className={cx("top-0 left-0 p-1 mx-0.5 bg-gray-50/40 text-gray-800 rounded-lg flex flex-row items-center justify-center w-6  hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600",
+            isScroll ? "visible" : "invisible",
+          )}
+          onClick={() => emblaApi && emblaApi.scrollPrev()}
+        >
+          <FaAngleLeft />
+        </button>
+        <div className="flex flex-grow" ref={wrapper}>
+          {ready ? (
+            <div
+              className={cx("overflow-hidden flex-grow")}
+              style={{
+                width: widthWrapper,
+              }}
+              ref={emblaRef}
+            >
+              <div className="flex flex-shrink-0" ref={item}>
+                {children}
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
-        {isOverflowing ? (
-          <button
-            className="px-2  top-0 right-0 flex  flex-row items-center justify-center w-8 h-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
-            onClick={() => emblaApi && emblaApi.scrollNext()}
-            disabled={!canScrollNext}
-          >
-            ❯
-          </button>
+
+        {/* <div ref={emblaRef} className="overflow-hidden ">
+          
+        </div> */}
+        {/* {isOverflowing ? (
+          
         ) : (
           <></>
-        )}
+        )} */}
+        <button
+
+className={cx("top-0 left-0 p-1 mx-0.5 bg-gray-50/40 text-gray-800 rounded-lg flex flex-row items-center justify-center w-6  hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600",
+  isScroll ? "visible" : "invisible",
+)}          onClick={() => emblaApi && emblaApi.scrollNext()}
+        >
+          <FaAngleRight />
+        </button>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 # Gunakan image Node 22 sebagai base image
-FROM node:22 AS build
+FROM node:20 AS build
 
 # Tentukan direktori kerja di dalam container
 WORKDIR /app
@@ -15,12 +15,13 @@ COPY . .
 
 # Build aplikasi Next.js untuk production
 RUN npm run build
-ENV HOST=0.0.0.0
-# Tentukan port yang akan digunakan aplikasi
 EXPOSE 3000
 
-# Gunakan image Node 22 untuk menjalankan aplikasi
-FROM node:22
+ENV PORT=3000
+
+# server.js is created by next build from the standalone output
+# https://nextjs.org/docs/pages/api-reference/next-config-js/output
+ENV HOSTNAME="0.0.0.0"
 
 # Tentukan direktori kerja di dalam container
 WORKDIR /app
