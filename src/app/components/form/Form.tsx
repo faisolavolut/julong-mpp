@@ -39,6 +39,7 @@ export const Form: React.FC<any> = ({
     submit: async () => {
       await onSubmit(local);
     },
+    fields: {} as any,
     render: () => {},
     mode,
   });

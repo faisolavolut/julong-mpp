@@ -119,11 +119,14 @@ export const TypeInput: React.FC<any> = ({
       <Input
         id={name}
         name={name}
+        className={cx(css`
+          background-color: ${disabled ? "rgb(243 244 246)" : "transparant" } ? ""
+          `)}
         disabled={disabled}
         required={required}
         placeholder={placeholder || ""}
         value={value}
-        type={type}
+        type={!type ? "text" : type}
         onChange={(ev) => {
           fm.data[name] = ev.currentTarget.value;
           fm.render();
