@@ -28,6 +28,7 @@ import {
   HiHome,
   HiOutlinePencilAlt,
   HiPlus,
+  HiSearch,
   HiTrash,
 } from "react-icons/hi";
 import classNames from "classnames";
@@ -39,6 +40,7 @@ import Link from "next/link";
 import { init_column } from "./lib/column";
 import { toast } from "sonner";
 import { Check, Loader2 } from "lucide-react";
+import { InputSearch } from "../ui/input-search";
 
 export const TableList: React.FC<any> = ({
   name,
@@ -46,7 +48,12 @@ export const TableList: React.FC<any> = ({
   onLoad,
   take = 20,
   header,
+  disabledPagination,
 }) => {
+  console.log(take);
+  const [data, setData] = useState<any[]>([]);
+  const sideLeft =
+    typeof header?.sideLeft === "function" ? header.sideLeft : null;
   const sideRight =
     typeof header?.sideRight === "function" ? header.sideRight : null;
   type Person = {
@@ -56,8 +63,7 @@ export const TableList: React.FC<any> = ({
     visits: number;
     status: string;
     progress: number;
-  }; 
-  const [data, setData] = useState<any[]>([]);
+  };
   const local = useLocal({
     table: null as any,
     data: [] as any[],
@@ -65,10 +71,10 @@ export const TableList: React.FC<any> = ({
     search: null as any,
     addRow: (row: any) => {
       setData((prev) => [...prev, row]);
-      local.data.push(row)
+      local.data.push(row);
+      local.render();
     },
     reload: async () => {
-      console.log("HALOOO DEK")
       if (Array.isArray(onLoad)) {
         local.data = onLoad;
         local.render();
@@ -89,7 +95,7 @@ export const TableList: React.FC<any> = ({
           local.render();
         }
       }
-      console.log(local.data)
+      console.log(local.data);
     },
   });
   useEffect(() => {
@@ -102,6 +108,7 @@ export const TableList: React.FC<any> = ({
     if (Array.isArray(onLoad)) {
       local.data = onLoad;
       local.render();
+      setData(onLoad);
     } else {
       const res: any = onLoad({
         search: local.search,
@@ -113,6 +120,7 @@ export const TableList: React.FC<any> = ({
         res.then((e) => {
           local.data = e;
           local.render();
+          setData(e);
           setTimeout(() => {
             toast.dismiss();
           }, 2000);
@@ -120,6 +128,7 @@ export const TableList: React.FC<any> = ({
       } else {
         local.data = res;
         local.render();
+        setData(res);
         setTimeout(() => {
           toast.dismiss();
         }, 2000);
@@ -139,15 +148,18 @@ export const TableList: React.FC<any> = ({
   // Create the table and pass your options
   useEffect(() => {
     setData(local.data);
-    console.log("AYO INI BERUBAH")
-  }, [local.data]);
+  }, [local.data.length]);
+  const paginationConfig = disabledPagination
+    ? {}
+    : {
+        getPaginationRowModel: getPaginationRowModel(),
+      };
   const table = useReactTable({
     data: data,
     columnResizeMode,
     columnResizeDirection,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
     state: {
@@ -157,6 +169,7 @@ export const TableList: React.FC<any> = ({
       },
       sorting,
     },
+    ...paginationConfig
   });
   local.table = table;
 
@@ -170,82 +183,79 @@ export const TableList: React.FC<any> = ({
     onStateChange: setState,
     debugTable: state.pagination.pageIndex > 2,
   }));
-  const addRow = () => {
-    const newRow = { id: data.length + 1, name: "New User", age: 20 };
-    setData((prev) => [...prev, newRow]);
-  };
   return (
     <>
       <div className="tbl-wrapper p-2 flex flex-grow flex-col">
-        <div className="head-tbl-list block items-end justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+        <div className="head-tbl-list block items-start justify-between border-b border-gray-200 bg-white py-4 px-0 dark:border-gray-700 dark:bg-gray-800 sm:flex">
           <div className="flex flex-row items-end">
             <div className="sm:flex flex flex-col space-y-2">
               {name ? (
                 <div className="">
-                  <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-                    All{" "}
-                    <span className="capitalize">{name ? `${name}s` : ``}</span>
-                  </h1>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+                    All <span className="">{name ? `${name}s` : ``}</span>
+                  </h2>
                 </div>
               ) : (
                 <></>
               )}
-              <div className="tbl-search mb-3 hidden items-center dark:divide-gray-700 sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100">
-                <form
-                  className="lg:pr-3"
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    await local.reload();
-                  }}
-                >
-                  <Label htmlFor="users-search" className="sr-only">
-                    Search
-                  </Label>
-                  <div className="relative mt-1 lg:w-64 xl:w-96">
-                    <TextInput
-                      id="users-search"
-                      name="users-search"
-                      placeholder={`Search for ${name ? `${name}s` : ``}`}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        local.search = value;
-                        local.render();
-                        debouncedHandler(() => {
-                          local.reload();
-                        }, 1500);
-                      }}
-                    />
-                  </div>
-                </form>
+
+              <div className="flex">
+                {sideLeft ? (
+                  sideLeft(local)
+                ) : (
+                  <>
+                    <Link href={"/new"}>
+                      <Button className="bg-primary-500">
+                        <div className="flex items-center gap-x-0.5">
+                          <HiPlus className="text-xl" />
+                          <span className="capitalize">Add {name}</span>
+                        </div>
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="ml-auto flex items-center space-x-2 sm:space-x-3">
-            <div className="flex">
-              {sideRight ? (
-                sideRight(local)
-              ) : (
-                <>
-                  <Link href={"/d/tablelist/new"}>
-                    <Button className="bg-primary-500">
-                      <div className="flex items-center gap-x-3">
-                        <HiPlus className="text-xl" />
-                        <span className="capitalize">Add {name}</span>
-                      </div>
-                    </Button>
-                  </Link>
-                </>
-              )}
+          <div className="ml-auto flex items-center flex-row">
+            <div className="tbl-search hidden items-center dark:divide-gray-700 sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100">
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  await local.reload();
+                }}
+              >
+                <Label htmlFor="users-search" className="sr-only">
+                  Search
+                </Label>
+                <div className="relative  lg:w-56">
+                  <InputSearch
+                    // className="bg-white search text-xs "
+                    id="users-search"
+                    name="users-search"
+                    placeholder={`Search`}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      local.search = value;
+                      local.render();
+                      debouncedHandler(() => {
+                        local.reload();
+                      }, 1500);
+                    }}
+                  />
+                </div>
+              </form>
             </div>
+            <div className="flex">{sideRight ? sideRight(local) : <></>}</div>
           </div>
         </div>
         <div className="flex flex-col flex-grow">
           <div className="overflow-auto relative flex-grow flex-row">
             <div className="tbl absolute top-0 left-0 inline-block flex-grow w-full h-full align-middle">
-              <div className="shadow ">
+              <div className=" ">
                 <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-                  <thead className="bg-gray-100 dark:bg-gray-700 group/head text-xs uppercase text-gray-700 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
+                  <thead className="text-md bg-gray-100 dark:bg-gray-700 group/head text-md uppercase text-gray-700 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
                     {table.getHeaderGroups().map((headerGroup) => (
                       <tr key={`${headerGroup.id}`} className={headerGroup.id}>
                         {headerGroup.headers.map((header, index) => {
@@ -259,15 +269,12 @@ export const TableList: React.FC<any> = ({
                             <th
                               {...{
                                 style: {
-                                  width:
-                                    col?.width && header.getSize() < col?.width
-                                      ? col?.width
-                                      : header.getSize(),
+                                  width: header.getSize(),
                                 },
                               }}
                               key={header.id}
                               colSpan={header.colSpan}
-                              className="relative bg-gray-50 px-6 py-3 group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg dark:bg-gray-700"
+                              className="relative bg-gray-50 px-2 py-2 text-xs py-1 group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg dark:bg-gray-700"
                             >
                               <div
                                 key={`${header.id}-label`}
@@ -289,11 +296,11 @@ export const TableList: React.FC<any> = ({
                                   }
                                 }}
                                 className={cx(
-                                  "flex flex-grow flex-row  select-none items-center flex-row",
+                                  "flex flex-grow flex-row  select-none items-center flex-row text-base text-nowrap",
                                   isSort ? " cursor-pointer" : ""
                                 )}
                               >
-                                <div className="flex flex-row items-center">
+                                <div className="flex flex-row items-center text-xs">
                                   {header.isPlaceholder
                                     ? null
                                     : flexRender(
@@ -375,7 +382,7 @@ export const TableList: React.FC<any> = ({
                                 );
                           return (
                             <Table.Cell
-                              className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white"
+                              className="text-md px-2  py-1  whitespace-nowrap font-medium text-gray-900 dark:text-white"
                               key={cell.id}
                             >
                               {renderData}
@@ -461,7 +468,7 @@ export const Pagination: React.FC<any> = ({
           <span className="sr-only">Next page</span>
           <HiChevronRight className="text-2xl" />
         </div>
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+        <span className="text-md font-normal text-gray-500 dark:text-gray-400">
           Page&nbsp;
           <span className="font-semibold text-gray-900 dark:text-white">
             {page}
@@ -506,7 +513,7 @@ export const Pagination: React.FC<any> = ({
                   onChangePage(local.page - 1);
                 }, 1500);
               }}
-              className="block  ml-2 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block  ml-2 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </form>
         </span>
@@ -521,7 +528,7 @@ export const Pagination: React.FC<any> = ({
                 }
               }}
               className={classNames(
-                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-md font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               )}
             >
               <HiChevronLeft className="mr-1 text-base" />
@@ -540,7 +547,7 @@ export const Pagination: React.FC<any> = ({
                 }
               }}
               className={classNames(
-                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-md font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               )}
             >
               Next

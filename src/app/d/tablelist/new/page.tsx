@@ -45,7 +45,7 @@ return {}
                   </div>
                   <div className="flex flex-row space-x-2">
                     <Button className="bg-primary-500" onClick={() => {}}>
-                      <div className="flex items-center gap-x-3">
+                      <div className="flex items-center gap-x-0.5">
                         <IoMdSave className="text-xl" />
                         Save
                       </div>
@@ -83,11 +83,11 @@ return {}
                             aria-describedby="file_input_help"
                             id="file_input"
                             name="file_input"
-                            className="w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            className="w-full text-md text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                           />
                           <Label
                             htmlFor="file_input"
-                            className="mt-1 text-xs font-normal text-gray-500 dark:text-gray-300"
+                            className="mt-1 text-md font-normal text-gray-500 dark:text-gray-300"
                           >
                             SVG, PNG, JPG or GIF (MAX. 800x400px).
                           </Label>
@@ -140,7 +140,7 @@ return {}
                     <div>
                       <Label
                         htmlFor="user-permissions"
-                        className="inline-flex items-center mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 dark:text-white"
                       >
                         User Permissions
                         <Tooltip content="User permissions, part of the overall user management process, are access granted to users to specific resources such as files, applications, networks, or devices.">
@@ -170,7 +170,7 @@ return {}
                     <div>
                       <Label
                         htmlFor="email-status"
-                        className="inline-flex items-center mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 dark:text-white"
                       >
                         Email Status
                         <Tooltip content="As an administrator, you can view the status of a user's email. The status indicates whether a user's email is verified or not.">
@@ -214,7 +214,7 @@ return {}
                     <div>
                       <Label
                         htmlFor="user-role"
-                        className="inline-flex items-center mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 dark:text-white"
                       >
                         User Role
                         <Tooltip content="Flowbite provides 7 predefined roles: Owner, Admin, Editor, Contributor and Viewer. Assign the most suitable role to each user, giving them the most appropriate level of control.">
@@ -247,7 +247,7 @@ return {}
                     <div>
                       <Label
                         htmlFor="account"
-                        className="inline-flex items-center mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 dark:text-white"
                       >
                         Account
                         <Tooltip content="Choose here your account type.">
@@ -315,7 +315,7 @@ return {}
                           />
                           <Label
                             htmlFor="inline-checkbox"
-                            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            className="ml-2 text-md font-medium text-gray-900 dark:text-gray-300"
                           >
                             Administrator
                           </Label>
@@ -327,7 +327,7 @@ return {}
                           />
                           <Label
                             htmlFor="inline-2-checkbox"
-                            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            className="ml-2 text-md font-medium text-gray-900 dark:text-gray-300"
                           >
                             Member
                           </Label>
@@ -339,7 +339,7 @@ return {}
                           />
                           <Label
                             htmlFor="inline-3-checked-checkbox"
-                            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            className="ml-2 text-md font-medium text-gray-900 dark:text-gray-300"
                           >
                             Viewer
                           </Label>

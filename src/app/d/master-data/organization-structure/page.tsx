@@ -1,6 +1,7 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
 import api from "@/lib/axios";
+import { getValue } from "@/lib/getValue";
 
 function Page() {
   return (
@@ -9,36 +10,37 @@ function Page() {
         <TableList
           name="Organization Structure"
           header={{
-            sideRight: (data: any) => {
+            sideLeft: (data: any) => {
               return <></>;
             },
           }}
           column={[
             {
-              name: "organization",
+              name: "organization.name",
               header: () => <span>Organization</span>,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{row.name}</>;
+                return <>{getValue(row, "organization.name")}</>;
               },
             },
             {
-              name: "organization_location",
+              name: "name",
               header: () => <span>Name</span>,
-              width: 300,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{row.name}</>;
+                return <>{getValue(row, "name")}</>;
               },
             },
             {
               name: "parent",
               header: () => <span>Parent</span>,
-              width: 300,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{row.name}</>;
+                return <>{getValue(row, "parent.name")}</>;
               },
             },
           ]}
           onLoad={async (param: any) => {
+            // const res: any = await api.get("/api/organization-structures");
+            // const data: any[] = res.data.data.OrganizationStructures
+            // return data || []
             const res: any = await api.get(
               "https://jsonplaceholder.typicode.com/users"
             );

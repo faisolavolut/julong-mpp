@@ -150,7 +150,7 @@ export const SecondaryButton: React.FC<Button> = ({
   const getClassName: () => string = useCallback(() => {
     const ringColor =
       RING_COLOR.focus[primaryColor as keyof typeof RING_COLOR.focus];
-    return ` w-full transition-all duration-300 bg-gray-50 dark:text-gray-700 font-medium border border-gray-300 px-4 py-2.5 text-sm rounded-md focus:ring-2 focus:ring-offset-2 hover:bg-gray-50 ${ringColor}`;
+    return ` w-full transition-all duration-300 bg-gray-50 dark:text-gray-700 font-medium border border-gray-300 px-4 py-2.5 text-md rounded-md focus:ring-2 focus:ring-offset-2 hover:bg-gray-50 ${ringColor}`;
   }, [primaryColor]);
 
   return (
@@ -183,7 +183,7 @@ export const PrimaryButton: React.FC<Button> = ({
 
   // Functions
   const getClassName = useCallback(() => {
-    return ` w-full transition-all duration-300 ${bgColor} ${borderColor} text-white font-medium border px-4 py-2 text-sm rounded-md focus:ring-2 focus:ring-offset-2 ${bgColorHover} ${ringColor} ${
+    return ` w-full transition-all duration-300 ${bgColor} ${borderColor} text-white font-medium border px-4 py-2 text-md rounded-md focus:ring-2 focus:ring-offset-2 ${bgColorHover} ${ringColor} ${
       disabled ? " cursor-no-drop" : ""
     }`;
   }, [bgColor, bgColorHover, borderColor, disabled, ringColor]);
@@ -219,7 +219,7 @@ export const RoundedButton: React.FC<Button> = ({
       ? "font-semibold bg-gray-50 dark:bg-white/5"
       : "";
     const defaultClass = !roundedFull
-      ? `w-full tracking-wide ${darkClass} ${activeClass} transition-all duration-300 px-3 ${padding} uppercase hover:bg-gray-100 rounded-md focus:ring-1`
+      ? `w-full tracking-wide ${darkClass} ${activeClass} transition-all duration-300 ${padding} uppercase hover:bg-gray-100 rounded-md focus:ring-1`
       : `${darkClass} ${activeClass} transition-all duration-300 hover:bg-gray-100 rounded-full p-[0.45rem] focus:ring-1`;
     const buttonFocusColor =
       BUTTON_COLOR.focus[primaryColor as keyof typeof BUTTON_COLOR.focus];

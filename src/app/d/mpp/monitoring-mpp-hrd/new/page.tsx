@@ -45,7 +45,7 @@ function Page() {
                         fm.submit();
                       }}
                     >
-                      <div className="flex items-center gap-x-3">
+                      <div className="flex items-center gap-x-0.5">
                         <IoMdSave className="text-xl" />
                         Save
                       </div>
@@ -56,7 +56,7 @@ function Page() {
                         fm.submit();
                       }}
                     >
-                      <div className="flex items-center gap-x-3">
+                      <div className="flex items-center gap-x-0.5">
                         <IoMdSave className="text-xl" />
                         Submit
                       </div>
@@ -136,7 +136,7 @@ function Page() {
                         fm={fm}
                         name={"budget_year_from"}
                         label={"Budget year From"}
-                        type={"datetime"}
+                        type={"date"}
                         disabled={true}
                       />
                     </div>

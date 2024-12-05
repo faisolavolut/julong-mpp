@@ -48,7 +48,7 @@ const TabSlider: React.FC<any> = ({ children, className }) => {
   return (
     <div className="flex flex-grow flex-row w-full">
       <div
-        className={cx("relative flex flex-row items-center w-full", className)}
+        className={cx("relative flex flex-row items-center w-full pt-2", className)}
         // ref={containerRef}
       >
         <button

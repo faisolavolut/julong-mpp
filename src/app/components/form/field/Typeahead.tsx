@@ -379,7 +379,7 @@ export const Typeahead: FC<{
                   }
                 }}
               >
-                <div>{e?.tag || e?.label || <>&nbsp;</>}</div>
+                <div className="text-xs">{e?.tag || e?.label || <>&nbsp;</>}</div>
                 {!disabled && <IoCloseOutline  size={12} />}
               </Badge>
             );
@@ -541,7 +541,7 @@ export const Typeahead: FC<{
             disabled={!disabled ? disabledSearch : disabled}
             spellCheck={false}
             className={cx(
-              "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+              "flex h-9 w-full rounded-md border border-gray-300 border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
               local.mode === "single" ? "cursor-pointer" : ""
             )}
             style={{

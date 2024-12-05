@@ -11,7 +11,8 @@ export const Field: React.FC<any> = ({
   placeholder,
   required,
   disabled,
-  hidden_label
+  hidden_label,
+  onChange
 }) => {
   let result = null;
   const is_disable = fm.mode === "view" ? true : disabled
@@ -19,15 +20,17 @@ export const Field: React.FC<any> = ({
     <>
       <div className={cx("flex flex-col")}>
         {!hidden_label ? 
-        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        <label className="block mb-2 text-md font-medium text-gray-900 dark:text-white">
           {label}
         </label> : <></>}
+        <div className={cx("flex flex-row rounded-md", disabled ? "bg-gray-100" : "")}>
+
         {["upload"].includes(type) ? (
           <>
             <TypeUpload
               fm={fm}
               name={name}
-              on_change={() => {}}
+              on_change={onChange}
               mode={"upload"}
             />
           </>
@@ -39,6 +42,7 @@ export const Field: React.FC<any> = ({
               onLoad={onLoad}
               placeholder={placeholder}
               disabled={is_disable}
+              on_change={onChange}
             />
           </>
         ) : (
@@ -50,9 +54,11 @@ export const Field: React.FC<any> = ({
               required={required}
               type={type}
               disabled={is_disable}
+              on_change={onChange}
             />
           </>
         )}
+        </div>
       </div>
     </>
   );

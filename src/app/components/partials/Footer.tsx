@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
           <li>
             <a
               href="#"
-              className="mr-4 text-sm font-normal text-gray-500 hover:underline md:mr-6"
+              className="mr-4 text-md font-normal text-gray-500 hover:underline md:mr-6"
             >
               Terms and conditions
             </a>
@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
           <li>
             <a
               href="#"
-              className="mr-4 text-sm font-normal text-gray-500 hover:underline md:mr-6"
+              className="mr-4 text-md font-normal text-gray-500 hover:underline md:mr-6"
             >
               Privacy Policy
             </a>
@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
           <li>
             <a
               href="#"
-              className="mr-4 text-sm font-normal text-gray-500 hover:underline md:mr-6"
+              className="mr-4 text-md font-normal text-gray-500 hover:underline md:mr-6"
             >
               Licensing
             </a>
@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
           <li>
             <a
               href="#"
-              className="mr-4 text-sm font-normal text-gray-500 hover:underline md:mr-6"
+              className="mr-4 text-md font-normal text-gray-500 hover:underline md:mr-6"
             >
               Cookie Policy
             </a>
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
           <li>
             <a
               href="#"
-              className="text-sm font-normal text-gray-500 hover:underline"
+              className="text-md font-normal text-gray-500 hover:underline"
             >
               Contact
             </a>
@@ -115,7 +115,7 @@ const Footer: React.FC = () => {
           </a>
         </div>
       </footer>
-      <p className="my-10 text-sm text-center text-gray-500">
+      <p className="my-10 text-md text-center text-gray-500">
         &copy; 2019-2023 Built with ❤️ by
         <a
           href="https://creative-tim.com"

@@ -21,8 +21,22 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Roboto';
 }
+.group{
+  margin-left: 5px
+}
+.group span{
+padding: 5px;
+font-size: 0.75rem !important; /* 12px */
+line-height: 1rem  !important; /* 16px */
+}
+/* .group span.capitalize{
+  padding: 0px;
+  } */
+  .group >span{
+    padding: 5px 8px 5px 8px;
+    }
 .resizer {
   position: absolute;
   top: 0;
@@ -31,7 +45,12 @@ body {
   user-select: none;
   touch-action: none;
 }
-
+/* .search input {
+  flex-grow: 1;
+  padding: 5px;
+  padding-left: 40px !important;
+  background-color: transparent !important;
+} */
 .resizer.ltr {
   right: 0;
 }

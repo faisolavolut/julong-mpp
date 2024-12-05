@@ -14,7 +14,7 @@ function Page() {
         <TableList
           name="monitoring mpp"
           header={{
-            sideRight: (data: any) => {
+            sideLeft: (data: any) => {
               return (
                 <>
                   
@@ -85,7 +85,7 @@ function Page() {
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
                 return (
-                  <div className="flex items-center gap-x-3 whitespace-nowrap">
+                  <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                     <Button
                       className="bg-primary-500"
                       onClick={() => {

@@ -91,8 +91,8 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
 
                   {!mini ? (
                     <>
-                      <div className="pl-2 flex-grow  text-black">{item.title}</div>
-                      <div className="text-xs">
+                      <div className="pl-2 flex-grow  text-black text-xs">{item.title}</div>
+                      <div className="text-md">
                         {isOpen ? <FaChevronUp /> : <FaChevronDown />}
                       </div>
                     </>
@@ -153,7 +153,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                 )}
                 {!mini ? (
                   <>
-                    <div className="pl-2 text-black">{item.title}</div>
+                    <div className="pl-2 text-black text-xs">{item.title}</div>
                   </>
                 ) : (
                   <></>
@@ -264,7 +264,7 @@ const LanguageDropdown: FC = function () {
         <li>
           <a
             href="#"
-            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 "
+            className="block py-2 px-4 text-md text-gray-700 hover:bg-gray-100 "
           >
             <div className="inline-flex items-center">
               <svg
@@ -305,7 +305,7 @@ const LanguageDropdown: FC = function () {
         <li>
           <a
             href="#"
-            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100"
+            className="block py-2 px-4 text-md text-gray-700 hover:bg-gray-100"
           >
             <div className="inline-flex items-center">
               <svg
@@ -325,7 +325,7 @@ const LanguageDropdown: FC = function () {
         <li>
           <a
             href="#"
-            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 "
+            className="block py-2 px-4 text-md text-gray-700 hover:bg-gray-100 "
           >
             <div className="inline-flex items-center">
               <svg
@@ -347,7 +347,7 @@ const LanguageDropdown: FC = function () {
         <li>
           <a
             href="#"
-            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+            className="block py-2 px-4 text-md text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
           >
             <div className="inline-flex items-center">
               <svg

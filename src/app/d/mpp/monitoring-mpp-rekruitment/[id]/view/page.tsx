@@ -8,9 +8,10 @@ import { Tablist } from "@/app/components/tablist/Tablist";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { TableList } from "@/app/components/tablelist/TableList";
-import { HiPlus } from "react-icons/hi";
+import { HiDocumentDownload, HiPlus } from "react-icons/hi";
 import { Skeleton } from "@/app/components/ui/Skeleton";
 import { getParams } from "@/lib/get-params";
+import { cloneFM } from "@/lib/cloneFm";
 function Page() {
   const id = getParams("id");
   return (
@@ -71,6 +72,35 @@ function Page() {
                     </div>
                   </div>
                   <div className="flex flex-row space-x-2">
+                    <Button color="gray">
+                      <div className="flex items-center gap-x-1">
+                        <HiDocumentDownload className="text-xl" />
+                        <span>Export</span>
+                      </div>
+                    </Button>
+                    
+                    <Button
+                      className="bg-primary-500"
+                      onClick={() => {
+                        fm.submit();
+                      }}
+                    >
+                      <div className="flex items-center gap-x-0.5">
+                        <IoMdSave className="text-xl" />
+                        Approve
+                      </div>
+                    </Button>
+                    <Button
+                      className="bg-red-500"
+                      onClick={() => {
+                        fm.submit();
+                      }}
+                    >
+                      <div className="flex items-center gap-x-0.5">
+                        <IoMdSave className="text-xl" />
+                        Reject
+                      </div>
+                    </Button>
                   </div>
                 </div>
               </>
@@ -137,7 +167,7 @@ function Page() {
                         fm={fm}
                         name={"document_date"}
                         label={"Document Date"}
-                        type={"datetime"}
+                        type={"date"}
                         disabled={true}
                       />
                     </div>
@@ -146,7 +176,7 @@ function Page() {
                         fm={fm}
                         name={"budget_year_from"}
                         label={"Budget year From"}
-                        type={"datetime"}
+                        type={"date"}
                         disabled={true}
                       />
                     </div>
@@ -294,7 +324,7 @@ function Page() {
                         <div className="w-full flex flex-row">
                           <div
                             className={cx(
-                              "flex flex-grow flex-col h-[500px]",
+                              "flex flex-grow flex-col h-[350px]",
                               css`
                                 .tbl {
                                   position: relative;
@@ -303,11 +333,17 @@ function Page() {
                             )}
                           >
                             <TableList
-                              name={"Line"}
+                              disabledPagination={true}
                               header={{
-                                sideRight: (tbl: any) => {
+                                sideLeft: (tbl: any) => {
                                   return (
                                     <></>
+                                  );
+                                },
+                                sideRight: (tbl: any) => {
+                                  return (
+                                    <>
+                                    </>
                                   );
                                 },
                               }}
@@ -316,14 +352,50 @@ function Page() {
                                   name: "level",
                                   header: () => <span>Job Level</span>,
                                   renderCell: ({ row, name, cell }: any) => {
-                                    return <>{row.level}</>;
+                                    return (
+                                      <>
+                                        <Field
+                                          fm={cloneFM(fm, row)}
+                                          hidden_label={true}
+                                          name={"level"}
+                                          label={"Organization"}
+                                          type={"dropdown"}
+                                          onLoad={async () => {
+                                            return [
+                                              {
+                                                value: 1,
+                                                label: "Organization",
+                                              },
+                                            ];
+                                          }}
+                                        />
+                                      </>
+                                    );
                                   },
                                 },
                                 {
                                   name: "job",
                                   header: () => <span>Job</span>,
                                   renderCell: ({ row, name, cell }: any) => {
-                                    return <>{shortDate(new Date())}</>;
+                                    return (
+                                      <>
+                                        <Field
+                                          fm={cloneFM(fm, row)}
+                                          hidden_label={true}
+                                          name={"organization"}
+                                          label={"Organization"}
+                                          type={"dropdown"}
+                                          onLoad={async () => {
+                                            return [
+                                              {
+                                                value: 1,
+                                                label: "Organization",
+                                              },
+                                            ];
+                                          }}
+                                        />
+                                      </>
+                                    );
                                   },
                                 },
                                 {
@@ -333,10 +405,7 @@ function Page() {
                                     return (
                                       <>
                                         <Field
-                                          fm={{
-                                            data: row,
-                                            render: fm.render,
-                                          }}
+                                          fm={cloneFM(fm, row)}
                                           name={"existing"}
                                           label={"Approved by"}
                                           type={"text"}
@@ -353,7 +422,7 @@ function Page() {
                                     return (
                                       <>
                                         <Field
-                                          fm={fm}
+                                          fm={cloneFM(fm, row)}
                                           name={"recruit"}
                                           label={"Approved by"}
                                           type={"text"}
@@ -370,7 +439,7 @@ function Page() {
                                     return (
                                       <>
                                         <Field
-                                          fm={fm}
+                                          fm={cloneFM(fm, row)}
                                           name={"suggested_recruit"}
                                           label={"Approved by"}
                                           type={"text"}
@@ -387,8 +456,8 @@ function Page() {
                                     return (
                                       <>
                                         <Field
-                                          fm={fm}
-                                          name={"approved_by"}
+                                          fm={cloneFM(fm, row)}
+                                          name={"promotion"}
                                           label={"Approved by"}
                                           type={"text"}
                                           hidden_label={true}
@@ -405,7 +474,15 @@ function Page() {
                                   },
                                 },
                               ]}
-                              onLoad={data.line || []}
+                              onLoad={async (param: any) => {
+                                console.log(data);
+                                return data?.line || [];
+                                const res: any = await api.get(
+                                  "https://jsonplaceholder.typicode.com/users"
+                                );
+                                console.log(res);
+                                return res.data;
+                              }}
                               onInit={async (list: any) => {}}
                             />
                           </div>
