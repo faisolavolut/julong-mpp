@@ -9,11 +9,11 @@ export const TypeDropdown: React.FC<any> = ({fm, name, onLoad, onChange,placehol
         //   popupClassName={}
         onSelect={({ search, item }) => {
           if (item) {
-            fm.data[name] = item;
+            fm.data[name] = item.value;
             fm.render();
           }
-          if(typeof onChange === "function"){
-            onChange(item)
+          if(typeof onChange === "function" && item){
+            onChange(item.value)
           }
           return item?.value || search;
         }}
