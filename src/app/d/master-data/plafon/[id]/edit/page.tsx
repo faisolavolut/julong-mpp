@@ -71,7 +71,7 @@ function Page() {
                       }}
                     >
                       <div className={cx("bg-red-500", btn())}>
-                        <div className="flex items-center gap-x-3">
+                        <div className="flex items-center gap-x-0.5">
                           <MdDelete className="text-xl" />
                           Delete
                         </div>
@@ -85,7 +85,7 @@ function Page() {
                       }}
                     >
                       <div className={cx("bg-primary-500", btn())}>
-                        <div className="flex items-center gap-x-3">
+                        <div className="flex items-center gap-x-0.5">
                           <IoMdSave className="text-xl" />
                           Save
                         </div>

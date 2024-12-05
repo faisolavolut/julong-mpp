@@ -110,7 +110,7 @@ const Login: FC = function () {
                   <div className="flex h-5 items-center">
                     <Checkbox id="remember-illustration" />
                   </div>
-                  <div className="ml-3 text-sm">
+                  <div className="ml-3 text-md">
                     <Label
                       htmlFor="remember-illustration"
                       className="text-gray-500 dark:text-gray-300"
@@ -121,7 +121,7 @@ const Login: FC = function () {
                 </div>
                 <a
                   href="#"
-                  className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  className="text-md font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   Forgot password?
                 </a>
@@ -133,7 +133,7 @@ const Login: FC = function () {
                 Sign in to your account
               </Button>
 
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
+              <p className="text-md font-medium text-gray-900 dark:text-white">
                 Don’t have an account yet?&nbsp;
                 <a
                   href="#"

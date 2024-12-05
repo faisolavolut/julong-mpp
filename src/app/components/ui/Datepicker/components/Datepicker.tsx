@@ -340,7 +340,7 @@ const Datepicker: React.FC<DatepickerType> = ({
         }}
         open={local.open}
         content={
-          <div className={cx("text-sm 2xl:text-sm")} ref={calendarContainerRef}>
+          <div className={cx("text-md 2xl:text-md")} ref={calendarContainerRef}>
             <div className="flex flex-col lg:flex-row py-1">
               {showShortcuts && <Shortcuts />}
 

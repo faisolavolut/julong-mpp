@@ -68,7 +68,7 @@ export const TypeaheadOptions: FC<{
               tabIndex={0}
               key={item.value + "_" + idx}
               className={cx(
-                "opt-item px-3 py-1 cursor-pointer option-item text-sm",
+                "opt-item px-3 py-1 cursor-pointer option-item text-xs",
                 is_selected ? "bg-blue-600 text-white" : "hover:bg-blue-50",
                 idx > 0 && "border-t"
               )}
@@ -86,7 +86,7 @@ export const TypeaheadOptions: FC<{
         ) : (
           <>
             {options.length === 0 && (
-              <div className="p-4 w-full text-center text-sm text-slate-400">
+              <div className="p-4 w-full text-center text-md text-slate-400">
                 {!searchText ? (
                   <>&mdash; Empty &mdash;</>
                 ) : (

@@ -46,7 +46,7 @@ function Page() {
                         fm.submit();
                       }}
                     >
-                      <div className="flex items-center gap-x-3">
+                      <div className="flex items-center gap-x-0.5">
                         <IoMdSave className="text-xl" />
                         Approve
                       </div>
@@ -57,7 +57,7 @@ function Page() {
                         fm.submit();
                       }}
                     >
-                      <div className="flex items-center gap-x-3">
+                      <div className="flex items-center gap-x-0.5">
                         <IoMdSave className="text-xl" />
                         Reject
                       </div>
@@ -128,7 +128,7 @@ function Page() {
                         fm={fm}
                         name={"document_date"}
                         label={"Document Date"}
-                        type={"datetime"}
+                        type={"date"}
                         disabled={true}
                       />
                     </div>
@@ -137,7 +137,7 @@ function Page() {
                         fm={fm}
                         name={"budget_year_from"}
                         label={"Budget year From"}
-                        type={"datetime"}
+                        type={"date"}
                         disabled={true}
                       />
                     </div>
@@ -270,16 +270,16 @@ function Page() {
                     return (
                       <>
                         <div className="w-full flex flex-row">
-                          <div className="flex flex-grow flex-col h-[500px]">
+                          <div className="flex flex-grow flex-col h-[350px]">
                             <TableList
                               name={"Line"}
                               header={{
-                                sideRight: (data: any) => {
+                                sideLeft: (data: any) => {
                                   return (
                                     <>
                                       <div className="flex flex-row flex-grow">
                                         <Button className="bg-primary-500">
-                                          <div className="flex items-center gap-x-3">
+                                          <div className="flex items-center gap-x-0.5">
                                             <IoMdSave className="text-xl" />
                                             <span className="capitalize">
                                               Save

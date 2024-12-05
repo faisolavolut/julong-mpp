@@ -1,6 +1,7 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
 import api from "@/lib/axios";
+import { getValue } from "@/lib/getValue";
 import { Button } from "flowbite-react";
 import Link from "next/link";
 import { HiOutlinePencilAlt, HiPlus, HiTrash } from "react-icons/hi";
@@ -13,20 +14,9 @@ function Page() {
         <TableList
           name="Plafon"
           header={{
-            sideRight: (data: any) => {
+            sideLeft: (data: any) => {
               return (
-                <>
-                  <div className="flex flex-row flex-grow">
-                    <Link href={"/d/master-data/plafon/new"}>
-                      <Button className="bg-primary-500">
-                        <div className="flex items-center gap-x-3">
-                          <HiPlus className="text-xl" />
-                          <span className="capitalize">Add Plafon</span>
-                        </div>
-                      </Button>
-                    </Link>
-                  </div>
-                </>
+                <></>
               );
             },
           }}
@@ -35,7 +25,7 @@ function Page() {
               name: "Organization",
               header: () => <span>Organization</span>,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{row.name}</>;
+                return <>{getValue(row, "organization.name")}</>;
               },
             },
             {
@@ -43,7 +33,7 @@ function Page() {
               header: () => <span>Job</span>,
               width: 300,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{row.name}</>;
+                return <>{getValue(row, "job.name")}</>;
               },
             },
             {
@@ -60,7 +50,7 @@ function Page() {
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
                 return (
-                  <div className="flex items-center gap-x-3 whitespace-nowrap">
+                  <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                     <Button
                       className="bg-primary-500"
                       onClick={() => {
@@ -87,6 +77,11 @@ function Page() {
             },
           ]}
           onLoad={async (param: any) => {
+            
+            
+            // const res: any = await api.get("/api/organization-structures");
+            // const data: any[] = res.data.data.plafon
+            // return data || []
             const res: any = await api.get(
               "https://jsonplaceholder.typicode.com/users"
             );

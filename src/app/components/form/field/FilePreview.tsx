@@ -132,7 +132,7 @@ export const FilePreview = ({ url }: { url: string }) => {
             border: 1px solid #ccc;
             background: white;
           `,
-          "flex items-center text-sm"
+          "flex items-center text-md"
         )}
       >
         {file}

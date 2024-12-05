@@ -4,7 +4,7 @@ import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { Button } from "flowbite-react";
 import Link from "next/link";
-import { HiOutlinePencilAlt, HiPlus, HiTrash } from "react-icons/hi";
+import { HiDocumentDownload, HiOutlinePencilAlt, HiPlus, HiTrash } from "react-icons/hi";
 import { IoEye } from "react-icons/io5";
 
 function Page() {
@@ -14,18 +14,25 @@ function Page() {
         <TableList
           name="monitoring mpp"
           header={{
-            sideRight: (data: any) => {
+            sideLeft: (data: any) => {
               return (
                 <>
                   <div className="flex flex-row flex-grow">
                     <Link href={"/d/mpp/monitoring-mpp-hrd/new"}>
                       <Button className="bg-primary-500">
-                        <div className="flex items-center gap-x-3">
+                        <div className="flex items-center gap-x-0.5">
                           <HiPlus className="text-xl" />
                           <span className="capitalize">Add New</span>
                         </div>
                       </Button>
                     </Link>
+                    
+                    <Button color="gray">
+                      <div className="flex items-center gap-x-1">
+                        <HiDocumentDownload className="text-xl" />
+                        <span>Export</span>
+                      </div>
+                    </Button>
                   </div>
                 </>
               );
@@ -87,7 +94,7 @@ function Page() {
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
                 return (
-                  <div className="flex items-center gap-x-3 whitespace-nowrap">
+                  <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                     <Button
                       className="bg-primary-500"
                       onClick={() => {

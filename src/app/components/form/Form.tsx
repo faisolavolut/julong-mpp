@@ -31,7 +31,7 @@ export const Form: React.FC<any> = ({
   onSubmit,
   onFooter,
   showResize,
-  mode
+  mode,
 }) => {
   const local = useLocal({
     ready: false,
@@ -40,7 +40,7 @@ export const Form: React.FC<any> = ({
       await onSubmit(local);
     },
     render: () => {},
-    mode
+    mode,
   });
 
   useEffect(() => {
@@ -170,6 +170,9 @@ export const Form: React.FC<any> = ({
                 .tbl-wrapper {
                   padding-top: 0 !important;
                 }
+                    .tbl {
+                      position: relative;
+                    }
                 .head-tbl-list {
                   padding-top: 0 !important;
                 }

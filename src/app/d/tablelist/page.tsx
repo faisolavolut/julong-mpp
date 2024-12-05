@@ -27,7 +27,7 @@ function Page() {
               header: () => <span>Action</span>,
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
-                return <div className="flex items-center gap-x-3 whitespace-nowrap">
+                return <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                 <Button
                   className="bg-primary-500"
                   onClick={() => {

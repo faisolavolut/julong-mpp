@@ -52,7 +52,7 @@ function Page() {
                         fm.submit();
                       }}
                     >
-                      <div className="flex items-center gap-x-3">
+                      <div className="flex items-center gap-x-0.5">
                         <IoMdSave className="text-xl" />
                         Submit
                       </div>
@@ -65,7 +65,7 @@ function Page() {
                             fm.submit();
                           }}
                         >
-                          <div className="flex items-center gap-x-3">
+                          <div className="flex items-center gap-x-0.5">
                             <IoMdSave className="text-xl" />
                             Close
                           </div>
@@ -79,7 +79,7 @@ function Page() {
                             fm.submit();
                           }}
                         >
-                          <div className="flex items-center gap-x-3">
+                          <div className="flex items-center gap-x-0.5">
                             <IoMdSave className="text-xl" />
                             Complete
                           </div>
@@ -111,7 +111,7 @@ function Page() {
                         fm={fm}
                         name={"start_date"}
                         label={"Start Date"}
-                        type={"datetime"}
+                        type={"date"}
                       />
                     </div>
                     <div>
@@ -119,7 +119,7 @@ function Page() {
                         fm={fm}
                         name={"end_date"}
                         label={"End Date"}
-                        type={"datetime"}
+                        type={"date"}
                       />
                     </div>
                     <div>

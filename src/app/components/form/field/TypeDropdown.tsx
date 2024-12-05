@@ -1,6 +1,6 @@
 import { Typeahead } from "./Typeahead";
 
-export const TypeDropdown: React.FC<any> = ({fm, name, onLoad, placeholder, disabled}) => {
+export const TypeDropdown: React.FC<any> = ({fm, name, onLoad, onChange,placeholder, disabled}) => {
   return (
     <>
       <Typeahead
@@ -11,6 +11,9 @@ export const TypeDropdown: React.FC<any> = ({fm, name, onLoad, placeholder, disa
           if (item) {
             fm.data[name] = item;
             fm.render();
+          }
+          if(typeof onChange === "function"){
+            onChange(item)
           }
           return item?.value || search;
         }}

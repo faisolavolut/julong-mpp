@@ -9,7 +9,7 @@ function Page() {
         <TableList
           name="Job"
           header={{
-            sideRight: (data: any) => {
+            sideLeft: (data: any) => {
               return <></>;
             },
           }}

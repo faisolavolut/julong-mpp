@@ -62,7 +62,7 @@ const Input: React.FC<Props> = (e: Props) => {
         primaryColor as keyof (typeof RING_COLOR)["second-focus"]
       ];
 
-    const defaultInputClassName = `relative transition-all duration-300 pl-2 pr-14 py-2.5  w-full border-gray-300 dark:bg-slate-800 dark:text-white/80 dark:border-slate-600 rounded-lg tracking-wide font-light text-sm placeholder-gray-400 bg-gray-50 outline-none focus:ring-0 disabled:opacity-40 disabled:cursor-not-allowed ${border} ${ring}`;
+    const defaultInputClassName = `relative flex h-9 w-full rounded-md border border-gray-200 border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm ${border} ${ring}`;
 
     return typeof inputClassName === "function"
       ? inputClassName(defaultInputClassName)
@@ -171,7 +171,7 @@ const Input: React.FC<Props> = (e: Props) => {
     }
 
     const defaultToggleClassName =
-      "absolute right-0 h-full px-3 text-gray-400 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed";
+      "absolute right-0 top-0 h-full px-3 text-gray-400 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed";
 
     return typeof toggleClassName === "function"
       ? toggleClassName(defaultToggleClassName)
@@ -286,7 +286,7 @@ const Input: React.FC<Props> = (e: Props) => {
   return (
     <>
       {disabled ? (
-        <div className={"block w-full border disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 bg-gray-50 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lgblock w-full border disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 bg-gray-50 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lgblock w-full border disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 bg-gray-50 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg"}>{inputText}</div>
+        <div className={"flex h-9 w-full rounded-md border border-gray-200 border-input bg-gray-100 items-center px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"}>{inputText ? inputText : "-"}</div>
       ) : (
         <input
           ref={inputRef}

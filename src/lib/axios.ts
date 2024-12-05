@@ -7,14 +7,13 @@ const api = axios.create({
   timeout: 10000, // Timeout dalam milidetik
   withCredentials: true, // Kirim cookie otomatis dengan setiap permintaan
 });
-
+console.log(process.env.NEXT_PUBLIC_API_BASE_URL)
 // Interceptor untuk menambahkan token dari cookie ke header Authorization (jika diperlukan)
 api.interceptors.request.use((config) => {
   const token = Cookies.get("token"); // Ambil token dari cookie
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  console.log({config})
   return config;
 });
 
