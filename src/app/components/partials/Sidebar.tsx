@@ -10,6 +10,7 @@ import isSmallScreen from "@/helpers/is-small-screen";
 import { css } from "@emotion/css";
 import { FaAngleUp, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Minimize } from "lucide-react";
+import { SidebarLinkBetter } from "../ui/link-better";
 interface TreeMenuItem {
   title: string;
   href?: string;
@@ -63,10 +64,12 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                   isParentActive && !depth
                     ? " text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group bg-white shadow-md  shadow-[#31367875] hover:!bg-white  transition-all duration-200  dark:bg-gray-700"
                     : " ",
-                    mini ? "m-0 flex-grow w-full" : "py-2.5 px-4 ",
-                    mini ? css`
-                     margin: 0 !important
-                    ` : ""
+                  mini ? "m-0 flex-grow w-full" : "py-2.5 px-4 ",
+                  mini
+                    ? css`
+                        margin: 0 !important;
+                      `
+                    : ""
                 )}
                 onClick={() => {
                   if (mini) {
@@ -76,7 +79,17 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                 }}
                 style={itemStyle}
               >
-                <div className={cx("flex flex-row items-center flex-grow", mini ? "py-2 justify-center  rounded-lg" : " px-3", mini ? isParentActive ? "bg-[#313678]": "bg-white hover:bg-gray-300 shadow shadow-gray-300" : "" )}>
+                <div
+                  className={cx(
+                    "flex flex-row items-center flex-grow",
+                    mini ? "py-2 justify-center  rounded-lg" : " px-3",
+                    mini
+                      ? isParentActive
+                        ? "bg-[#313678]"
+                        : "bg-white hover:bg-gray-300 shadow shadow-gray-300"
+                      : ""
+                  )}
+                >
                   {!depth ? (
                     <div
                       className={classNames(
@@ -84,8 +97,14 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                         isParentActive
                           ? "bg-[#313678] text-white "
                           : "bg-white shadow-lg text-black",
-                        !mini ? "mr-1  p-2 shadow-gray-300" : " text-lg shadow-none",
-                        mini ? css`background: transparent !important` : ``,
+                        !mini
+                          ? "mr-1  p-2 shadow-gray-300"
+                          : " text-lg shadow-none",
+                        mini
+                          ? css`
+                              background: transparent !important;
+                            `
+                          : ``
                       )}
                     >
                       {item.icon}
@@ -96,7 +115,9 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
 
                   {!mini ? (
                     <>
-                      <div className="pl-2 flex-grow  text-black text-xs">{item.title}</div>
+                      <div className="pl-2 flex-grow  text-black text-xs">
+                        {item.title}
+                      </div>
                       <div className="text-md">
                         {isOpen ? <FaChevronUp /> : <FaChevronDown />}
                       </div>
@@ -118,53 +139,60 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
               </Sidebar.ItemGroup>
             </li>
           ) : (
-            <Sidebar.Item
-              href={item.href}
-              className={classNames(
-                "flex-row flex items-center cursor-pointer",
-                isActive
-                  ? " py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg  group     shadow-[#31367875]   transition-all duration-200  dark:bg-gray-700"
-                  : "",
-                isActive
-                  ? !depth
-                    ? " bg-white shadow-md hover:bg-gray-200 hover:!bg-white "
-                    : "bg-gray-100"
-                  : "",
-                css`
-                  & > span {
-                    white-space: wrap !important;
-                  }
-                `,
+            <li>
+              <SidebarLinkBetter
+                href={item.href}
+                onClick={() => {
+                  if (item?.href) setCurrentPage(item.href);
+                }}
+                className={classNames(
+                  " flex-row flex items-center cursor-pointer items-center w-full rounded-lg text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 flex flex-row  py-2.5 px-4",
+                  isActive
+                    ? " py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg  group     shadow-[#31367875]   transition-all duration-200  dark:bg-gray-700"
+                    : "",
+                  isActive
+                    ? !depth
+                      ? " bg-white shadow-md hover:bg-gray-200 hover:!bg-white "
+                      : "bg-gray-100"
+                    : "",
+                  css`
+                    & > span {
+                      white-space: wrap !important;
+                    }
+                  `,
 
-                mini ? "px-0 py-2" : ""
-              )}
-              style={itemStyle} // Terapkan gaya berdasarkan depth
-            >
-              <div className="flex flex-row items-center">
-                {!depth ? (
-                  <div
-                    className={classNames(
-                      " shadow-gray-300  text-dark-700 w-8 h-8  rounded-lg text-center flex flex-row items-center justify-center shadow-[#313678]",
-                      isActive
-                        ? "bg-[#313678] text-white"
-                        : "bg-white shadow-lg text-black",
-                      !mini ? "mr-1  p-2" : " text-lg"
-                    )}
-                  >
-                    {item.icon}
-                  </div>
-                ) : (
-                  <></>
+                  mini ? "px-0 py-2" : ""
                 )}
-                {!mini ? (
-                  <>
-                    <div className="pl-2 text-black text-xs">{item.title}</div>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </div>
-            </Sidebar.Item>
+                style={itemStyle} // Terapkan gaya berdasarkan depth
+              >
+                <div className="flex flex-row items-center">
+                  {!depth ? (
+                    <div
+                      className={classNames(
+                        " shadow-gray-300  text-dark-700 w-8 h-8  rounded-lg text-center flex flex-row items-center justify-center shadow-[#313678]",
+                        isActive
+                          ? "bg-[#313678] text-white"
+                          : "bg-white shadow-lg text-black",
+                        !mini ? "mr-1  p-2" : " text-lg"
+                      )}
+                    >
+                      {item.icon}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                  {!mini ? (
+                    <>
+                      <div className="pl-2 text-black text-xs">
+                        {item.title}
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </SidebarLinkBetter>
+            </li>
           )}
         </React.Fragment>
       );

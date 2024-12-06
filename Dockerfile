@@ -50,18 +50,7 @@ RUN npm run build
 FROM node:20-slim AS runner
 
 WORKDIR /app
-
-# Salin file yang dibutuhkan untuk runtime
 COPY --from=builder /app ./
-# Buat file .env
-RUN echo "NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}" > .env && \
-    echo "NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}" >> .env && \
-    echo "NODE_ENV=${NODE_ENV}" >> .env
-
-# Debug: Tampilkan isi file .env
-RUN cat .env
-
-# Expose port untuk Next.js
 EXPOSE 3000
 
 # Jalankan aplikasi
