@@ -10,7 +10,7 @@ import { shortDate } from "@/lib/date";
 import { TableList } from "@/app/components/tablelist/TableList";
 function Page() {
   return (
-    <div className="w-full flex flex-row">
+    <div className="w-full flex flex-row flex-grow">
       <div className="flex flex-grow flex-col">
         <Form
           onSubmit={async (fm: any) => {
@@ -269,7 +269,7 @@ function Page() {
                   tabContent={(data: any) => {
                     return (
                       <>
-                        <div className="w-full flex flex-row">
+                        <div className="w-full flex flex-row flex-grow">
                           <div className="flex flex-grow flex-col h-[350px]">
                             <TableList
                               name={"Line"}

@@ -32,6 +32,7 @@ export const Form: React.FC<any> = ({
   onFooter,
   showResize,
   mode,
+  className,
 }) => {
   const local = useLocal({
     ready: false,
@@ -106,7 +107,7 @@ export const Form: React.FC<any> = ({
   }, []);
 
   return (
-    <div className="flex-grow flex-col flex">
+    <div className={cx("flex-grow flex-col flex", className)}>
       <div className="flex flex-row">{header(local)}</div>
       {showResize ? (
         <>
@@ -171,9 +172,9 @@ export const Form: React.FC<any> = ({
                 .tbl-wrapper {
                   padding-top: 0 !important;
                 }
-                    .tbl {
-                      position: relative;
-                    }
+                // .tbl {
+                //   position: relative;
+                // }
                 .head-tbl-list {
                   padding-top: 0 !important;
                 }

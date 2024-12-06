@@ -17,9 +17,21 @@ import { MdDelete } from "react-icons/md";
 function Page() {
   const id = getParams("id");
   return (
-    <div className="w-full flex flex-row">
-      <div className="flex flex-grow flex-col">
+    <div className="flex flex-col flex-grow">
+      <div className="flex flex-col py-4">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <span className="">Form Monitoring MPP</span>
+        </h2>
+        <Breadcrumb className="breadcrumb">
+          <Breadcrumb.Item href="/d/master-data/plafon">
+            List Monitoring MPP
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>Edit</Breadcrumb.Item>
+        </Breadcrumb>
+      </div>
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg relative overflow-auto shadow">
         <Form
+        className={"absolute top-0 left-0 w-full"}
           onSubmit={async (fm: any) => {
             const data = fm.data;
             console.log({ data });
@@ -36,7 +48,7 @@ function Page() {
                   line: [
                     {
                       job: "JOB 1",
-                      level: 1,
+                      level: "1",
                     },
                   ],
                 },
@@ -364,8 +376,32 @@ function Page() {
                                           onLoad={async () => {
                                             return [
                                               {
-                                                value: 1,
-                                                label: "Organization",
+                                                value: "1",
+                                                label: "1",
+                                              },
+                                              {
+                                                value: "2",
+                                                label: "2",
+                                              },
+                                              {
+                                                value: "3",
+                                                label: "3",
+                                              },
+                                              {
+                                                value: "4",
+                                                label: "4",
+                                              },
+                                              {
+                                                value: "5",
+                                                label: "5",
+                                              },
+                                              {
+                                                value: "6",
+                                                label: "6",
+                                              },
+                                              {
+                                                value: "7",
+                                                label: "7",
                                               },
                                             ];
                                           }}
@@ -377,6 +413,7 @@ function Page() {
                                 {
                                   name: "job",
                                   header: () => <span>Job</span>,
+                                  width: 150,
                                   renderCell: ({ row, name, cell }: any) => {
                                     return (
                                       <>
@@ -476,7 +513,6 @@ function Page() {
                                 },
                               ]}
                               onLoad={async (param: any) => {
-                                console.log(data);
                                 return data?.line || [];
                                 const res: any = await api.get(
                                   "https://jsonplaceholder.typicode.com/users"

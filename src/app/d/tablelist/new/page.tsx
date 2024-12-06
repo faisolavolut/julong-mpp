@@ -22,7 +22,7 @@ function Page() {
     data: null as any,
   });
   return (
-    <div className="w-full flex flex-row">
+    <div className="w-full flex flex-row flex-grow">
       <div className="flex flex-grow flex-col">
         <Form
         onSubmit={async() => {

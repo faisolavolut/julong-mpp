@@ -59,10 +59,14 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
             <li>
               <div
                 className={classNames(
-                  " py-2.5 px-4  flex-row flex items-center cursor-pointer items-center w-full rounded-lg text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 flex flex-row",
+                  " flex-row flex items-center cursor-pointer items-center w-full rounded-lg text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 flex flex-row",
                   isParentActive && !depth
-                    ? " py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group bg-white shadow-lg shadow-gray-200 hover:!bg-white  transition-all duration-200  dark:bg-gray-700"
-                    : " "
+                    ? " text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group bg-white shadow-md  shadow-[#31367875] hover:!bg-white  transition-all duration-200  dark:bg-gray-700"
+                    : " ",
+                    mini ? "m-0 flex-grow w-full" : "py-2.5 px-4 ",
+                    mini ? css`
+                     margin: 0 !important
+                    ` : ""
                 )}
                 onClick={() => {
                   if (mini) {
@@ -72,15 +76,16 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                 }}
                 style={itemStyle}
               >
-                <div className="flex flex-row items-center flex-grow px-3">
+                <div className={cx("flex flex-row items-center flex-grow", mini ? "py-2 justify-center  rounded-lg" : " px-3", mini ? isParentActive ? "bg-[#313678]": "bg-white hover:bg-gray-300 shadow shadow-gray-300" : "" )}>
                   {!depth ? (
                     <div
                       className={classNames(
-                        " shadow-gray-300  text-dark-700 w-8 h-8 rounded-lg text-center flex flex-row items-center justify-center shadow-gray-300",
+                        "   text-dark-700 w-8 h-8 rounded-lg text-center flex flex-row items-center justify-center",
                         isParentActive
-                          ? "bg-[#313678] text-white"
+                          ? "bg-[#313678] text-white "
                           : "bg-white shadow-lg text-black",
-                        !mini ? "mr-1  p-2" : " text-lg"
+                        !mini ? "mr-1  p-2 shadow-gray-300" : " text-lg shadow-none",
+                        mini ? css`background: transparent !important` : ``,
                       )}
                     >
                       {item.icon}
@@ -118,11 +123,11 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
               className={classNames(
                 "flex-row flex items-center cursor-pointer",
                 isActive
-                  ? " py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg  group   shadow-gray-200   transition-all duration-200  dark:bg-gray-700"
+                  ? " py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg  group     shadow-[#31367875]   transition-all duration-200  dark:bg-gray-700"
                   : "",
                 isActive
                   ? !depth
-                    ? " bg-white shadow-lg hover:bg-gray-200 hover:!bg-white "
+                    ? " bg-white shadow-md hover:bg-gray-200 hover:!bg-white "
                     : "bg-gray-100"
                   : "",
                 css`
@@ -139,7 +144,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                 {!depth ? (
                   <div
                     className={classNames(
-                      " shadow-gray-300  text-dark-700 w-8 h-8  rounded-lg text-center flex flex-row items-center justify-center shadow-gray-300",
+                      " shadow-gray-300  text-dark-700 w-8 h-8  rounded-lg text-center flex flex-row items-center justify-center shadow-[#313678]",
                       isActive
                         ? "bg-[#313678] text-white"
                         : "bg-white shadow-lg text-black",
@@ -170,7 +175,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
     <div className={classNames("flex h-full lg:!block", {})}>
       <Sidebar
         aria-label="Sidebar with multi-level dropdown example"
-        className={classNames("relative", mini ? "w-20" : "", css``)}
+        className={classNames("relative bg-white", mini ? "w-20" : "", css``)}
       >
         <div className="w-full h-full relative">
           <div className="flex h-full flex-col justify-between w-full absolute top-0 left-0">

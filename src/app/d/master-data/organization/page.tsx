@@ -2,51 +2,61 @@
 import { TableList } from "@/app/components/tablelist/TableList";
 import api from "@/lib/axios";
 import { joinString } from "@/lib/joinString";
+import { Breadcrumb } from "flowbite-react";
 
 function Page() {
   return (
-    <div className="w-full flex flex-row">
-      <div className="flex flex-grow flex-col">
-        <TableList
-          name="Organization"
-          header={{
-            sideLeft: (data: any) => {
-              return <></>;
-            },
-          }}
-          column={[
-            {
-              name: "name",
-              header: () => <span>Organization</span>,
-              renderCell: ({ row, name, cell }: any) => {
-                return <>{row.name}</>;
+    <div className="flex flex-col flex-grow">
+      <div className="flex flex-col py-4">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <span className="">Organizations</span>
+        </h2>
+      </div>
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
+        <div className="flex flex-grow flex-col">
+          <TableList
+            name="Organization"
+            header={{
+              sideLeft: (data: any) => {
+                return <></>;
               },
-            },
-            {
-              name: "organization_location",
-              header: () => <span>Organization Location</span>,
-              width: 300,
-              renderCell: ({ row, name, cell }: any) => {
-                const data = row.organization_location;
-                return <>{joinString(data, "name")}</>;
+            }}
+            column={[
+              {
+                name: "name",
+                header: () => <span>Organization</span>,
+                renderCell: ({ row, name, cell }: any) => {
+                  return <>{row.name}</>;
+                },
               },
-            },
-          ]}
-          onLoad={async (param: any) => {
-            // await api.get("/api/users/me")  
-            // console.log("HALO")
-            // await api.get("http://localhost:3000/api/proxy/api/organizations")
-            // const res: any = await api.get("/api/organizations");
-            // const data: any[] = res.data.data.organizations
-            // return data || []
-            
-            const res: any = await api.get(
-              "https://jsonplaceholder.typicode.com/users"
-            );
-            return res.data;
-          }}
-          onInit={async (list: any) => {}}
-        />
+              {
+                name: "organization_location",
+                header: () => <span>Organization Location</span>,
+                width: 300,
+                renderCell: ({ row, name, cell }: any) => {
+                  console.log(row);
+                  const data = row.organization_locations;
+                  return <>{joinString(data, "name")}</>;
+                },
+              },
+            ]}
+            onLoad={async (param: any) => {
+              // await api.get("/api/users/me")
+              // console.log("HALO")
+              // await api.get("http://localhost:3000/api/proxy/api/organizations")
+              const res: any = await api.get("/api/organizations");
+              const data: any[] = res.data.data.organizations;
+              console.log(data);
+              return data || [];
+
+              // const res: any = await api.get(
+              //   "https://jsonplaceholder.typicode.com/users"
+              // );
+              // return res.data;
+            }}
+            onInit={async (list: any) => {}}
+          />
+        </div>
       </div>
     </div>
   );

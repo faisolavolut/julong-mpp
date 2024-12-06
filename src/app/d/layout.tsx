@@ -19,8 +19,8 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
     const localMini = localStorage.getItem("mini");
     if (!localMini) {
       localStorage.setItem("mini", mini ? "true" : "false");
-    }else{
-      setMini(localMini === "true" ? true : false)
+    } else {
+      setMini(localMini === "true" ? true : false);
     }
   }, []);
   return (
@@ -28,7 +28,7 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
       <NavFlow
         minimaze={() => {
           setMini(!mini);
-              localStorage.setItem("mini", !mini ? "true" : "false");
+          localStorage.setItem("mini", !mini ? "true" : "false");
         }}
       />
       <div className="flex  bg-white flex-grow flex-row">
@@ -41,14 +41,12 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
             mini={mini}
           />
         </SidebarProvider>
-        <div className="flex flex-row flex-grow bg-gray-500 flex-grow">
+        <div className="flex flex-row flex-grow  bg-[#F1F1F1] flex-grow">
           <div
             id="main-content"
-            className="flex-grow bg-gray-50 relative overflow-y-auto bg-white flex flex-row"
+            className="flex-grow  relative overflow-y-auto flex flex-row"
           >
-            <main className="absolute top-0 left-0 w-full bg-white h-full flex flex-row">
-              {children}
-            </main>
+            <main className="flex-grow p-10 flex flex-col">{children}</main>
           </div>
         </div>
       </div>

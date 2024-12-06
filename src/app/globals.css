@@ -23,6 +23,12 @@ body {
   background: var(--background);
   font-family: 'Roboto';
 }
+.breadcrumb li{
+  margin-left: 0px;
+}
+.breadcrumb li > span{
+  padding-left: 0px;
+}
 .group{
   margin-left: 5px
 }

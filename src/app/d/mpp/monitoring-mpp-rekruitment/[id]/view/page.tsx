@@ -15,7 +15,7 @@ import { cloneFM } from "@/lib/cloneFm";
 function Page() {
   const id = getParams("id");
   return (
-    <div className="w-full flex flex-row">
+    <div className="w-full flex flex-row flex-grow">
       <div className="flex flex-grow flex-col">
         <Form
           mode="view"
@@ -321,7 +321,7 @@ function Page() {
                   tabContent={(data: any) => {
                     return (
                       <>
-                        <div className="w-full flex flex-row">
+                        <div className="w-full flex flex-row flex-grow">
                           <div
                             className={cx(
                               "flex flex-grow flex-col h-[350px]",

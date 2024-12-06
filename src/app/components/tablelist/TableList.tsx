@@ -34,13 +34,15 @@ import {
 import classNames from "classnames";
 import { useLocal } from "@/lib/use-local";
 import { debouncedHandler } from "@/lib/debounceHandler";
-import { FaArrowDownLong, FaArrowUp } from "react-icons/fa6";
+import { FaArrowDownLong, FaArrowUp, FaChevronUp } from "react-icons/fa6";
 
 import Link from "next/link";
 import { init_column } from "./lib/column";
 import { toast } from "sonner";
 import { Check, Loader2 } from "lucide-react";
 import { InputSearch } from "../ui/input-search";
+import { Input } from "../ui/input";
+import { FaChevronDown } from "react-icons/fa";
 
 export const TableList: React.FC<any> = ({
   name,
@@ -50,7 +52,6 @@ export const TableList: React.FC<any> = ({
   header,
   disabledPagination,
 }) => {
-  console.log(take);
   const [data, setData] = useState<any[]>([]);
   const sideLeft =
     typeof header?.sideLeft === "function" ? header.sideLeft : null;
@@ -185,11 +186,11 @@ export const TableList: React.FC<any> = ({
   }));
   return (
     <>
-      <div className="tbl-wrapper p-2 flex flex-grow flex-col">
-        <div className="head-tbl-list block items-start justify-between border-b border-gray-200 bg-white py-4 px-0 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+      <div className="tbl-wrapper flex flex-grow flex-col">
+        <div className="head-tbl-list block items-start justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
           <div className="flex flex-row items-end">
             <div className="sm:flex flex flex-col space-y-2">
-              {name ? (
+              {false ? (
                 <div className="">
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
                     All <span className="">{name ? `${name}s` : ``}</span>
@@ -254,8 +255,8 @@ export const TableList: React.FC<any> = ({
           <div className="overflow-auto relative flex-grow flex-row">
             <div className="tbl absolute top-0 left-0 inline-block flex-grow w-full h-full align-middle">
               <div className=" ">
-                <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-                  <thead className="text-md bg-gray-100 dark:bg-gray-700 group/head text-md uppercase text-gray-700 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
+                <Table className="min-w-full divide-y divide-gray-200 ">
+                  <thead className="text-md bg-second group/head text-md uppercase text-gray-700 ">
                     {table.getHeaderGroups().map((headerGroup) => (
                       <tr key={`${headerGroup.id}`} className={headerGroup.id}>
                         {headerGroup.headers.map((header, index) => {
@@ -274,10 +275,16 @@ export const TableList: React.FC<any> = ({
                               }}
                               key={header.id}
                               colSpan={header.colSpan}
-                              className="relative bg-gray-50 px-2 py-2 text-xs py-1 group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg dark:bg-gray-700"
+                              className="relative px-2 py-2 text-sm py-1 "
                             >
                               <div
                                 key={`${header.id}-label`}
+                                
+                              {...{
+                                style: col.width ? {
+                                  minWidth: `${col.width}px`,
+                                } : {},
+                              }}
                                 onClick={() => {
                                   if (isSort) {
                                     const sort = local?.sort?.[name];
@@ -296,11 +303,11 @@ export const TableList: React.FC<any> = ({
                                   }
                                 }}
                                 className={cx(
-                                  "flex flex-grow flex-row  select-none items-center flex-row text-base text-nowrap",
+                                  "flex flex-grow flex-row  flex-grow select-none items-center flex-row text-base text-nowrap",
                                   isSort ? " cursor-pointer" : ""
                                 )}
                               >
-                                <div className="flex flex-row items-center text-xs">
+                                <div className="flex flex-row items-center flex-grow text-sm">
                                   {header.isPlaceholder
                                     ? null
                                     : flexRender(
@@ -308,16 +315,13 @@ export const TableList: React.FC<any> = ({
                                         header.getContext()
                                       )}
                                 </div>
-                                <div className="flex flex-row items-center">
-                                  {local?.sort?.[name] === "asc" ? (
-                                    <FaArrowUp className="px-0.5 mx-1" />
-                                  ) : local?.sort?.[name] === "desc" ? (
-                                    <FaArrowDownLong className="px-0.5 mx-1" />
-                                  ) : (
-                                    <></>
-                                  )}
+                                
+                                <div className="flex flex-col items-center">
+                                <FaChevronUp className={cx("px-0.5 mx-1  text-[12px]", local?.sort?.[name] === "asc" ? "text-black" : "text-gray-500")} />
+                                <FaChevronDown className={cx("px-0.5 mx-1  text-[12px]", local?.sort?.[name] === "desc" ? "text-black" : "text-gray-500")} />
                                 </div>
                               </div>
+                              
                               {headerGroup.headers.length !== index + 1 ? (
                                 <div
                                   key={`${header.id}-resizer`} // Tambahkan key unik
@@ -357,11 +361,11 @@ export const TableList: React.FC<any> = ({
                     ))}
                   </thead>
 
-                  <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+                  <Table.Body className="divide-y divide-gray-200 bg-white">
                     {table.getRowModel().rows.map((row) => (
                       <Table.Row
                         key={row.id}
-                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="hover:bg-[#DBDBE7]"
                       >
                         {row.getVisibleCells().map((cell) => {
                           const ctx = cell.getContext();
@@ -382,7 +386,7 @@ export const TableList: React.FC<any> = ({
                                 );
                           return (
                             <Table.Cell
-                              className="text-md px-2  py-1  whitespace-nowrap font-medium text-gray-900 dark:text-white"
+                              className="text-md px-2  py-1  whitespace-nowrap text-gray-900 dark:text-white"
                               key={cell.id}
                             >
                               {renderData}
@@ -434,7 +438,7 @@ export const Pagination: React.FC<any> = ({
     local.render();
   }, [page]);
   return (
-    <div className="tbl-pagination sticky bottom-0 right-0 w-full items-center justify-end border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+    <div className="tbl-pagination sticky text-sm bottom-0 right-0 w-full items-center justify-end text-sm border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
       <div className="mb-4 flex items-center sm:mb-0">
         <div
           onClick={() => {
@@ -479,7 +483,7 @@ export const Pagination: React.FC<any> = ({
           </span>
         </span>
 
-        <span className="flex items-center pl-2 text-black">
+        <span className="flex items-center pl-2 text-black gap-x-2">
           | Go to page:
           <form
             onSubmit={(e) => {
@@ -494,7 +498,7 @@ export const Pagination: React.FC<any> = ({
               onChangePage(local.page - 1);
             }}
           >
-            <input
+            <Input
               type="number"
               min="1"
               max={countPage}
@@ -513,8 +517,7 @@ export const Pagination: React.FC<any> = ({
                   onChangePage(local.page - 1);
                 }, 1500);
               }}
-              className="block  ml-2 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
+      />
           </form>
         </span>
       </div>

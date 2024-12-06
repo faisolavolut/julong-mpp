@@ -1,3 +1,3 @@
 export const siteurl = (param: string) => {
-    return `${param}`
+    return `${process.env.NEXT_PUBLIC_BASE_URL + param}`
 }

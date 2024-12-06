@@ -9,7 +9,7 @@ import { IoEye } from "react-icons/io5";
 
 function Page() {
   return (
-    <div className="w-full flex flex-row">
+    <div className="w-full flex flex-row flex-grow">
       <div className="flex flex-grow flex-col">
         <TableList
           name="monitoring mpp"

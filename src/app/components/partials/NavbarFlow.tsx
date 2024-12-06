@@ -25,7 +25,8 @@ import {
   HiViewGrid,
   HiX,
 } from "react-icons/hi";
-const NavFlow: React.FC<any> = ({minimaze}) => {
+import { siteurl } from "@/lib/siteurl";
+const NavFlow: React.FC<any> = ({ minimaze }) => {
   return (
     <Navbar fluid>
       <div className="w-full p-1 lg:px-5 lg:pl-3">
@@ -41,17 +42,20 @@ const NavFlow: React.FC<any> = ({minimaze}) => {
               </button>
             )}
             <Navbar.Brand href="/">
-              <img alt="" src="http://localhost:3000/julong.png" className="mr-3 h-6 sm:h-8" />
+              <img
+                alt=""
+                src={siteurl("/julong.png")}
+                className="mr-3 h-6 sm:h-8"
+              />
               <span className="self-center whitespace-nowrap text-2xl font-semibold text-black">
                 Man Power Management
               </span>
-            </Navbar.Brand>                           
+            </Navbar.Brand>
           </div>
 
           <div className="flex items-center lg:gap-3">
             <div className="flex items-center">
               <NotificationBellDropdown />
-              <AppDrawerDropdown />
             </div>
             <div className="hidden lg:block">
               <UserDropdown />
@@ -87,7 +91,7 @@ const NotificationBellDropdown: FC = function () {
             <div className="shrink-0">
               <img
                 alt=""
-                src="../images/users/bonnie-green.png"
+                src={siteurl("/dog.jpg")}
                 className="h-11 w-11 rounded-full"
               />
               <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-primary-700 dark:border-gray-700">
@@ -114,7 +118,7 @@ const NotificationBellDropdown: FC = function () {
             <div className="shrink-0">
               <img
                 alt=""
-                src="../images/users/jese-leos.png"
+                src={siteurl("/dog.jpg")}
                 className="h-11 w-11 rounded-full"
               />
               <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-gray-900 dark:border-gray-700">
@@ -144,7 +148,7 @@ const NotificationBellDropdown: FC = function () {
             <div className="shrink-0">
               <img
                 alt=""
-                src="../images/users/joseph-mcfall.png"
+                src={siteurl("/dog.jpg")}
                 className="h-11 w-11 rounded-full"
               />
               <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-red-600 dark:border-gray-700">
@@ -174,7 +178,7 @@ const NotificationBellDropdown: FC = function () {
             <div className="shrink-0">
               <img
                 alt=""
-                src="../images/users/leslie-livingston.png"
+                src={siteurl("/dog.jpg")}
                 className="h-11 w-11 rounded-full"
               />
               <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-green-400 dark:border-gray-700">
@@ -204,7 +208,7 @@ const NotificationBellDropdown: FC = function () {
             <div className="shrink-0">
               <img
                 alt=""
-                src="../images/users/robert-brown.png"
+                src={siteurl("/dog.jpg")}
                 className="h-11 w-11 rounded-full"
               />
               <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-purple-500 dark:border-gray-700">
@@ -423,7 +427,7 @@ const UserDropdown: FC = function () {
       label={
         <span>
           <span className="sr-only">User menu</span>
-          <Avatar alt="" img="../dog.jpg" rounded size="sm" />
+          <Avatar alt="" img={siteurl("/dog.jpg")} rounded size="sm" />
         </span>
       }
     >

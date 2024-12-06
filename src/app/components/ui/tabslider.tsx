@@ -31,9 +31,6 @@ const TabSlider: React.FC<any> = ({ children, className }) => {
   }, [wrapper]);
   useEffect(() => {
     if (item.current) {
-      console.log({ item });
-
-      console.log(item.current.scrollWidth > widthWrapper);
       if (item.current.scrollWidth > widthWrapper) {
         setIsScroll(true);
       }

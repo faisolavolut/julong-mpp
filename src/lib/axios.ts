@@ -1,13 +1,11 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-
 // Buat instance Axios
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.example.com", // Ganti dengan URL API Anda
   timeout: 10000, // Timeout dalam milidetik
   withCredentials: true, // Kirim cookie otomatis dengan setiap permintaan
 });
-console.log(process.env.NEXT_PUBLIC_API_BASE_URL)
 // Interceptor untuk menambahkan token dari cookie ke header Authorization (jika diperlukan)
 api.interceptors.request.use((config) => {
   const token = Cookies.get("token"); // Ambil token dari cookie
