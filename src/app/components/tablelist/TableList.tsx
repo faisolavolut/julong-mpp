@@ -170,7 +170,7 @@ export const TableList: React.FC<any> = ({
       },
       sorting,
     },
-    ...paginationConfig
+    ...paginationConfig,
   });
   local.table = table;
 
@@ -279,12 +279,13 @@ export const TableList: React.FC<any> = ({
                             >
                               <div
                                 key={`${header.id}-label`}
-                                
-                              {...{
-                                style: col.width ? {
-                                  minWidth: `${col.width}px`,
-                                } : {},
-                              }}
+                                {...{
+                                  style: col?.width
+                                    ? {
+                                        minWidth: `${col.width}px`,
+                                      }
+                                    : {},
+                                }}
                                 onClick={() => {
                                   if (isSort) {
                                     const sort = local?.sort?.[name];
@@ -315,13 +316,27 @@ export const TableList: React.FC<any> = ({
                                         header.getContext()
                                       )}
                                 </div>
-                                
+
                                 <div className="flex flex-col items-center">
-                                <FaChevronUp className={cx("px-0.5 mx-1  text-[12px]", local?.sort?.[name] === "asc" ? "text-black" : "text-gray-500")} />
-                                <FaChevronDown className={cx("px-0.5 mx-1  text-[12px]", local?.sort?.[name] === "desc" ? "text-black" : "text-gray-500")} />
+                                  <FaChevronUp
+                                    className={cx(
+                                      "px-0.5 mx-1  text-[12px]",
+                                      local?.sort?.[name] === "asc"
+                                        ? "text-black"
+                                        : "text-gray-500"
+                                    )}
+                                  />
+                                  <FaChevronDown
+                                    className={cx(
+                                      "px-0.5 mx-1  text-[12px]",
+                                      local?.sort?.[name] === "desc"
+                                        ? "text-black"
+                                        : "text-gray-500"
+                                    )}
+                                  />
                                 </div>
                               </div>
-                              
+
                               {headerGroup.headers.length !== index + 1 ? (
                                 <div
                                   key={`${header.id}-resizer`} // Tambahkan key unik
@@ -363,10 +378,7 @@ export const TableList: React.FC<any> = ({
 
                   <Table.Body className="divide-y divide-gray-200 bg-white">
                     {table.getRowModel().rows.map((row) => (
-                      <Table.Row
-                        key={row.id}
-                        className="hover:bg-[#DBDBE7]"
-                      >
+                      <Table.Row key={row.id} className="hover:bg-[#DBDBE7]">
                         {row.getVisibleCells().map((cell) => {
                           const ctx = cell.getContext();
                           const param = {
@@ -517,7 +529,7 @@ export const Pagination: React.FC<any> = ({
                   onChangePage(local.page - 1);
                 }, 1500);
               }}
-      />
+            />
           </form>
         </span>
       </div>
