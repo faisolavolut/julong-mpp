@@ -1,5 +1,6 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
+import { ButtonLink } from "@/app/components/ui/button-link";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { Button } from "flowbite-react";
@@ -9,8 +10,13 @@ import { IoEye } from "react-icons/io5";
 
 function Page() {
   return (
-    <div className="w-full flex flex-row flex-grow">
-      <div className="flex flex-grow flex-col">
+    <div className="flex flex-col flex-grow">
+      <div className="flex flex-col py-4 pt-0">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <span className="">Period</span>
+        </h2>
+      </div>
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
         <TableList
           name="period"
           header={{
@@ -18,14 +24,15 @@ function Page() {
               return (
                 <>
                   <div className="flex flex-row flex-grow">
-                    <Link href={"/d/mpp/period/new"}>
-                      <Button className="bg-primary-500">
-                        <div className="flex items-center gap-x-0.5">
-                          <HiPlus className="text-xl" />
-                          <span className="capitalize">Add period</span>
-                        </div>
-                      </Button>
-                    </Link>
+                    <ButtonLink
+                      className="bg-primary-500"
+                      href={"/d/mpp/period/new"}
+                    >
+                      <div className="flex items-center gap-x-0.5">
+                        <HiPlus className="text-xl" />
+                        <span className="capitalize">Add period</span>
+                      </div>
+                    </ButtonLink>
                   </div>
                 </>
               );
@@ -67,26 +74,22 @@ function Page() {
               renderCell: ({ row, name, cell }: any) => {
                 return (
                   <div className="flex items-center gap-x-0.5 whitespace-nowrap">
-                    <Button
+                    <ButtonLink
                       className="bg-primary-500"
-                      onClick={() => {
-                        navigate(`/d/mpp/period/${row.id}/view`);
-                      }}
+                      href={`/d/mpp/period/${row.id}/view`}
                     >
                       <div className="flex items-center gap-x-2">
                         <IoEye className="text-lg" />
                       </div>
-                    </Button>
-                    <Button
+                    </ButtonLink>
+                    <ButtonLink
                       className="bg-primary-500"
-                      onClick={() => {
-                        navigate(`/d/mpp/period/${row.id}/edit`);
-                      }}
+                      href={`/d/mpp/period/${row.id}/edit`}
                     >
                       <div className="flex items-center gap-x-2">
                         <HiOutlinePencilAlt className="text-lg" />
                       </div>
-                    </Button>
+                    </ButtonLink>
                   </div>
                 );
               },

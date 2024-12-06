@@ -6,22 +6,26 @@ export const SidebarLinkBetter: FC<{
   style: any;
   children: any;
   href?: string;
-  onClick?: () => void
+  onClick?: () => void;
 }> = ({ className, style, children, href, onClick }) => {
   if (href)
     return (
-      <Link
-        href={href}
-        className={className}
-        style={style} // Terapkan gaya berdasarkan depth
+      <div
+        className="flex flex-row flex-grow w-full"
         onClick={() => {
-            if(typeof onClick === "function"){
-                onClick()
-            }
+          if (typeof onClick === "function") {
+            onClick();
+          }
         }}
       >
-        {children}
-      </Link>
+        <Link
+          href={href}
+          className={className}
+          style={style} // Terapkan gaya berdasarkan depth
+        >
+          {children}
+        </Link>
+      </div>
     );
   return (
     <div

@@ -1,11 +1,9 @@
 "use client";
 import { Field } from "@/app/components/form/Field";
-import { Form } from "@/app/components/form/Form";
 import { FormBetter } from "@/app/components/form/FormBetter";
 import { Alert } from "@/app/components/ui/alert";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
 import { btn } from "@/app/components/ui/button";
-import { Breadcrumb } from "flowbite-react";
 import { IoMdSave } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 
@@ -22,7 +20,7 @@ function Page() {
               <BreadcrumbBetterLink
                 data={[
                   {
-                    title: "List Platfon",
+                    title: "List Plafon",
                     url: "/d/master-data/plafon",
                   },
                   {

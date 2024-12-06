@@ -11,6 +11,7 @@ import { css } from "@emotion/css";
 import { FaAngleUp, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Minimize } from "lucide-react";
 import { SidebarLinkBetter } from "../ui/link-better";
+import { detectCase } from "@/utils/detectCase";
 interface TreeMenuItem {
   title: string;
   href?: string;
@@ -26,12 +27,13 @@ interface TreeMenuProps {
 
 const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
   const [currentPage, setCurrentPage] = useState("");
-  if (process.browser) {
-    useEffect(() => {
+
+  useEffect(() => {
+    if (typeof location === "object") {
       const newPage = window.location.pathname;
       setCurrentPage(newPage);
-    }, [location.pathname]);
-  }
+    }
+  }, []);
 
   const isChildActive = (items: TreeMenuItem[]): boolean => {
     return items.some((item) => {
@@ -43,7 +45,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
   const renderTree = (items: TreeMenuItem[], depth: number = 0) => {
     return items.map((item, index) => {
       const hasChildren = item.children && item.children.length > 0;
-      const isActive = item.href && currentPage.startsWith(item.href);
+      const isActive = item.href && detectCase(currentPage, item.href);
       const isParentActive = hasChildren && isChildActive(item.children!);
       const [isOpen, setIsOpen] = useState(isParentActive);
       useEffect(() => {
@@ -208,7 +210,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
         <div className="w-full h-full relative">
           <div className="flex h-full flex-col justify-between w-full absolute top-0 left-0">
             <Sidebar.Items>
-              <Sidebar.ItemGroup className="border-none mt-0">
+              <Sidebar.ItemGroup className={cx("border-none mt-0", mini ? "flex flex-col gap-y-2" : "")}>
                 {renderTree(data)}
               </Sidebar.ItemGroup>
             </Sidebar.Items>

@@ -1,5 +1,6 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
+import { ButtonLink } from "@/app/components/ui/button-link";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { Button } from "flowbite-react";
@@ -9,17 +10,18 @@ import { IoEye } from "react-icons/io5";
 
 function Page() {
   return (
-    <div className="w-full flex flex-row flex-grow">
-      <div className="flex flex-grow flex-col">
+    <div className="flex flex-col flex-grow">
+      <div className="flex flex-col py-4 pt-0">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <span className="">Monitoring MPP</span>
+        </h2>
+      </div>
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
         <TableList
           name="monitoring mpp"
           header={{
             sideLeft: (data: any) => {
-              return (
-                <>
-                  
-                </>
-              );
+              return <></>;
             },
           }}
           column={[
@@ -86,16 +88,14 @@ function Page() {
               renderCell: ({ row, name, cell }: any) => {
                 return (
                   <div className="flex items-center gap-x-0.5 whitespace-nowrap">
-                    <Button
+                                        <ButtonLink
                       className="bg-primary-500"
-                      onClick={() => {
-                        navigate(`/d/mpp/monitoring-mpp-rekruitment/${row.id}/view`);
-                      }}
+                      href={`/d/mpp/monitoring-mpp-rekruitment/${row.id}/view`}
                     >
                       <div className="flex items-center gap-x-2">
                         <IoEye className="text-lg" />
                       </div>
-                    </Button>
+                    </ButtonLink>
                   </div>
                 );
               },

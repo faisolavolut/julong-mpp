@@ -14,7 +14,9 @@ export const FormBetter: React.FC<any> = ({
   className,
   onInit,
 }) => {
-  const [fm, setFM] = useState<any>(null);
+  const [fm, setFM] = useState<any>({
+    data: null as any
+  });
 
   return (
     <div className="flex flex-col flex-grow">

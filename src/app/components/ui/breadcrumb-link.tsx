@@ -26,24 +26,36 @@ const BreadcrumbBetterLink: FC<{ data: any[]; className?: string }> = ({
   data,
   className,
 }) => {
+  const item: any[] = addSeparator(data, ".");
   return (
     <Breadcrumb>
-      <BreadcrumbList className={cx(className)}>
-        {data.map((e, idx) => {
+      <BreadcrumbList className={cx(className)} >
+        {item.map((e, idx) => {
+          if (typeof e === "string" && e === ".")
+            return <BreadcrumbSeparator key={"separator_"+idx}/>;
           return (
-            <BreadcrumbItem>
-                {e?.url ? (
-                  <BreadcrumbLink asChild>
-                    <Link href={e.url}>{e.title}</Link>
-                  </BreadcrumbLink>
-                ) : (
-                  <BreadcrumbPage>{e.title}</BreadcrumbPage>
-                )}
-              </BreadcrumbItem>
+            <BreadcrumbItem key={"item_"+idx}>
+              {e?.url ? (
+                <BreadcrumbLink asChild>
+                  <Link href={e.url} className="hover:underline">{e.title}</Link>
+                </BreadcrumbLink>
+              ) : (
+                <BreadcrumbPage>{e.title}</BreadcrumbPage>
+              )}
+            </BreadcrumbItem>
           );
         })}
       </BreadcrumbList>
     </Breadcrumb>
   );
 };
+const addSeparator = (arr: any[], separator: any | string) => {
+  if (arr.length === 0) return [];
+
+  // Menggunakan flatMap untuk menyisipkan separator di antara elemen
+  return arr.flatMap((item, index) =>
+    index < arr.length - 1 ? [item, separator] : [item]
+  );
+};
+
 export { BreadcrumbBetter, BreadcrumbBetterLink };

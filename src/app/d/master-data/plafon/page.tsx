@@ -57,7 +57,7 @@ function Page() {
                   <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                     <ButtonLink
                       className="bg-primary-500"
-                      link={`/d/master-data/plafon/${row.id}/view`}
+                      href={`/d/master-data/plafon/${row.id}/view`}
                     >
                       <div className="flex items-center gap-x-2">
                         <IoEye className="text-lg" />
@@ -65,7 +65,7 @@ function Page() {
                     </ButtonLink>
                     <ButtonLink
                       className="bg-primary-500"
-                      link={`/d/master-data/plafon/${row.id}/edit`}
+                      href={`/d/master-data/plafon/${row.id}/edit`}
                     >
                     <div className="flex items-center gap-x-2">
                       <HiOutlinePencilAlt className="text-lg" />

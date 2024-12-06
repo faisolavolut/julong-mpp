@@ -1,10 +1,17 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
+import { ButtonBetter } from "@/app/components/ui/button";
+import { ButtonLink } from "@/app/components/ui/button-link";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { Button } from "flowbite-react";
 import Link from "next/link";
-import { HiDocumentDownload, HiOutlinePencilAlt, HiPlus, HiTrash } from "react-icons/hi";
+import {
+  HiDocumentDownload,
+  HiOutlinePencilAlt,
+  HiPlus,
+  HiTrash,
+} from "react-icons/hi";
 import { IoEye } from "react-icons/io5";
 
 function Page() {
@@ -22,22 +29,22 @@ function Page() {
             sideLeft: (data: any) => {
               return (
                 <>
-                  <div className="flex flex-row flex-grow">
-                    <Link href={"/d/mpp/monitoring-mpp-hrd/new"}>
-                      <Button className="bg-primary-500">
-                        <div className="flex items-center gap-x-0.5">
-                          <HiPlus className="text-xl" />
-                          <span className="capitalize">Add New</span>
-                        </div>
-                      </Button>
-                    </Link>
-                    
-                    <Button color="gray">
+                  <div className="flex flex-row flex-grow gap-x-1">
+                    <ButtonLink
+                      className="bg-primary-500"
+                      href={"/d/mpp/monitoring-mpp-hrd/new"}
+                    >
+                      <div className="flex items-center gap-x-0.5">
+                        <HiPlus className="text-xl" />
+                        <span className="capitalize">Add New</span>
+                      </div>
+                    </ButtonLink>
+                    <ButtonBetter variant="outline">
                       <div className="flex items-center gap-x-1">
                         <HiDocumentDownload className="text-xl" />
                         <span>Export</span>
                       </div>
-                    </Button>
+                    </ButtonBetter>
                   </div>
                 </>
               );
@@ -100,26 +107,22 @@ function Page() {
               renderCell: ({ row, name, cell }: any) => {
                 return (
                   <div className="flex items-center gap-x-0.5 whitespace-nowrap">
-                    <Button
+                    <ButtonLink
                       className="bg-primary-500"
-                      onClick={() => {
-                        navigate(`/d/mpp/monitoring-mpp-hrd/${row.id}/view`);
-                      }}
+                      href={`/d/mpp/monitoring-mpp-hrd/${row.id}/view`}
                     >
                       <div className="flex items-center gap-x-2">
                         <IoEye className="text-lg" />
                       </div>
-                    </Button>
-                    <Button
+                    </ButtonLink>
+                    <ButtonLink
                       className="bg-primary-500"
-                      onClick={() => {
-                        navigate(`/d/mpp/monitoring-mpp-hrd/${row.id}/edit`);
-                      }}
+                      href={`/d/mpp/monitoring-mpp-hrd/${row.id}/edit`}
                     >
                       <div className="flex items-center gap-x-2">
                         <HiOutlinePencilAlt className="text-lg" />
                       </div>
-                    </Button>
+                    </ButtonLink>
                   </div>
                 );
               },

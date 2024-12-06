@@ -57,9 +57,9 @@ const ButtonBetter = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
-const ButtonLink: FC<any> = ({ className, children, link }) => {
+const ButtonLink: FC<any> = ({ className, children, href }) => {
   return (
-    <Link href={link}>
+    <Link href={href}>
       <ButtonBetter className={cx(className, "text-white")}>{children}</ButtonBetter>
     </Link>
   );

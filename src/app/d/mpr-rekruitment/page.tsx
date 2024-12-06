@@ -1,5 +1,7 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
+import { ButtonBetter } from "@/app/components/ui/button";
+import { ButtonLink } from "@/app/components/ui/button-link";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { getValue } from "@/lib/getValue";
@@ -15,8 +17,13 @@ import { IoEye } from "react-icons/io5";
 
 function Page() {
   return (
-    <div className="w-full flex flex-row flex-grow">
-      <div className="flex flex-grow flex-col">
+    <div className="flex flex-col flex-grow">
+      <div className="flex flex-col py-4 pt-0">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <span className="">Manpower Request</span>
+        </h2>
+      </div>
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
         <TableList
           name="Manpower Request Overview"
           header={{
@@ -108,22 +115,22 @@ function Page() {
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
                 return (
-                  <div className="flex items-center gap-x-0.5 whitespace-nowrap">
-                    <Button
+                  <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                    <ButtonLink
                       className="bg-primary-500"
-                      onClick={() => {
-                        navigate(`/d/mpr-hrd/${row.id}/view`);
-                      }}
+                      href={`/d/mpr-rekruitment/${row.id}/view`}
                     >
                       <div className="flex items-center gap-x-2">
                         <IoEye className="text-lg" />
                       </div>
-                    </Button>
-                    <Button color="gray">
+                    </ButtonLink>
+                    <ButtonBetter
+                    variant={"outline"}
+                    >
                       <div className="flex items-center gap-x-2">
-                        <HiDocumentDownload className="text-xl" />
+                        <HiDocumentDownload className="text-lg" />
                       </div>
-                    </Button>
+                    </ButtonBetter>
                   </div>
                 );
               },
