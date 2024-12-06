@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "./alert-dialog";
 
-export const Alert: FC<any> = ({ type, onClick, children }) => {
+export const Alert: FC<any> = ({ type, onClick, children, className }) => {
   const message: any = {
     save: "Your data will be saved securely. You can update it at any time if needed.",
     delete:
@@ -28,7 +28,7 @@ export const Alert: FC<any> = ({ type, onClick, children }) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction className="bg-red-500" onClick={onClick}>
+            <AlertDialogAction className={"bg-primary-500 text-white"} onClick={onClick}>
               Continue
             </AlertDialogAction>
           </AlertDialogFooter>

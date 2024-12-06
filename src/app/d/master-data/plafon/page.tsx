@@ -1,5 +1,6 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
+import { ButtonLink } from "@/app/components/ui/button-link";
 import api from "@/lib/axios";
 import { getValue } from "@/lib/getValue";
 import { Button } from "flowbite-react";
@@ -10,7 +11,7 @@ import { IoEye } from "react-icons/io5";
 function Page() {
   return (
     <div className="flex flex-col flex-grow">
-      <div className="flex flex-col py-4">
+      <div className="flex flex-col py-4 pt-0">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
           <span className="">Plafon</span>
         </h2>
@@ -20,9 +21,7 @@ function Page() {
           name="Plafon"
           header={{
             sideLeft: (data: any) => {
-              return (
-                <></>
-              );
+              return <></>;
             },
           }}
           column={[
@@ -56,34 +55,28 @@ function Page() {
               renderCell: ({ row, name, cell }: any) => {
                 return (
                   <div className="flex items-center gap-x-0.5 whitespace-nowrap">
-                    <Button
+                    <ButtonLink
                       className="bg-primary-500"
-                      onClick={() => {
-                        navigate(`/d/master-data/plafon/${row.id}/view`);
-                      }}
+                      link={`/d/master-data/plafon/${row.id}/view`}
                     >
                       <div className="flex items-center gap-x-2">
                         <IoEye className="text-lg" />
                       </div>
-                    </Button>
-                    <Button
+                    </ButtonLink>
+                    <ButtonLink
                       className="bg-primary-500"
-                      onClick={() => {
-                        navigate(`/d/master-data/plafon/${row.id}/edit`);
-                      }}
+                      link={`/d/master-data/plafon/${row.id}/edit`}
                     >
-                      <div className="flex items-center gap-x-2">
-                        <HiOutlinePencilAlt className="text-lg" />
-                      </div>
-                    </Button>
+                    <div className="flex items-center gap-x-2">
+                      <HiOutlinePencilAlt className="text-lg" />
+                    </div>
+                    </ButtonLink>
                   </div>
                 );
               },
             },
           ]}
           onLoad={async (param: any) => {
-            
-            
             // const res: any = await api.get("/api/organization-structures");
             // const data: any[] = res.data.data.plafon
             // return data || []

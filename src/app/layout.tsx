@@ -10,6 +10,8 @@ import { css } from "@emotion/css";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Toaster } from 'sonner';
+import dotenv from 'dotenv';
+dotenv.config();
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -31,7 +33,7 @@ globalThis.navigate = navigate;
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const routerInstance = useRouter();
   useEffect(() => {
-
+console.log(process.env)
     globalThis.router = routerInstance;
     const user = localStorage.getItem("user")
     if(user){

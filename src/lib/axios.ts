@@ -1,5 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import dotenv from 'dotenv';
+
+dotenv.config();
 // Buat instance Axios
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.example.com", // Ganti dengan URL API Anda

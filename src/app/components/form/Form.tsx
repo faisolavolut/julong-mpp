@@ -9,15 +9,6 @@ import {
   ResizablePanelGroup,
 } from "../ui/resize";
 
-type FormProps<T> = {
-  children: (fm: Local<T>) => ReactNode;
-  header: (fm: Local<T>) => ReactNode;
-  onFooter?: (fm: Local<T>) => ReactNode;
-  onLoad: () => Promise<T> | T;
-  onSubmit: (fm: Local<T>) => Promise<void>;
-  showResize: boolean;
-};
-
 type Local<T> = {
   data: T | null;
   submit: () => Promise<void>;
@@ -33,6 +24,7 @@ export const Form: React.FC<any> = ({
   showResize,
   mode,
   className,
+  onInit
 }) => {
   const local = useLocal({
     ready: false,
@@ -46,6 +38,9 @@ export const Form: React.FC<any> = ({
   });
 
   useEffect(() => {
+    if(typeof onInit === "function"){
+      onInit(local)
+    }
     local.ready = false;
     local.render();
     toast.info(
@@ -105,6 +100,7 @@ export const Form: React.FC<any> = ({
       }, 1000);
     }
   }, []);
+
 
   return (
     <div className={cx("flex-grow flex-col flex", className)}>

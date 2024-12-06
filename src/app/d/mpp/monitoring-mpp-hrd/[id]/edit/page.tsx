@@ -18,7 +18,7 @@ function Page() {
   const id = getParams("id");
   return (
     <div className="flex flex-col flex-grow">
-      <div className="flex flex-col py-4">
+      <div className="flex flex-col py-4 pt-0">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
           <span className="">Form Monitoring MPP</span>
         </h2>
@@ -66,47 +66,7 @@ function Page() {
           }}
           header={(fm: any) => {
             return (
-              <>
-                <div className="flex flex-row flex-grow px-4 py-4 border-b border-gray-300	items-center">
-                  <div className="flex flex-col flex-grow">
-                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-                      <span className="capitalize">Form Manpower Planning</span>
-                    </h1>
-                    <div className="flex-grow flex flex-row">
-                      <Breadcrumb className="breadcrumb">
-                        <Breadcrumb.Item href="/d/mpp/monitoring-mpp-hrd">
-                          Manpower Planning
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>Edit</Breadcrumb.Item>
-                      </Breadcrumb>
-                    </div>
-                  </div>
-                  <div className="flex flex-row space-x-2">
-                    <Button
-                      className="bg-primary-500"
-                      onClick={() => {
-                        fm.submit();
-                      }}
-                    >
-                      <div className="flex items-center gap-x-0.5">
-                        <IoMdSave className="text-xl" />
-                        Save
-                      </div>
-                    </Button>{" "}
-                    <Button
-                      className="bg-primary-500"
-                      onClick={() => {
-                        fm.submit();
-                      }}
-                    >
-                      <div className="flex items-center gap-x-0.5">
-                        <IoMdSave className="text-xl" />
-                        Submit
-                      </div>
-                    </Button>
-                  </div>
-                </div>
-              </>
+              <></>
             );
           }}
           children={(fm: any) => {
