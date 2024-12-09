@@ -33,7 +33,6 @@ globalThis.navigate = navigate;
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const routerInstance = useRouter();
   useEffect(() => {
-console.log(process.env)
     globalThis.router = routerInstance;
     const user = localStorage.getItem("user")
     if(user){

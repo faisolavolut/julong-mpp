@@ -94,7 +94,7 @@ const NotificationBellDropdown: FC = function () {
                 src={siteurl("/dog.jpg")}
                 className="h-11 w-11 rounded-full"
               />
-              <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-primary-700 dark:border-gray-700">
+              <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-primary dark:border-gray-700">
                 <NewMessageIcon />
               </div>
             </div>

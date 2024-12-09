@@ -30,7 +30,7 @@ function Page() {
             </div>
             <div className="flex flex-row space-x-2">
               <Alert type={"delete"} onClick={() => {}}>
-                <div className={cx("bg-primary-500", btn())}>
+                <div className={cx("bg-primary", btn())}>
                 <div className="flex items-center gap-x-0.5">
                     <IoMdSave className="text-xl" />
                     Save
@@ -43,7 +43,7 @@ function Page() {
                   fm.submit();
                 }}
               >
-                <div className={cx("bg-primary-500", btn())}>
+                <div className={cx("bg-primary", btn())}>
                 <div className="flex items-center gap-x-0.5">
                     <IoMdSave className="text-xl" />
                     Submit

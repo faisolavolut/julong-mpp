@@ -14,19 +14,16 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        primary: {
-          50: "#313678",
-          100: "#313678",
-          200: "#313678",
-          300: "#313678",
-          400: "#313678",
-          500: "#313678",
-          600: "#313678",
-          700: "#313678",
-          800: "#313678",
-          900: "#313678",
-        },
-        second: "#C3D5FF"
+        primary: "#313678",
+        second: "#C3D5FF",
+        "background-default": "#F4F7FF",
+        "default-stroke": "#C3D5FF",
+        "default-text": "#313678",
+        "active=advice": "#313678",
+        "active-stroke": "#C3D5FF",
+        "active-text": "#FFFFFF",
+        "disabled-stroke": "#94A3B8",
+        "disabled-text": "#94A3B8",
       },
       fontFamily: {
         body: [

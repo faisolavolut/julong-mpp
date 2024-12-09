@@ -206,7 +206,7 @@ export const TableList: React.FC<any> = ({
                 ) : (
                   <>
                     <Link href={"/new"}>
-                      <Button className="bg-primary-500">
+                      <Button className="bg-primary">
                         <div className="flex items-center gap-x-0.5">
                           <HiPlus className="text-xl" />
                           <span className="capitalize">Add {name}</span>
@@ -543,7 +543,7 @@ export const Pagination: React.FC<any> = ({
                 }
               }}
               className={classNames(
-                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-md font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary px-3 py-2 text-center text-md font-medium text-white hover:bg-primary focus:ring-4 focus:ring-primary-300 dark:bg-primary dark:hover:bg-primary dark:focus:ring-primary-800"
               )}
             >
               <HiChevronLeft className="mr-1 text-base" />
@@ -562,7 +562,7 @@ export const Pagination: React.FC<any> = ({
                 }
               }}
               className={classNames(
-                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-md font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary px-3 py-2 text-center text-md font-medium text-white hover:bg-primary focus:ring-4 focus:ring-primary-300 dark:bg-primary dark:hover:bg-primary dark:focus:ring-primary-800"
               )}
             >
               Next

@@ -7,7 +7,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const { token } = req.body;
     res.setHeader(
       "Set-Cookie",
-      serialize("token", token, {
+      serialize("jwt_token", token, {
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: 3600 * 24, // Expired dalam 1 jam

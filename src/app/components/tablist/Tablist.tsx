@@ -122,7 +122,7 @@ export const Tablist: React.FC<any> = ({
           return (
             <TabsContent
               value={onValue(e)}
-              className="bg-primary-white"
+              className="bg-primary"
               key={onValue(e) + "_tabcontent"}
             >
               {tabContent(e)}

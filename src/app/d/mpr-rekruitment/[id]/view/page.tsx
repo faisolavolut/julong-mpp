@@ -68,7 +68,7 @@ function Page() {
                   fm.submit();
                 }}
               >
-                <ButtonContainer className={"bg-primary-500"}>
+                <ButtonContainer className={"bg-primary"}>
                   <IoMdSave className="text-xl" />
                   Save
                 </ButtonContainer>

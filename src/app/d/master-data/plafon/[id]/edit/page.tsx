@@ -4,10 +4,13 @@ import { FormBetter } from "@/app/components/form/FormBetter";
 import { Alert } from "@/app/components/ui/alert";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
 import { btn } from "@/app/components/ui/button";
+import { getParams } from "@/lib/get-params";
+import { get_params_url } from "@/lib/getParamsUrl";
 import { IoMdSave } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 
 function Page() {
+  const id = getParams("id")
   return (
     <FormBetter
       onTitle={(fm: any) => {
@@ -30,21 +33,21 @@ function Page() {
               />
             </div>
             <div className="flex flex-row space-x-2">
-              <Alert type={"delete"} onClick={() => {}}>
+              {/* <Alert type={"delete"} onClick={() => {}}>
                 <div className={cx("bg-red-500", btn())}>
                   <div className="flex items-center gap-x-0.5">
                     <MdDelete className="text-xl" />
                     Delete
                   </div>
                 </div>
-              </Alert>
+              </Alert> */}
               <Alert
                 type={"save"}
                 onClick={() => {
                   fm.submit();
                 }}
               >
-                <div className={cx("bg-primary-500", btn())}>
+                <div className={cx("bg-primary", btn())}>
                   <div className="flex items-center gap-x-0.5">
                     <IoMdSave className="text-xl" />
                     Save
@@ -55,7 +58,18 @@ function Page() {
           </div>
         );
       }}
-      onSubmit={async () => {}}
+      onSubmit={async (fm: any) => {
+        console.log("MAH")
+        const data = fm?.data
+        console.log({data})
+        const res = {
+          id,
+          plafon: Number(data.plafon)
+        }
+        console.log(res)
+        // navigate("/d/master-data/plafon")
+        
+      }}
       onLoad={async () => {
         return {
           organization: 1,
@@ -105,7 +119,7 @@ function Page() {
                   />
                 </div>
                 <div>
-                  <Field fm={fm} name={"name"} label={"Plafon"} type={"text"} />
+                  <Field fm={fm} name={"plafon"} label={"Plafon"} type={"money"} />
                 </div>
               </div>
             </div>

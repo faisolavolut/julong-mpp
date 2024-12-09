@@ -29,7 +29,7 @@ function Page() {
               renderCell: ({ row, name, cell }: any) => {
                 return <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                 <Button
-                  className="bg-primary-500"
+                  className="bg-primary"
                   onClick={() => {
                     navigate(`/d/tablelist/${row.id}`)
                   }}

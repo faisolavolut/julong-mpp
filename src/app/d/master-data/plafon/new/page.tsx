@@ -59,7 +59,7 @@ function Page() {
                     </div>
                   </div>
                   <div className="flex flex-row space-x-2">
-                    <Button className="bg-primary-500" onClick={() => {
+                    <Button className="bg-primary" onClick={() => {
                       fm.submit()
                     }}>
                       <div className="flex items-center gap-x-0.5">

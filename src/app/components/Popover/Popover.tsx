@@ -201,7 +201,7 @@ export function Popover({
     <PopoverContext.Provider value={popover}>
       <PopoverTrigger
         asChild
-        className="w-full h-full"
+        className="w-full h-full cursor-pointer"
         onClick={
           typeof restOptions.open !== "undefined"
             ? () => {
@@ -210,7 +210,7 @@ export function Popover({
             : undefined
         }
       >
-        {children}
+        {[children]}
       </PopoverTrigger>
       <PopoverContent
         className={cx(

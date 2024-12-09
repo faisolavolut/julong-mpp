@@ -1,12 +1,13 @@
 import { Typeahead } from "./Typeahead";
 
-export const TypeDropdown: React.FC<any> = ({fm, name, onLoad, onChange,placeholder, disabled}) => {
+export const TypeDropdown: React.FC<any> = ({required,fm, name, onLoad, onChange,placeholder, disabled}) => {
   return (
     <>
       <Typeahead
         value={fm.data?.[name]? [fm.data?.[name]] : []}
         disabledSearch={false}
         //   popupClassName={}
+        required={required}
         onSelect={({ search, item }) => {
           if (item) {
             fm.data[name] = item.value;

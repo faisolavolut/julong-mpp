@@ -25,7 +25,7 @@ function Page() {
                 <>
                   <div className="flex flex-row flex-grow">
                     <ButtonLink
-                      className="bg-primary-500"
+                      className="bg-primary"
                       href={"/d/mpp/period/new"}
                     >
                       <div className="flex items-center gap-x-0.5">
@@ -75,7 +75,7 @@ function Page() {
                 return (
                   <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                     <ButtonLink
-                      className="bg-primary-500"
+                      className="bg-primary"
                       href={`/d/mpp/period/${row.id}/view`}
                     >
                       <div className="flex items-center gap-x-2">
@@ -83,7 +83,7 @@ function Page() {
                       </div>
                     </ButtonLink>
                     <ButtonLink
-                      className="bg-primary-500"
+                      className="bg-primary"
                       href={`/d/mpp/period/${row.id}/edit`}
                     >
                       <div className="flex items-center gap-x-2">

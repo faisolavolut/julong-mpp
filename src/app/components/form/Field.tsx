@@ -41,6 +41,7 @@ export const Field: React.FC<any> = ({
           <>
             <TypeDropdown
               fm={fm}
+              required={required}
               name={name}
               onLoad={onLoad}
               placeholder={placeholder}

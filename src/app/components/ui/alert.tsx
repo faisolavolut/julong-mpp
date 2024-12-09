@@ -28,7 +28,7 @@ export const Alert: FC<any> = ({ type, onClick, children, className }) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction className={"bg-primary-500 text-white"} onClick={onClick}>
+            <AlertDialogAction className={"bg-primary text-white"} onClick={onClick}>
               Continue
             </AlertDialogAction>
           </AlertDialogFooter>

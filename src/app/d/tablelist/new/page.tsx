@@ -44,7 +44,7 @@ return {}
                     </Breadcrumb>
                   </div>
                   <div className="flex flex-row space-x-2">
-                    <Button className="bg-primary-500" onClick={() => {}}>
+                    <Button className="bg-primary" onClick={() => {}}>
                       <div className="flex items-center gap-x-0.5">
                         <IoMdSave className="text-xl" />
                         Save

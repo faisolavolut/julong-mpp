@@ -305,7 +305,7 @@ function Page() {
                                 <>
                                   <div className="flex flex-row flex-grow space-x-2">
                                     <ButtonBetter
-                                      className="bg-primary-500"
+                                      className="bg-primary"
                                       onClick={() => {
                                         tbl.addRow({});
                                         tbl.render();
@@ -327,7 +327,7 @@ function Page() {
                               return (
                                 <>
                                   <div className="flex flex-row flex-grow space-x-2">
-                                    <ButtonBetter className="bg-primary-500">
+                                    <ButtonBetter className="bg-primary">
                                       <div className="flex items-center gap-x-0.5">
                                         <IoMdSave className="text-xl" />
                                         <span className="capitalize">Save</span>

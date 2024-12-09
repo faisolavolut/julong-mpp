@@ -57,7 +57,7 @@ function Page() {
                         Delete
                       </div>
                     </Button>
-                    <Button className="bg-primary-500" onClick={() => {
+                    <Button className="bg-primary" onClick={() => {
                       fm.submit()
                     }}>
                       <div className="flex items-center gap-x-0.5">

@@ -72,7 +72,7 @@ function Page() {
                   </div>
                   <div className="flex flex-row space-x-2">
                     <Button
-                      className="bg-primary-500"
+                      className="bg-primary"
                       onClick={() => {
                         fm.submit();
                       }}
@@ -333,7 +333,7 @@ function Page() {
                                     <>
                                       <div className="flex flex-row flex-grow space-x-2">
                                         <Button
-                                          className="bg-primary-500"
+                                          className="bg-primary"
                                           onClick={() => {
                                             tbl.addRow({});
                                             tbl.render();
@@ -355,7 +355,7 @@ function Page() {
                                   return (
                                     <>
                                       <div className="flex flex-row flex-grow space-x-2">
-                                        <Button className="bg-primary-500">
+                                        <Button className="bg-primary">
                                           <div className="flex items-center gap-x-0.5">
                                             <IoMdSave className="text-xl" />
                                             <span className="capitalize">

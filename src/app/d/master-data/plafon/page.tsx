@@ -56,7 +56,7 @@ function Page() {
                 return (
                   <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                     <ButtonLink
-                      className="bg-primary-500"
+                      className="bg-primary"
                       href={`/d/master-data/plafon/${row.id}/view`}
                     >
                       <div className="flex items-center gap-x-2">
@@ -64,7 +64,7 @@ function Page() {
                       </div>
                     </ButtonLink>
                     <ButtonLink
-                      className="bg-primary-500"
+                      className="bg-primary"
                       href={`/d/master-data/plafon/${row.id}/edit`}
                     >
                     <div className="flex items-center gap-x-2">

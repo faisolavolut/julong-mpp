@@ -118,7 +118,7 @@ function Page() {
                 return (
                   <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
                     <ButtonLink
-                      className="bg-primary-500"
+                      className="bg-primary"
                       href={`/d/mpr-hrd/${row.id}/view`}
                     >
                       <div className="flex items-center gap-x-2">

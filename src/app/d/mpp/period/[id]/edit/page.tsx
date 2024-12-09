@@ -35,7 +35,7 @@ function Page() {
                   fm.submit();
                 }}
               >
-                <div className={cx("bg-primary-500", btn())}>
+                <div className={cx("bg-primary", btn())}>
                   <div className="flex items-center gap-x-0.5">
                     <IoMdSave className="text-xl" />
                     Save
@@ -50,7 +50,7 @@ function Page() {
                       fm.submit();
                     }}
                   >
-                    <div className={cx("bg-primary-500", btn())}>
+                    <div className={cx("bg-primary", btn())}>
                       <div className="flex items-center gap-x-0.5">
                         <IoMdSave className="text-xl" />
                         Close
@@ -66,7 +66,7 @@ function Page() {
                       fm.submit();
                     }}
                   >
-                    <div className={cx("bg-primary-500", btn())}>
+                    <div className={cx("bg-primary", btn())}>
                       <div className="flex items-center gap-x-0.5">
                         <IoMdSave className="text-xl" />
                         Close
