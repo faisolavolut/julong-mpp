@@ -11,7 +11,7 @@ const api = axios.create({
 });
 // Interceptor untuk menambahkan token dari cookie ke header Authorization (jika diperlukan)
 api.interceptors.request.use((config) => {
-  const token = Cookies.get("jwt_token"); // Ambil token dari cookie
+  const token = Cookies.get("token"); // Ambil token dari cookie
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
