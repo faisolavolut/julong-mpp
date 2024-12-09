@@ -17,7 +17,7 @@ function Portal() {
     // }, {});
     const run = async () => {
 
-      const res = await api.post( "http://localhost:3000/api/cookies", {
+      const res = await api.post( process.env.NEXT_PUBLIC_BASE_URL + "/api/cookies", {
         token: jwt
       })
       const user = await api.get("/api/users/me")
