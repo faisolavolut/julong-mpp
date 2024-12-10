@@ -22,6 +22,7 @@ export const useLocal = <T extends object>(
     lastRenderCount: 0,
     delayedRender: false,
     delayedRenderTimeout: null as any,
+    overRenderTimeout: null as any,
   });
   const local = _.current;
 
@@ -58,13 +59,22 @@ export const useLocal = <T extends object>(
           local.lastRenderCount = 0;
         }
 
+        local.lastRender = Date.now();
+
         if (local.lastRenderCount > 300) {
-          throw new Error(
-            "local.render more than 300 times in less than 300ms"
+          clearTimeout(local.overRenderTimeout);
+          local.overRenderTimeout = setTimeout(() => {
+            local.lastRenderCount = 0;
+            local.lastRender = Date.now();
+            _render({});
+          }, 1000);
+
+          console.error(
+            `local.render executed ${local.lastRenderCount} times in less than 300ms`
           );
+          return;
         }
 
-        local.lastRender = Date.now();
         _render({});
       }
     };

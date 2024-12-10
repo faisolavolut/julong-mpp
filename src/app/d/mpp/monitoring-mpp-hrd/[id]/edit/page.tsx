@@ -5,7 +5,7 @@ import { TableList } from "@/app/components/tablelist/TableList";
 import { Tablist } from "@/app/components/tablist/Tablist";
 import { Alert } from "@/app/components/ui/alert";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import {  ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
+import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
 import api from "@/lib/axios";
 import { cloneFM } from "@/lib/cloneFm";
 import { getParams } from "@/lib/get-params";
@@ -115,27 +115,7 @@ function Page() {
                     }}
                   />
                 </div>{" "}
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"emp_org_id"}
-                    label={"Employment Org"}
-                    type={"dropdown"}
-                    disabled={true}
-                    onLoad={async () => {
-                      return [
-                        {
-                          value: 1,
-                          label: "Organization",
-                          data: {
-                            id: 1,
-                            label: "Organization",
-                          },
-                        },
-                      ];
-                    }}
-                  />
-                </div>
+                <div></div>
                 <div>
                   <Field
                     fm={fm}
@@ -157,8 +137,34 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
+                    name={"mpp_name"}
+                    label={"MPP Name"}
+                    type={"dropdown"}
+                    onLoad={async () => {
+                      return [
+                        {
+                          value: 1,
+                          label: "MPP 1",
+                        },
+                      ];
+                    }}
+                  />
+                </div>
+                <div></div>
+                <div>
+                  <Field
+                    fm={fm}
                     name={"budget_year_from"}
                     label={"Budget year From"}
+                    type={"date"}
+                    disabled={true}
+                  />
+                </div>
+                <div>
+                  <Field
+                    fm={fm}
+                    name={"budget_year_to"}
+                    label={"Budget year To"}
                     type={"date"}
                     disabled={true}
                   />
@@ -173,25 +179,8 @@ function Page() {
                     onLoad={async () => {
                       return [
                         {
-                          value: 1,
-                          label: "Organization",
-                        },
-                      ];
-                    }}
-                  />
-                </div>
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"requestor"}
-                    label={"Requestor"}
-                    type={"dropdown"}
-                    disabled={true}
-                    onLoad={async () => {
-                      return [
-                        {
-                          value: 1,
-                          label: "Organization",
+                          value: "8e6958d1-ac2d-444c-a0ef-b27b0b168b08",
+                          label: "Employee",
                         },
                       ];
                     }}
@@ -220,7 +209,6 @@ function Page() {
                     name={"notes"}
                     label={"Notes"}
                     type={"textarea"}
-                    disabled={true}
                   />
                 </div>
                 <div>
@@ -295,7 +283,7 @@ function Page() {
               tabContent={(data: any) => {
                 return (
                   <>
-                    <div className="w-full flex flex-row py-6">
+                    <div className="w-full flex flex-row">
                       <div className="flex flex-grow flex-col h-[350px]">
                         <TableList
                           disabledPagination={true}
@@ -417,6 +405,7 @@ function Page() {
                             {
                               name: "existing",
                               header: () => <span>Existing</span>,
+                              width: 50,
                               renderCell: ({ row, name, cell }: any) => {
                                 return (
                                   <>
@@ -432,15 +421,32 @@ function Page() {
                               },
                             },
                             {
-                              name: "recruit",
-                              header: () => <span>Recruit</span>,
+                              name: "recruit_ph",
+                              header: () => <span>Recruit PH</span>,
+                              width: 50,
                               renderCell: ({ row, name, cell }: any) => {
                                 return (
                                   <>
                                     <Field
                                       fm={cloneFM(fm, row)}
-                                      name={"recruit"}
-                                      label={"Approved by"}
+                                      name={"recruit_ph"}
+                                      type={"text"}
+                                      hidden_label={true}
+                                    />
+                                  </>
+                                );
+                              },
+                            },
+                            {
+                              name: "recruit_mt",
+                              header: () => <span>Recruit MT</span>,
+                              width: 50,
+                              renderCell: ({ row, name, cell }: any) => {
+                                return (
+                                  <>
+                                    <Field
+                                      fm={cloneFM(fm, row)}
+                                      name={"recruit_mt"}
                                       type={"text"}
                                       hidden_label={true}
                                     />
@@ -451,6 +457,7 @@ function Page() {
                             {
                               name: "suggested_recruit",
                               header: () => <span>Suggested Recruit</span>,
+                              width: 50,
                               renderCell: ({ row, name, cell }: any) => {
                                 return (
                                   <>
@@ -468,6 +475,7 @@ function Page() {
                             {
                               name: "promotion",
                               header: () => <span>Promotion</span>,
+                              width: 50,
                               renderCell: ({ row, name, cell }: any) => {
                                 return (
                                   <>
@@ -485,8 +493,28 @@ function Page() {
                             {
                               name: "total",
                               header: () => <span>Total</span>,
+                              width: 50,
                               renderCell: ({ row, name, cell }: any) => {
                                 return <>{row?.total || 0}</>;
+                              },
+                            },
+
+                            {
+                              name: "action",
+                              header: () => <span>Action</span>,
+                              sortable: false,
+                              renderCell: ({ row, name, cell, tbl }: any) => {
+                                return (
+                                  <div className="flex items-center gap-x-0.5 whitespace-nowrap">
+                                    <ButtonBetter className="bg-red-500" onClick={() => {
+                                      tbl.removeRow(row)
+                                    }}>
+                                      <div className="flex items-center">
+                                        <MdDelete />
+                                      </div>
+                                    </ButtonBetter>
+                                  </div>
+                                );
                               },
                             },
                           ]}

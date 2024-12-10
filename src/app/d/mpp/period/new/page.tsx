@@ -23,8 +23,8 @@ function Page() {
                     url: "/d/mpp/period",
                   },
                   {
-                    title: "Add New"
-                  }
+                    title: "Add New",
+                  },
                 ]}
               />
             </div>
@@ -38,25 +38,32 @@ function Page() {
                 <div className={cx("bg-primary", btn())}>
                   <div className="flex items-center gap-x-0.5">
                     <IoMdSave className="text-xl" />
-                    Save
+                    Submit
                   </div>
                 </div>
               </Alert>
+              
             </div>
           </div>
         );
       }}
       onSubmit={async (fm: any) => {
         const data = fm.data;
+        const res = {
+          title: data?.title,
+          start_date: data?.start_date,
+          end_date: data?.end_date,
+          status: data?.status,
+        };
+        console.log(res)
       }}
       onLoad={async () => {
-        return {};
+        return {
+          status: "open"
+        };
       }}
       header={(fm: any) => {
-        return (
-          <>
-          </>
-        );
+        return <></>;
       }}
       children={(fm: any) => {
         return (
@@ -93,6 +100,7 @@ function Page() {
                     name={"status"}
                     label={"Status"}
                     type={"dropdown"}
+                    disabled={true}
                     onLoad={async () => {
                       return [
                         {

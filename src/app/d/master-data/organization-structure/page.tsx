@@ -144,7 +144,7 @@ function Page() {
               },
             },
             {
-              name: "parent",
+              name: "parent.name",
               header: () => <span>Parent</span>,
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, "parent.name")}</>;
@@ -152,14 +152,9 @@ function Page() {
             },
           ]}
           onLoad={async (param: any) => {
-            // const res: any = await api.get("/api/organization-structures");
-            // const data: any[] = res.data.data.OrganizationStructures
-            // return data || []
-            const res: any = await api.get(
-              "https://jsonplaceholder.typicode.com/users"
-            );
-            console.log(res);
-            return res.data;
+            const res: any = await api.get("https://julong-portal.avolut.com/api/organization-structures");
+            const data: any[] = res.data.data.OrganizationStructures;
+            return data || [];
           }}
           onInit={async (list: any) => {}}
         />

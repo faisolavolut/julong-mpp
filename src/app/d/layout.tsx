@@ -10,6 +10,7 @@ import { LuUsers } from "react-icons/lu";
 import { configMenu } from "./config-menu";
 import { useLocal } from "@/lib/use-local";
 import { useEffect, useState } from "react";
+import api from "@/lib/axios";
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -22,6 +23,10 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
     } else {
       setMini(localMini === "true" ? true : false);
     }
+    const run = async () => {
+      const user = await api.get("https://julong-portal.avolut.com/api/users/me")
+    }
+    run() 
   }, []);
   return (
     <div className="flex h-screen flex-col">

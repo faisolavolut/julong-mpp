@@ -29,7 +29,19 @@ function Page() {
           name="Manpower Request Overview"
           header={{
             sideLeft: (data: any) => {
-              return <></>;
+              return <>
+                <div className="flex flex-row flex-grow">
+                  <ButtonLink
+                    className="bg-primary"
+                    href={"/d/mpr-hrd/new"}
+                  >
+                    <div className="flex items-center gap-x-0.5">
+                      <HiPlus className="text-xl" />
+                      <span className="capitalize">Add Manpower Request</span>
+                    </div>
+                  </ButtonLink>
+                </div>
+              </>;
             },
           }}
           column={[
@@ -117,6 +129,14 @@ function Page() {
               renderCell: ({ row, name, cell }: any) => {
                 return (
                   <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                    <ButtonLink
+                      className="bg-primary"
+                      href={`/d/mpr-hrd/${row.id}/edit`}
+                    >
+                      <div className="flex items-center gap-x-2">
+                        <HiOutlinePencilAlt className="text-lg" />
+                      </div>
+                    </ButtonLink>
                     <ButtonLink
                       className="bg-primary"
                       href={`/d/mpr-hrd/${row.id}/view`}

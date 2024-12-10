@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { FC } from "react";
 
 const btn = cva(
-  " px-4 py-1.5 group relative flex items-stretch justify-center p-0.5 text-center border border-transparent text-white enabled:hover:bg-cyan-800  rounded-lg"
+  " px-4 py-1.5 group relative flex items-stretch justify-center p-0.5 text-center border border-transparent text-white enabled:hover:bg-cyan-800  rounded-md"
 );
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -59,7 +59,7 @@ const ButtonBetter = React.forwardRef<HTMLButtonElement, ButtonProps>(
 const ButtonContainer: FC<any> = ({ children, className }) => {
   return (
     <div className={cx("bg-primary", btn(), className)}>
-      <div className="flex items-center gap-x-0.5">{children}</div>
+      <div className="flex items-center gap-x-0.5 text-sm">{children}</div>
     </div>
   );
 };

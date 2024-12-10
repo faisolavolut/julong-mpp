@@ -1,6 +1,6 @@
 "use client";
 import { Form } from "./Form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const FormBetter: React.FC<any> = ({
   children,
@@ -15,9 +15,11 @@ export const FormBetter: React.FC<any> = ({
   onInit,
 }) => {
   const [fm, setFM] = useState<any>({
-    data: null as any
+    data: null as any,
   });
-
+  useEffect(() => {
+    console.log("PERUBAHAN DATA", fm.data);
+  }, [fm.data]);
   return (
     <div className="flex flex-col flex-grow">
       {typeof fm === "object" && typeof onTitle === "function" ? (
@@ -25,7 +27,7 @@ export const FormBetter: React.FC<any> = ({
       ) : (
         <></>
       )}
-      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  relative overflow-y-scroll shadow">
         <Form
           {...{
             children,
@@ -36,12 +38,30 @@ export const FormBetter: React.FC<any> = ({
             onFooter,
             showResize,
             mode,
-            className,
+            className: cx(className, "absolute top-0 left-0 w-full"),
+            onInit: (form: any) => {
+              setFM(form);
 
-            onInit: (fm: any) => {
-              setFM(fm)
+              const originalRender = form.render;
+
+              // Buat versi baru dari `local.render`
+              form.render = () => {
+                // Panggil fungsi asli
+                console.log("CEK");
+                originalRender();
+
+                // Tambahkan logika tambahan untuk sinkronisasi
+                setFM({
+                  ...form,
+                  submit: form.submit,
+                  render: form.render,
+                  data: form.data,
+                });
+                console.log(fm.data)
+              };
+              form.render();
               if (typeof onInit === "function") {
-                onInit(fm);
+                onInit(form);
               }
             },
           }}

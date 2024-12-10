@@ -1,6 +1,7 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
 import api from "@/lib/axios";
+import { getValue } from "@/lib/getValue";
 
 function Page() {
   return (
@@ -20,10 +21,10 @@ function Page() {
           }}
           column={[
             {
-              name: "Organization",
+              name: "organization_structure.organization.name",
               header: () => <span>Organization</span>,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{row.name}</>;
+                return <>{getValue(row, name)}</>;
               },
             },
             {
@@ -35,7 +36,7 @@ function Page() {
               },
             },
             {
-              name: "parent",
+              name: "parent.name",
               header: () => <span>Parent</span>,
               width: 300,
               renderCell: ({ row, name, cell }: any) => {
@@ -44,11 +45,9 @@ function Page() {
             },
           ]}
           onLoad={async (param: any) => {
-            const res: any = await api.get(
-              "https://jsonplaceholder.typicode.com/users"
-            );
-            console.log(res);
-            return res.data;
+            const res: any = await api.get("https://julong-portal.avolut.com/api/jobs");
+            const data: any[] = res.data.data.jobs;
+            return data || [];
           }}
           onInit={async (list: any) => {}}
         />

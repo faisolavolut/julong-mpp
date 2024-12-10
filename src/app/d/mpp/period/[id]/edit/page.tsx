@@ -4,88 +4,97 @@ import { FormBetter } from "@/app/components/form/FormBetter";
 import { Alert } from "@/app/components/ui/alert";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
 import { btn } from "@/app/components/ui/button";
+import { getParams } from "@/lib/get-params";
 import { IoMdSave } from "react-icons/io";
 
 function Page() {
+  const id = getParams("id")
   return (
-    <FormBetter
-      onTitle={(fm: any) => {
-        return (
-          <div className="flex flex-row w-full">
-            <div className="flex flex-col py-4 pt-0 flex-grow">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                <span className="">Period</span>
-              </h2>
-              <BreadcrumbBetterLink
-                data={[
-                  {
-                    title: "List Period",
-                    url: "/d/mpp/period",
-                  },
-                  {
-                    title: "Edit",
-                  },
-                ]}
-              />
-            </div>
-            <div className="flex flex-row space-x-2">
-              <Alert
-                type={"save"}
-                onClick={() => {
-                  fm.submit();
-                }}
-              >
-                <div className={cx("bg-primary", btn())}>
-                  <div className="flex items-center gap-x-0.5">
-                    <IoMdSave className="text-xl" />
-                    Save
+      <FormBetter
+        onTitle={(fm: any) => {
+          return (
+            <div className="flex flex-row w-full">
+              <div className="flex flex-col py-4 pt-0 flex-grow">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <span className="">Period</span>
+                </h2>
+                <BreadcrumbBetterLink
+                  data={[
+                    {
+                      title: "List Period",
+                      url: "/d/mpp/period",
+                    },
+                    {
+                      title: "Edit",
+                    },
+                  ]}
+                />
+              </div>
+              <div className="flex flex-row space-x-2">
+                <Alert
+                  type={"save"}
+                  onClick={() => {
+                    fm.submit();
+                  }}
+                >
+                  <div className={cx("bg-primary", btn())}>
+                    <div className="flex items-center gap-x-0.5">
+                      <IoMdSave className="text-xl" />
+                      Save
+                    </div>
                   </div>
-                </div>
-              </Alert>
-              {fm.data?.status === "complete" ? (
-                <>
-                  <Alert
-                    type={"save"}
-                    onClick={() => {
-                      fm.submit();
-                    }}
-                  >
-                    <div className={cx("bg-primary", btn())}>
-                      <div className="flex items-center gap-x-0.5">
-                        <IoMdSave className="text-xl" />
-                        Close
+                </Alert>
+                {fm.data?.status === "complete" ? (
+                  <>
+                    <Alert
+                      type={"save"}
+                      onClick={() => {
+                        fm.data.status = "closed"
+                        fm.render()
+                        fm.submit();
+                      }}
+                    >
+                      <div className={cx("bg-primary", btn())}>
+                        <div className="flex items-center gap-x-0.5">
+                          <IoMdSave className="text-xl" />
+                          Close
+                        </div>
                       </div>
-                    </div>
-                  </Alert>
-                </>
-              ) : fm.data?.status === "open" ? (
-                <>
-                  <Alert
-                    type={"save"}
-                    onClick={() => {
-                      fm.submit();
-                    }}
-                  >
-                    <div className={cx("bg-primary", btn())}>
-                      <div className="flex items-center gap-x-0.5">
-                        <IoMdSave className="text-xl" />
-                        Close
+                    </Alert>
+                  </>
+                ) : fm.data?.status === "open" ? (
+                  <>
+                    <Alert
+                      type={"save"}
+                      onClick={() => {
+                        fm.data.status = "complete"
+                        fm.render()
+                        fm.submit();
+                      }}
+                    >
+                      <div className={cx("bg-primary", btn())}>
+                        <div className="flex items-center gap-x-0.5">
+                          <IoMdSave className="text-xl" />
+                          Complete
+                        </div>
                       </div>
-                    </div>
-                  </Alert>
-                </>
-              ) : (
-                <></>
-              )}
+                    </Alert>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
-          </div>
-        );
-      }}
+          );
+        }}
       onSubmit={async (fm: any) => {
         const data = fm.data;
       }}
       onLoad={async () => {
-        return {};
+        return {
+          id,
+          status: "open"
+        };
       }}
       header={(fm: any) => {
         return (
@@ -127,6 +136,7 @@ function Page() {
                     fm={fm}
                     name={"status"}
                     label={"Status"}
+                    disabled={true}
                     type={"dropdown"}
                     onLoad={async () => {
                       return [

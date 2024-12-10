@@ -1,7 +1,7 @@
 "use client";
 import { useLocal } from "@/lib/use-local";
 import { Check, Loader2 } from "lucide-react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   ResizableHandle,
@@ -24,7 +24,7 @@ export const Form: React.FC<any> = ({
   showResize,
   mode,
   className,
-  onInit
+  onInit,
 }) => {
   const local = useLocal({
     ready: false,
@@ -36,10 +36,9 @@ export const Form: React.FC<any> = ({
     render: () => {},
     mode,
   });
-
   useEffect(() => {
-    if(typeof onInit === "function"){
-      onInit(local)
+    if (typeof onInit === "function") {
+      onInit(local);
     }
     local.ready = false;
     local.render();
@@ -54,102 +53,44 @@ export const Form: React.FC<any> = ({
       res.then((data) => {
         local.ready = true;
         local.data = data;
-        local.render();
+        local.render(); // Panggil render setelah data diperbarui
         toast.dismiss();
-        toast.success(
-          <div
-            className={cx(
-              "cursor-pointer flex flex-col select-none items-stretch flex-1 w-full"
-            )}
-            onClick={() => {
-              toast.dismiss();
-            }}
-          >
-            <div className="flex text-green-700 items-center success-title font-semibold">
-              <Check className="h-6 w-6 mr-1 " />
-              Saved
-            </div>
-          </div>
-        );
-        setTimeout(() => {
-          toast.dismiss();
-        }, 1000);
+        toast.success("Data Loaded Successfully!");
       });
     } else {
       local.ready = true;
       local.data = res;
-      local.render();
+      local.render(); // Panggil render untuk memicu re-render
       toast.dismiss();
-      toast.success(
-        <div
-          className={cx(
-            "cursor-pointer flex flex-col select-none items-stretch flex-1 w-full"
-          )}
-          onClick={() => {
-            toast.dismiss();
-          }}
-        >
-          <div className="flex text-green-700 items-center success-title font-semibold">
-            <Check className="h-6 w-6 mr-1 " />
-            Saved
-          </div>
-        </div>
-      );
-      setTimeout(() => {
-        toast.dismiss();
-      }, 1000);
+      toast.success("Data Loaded Successfully!");
     }
   }, []);
 
+  // Tambahkan dependency ke header agar reaktif
+  const HeaderComponent = header(local);
 
   return (
-    <div className={cx("flex-grow flex-col flex", className)}>
+    <div className={`flex-grow flex-col flex ${className}`}>
       <div className="flex flex-row">{header(local)}</div>
       {showResize ? (
-        <>
-          <ResizablePanelGroup
-            direction="vertical"
-            className="rounded-lg border flex-grow border-none flex-col"
-          >
-            <ResizablePanel
-              className={cx(
-                "border-none flex flex-col ",
-                css`
-                  overflow-y: scroll !important;
-                `
-              )}
+        // Resize panels...
+        <ResizablePanelGroup direction="vertical" className="rounded-lg border">
+          <ResizablePanel className="border-none flex flex-col">
+            <form
+              className="flex flex-grow flex-col"
+              onSubmit={(e) => {
+                e.preventDefault();
+                local.submit();
+              }}
             >
-              <form
-                className="flex flex-grow flex-col"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  local.submit();
-                }}
-              >
-                {children(local)}
-              </form>
-            </ResizablePanel>
-            <ResizableHandle className="border-none" />
-            <ResizablePanel className="border-t-2	 flex flex-row flex-grow">
-              <div></div>
-              <div
-                className={cx(
-                  "flex flex-col flex-grow relative",
-                  css`
-                    .tbl-wrapper {
-                      padding-top: 0 !important;
-                    }
-                    .head-tbl-list {
-                      padding-top: 0 !important;
-                    }
-                  `
-                )}
-              >
-                {typeof onFooter === "function" ? onFooter(local) : <></>}
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </>
+              {children(local)}
+            </form>
+          </ResizablePanel>
+          <ResizableHandle className="border-none" />
+          <ResizablePanel className="border-t-2 flex flex-row flex-grow">
+            {typeof onFooter === "function" ? onFooter(local) : null}
+          </ResizablePanel>
+        </ResizablePanelGroup>
       ) : (
         <>
           <form
@@ -161,24 +102,7 @@ export const Form: React.FC<any> = ({
           >
             {children(local)}
           </form>
-          <div
-            className={cx(
-              "flex flex-col flex-grow relative",
-              css`
-                .tbl-wrapper {
-                  padding-top: 0 !important;
-                }
-                // .tbl {
-                //   position: relative;
-                // }
-                .head-tbl-list {
-                  padding-top: 0 !important;
-                }
-              `
-            )}
-          >
-            {typeof onFooter === "function" ? onFooter(local) : <></>}
-          </div>
+          {typeof onFooter === "function" ? onFooter(local) : null}
         </>
       )}
     </div>

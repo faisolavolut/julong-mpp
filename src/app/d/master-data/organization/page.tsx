@@ -41,18 +41,9 @@ function Page() {
               },
             ]}
             onLoad={async (param: any) => {
-              // await api.get("/api/users/me")
-              // console.log("HALO")
-              // await api.get("http://localhost:3000/api/proxy/api/organizations")
-              const res: any = await api.get("/api/organizations");
+              const res: any = await api.get("https://julong-portal.avolut.com/api/organizations");
               const data: any[] = res.data.data.organizations;
-              console.log(data);
               return data || [];
-
-              // const res: any = await api.get(
-              //   "https://jsonplaceholder.typicode.com/users"
-              // );
-              // return res.data;
             }}
             onInit={async (list: any) => {}}
           />

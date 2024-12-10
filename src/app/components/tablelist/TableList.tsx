@@ -51,6 +51,9 @@ export const TableList: React.FC<any> = ({
   take = 20,
   header,
   disabledPagination,
+  disabledHeader,
+  disabledHeadTable,
+  onInit
 }) => {
   const [data, setData] = useState<any[]>([]);
   const sideLeft =
@@ -75,31 +78,54 @@ export const TableList: React.FC<any> = ({
       local.data.push(row);
       local.render();
     },
+    removeRow: (row: any) => {
+      setData((prev) => prev.filter((item) => item !== row)); // Update state lokal
+      local.data = local.data.filter((item: any) => item !== row); // Hapus row dari local.data
+      local.render(); // Panggil render untuk memperbarui UI
+    },
     reload: async () => {
+      toast.info(
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          {"Loading..."}
+        </>
+      );
       if (Array.isArray(onLoad)) {
         local.data = onLoad;
         local.render();
+        setData(onLoad);
       } else {
         const res: any = onLoad({
           search: local.search,
           sort: local.sort,
-          take,
+          take: 10,
           paging: 1,
         });
         if (res instanceof Promise) {
           res.then((e) => {
             local.data = e;
             local.render();
+            setData(e);
+            setTimeout(() => {
+              toast.dismiss();
+            }, 2000);
           });
         } else {
           local.data = res;
           local.render();
+          setData(res);
+          console.log("HALO", res)
+          setTimeout(() => {
+            toast.dismiss();
+          }, 2000);
         }
       }
-      console.log(local.data);
     },
   });
   useEffect(() => {
+    if(typeof onInit === "function"){
+      onInit(local)
+    }
     toast.info(
       <>
         <Loader2 className="h-4 w-4 animate-spin" />
@@ -187,7 +213,7 @@ export const TableList: React.FC<any> = ({
   return (
     <>
       <div className="tbl-wrapper flex flex-grow flex-col">
-        <div className="head-tbl-list block items-start justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+        {!disabledHeader ?<div className="head-tbl-list block items-start justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
           <div className="flex flex-row items-end">
             <div className="sm:flex flex flex-col space-y-2">
               {false ? (
@@ -250,13 +276,14 @@ export const TableList: React.FC<any> = ({
             </div>
             <div className="flex">{sideRight ? sideRight(local) : <></>}</div>
           </div>
-        </div>
+        </div> : <></>}
+        
         <div className="flex flex-col flex-grow">
           <div className="overflow-auto relative flex-grow flex-row">
             <div className="tbl absolute top-0 left-0 inline-block flex-grow w-full h-full align-middle">
               <div className=" ">
                 <Table className="min-w-full divide-y divide-gray-200 ">
-                  <thead className="text-md bg-second group/head text-md uppercase text-gray-700 ">
+                  {!disabledHeadTable ? <thead className="text-md bg-second group/head text-md uppercase text-gray-700 ">
                     {table.getHeaderGroups().map((headerGroup) => (
                       <tr key={`${headerGroup.id}`} className={headerGroup.id}>
                         {headerGroup.headers.map((header, index) => {
@@ -270,7 +297,11 @@ export const TableList: React.FC<any> = ({
                             <th
                               {...{
                                 style: {
-                                  width: header.getSize(),
+                                  width: col?.width
+                                    ? header.getSize() < col?.width
+                                      ? `${col.width}px`
+                                      : header.getSize()
+                                    : header.getSize(),
                                 },
                               }}
                               key={header.id}
@@ -374,10 +405,11 @@ export const TableList: React.FC<any> = ({
                         })}
                       </tr>
                     ))}
-                  </thead>
+                  </thead> : <></>}
+                  
 
                   <Table.Body className="divide-y divide-gray-200 bg-white">
-                    {table.getRowModel().rows.map((row) => (
+                    {table.getRowModel().rows.map((row, idx) => (
                       <Table.Row key={row.id} className="hover:bg-[#DBDBE7]">
                         {row.getVisibleCells().map((cell) => {
                           const ctx = cell.getContext();
@@ -385,6 +417,8 @@ export const TableList: React.FC<any> = ({
                             row: row.original,
                             name: ctx.column.id,
                             cell,
+                            idx,
+                            tbl: local
                           };
                           const head = column.find(
                             (e: any) => e?.name === ctx.column.id

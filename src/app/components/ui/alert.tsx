@@ -11,7 +11,13 @@ import {
   AlertDialogTrigger,
 } from "./alert-dialog";
 
-export const Alert: FC<any> = ({ type, onClick, children, className }) => {
+export const Alert: FC<any> = ({
+  type,
+  onClick,
+  children,
+  className,
+  content,
+}) => {
   const message: any = {
     save: "Your data will be saved securely. You can update it at any time if needed.",
     delete:
@@ -22,16 +28,27 @@ export const Alert: FC<any> = ({ type, onClick, children, className }) => {
       <AlertDialog>
         <AlertDialogTrigger>{children}</AlertDialogTrigger>
         <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>{message?.[type]}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction className={"bg-primary text-white"} onClick={onClick}>
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
+          {content ? (
+            content
+          ) : (
+            <>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {message?.[type]}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  className={"bg-primary text-white"}
+                  onClick={onClick}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </>
+          )}
         </AlertDialogContent>
       </AlertDialog>
     </>

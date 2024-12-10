@@ -68,7 +68,7 @@ export const TypeaheadOptions: FC<{
               tabIndex={0}
               key={item.value + "_" + idx}
               className={cx(
-                "opt-item px-3 py-1 cursor-pointer option-item text-xs",
+                "opt-item px-3 py-1 cursor-pointer option-item text-sm",
                 is_selected ? "bg-blue-600 text-white" : "hover:bg-blue-50",
                 idx > 0 && "border-t"
               )}

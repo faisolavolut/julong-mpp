@@ -95,25 +95,6 @@ function Page() {
                   />
                 </div>{" "}
                 <div>
-                  <Field
-                    fm={fm}
-                    name={"emp_org_id"}
-                    label={"Employment Org"}
-                    type={"dropdown"}
-                    disabled={true}
-                    onLoad={async () => {
-                      return [
-                        {
-                          value: 1,
-                          label: "Organization",
-                          data: {
-                            id: 1,
-                            label: "Organization",
-                          },
-                        },
-                      ];
-                    }}
-                  />
                 </div>
                 <div>
                   <Field
@@ -136,8 +117,34 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
+                    name={"mpp_name"}
+                    label={"MPP Name"}
+                    type={"dropdown"}
+                    onLoad={async () => {
+                      return [
+                        {
+                          value: 1,
+                          label: "MPP 1",
+                        },
+                      ];
+                    }}
+                  />
+                </div>
+                <div></div>
+                <div>
+                  <Field
+                    fm={fm}
                     name={"budget_year_from"}
                     label={"Budget year From"}
+                    type={"date"}
+                    disabled={true}
+                  />
+                </div>
+                <div>
+                  <Field
+                    fm={fm}
+                    name={"budget_year_to"}
+                    label={"Budget year To"}
                     type={"date"}
                     disabled={true}
                   />
@@ -152,25 +159,8 @@ function Page() {
                     onLoad={async () => {
                       return [
                         {
-                          value: 1,
-                          label: "Organization",
-                        },
-                      ];
-                    }}
-                  />
-                </div>
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"requestor"}
-                    label={"Requestor"}
-                    type={"dropdown"}
-                    disabled={true}
-                    onLoad={async () => {
-                      return [
-                        {
-                          value: 1,
-                          label: "Organization",
+                          value: "8e6958d1-ac2d-444c-a0ef-b27b0b168b08",
+                          label: "Employee",
                         },
                       ];
                     }}
@@ -199,7 +189,6 @@ function Page() {
                     name={"notes"}
                     label={"Notes"}
                     type={"textarea"}
-                    disabled={true}
                   />
                 </div>
                 <div>
