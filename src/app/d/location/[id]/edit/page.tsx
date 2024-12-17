@@ -855,7 +855,7 @@ function Page() {
                                 tbl.removeRow(row);
                                 fm.data.document_line =
                                   fm.data.document_line.filter(
-                                    (e) => e !== row
+                                    (e: any) => e !== row
                                   );
                                 fm.render();
                                 console.log(fm.data.document_line, row);
