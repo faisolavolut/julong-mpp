@@ -14,8 +14,7 @@ function HomePage() {
         const us = user.data.data;
         if (us) {
           router.push("/d/master-data/organization");
-        } else {
-          navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
+        } else {navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
         }
       } catch (e) {
         navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
