@@ -24,7 +24,16 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
       setMini(localMini === "true" ? true : false);
     }
     const run = async () => {
-      const user = await api.get("https://julong-portal.avolut.com/api/users/me")
+      try {
+        const user = await api.get(
+          `${process.env.NEXT_PUBLIC_API_PORTAL}/api/users/me`
+        );
+        if (!user?.data.data) {
+          navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
+        }
+      } catch (e) {
+        navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
+      }
     }
     run() 
   }, []);

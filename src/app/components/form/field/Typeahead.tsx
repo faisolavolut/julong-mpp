@@ -342,7 +342,7 @@ export const Typeahead: FC<{
       <div
         className={cx(
           local.mode === "single" ? "cursor-pointer" : "cursor-text",
-          "flex relative flex-wrap py-0 items-center w-full h-full flex-1",
+          "text-black flex relative flex-wrap py-0 items-center w-full h-full flex-1",
           className
         )}
         onClick={() => {
@@ -550,7 +550,7 @@ export const Typeahead: FC<{
               disabled={!disabled ? disabledSearch : disabled}
               spellCheck={false}
               className={cx(
-                "flex h-9 w-full rounded-md border border-gray-300 border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+                "text-black flex h-9 w-full rounded-md border border-gray-300 border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
                 local.mode === "single" ? "cursor-pointer" : ""
               )}
               style={{

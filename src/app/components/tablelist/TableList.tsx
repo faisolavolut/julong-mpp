@@ -322,7 +322,7 @@ export const TableList: React.FC<any> = ({
         <div className="flex flex-col flex-grow">
           <div className="overflow-auto relative flex-grow flex-row">
             <div className="tbl absolute top-0 left-0 inline-block flex-grow w-full h-full align-middle">
-              <div className=" ">
+              <div className="">
                 <Table className="min-w-full divide-y divide-gray-200 ">
                   {!disabledHeadTable ? (
                     <thead className="text-md bg-second group/head text-md uppercase text-gray-700 ">

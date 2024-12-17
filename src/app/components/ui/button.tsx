@@ -9,7 +9,7 @@ const btn = cva(
   " px-4 py-1.5 group relative flex items-stretch justify-center p-0.5 text-center border border-transparent text-white enabled:hover:bg-cyan-800  rounded-md"
 );
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "px-4 py-1.5 group relative flex items-stretch justify-center p-0.5 text-center border inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -56,9 +56,10 @@ const ButtonBetter = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
-const ButtonContainer: FC<any> = ({ children, className }) => {
+const ButtonContainer: FC<any> = ({ children, className, variant = "default" }) => {
+  const vr = variant ? variant: "default"
   return (
-    <div className={cx("bg-primary", btn(), className)}>
+    <div className={cx(buttonVariants({ variant: vr, className }))}>
       <div className="flex items-center gap-x-0.5 text-sm">{children}</div>
     </div>
   );

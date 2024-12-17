@@ -26,6 +26,11 @@ import { cloneFM } from "@/lib/cloneFm";
 import { normalDate } from "@/lib/date";
 import { getParams } from "@/lib/get-params";
 import { get_user } from "@/lib/get_user";
+import { getAccess, userRoleMe } from "@/lib/getAccess";
+import { getNumber } from "@/lib/getNumber";
+import { useLocal } from "@/lib/use-local";
+import { notFound } from "next/navigation";
+import { useEffect } from "react";
 import { FiInfo } from "react-icons/fi";
 import { GoInfo } from "react-icons/go";
 import { HiDocumentDownload, HiPlus } from "react-icons/hi";
@@ -33,8 +38,25 @@ import { IoMdSave } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 
 function Page() {
+  const local = useLocal({
+    can_save: false,
+    can_submit: false,
+    can_edit: true,
+  });
+  useEffect(() => {
+    const run = async () => {
+      const roles = await userRoleMe();
+      local.can_save = getAccess("save-mpp", roles);
+      local.can_submit = getAccess("submit-mpp", roles);
+      local.can_edit = getAccess("edit-mpp", roles);
+      local.render()
+    };
+    run();
+  }, []);
+  if(!local.can_edit){
+    notFound();
+  }
   const id = getParams("id");
-
   return (
     <FormBetter
       onTitle={(fm: any) => {
@@ -42,12 +64,12 @@ function Page() {
           <div className="flex flex-row w-full">
             <div className="flex flex-col py-4 pt-0 flex-grow">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                <span className="">Manpower Planning</span>
+                <span className="">Manpower Planning Overview</span>
               </h2>
               <BreadcrumbBetterLink
                 data={[
                   {
-                    title: "List Manpower Planning",
+                    title: "List Manpower Planning Overview",
                     url: "/d/location",
                   },
                   {
@@ -57,51 +79,6 @@ function Page() {
               />
             </div>
             <div className="flex flex-row space-x-2">
-              
-            <div className="flex flex-row items-center h-full">
-                <ButtonBetter
-                  variant="outline"
-                  className="px-4 py-2 text-sm h-auto"
-                >
-                  <div className="flex items-center gap-x-1 ">
-                    <FiInfo className="text-xl" />
-                  </div>
-                </ButtonBetter>
-              </div>
-              <div className="flex flex-row items-center h-full">
-                <ButtonBetter
-                  variant="outline"
-                  className="px-4 py-2 text-sm h-auto"
-                >
-                  <div className="flex items-center gap-x-1 ">
-                    <HiDocumentDownload className="text-xl" />
-                    <span>Export</span>
-                  </div>
-                </ButtonBetter>
-              </div>
-              <Alert
-                type={"save"}
-                onClick={() => {
-                  fm.submit();
-                }}
-              >
-                <ButtonContainer className={"bg-primary"}>
-                  <IoMdSave className="text-xl" />
-                  Save
-                </ButtonContainer>
-              </Alert>
-              <Alert
-                type={"save"}
-                onClick={() => {
-                  fm.submit();
-                }}
-              >
-                <ButtonContainer className={"bg-primary"}>
-                  <IoMdSave className="text-xl" />
-                  Submit
-                </ButtonContainer>
-              </Alert>
-
               <Alert
                 type={"save"}
                 content={
@@ -255,29 +232,45 @@ function Page() {
                   </>
                 }
               >
-                <ButtonContainer className={"bg-red-500"}>
-                  <IoMdSave className="text-xl" />
-                  Reject
+                <ButtonContainer variant="outline">
+                  <FiInfo className="text-xl" />
                 </ButtonContainer>
               </Alert>
               <Alert
                 type={"save"}
                 onClick={() => {
+                  fm.data.status = "DRAFTED";
                   fm.submit();
                 }}
               >
                 <ButtonContainer className={"bg-primary"}>
                   <IoMdSave className="text-xl" />
-                  Approve
+                  Save
                 </ButtonContainer>
               </Alert>
+              {local.can_submit ? (
+                <Alert
+                  type={"save"}
+                  onClick={() => {
+                    fm.data.level = "Level HRD";
+                    fm.data.status = "IN_PROGRESS";
+                    fm.submit();
+                  }}
+                >
+                  <ButtonContainer className={"bg-primary"}>
+                    <IoMdSave className="text-xl" />
+                    Submit
+                  </ButtonContainer>
+                </Alert>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         );
       }}
       onSubmit={async (fm: any) => {
         const data = fm.data;
-
         const param: any = {
           id: data.id,
           mpp_period_id: data.mpp_period_id,
@@ -289,62 +282,82 @@ function Page() {
           notes: data.notes,
           total_recruit: data.total_recruit,
           total_promote: data.total_promote,
-          status: "DRAFT",
+          status: data.status,
           recommended_by: null,
           approved_by: null,
           requestor_id: data.requestor_id,
-          organization_location_id: data.organization_location_id,
+          organization_location_id: "b61cd44b-e66a-48e3-9bc1-7a5a31b6932d",
         };
-        // const
         const document_line = data.document_line.map((e: any) => {
           return {
             ...e,
-            organization_location_id: data.organization_location_id,
+            organization_location_id: "b61cd44b-e66a-48e3-9bc1-7a5a31b6932d",
           };
         });
         const formData = new FormData();
 
         // Menambahkan data param ke FormData
         formData.append("payload", JSON.stringify(param));
-        console.log(formData)
-        console.log({
-          mp_planning_header_id: data.id,
-          mp_planning_lines: document_line
-        })
-        // const res: any = await api.put(
-        //   `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings`,
-        //   formData,
-        //   {
-        //     headers: {
-        //       "Content-Type": "multipart/form-data",
-        //     },
-        //   }
-        // );
-        // await api.post(
-        //   `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/lines/batch/store`,
-        //   {
-        //     mp_planning_header_id: data.id,
-        //     mp_planning_lines: document_line
-        //   },
-        // );
+
+        const res: any = await api.put(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        await api.post(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/lines/batch/store`,
+          {
+            mp_planning_header_id: data.id,
+            mp_planning_lines: document_line,
+          }
+        );
+        if (data.status === "IN_PROGRESS") {
+          const data_status = {
+            id: id,
+            approver_id: get_user("employee.id"),
+            approved_by: get_user("employee.name"),
+            level: data.level,
+            status: "IN_PROGRESS",
+            notes: data.notes || null,
+          };
+          const attachments = data.attachment.length
+            ? data.attachment.map((e: any) => e.data)
+            : [];
+          const formData = new FormData();
+          formData.append("payload", JSON.stringify(data_status));
+          const res: any = await api.put(
+            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/update-status`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+        }
       }}
       onLoad={async () => {
         const res: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/` + id
         );
+        const turn_over = await api.get(
+          `${process.env.NEXT_PUBLIC_API_PORTAL}/api/employees/turnover?start_date=2024-06-01&end_date=2025-07-01`
+        );
         const data = res.data.data;
+        console.log({ turn_over });
         return {
           id,
           ...data,
-          mpp_name: data?.mpp_period?.name,
+          plafon: data?.job_plafon?.plafon,
+          turn_over: getNumber(turn_over?.data?.data?.total),
+          mpp_name: data?.mpp_period?.title,
           budget_year_from: data?.mpp_period?.budget_start_date,
           budget_year_to: data?.mpp_period?.budget_end_date,
-          document_line: [],
-        };
-        return {
-          id,
-          document_date: new Date(),
-          requestor: get_user("id"),
+          document_line: data?.mp_planning_lines || [],
         };
       }}
       showResize={false}
@@ -522,6 +535,25 @@ function Page() {
                                 tbl.addRow({});
                                 tbl.render();
                                 fm.render();
+                                const recruit = fm.data.document_line?.length
+                                  ? fm.data.document_line
+                                      .map(
+                                        (e: any) =>
+                                          getNumber(e.recruit_ph) +
+                                          getNumber(e.recruit_mt)
+                                      )
+                                      .reduce((a: any, b: any) => a + b, 0)
+                                  : 0;
+
+                                const totalPromotion = fm.data.document_line
+                                  ?.length
+                                  ? fm.data.document_line
+                                      .map((e: any) => getNumber(e.promotion))
+                                      .reduce((a: any, b: any) => a + b, 0)
+                                  : 0;
+                                fm.data.total_promote = totalPromotion;
+                                fm.data.total_recruit = recruit;
+                                fm.render();
                               }}
                             >
                               <div className="flex items-center gap-x-0.5">
@@ -594,10 +626,13 @@ function Page() {
                                 const existing = item.data.existing;
                                 fm_row.data.existing = existing;
                                 fm.render();
-
-                                const getNumber = (data: any) => {
-                                  return Number(data) || 0;
-                                };
+                                const suggested_recruit =
+                                  getNumber(fm.data.plafon) +
+                                  getNumber(existing) +
+                                  getNumber(fm.data.turn_over) +
+                                  getNumber(fm_row.data.promotion);
+                                fm_row.data.suggested_recruit =
+                                  suggested_recruit;
                                 const total =
                                   getNumber(fm_row.data.existing) +
                                   getNumber(fm_row.data.recruit_ph) +
@@ -657,8 +692,9 @@ function Page() {
                               fm={cloneFM(fm, row)}
                               name={"suggested_recruit"}
                               label={"Approved by"}
-                              type={"text"}
+                              type={"money"}
                               hidden_label={true}
+                              disabled={true}
                             />
                           </>
                         );
@@ -771,6 +807,15 @@ function Page() {
                                 fm.data.total_promote = totalPromotion;
                                 fm_row.data.total = total;
                                 fm.render();
+
+                                const suggested_recruit =
+                                  getNumber(fm.data.plafon) +
+                                  getNumber(fm_row.data.existing) +
+                                  getNumber(fm.data.turn_over) +
+                                  getNumber(fm_row.data.promotion);
+                                fm_row.data.suggested_recruit =
+                                  suggested_recruit;
+                                fm.render();
                               }}
                             />
                           </>
@@ -808,6 +853,31 @@ function Page() {
                               className="bg-red-500"
                               onClick={() => {
                                 tbl.removeRow(row);
+                                fm.data.document_line =
+                                  fm.data.document_line.filter(
+                                    (e) => e !== row
+                                  );
+                                fm.render();
+                                console.log(fm.data.document_line, row);
+                                const recruit = fm.data.document_line?.length
+                                  ? fm.data.document_line
+                                      .map(
+                                        (e: any) =>
+                                          getNumber(e.recruit_ph) +
+                                          getNumber(e.recruit_mt)
+                                      )
+                                      .reduce((a: any, b: any) => a + b, 0)
+                                  : 0;
+
+                                const totalPromotion = fm.data.document_line
+                                  ?.length
+                                  ? fm.data.document_line
+                                      .map((e: any) => getNumber(e.promotion))
+                                      .reduce((a: any, b: any) => a + b, 0)
+                                  : 0;
+                                fm.data.total_promote = totalPromotion;
+                                fm.data.total_recruit = recruit;
+                                fm.render();
                               }}
                             >
                               <div className="flex items-center">

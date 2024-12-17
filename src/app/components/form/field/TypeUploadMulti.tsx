@@ -67,28 +67,17 @@ export const FieldUploadMulti: FC<{
       for (let i = 0; i < event.target.files.length; i++) {
         const file = event.target?.files?.item(i);
         if (file) {
-          input.uploading.add(file);
-          upload_single(file).then((path) => {
-            input.uploading.delete(file);
-            list.push(path);
-            if (i + 1 === files) {
-              fm.data[field.name] = list;
-              fm.render();
-              setTimeout(() => {
-                
-              input.fase = "start";
-              input.render();
-              if (typeof on_change === "function") {
-                const run = async () => {
-                  on_change(fm.data?.[field.name]);
-                };
-                run();
-              }
-              }, 2000)
-            }
+          list.push({
+            name: file.name,
+            data: file,
           });
         }
       }
+
+      fm.data[field.name] = list;
+      fm.render();
+      on_change(fm.data?.[field.name]);
+      input.fase = "start";
       input.render();
     }
 

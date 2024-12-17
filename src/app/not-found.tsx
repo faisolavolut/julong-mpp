@@ -1,3 +1,5 @@
+import { siteurl } from "@/lib/siteurl";
+
 export default function NotFound() {
   return (
     <section className="bg-white dark:bg-gray-900">
@@ -5,7 +7,7 @@ export default function NotFound() {
         <div className="mx-auto max-w-screen-sm text-center">
           <img
             alt=""
-            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/404/404-computer.svg"
+            src={siteurl("/404-computer.svg")}
             className="mx-auto mb-4"
           />
           <h1 className="mb-4 text-2xl font-extrabold text-primary-600 dark:text-primary-500">

@@ -99,6 +99,7 @@ function Page() {
             },
           }
         );
+        navigate("/d/location/"+res.data?.data?.id+"/edit")
       }}
       onLoad={async () => {
         const document_number = await api.get(
@@ -109,14 +110,13 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organization-locations/` +
             get_user("employee.employee_job.organization_location_id")
         );
-        console.log({ id_org });
         const org = await api.get(
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations/` + id_org
         );
         console.log({ org });
         const current_open = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
-        );
+          );
         return {
           id,
           document_number: document_number.data.data,
@@ -133,7 +133,8 @@ function Page() {
           mpp_period_id: current_open?.data?.data?.id,
           organization_id: id_org,
           job_id: get_user("employee.employee_job.job_id"),
-          requestor_id: get_user("id"),
+          requestor_id: get_user("employee.id"),
+          status: "DRAFT",
           organization_location_id: get_user(
             "employee.employee_job.organization_location_id"
           ),

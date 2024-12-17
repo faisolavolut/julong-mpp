@@ -145,7 +145,7 @@ function Page() {
               },
             },
             {
-              name: "organization.name",
+              name: "parent.name",
               header: () => <span>Parent</span>,
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, name)}</>;
