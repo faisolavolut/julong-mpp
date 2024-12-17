@@ -1,38 +1,14 @@
 "use client";
 import { Field } from "@/app/components/form/Field";
-import { Form } from "@/app/components/form/Form";
 import { FormBetter } from "@/app/components/form/FormBetter";
 import { Alert } from "@/app/components/ui/alert";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/app/components/ui/alert-dialog";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
 import { btn } from "@/app/components/ui/button";
-import { useLocal } from "@/lib/use-local";
-import {
-  Avatar,
-  Breadcrumb,
-  Button,
-  Checkbox,
-  FileInput,
-  Label,
-  Select,
-  Textarea,
-  TextInput,
-  Tooltip,
-} from "flowbite-react";
+import api from "@/lib/axios";
+import { getParams } from "@/lib/get-params";
 import { IoMdSave } from "react-icons/io";
-import { MdDelete } from "react-icons/md";
-
 function Page() {
+  const id = getParams("id")
   return (
     <FormBetter
       onTitle={(fm: any) => {
@@ -54,17 +30,22 @@ function Page() {
                 ]}
               />
             </div>
+            <div className="flex flex-row space-x-2">
+            </div>
           </div>
         );
       }}
-      mode={"view"}
-      onSubmit={async () => {}}
+      onSubmit={async (fm: any) => {
+        
+      }}
       onLoad={async () => {
-        return {
-          organization: 1,
-          job: 1,
-          name: "pak de",
-        };
+        
+        const res: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons/` +
+            id
+        );
+        console.log(res.data.data)
+        return res.data.data
       }}
       header={(fm: any) => {
         return <></>;
@@ -77,39 +58,23 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    mode={"view"}
-                    name={"organization"}
+                    name={"organization_name"}
                     label={"Organization"}
-                    type={"dropdown"}
-                    onLoad={async () => {
-                      console.log("MASUKL");
-                      return [
-                        {
-                          value: 1,
-                          label: "Organization",
-                        },
-                      ];
-                    }}
+                    disabled={true}
                   />
                 </div>
                 <div>
-                  <Field
+                 
+                <Field
                     fm={fm}
-                    name={"job"}
+                    name={"job_name"}
                     label={"Job"}
-                    type={"dropdown"}
-                    onLoad={async () => {
-                      return [
-                        {
-                          value: 1,
-                          label: "Job",
-                        },
-                      ];
-                    }}
+                    disabled={true}
                   />
                 </div>
                 <div>
-                  <Field fm={fm} name={"name"} label={"Plafon"} type={"text"} />
+                  <Field fm={fm}
+                    disabled={true} name={"plafon"} label={"Plafon"} type={"money"} />
                 </div>
               </div>
             </div>

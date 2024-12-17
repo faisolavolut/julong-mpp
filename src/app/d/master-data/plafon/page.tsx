@@ -2,6 +2,7 @@
 import { TableList } from "@/app/components/tablelist/TableList";
 import { ButtonLink } from "@/app/components/ui/button-link";
 import api from "@/lib/axios";
+import { events } from "@/lib/event";
 import { getValue } from "@/lib/getValue";
 import { Button } from "flowbite-react";
 import Link from "next/link";
@@ -26,18 +27,18 @@ function Page() {
           }}
           column={[
             {
-              name: "Organization",
+              name: "organization_name",
               header: () => <span>Organization</span>,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{getValue(row, "organization.name")}</>;
+                return <>{getValue(row, name)}</>;
               },
             },
             {
-              name: "job",
+              name: "job_name",
               header: () => <span>Job</span>,
               width: 300,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{getValue(row, "job.name")}</>;
+                return <>{getValue(row, name)}</>;
               },
             },
             {
@@ -45,7 +46,7 @@ function Page() {
               header: () => <span>Plafon</span>,
               width: 300,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{row.name}</>;
+                return <>{getValue(row, name)}</>;
               },
             },
             {
@@ -77,14 +78,13 @@ function Page() {
             },
           ]}
           onLoad={async (param: any) => {
-            // const res: any = await api.get("/api/organization-structures");
-            // const data: any[] = res.data.data.plafon
-            // return data || []
+            const params = await events("onload-param", param);
             const res: any = await api.get(
-              "https://jsonplaceholder.typicode.com/users"
+              `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons` +
+                params
             );
-            console.log(res);
-            return res.data;
+            const data: any[] = res.data.data.job_plafons;
+            return data || [];
           }}
           onInit={async (list: any) => {}}
         />

@@ -1,6 +1,8 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
 import api from "@/lib/axios";
+import { events } from "@/lib/event";
+import { generateQueryString } from "@/lib/generateQueryString";
 import { joinString } from "@/lib/joinString";
 import { Breadcrumb } from "flowbite-react";
 
@@ -34,14 +36,16 @@ function Page() {
                 header: () => <span>Organization Location</span>,
                 width: 300,
                 renderCell: ({ row, name, cell }: any) => {
-                  console.log(row);
                   const data = row.organization_locations;
                   return <>{joinString(data, "name")}</>;
                 },
               },
             ]}
             onLoad={async (param: any) => {
-              const res: any = await api.get("https://julong-portal.avolut.com/api/organizations");
+              const params = await events("onload-param", param);
+              const res: any = await api.get(
+                "https://julong-portal.avolut.com/api/organizations" + params
+              );
               const data: any[] = res.data.data.organizations;
               return data || [];
             }}

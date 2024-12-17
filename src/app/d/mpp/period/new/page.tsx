@@ -4,6 +4,8 @@ import { FormBetter } from "@/app/components/form/FormBetter";
 import { Alert } from "@/app/components/ui/alert";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
 import { btn } from "@/app/components/ui/button";
+import api from "@/lib/axios";
+import { normalDate } from "@/lib/date";
 import { IoMdSave } from "react-icons/io";
 
 function Page() {
@@ -32,34 +34,42 @@ function Page() {
               <Alert
                 type={"save"}
                 onClick={() => {
+                  fm.data.status = "draft";
                   fm.submit();
                 }}
               >
                 <div className={cx("bg-primary", btn())}>
                   <div className="flex items-center gap-x-0.5">
                     <IoMdSave className="text-xl" />
-                    Submit
+                    Save
                   </div>
                 </div>
               </Alert>
-              
             </div>
           </div>
         );
       }}
       onSubmit={async (fm: any) => {
         const data = fm.data;
-        const res = {
+        const param = {
           title: data?.title,
-          start_date: data?.start_date,
-          end_date: data?.end_date,
+          start_date: normalDate(data?.start_date),
+          end_date: normalDate(data?.end_date),
           status: data?.status,
+          budget_start_date: normalDate(data?.budget_start_date),
+          budget_end_date: normalDate(data?.budget_end_date),
         };
-        console.log(res)
+        const res: any = await api.post(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods`,
+          param
+        );
+        setTimeout(() => {
+          navigate("/d/mpp/period");
+        }, 1000);
       }}
       onLoad={async () => {
         return {
-          status: "open"
+          status: "draft",
         };
       }}
       header={(fm: any) => {
@@ -71,13 +81,9 @@ function Page() {
             <div className={cx("flex flex-col flex-wrap px-4 py-2")}>
               <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8">
                 <div>
-                  <Field
-                    fm={fm}
-                    name={"title"}
-                    label={"Manpower Planning Name"}
-                    type={"text"}
-                  />
+                  <Field fm={fm} name={"title"} label={"Name"} type={"text"} />
                 </div>
+                <div></div>
                 <div>
                   <Field
                     fm={fm}
@@ -97,6 +103,22 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
+                    name={"budget_start_date"}
+                    label={"Budget Start date"}
+                    type={"date"}
+                  />
+                </div>
+                <div>
+                  <Field
+                    fm={fm}
+                    name={"budget_end_date"}
+                    label={"Budget End Date"}
+                    type={"date"}
+                  />
+                </div>
+                <div>
+                  <Field
+                    fm={fm}
                     name={"status"}
                     label={"Status"}
                     type={"dropdown"}
@@ -106,6 +128,18 @@ function Page() {
                         {
                           value: "open",
                           label: "Open",
+                        },
+                        {
+                          value: "draft",
+                          label: "Draft",
+                        },
+                        {
+                          value: "not_open",
+                          label: "Not Open",
+                        },
+                        {
+                          value: "complete",
+                          label: "Complete",
                         },
                         {
                           value: "close",

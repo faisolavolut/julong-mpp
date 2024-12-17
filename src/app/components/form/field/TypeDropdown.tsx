@@ -14,7 +14,7 @@ export const TypeDropdown: React.FC<any> = ({required,fm, name, onLoad, onChange
             fm.render();
           }
           if(typeof onChange === "function" && item){
-            onChange(item.value)
+            onChange(item)
           }
           return item?.value || search;
         }}

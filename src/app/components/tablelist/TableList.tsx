@@ -53,7 +53,7 @@ export const TableList: React.FC<any> = ({
   disabledPagination,
   disabledHeader,
   disabledHeadTable,
-  onInit
+  onInit,
 }) => {
   const [data, setData] = useState<any[]>([]);
   const sideLeft =
@@ -78,15 +78,37 @@ export const TableList: React.FC<any> = ({
       local.data.push(row);
       local.render();
     },
+    renderRow: (row: any) => {
+      setData((prev) => [...prev, row]);
+      console.log(data)
+      local.data = data;
+      local.render();
+    },
     removeRow: (row: any) => {
       setData((prev) => prev.filter((item) => item !== row)); // Update state lokal
       local.data = local.data.filter((item: any) => item !== row); // Hapus row dari local.data
       local.render(); // Panggil render untuk memperbarui UI
     },
     reload: async () => {
+      console.log("RELOAD");
       toast.info(
         <>
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2
+            className={cx(
+              "h-4 w-4 animate-spin-important",
+              css`
+                animation: spin 1s linear infinite !important;
+                @keyframes spin {
+                  0% {
+                    transform: rotate(0deg);
+                  }
+                  100% {
+                    transform: rotate(360deg);
+                  }
+                }
+              `
+            )}
+          />
           {"Loading..."}
         </>
       );
@@ -114,7 +136,7 @@ export const TableList: React.FC<any> = ({
           local.data = res;
           local.render();
           setData(res);
-          console.log("HALO", res)
+          console.log("HALO", res);
           setTimeout(() => {
             toast.dismiss();
           }, 2000);
@@ -123,12 +145,27 @@ export const TableList: React.FC<any> = ({
     },
   });
   useEffect(() => {
-    if(typeof onInit === "function"){
-      onInit(local)
+    if (typeof onInit === "function") {
+      onInit(local);
     }
     toast.info(
       <>
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <Loader2
+          className={cx(
+            "h-4 w-4 animate-spin-important",
+            css`
+              animation: spin 1s linear infinite !important;
+              @keyframes spin {
+                0% {
+                  transform: rotate(0deg);
+                }
+                100% {
+                  transform: rotate(360deg);
+                }
+              }
+            `
+          )}
+        />
         {"Loading..."}
       </>
     );
@@ -213,200 +250,219 @@ export const TableList: React.FC<any> = ({
   return (
     <>
       <div className="tbl-wrapper flex flex-grow flex-col">
-        {!disabledHeader ?<div className="head-tbl-list block items-start justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
-          <div className="flex flex-row items-end">
-            <div className="sm:flex flex flex-col space-y-2">
-              {false ? (
-                <div className="">
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-                    All <span className="">{name ? `${name}s` : ``}</span>
-                  </h2>
-                </div>
-              ) : (
-                <></>
-              )}
-
-              <div className="flex">
-                {sideLeft ? (
-                  sideLeft(local)
+        {!disabledHeader ? (
+          <div className="head-tbl-list block items-start justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+            <div className="flex flex-row items-end">
+              <div className="sm:flex flex flex-col space-y-2">
+                {false ? (
+                  <div className="">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+                      All <span className="">{name ? `${name}s` : ``}</span>
+                    </h2>
+                  </div>
                 ) : (
-                  <>
-                    <Link href={"/new"}>
-                      <Button className="bg-primary">
-                        <div className="flex items-center gap-x-0.5">
-                          <HiPlus className="text-xl" />
-                          <span className="capitalize">Add {name}</span>
-                        </div>
-                      </Button>
-                    </Link>
-                  </>
+                  <></>
                 )}
+
+                <div className="flex">
+                  {sideLeft ? (
+                    sideLeft(local)
+                  ) : (
+                    <>
+                      <Link href={"/new"}>
+                        <Button className="bg-primary">
+                          <div className="flex items-center gap-x-0.5">
+                            <HiPlus className="text-xl" />
+                            <span className="capitalize">Add {name}</span>
+                          </div>
+                        </Button>
+                      </Link>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="ml-auto flex items-center flex-row">
-            <div className="tbl-search hidden items-center dark:divide-gray-700 sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100">
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  await local.reload();
-                }}
-              >
-                <Label htmlFor="users-search" className="sr-only">
-                  Search
-                </Label>
-                <div className="relative  lg:w-56">
-                  <InputSearch
-                    // className="bg-white search text-xs "
-                    id="users-search"
-                    name="users-search"
-                    placeholder={`Search`}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      local.search = value;
-                      local.render();
-                      debouncedHandler(() => {
-                        local.reload();
-                      }, 1500);
-                    }}
-                  />
-                </div>
-              </form>
+            <div className="ml-auto flex items-center flex-row">
+              <div className="tbl-search hidden items-center dark:divide-gray-700 sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100">
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    await local.reload();
+                  }}
+                >
+                  <Label htmlFor="users-search" className="sr-only">
+                    Search
+                  </Label>
+                  <div className="relative  lg:w-56">
+                    <InputSearch
+                      // className="bg-white search text-xs "
+                      id="users-search"
+                      name="users-search"
+                      placeholder={`Search`}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        local.search = value;
+                        local.render();
+                        debouncedHandler(() => {
+                          local.reload();
+                        }, 1000);
+                      }}
+                    />
+                  </div>
+                </form>
+              </div>
+              <div className="flex">{sideRight ? sideRight(local) : <></>}</div>
             </div>
-            <div className="flex">{sideRight ? sideRight(local) : <></>}</div>
           </div>
-        </div> : <></>}
-        
+        ) : (
+          <></>
+        )}
+
         <div className="flex flex-col flex-grow">
           <div className="overflow-auto relative flex-grow flex-row">
             <div className="tbl absolute top-0 left-0 inline-block flex-grow w-full h-full align-middle">
               <div className=" ">
                 <Table className="min-w-full divide-y divide-gray-200 ">
-                  {!disabledHeadTable ? <thead className="text-md bg-second group/head text-md uppercase text-gray-700 ">
-                    {table.getHeaderGroups().map((headerGroup) => (
-                      <tr key={`${headerGroup.id}`} className={headerGroup.id}>
-                        {headerGroup.headers.map((header, index) => {
-                          const name = header.column.id;
-                          const col = column.find((e: any) => e?.name === name);
-                          const isSort =
-                            typeof col?.sortable === "boolean"
-                              ? col.sortable
-                              : true;
-                          return (
-                            <th
-                              {...{
-                                style: {
-                                  width: col?.width
-                                    ? header.getSize() < col?.width
-                                      ? `${col.width}px`
-                                      : header.getSize()
-                                    : header.getSize(),
-                                },
-                              }}
-                              key={header.id}
-                              colSpan={header.colSpan}
-                              className="relative px-2 py-2 text-sm py-1 "
-                            >
-                              <div
-                                key={`${header.id}-label`}
+                  {!disabledHeadTable ? (
+                    <thead className="text-md bg-second group/head text-md uppercase text-gray-700 ">
+                      {table.getHeaderGroups().map((headerGroup) => (
+                        <tr
+                          key={`${headerGroup.id}`}
+                          className={headerGroup.id}
+                        >
+                          {headerGroup.headers.map((header, index) => {
+                            const name = header.column.id;
+                            const col = column.find(
+                              (e: any) => e?.name === name
+                            );
+                            const isSort =
+                              typeof col?.sortable === "boolean"
+                                ? col.sortable
+                                : true;
+                            return (
+                              <th
                                 {...{
-                                  style: col?.width
-                                    ? {
-                                        minWidth: `${col.width}px`,
-                                      }
-                                    : {},
+                                  style: {
+                                    width: col?.width
+                                      ? header.getSize() < col?.width
+                                        ? `${col.width}px`
+                                        : header.getSize()
+                                      : header.getSize(),
+                                  },
                                 }}
-                                onClick={() => {
-                                  if (isSort) {
-                                    const sort = local?.sort?.[name];
-                                    const mode =
-                                      sort === "desc"
-                                        ? null
-                                        : sort === "asc"
-                                        ? "desc"
-                                        : "asc";
-                                    local.sort = mode
-                                      ? {
-                                          [name]: mode,
-                                        }
-                                      : {};
-                                    local.render();
-                                  }
-                                }}
-                                className={cx(
-                                  "flex flex-grow flex-row  flex-grow select-none items-center flex-row text-base text-nowrap",
-                                  isSort ? " cursor-pointer" : ""
-                                )}
+                                key={header.id}
+                                colSpan={header.colSpan}
+                                className="relative px-2 py-2 text-sm py-1 "
                               >
-                                <div className="flex flex-row items-center flex-grow text-sm">
-                                  {header.isPlaceholder
-                                    ? null
-                                    : flexRender(
-                                        header.column.columnDef.header,
-                                        header.getContext()
-                                      )}
-                                </div>
-
-                                <div className="flex flex-col items-center">
-                                  <FaChevronUp
-                                    className={cx(
-                                      "px-0.5 mx-1  text-[12px]",
-                                      local?.sort?.[name] === "asc"
-                                        ? "text-black"
-                                        : "text-gray-500"
-                                    )}
-                                  />
-                                  <FaChevronDown
-                                    className={cx(
-                                      "px-0.5 mx-1  text-[12px]",
-                                      local?.sort?.[name] === "desc"
-                                        ? "text-black"
-                                        : "text-gray-500"
-                                    )}
-                                  />
-                                </div>
-                              </div>
-
-                              {headerGroup.headers.length !== index + 1 ? (
                                 <div
-                                  key={`${header.id}-resizer`} // Tambahkan key unik
+                                  key={`${header.id}-label`}
                                   {...{
-                                    onDoubleClick: () =>
-                                      header.column.resetSize(),
-                                    onMouseDown: header.getResizeHandler(),
-                                    onTouchStart: header.getResizeHandler(),
-                                    className: `resizer w-0.5 bg-gray-300 ${
-                                      table.options.columnResizeDirection
-                                    } ${
-                                      header.column.getIsResizing()
-                                        ? "isResizing"
-                                        : ""
-                                    }`,
-                                    style: {
-                                      transform:
-                                        columnResizeMode === "onEnd" &&
-                                        header.column.getIsResizing()
-                                          ? `translateX(${
-                                              (table.options
-                                                .columnResizeDirection === "rtl"
-                                                ? -1
-                                                : 1) *
-                                              (table.getState().columnSizingInfo
-                                                .deltaOffset ?? 0)
-                                            }px)`
-                                          : "",
-                                    },
+                                    style: col?.width
+                                      ? {
+                                          minWidth: `${col.width}px`,
+                                        }
+                                      : {},
                                   }}
-                                ></div>
-                              ) : null}
-                            </th>
-                          );
-                        })}
-                      </tr>
-                    ))}
-                  </thead> : <></>}
-                  
+                                  onClick={() => {
+                                    if (isSort) {
+                                      const sort = local?.sort?.[name];
+                                      const mode =
+                                        sort === "desc"
+                                          ? null
+                                          : sort === "asc"
+                                          ? "desc"
+                                          : "asc";
+                                      local.sort = mode
+                                        ? {
+                                            [name]: mode,
+                                          }
+                                        : {};
+                                      local.render();
+
+                                      local.reload();
+                                    }
+                                  }}
+                                  className={cx(
+                                    "flex flex-grow flex-row  flex-grow select-none items-center flex-row text-base text-nowrap",
+                                    isSort ? " cursor-pointer" : ""
+                                  )}
+                                >
+                                  <div className="flex flex-row items-center flex-grow text-sm">
+                                    {header.isPlaceholder
+                                      ? null
+                                      : flexRender(
+                                          header.column.columnDef.header,
+                                          header.getContext()
+                                        )}
+                                  </div>
+                                  {isSort ? (
+                                    <div className="flex flex-col items-center">
+                                      <FaChevronUp
+                                        className={cx(
+                                          "px-0.5 mx-1  text-[12px]",
+                                          local?.sort?.[name] === "asc"
+                                            ? "text-black"
+                                            : "text-gray-500"
+                                        )}
+                                      />
+                                      <FaChevronDown
+                                        className={cx(
+                                          "px-0.5 mx-1  text-[12px]",
+                                          local?.sort?.[name] === "desc"
+                                            ? "text-black"
+                                            : "text-gray-500"
+                                        )}
+                                      />
+                                    </div>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </div>
+
+                                {headerGroup.headers.length !== index + 1 ? (
+                                  <div
+                                    key={`${header.id}-resizer`} // Tambahkan key unik
+                                    {...{
+                                      onDoubleClick: () =>
+                                        header.column.resetSize(),
+                                      onMouseDown: header.getResizeHandler(),
+                                      onTouchStart: header.getResizeHandler(),
+                                      className: `resizer w-0.5 bg-gray-300 ${
+                                        table.options.columnResizeDirection
+                                      } ${
+                                        header.column.getIsResizing()
+                                          ? "isResizing"
+                                          : ""
+                                      }`,
+                                      style: {
+                                        transform:
+                                          columnResizeMode === "onEnd" &&
+                                          header.column.getIsResizing()
+                                            ? `translateX(${
+                                                (table.options
+                                                  .columnResizeDirection ===
+                                                "rtl"
+                                                  ? -1
+                                                  : 1) *
+                                                (table.getState()
+                                                  .columnSizingInfo
+                                                  .deltaOffset ?? 0)
+                                              }px)`
+                                            : "",
+                                      },
+                                    }}
+                                  ></div>
+                                ) : null}
+                              </th>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </thead>
+                  ) : (
+                    <></>
+                  )}
 
                   <Table.Body className="divide-y divide-gray-200 bg-white">
                     {table.getRowModel().rows.map((row, idx) => (
@@ -418,7 +474,8 @@ export const TableList: React.FC<any> = ({
                             name: ctx.column.id,
                             cell,
                             idx,
-                            tbl: local
+                            tbl: local,
+
                           };
                           const head = column.find(
                             (e: any) => e?.name === ctx.column.id

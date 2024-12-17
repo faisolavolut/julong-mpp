@@ -30,7 +30,44 @@ export const Form: React.FC<any> = ({
     ready: false,
     data: null as any | null,
     submit: async () => {
+      toast.info(
+        <>
+          <Loader2 
+          className={cx(
+            "h-4 w-4 animate-spin-important",
+            css`
+              animation: spin 1s linear infinite !important;
+              @keyframes spin {
+                0% {
+                  transform: rotate(0deg);
+                }
+                100% {
+                  transform: rotate(360deg);
+                }
+              }
+            `
+          )} />
+          {"Saving..."}
+        </>
+      );
       await onSubmit(local);
+      setTimeout(() => {
+        toast.success(
+          <div
+            className={cx(
+              "cursor-pointer flex flex-col select-none items-stretch flex-1 w-full"
+            )}
+            onClick={() => {
+              toast.dismiss();
+            }}
+          >
+            <div className="flex text-green-700 items-center success-title font-semibold">
+              <Check className="h-6 w-6 mr-1 " />
+              Record Saved
+            </div>
+          </div>
+        );
+      }, 1000);
     },
     fields: {} as any,
     render: () => {},
@@ -44,7 +81,21 @@ export const Form: React.FC<any> = ({
     local.render();
     toast.info(
       <>
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <Loader2 
+          className={cx(
+            "h-4 w-4 animate-spin-important",
+            css`
+              animation: spin 1s linear infinite !important;
+              @keyframes spin {
+                0% {
+                  transform: rotate(0deg);
+                }
+                100% {
+                  transform: rotate(360deg);
+                }
+              }
+            `
+          )} />
         {"Loading..."}
       </>
     );
@@ -54,8 +105,8 @@ export const Form: React.FC<any> = ({
         local.ready = true;
         local.data = data;
         local.render(); // Panggil render setelah data diperbarui
-        toast.dismiss();
-        toast.success("Data Loaded Successfully!");
+        // toast.dismiss();
+        // toast.success("Data Loaded Successfully!");
       });
     } else {
       local.ready = true;
@@ -64,6 +115,7 @@ export const Form: React.FC<any> = ({
       toast.dismiss();
       toast.success("Data Loaded Successfully!");
     }
+
   }, []);
 
   // Tambahkan dependency ke header agar reaktif

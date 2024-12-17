@@ -4,7 +4,10 @@ import { FormBetter } from "@/app/components/form/FormBetter";
 import { Alert } from "@/app/components/ui/alert";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
 import { btn } from "@/app/components/ui/button";
+import api from "@/lib/axios";
+import { normalDate } from "@/lib/date";
 import { getParams } from "@/lib/get-params";
+import { getStatus } from "@/lib/getStatusDate";
 import { IoMdSave } from "react-icons/io";
 
 function Page() {
@@ -31,7 +34,8 @@ function Page() {
                 />
               </div>
               <div className="flex flex-row space-x-2">
-                <Alert
+                {["open", "not_open", "draft"].includes(fm.data?.status) ? <>
+                  <Alert
                   type={"save"}
                   onClick={() => {
                     fm.submit();
@@ -44,12 +48,16 @@ function Page() {
                     </div>
                   </div>
                 </Alert>
-                {fm.data?.status === "complete" ? (
+                </> : <></>}
+               
+                {["open", "not_open", "draft"].includes(fm.data?.status) ? (
                   <>
                     <Alert
                       type={"save"}
                       onClick={() => {
-                        fm.data.status = "closed"
+                        const status = getStatus(fm.data.start_date, fm.data.end_date)
+                        // fm.data.status = status === "open" ? "open" : "not_open"
+                        fm.data.status = "open"
                         fm.render()
                         fm.submit();
                       }}
@@ -57,25 +65,7 @@ function Page() {
                       <div className={cx("bg-primary", btn())}>
                         <div className="flex items-center gap-x-0.5">
                           <IoMdSave className="text-xl" />
-                          Close
-                        </div>
-                      </div>
-                    </Alert>
-                  </>
-                ) : fm.data?.status === "open" ? (
-                  <>
-                    <Alert
-                      type={"save"}
-                      onClick={() => {
-                        fm.data.status = "complete"
-                        fm.render()
-                        fm.submit();
-                      }}
-                    >
-                      <div className={cx("bg-primary", btn())}>
-                        <div className="flex items-center gap-x-0.5">
-                          <IoMdSave className="text-xl" />
-                          Complete
+                          Submit
                         </div>
                       </div>
                     </Alert>
@@ -89,12 +79,34 @@ function Page() {
         }}
       onSubmit={async (fm: any) => {
         const data = fm.data;
+        const param = {
+          id: data.id,
+          title: data?.title,
+          start_date: normalDate(data?.start_date),
+          end_date: normalDate(data?.end_date),
+          status: data?.status,
+          budget_start_date: normalDate(data?.budget_start_date),
+          budget_end_date: normalDate(data?.budget_end_date),
+        };
+        await api.put(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods`,
+          param
+        );
+        
+        const res: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/` +
+            id
+        );
+        fm.data = res.data.data;
+        fm.render();
       }}
       onLoad={async () => {
-        return {
-          id,
-          status: "open"
-        };
+        
+        const res: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/` +
+            id
+        );
+        return res.data.data
       }}
       header={(fm: any) => {
         return (
@@ -105,55 +117,76 @@ function Page() {
       children={(fm: any) => {
         return (
           <>
-            <div className={cx("flex flex-col flex-wrap px-4 py-2")}>
-              <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8">
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"title"}
-                    label={"Manpower Planning Name"}
-                    type={"text"}
-                  />
-                </div>
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"start_date"}
-                    label={"Start Date"}
-                    type={"date"}
-                  />
-                </div>
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"end_date"}
-                    label={"End Date"}
-                    type={"date"}
-                  />
-                </div>
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"status"}
-                    label={"Status"}
-                    disabled={true}
-                    type={"dropdown"}
-                    onLoad={async () => {
-                      return [
-                        {
-                          value: "open",
-                          label: "Open",
-                        },
-                        {
-                          value: "close",
-                          label: "Close",
-                        },
-                      ];
-                    }}
-                  />
-                </div>
+          <div className={cx("flex flex-col flex-wrap px-4 py-2")}>
+            <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8">
+              <div>
+                <Field
+                  fm={fm}
+                  name={"title"}
+                  label={"Name"}
+                  type={"text"}
+                />
+              </div>
+              <div></div>
+              <div>
+                <Field
+                  fm={fm}
+                  name={"start_date"}
+                  label={"Start Date"}
+                  type={"date"}
+                />
+              </div>
+              <div>
+                <Field
+                  fm={fm}
+                  name={"end_date"}
+                  label={"End Date"}
+                  type={"date"}
+                />
+              </div>
+              <div>
+                <Field
+                  fm={fm}
+                  name={"budget_start_date"}
+                  label={"Budget Start date"}
+                  type={"date"}
+                />
+              </div>
+              <div>
+                <Field
+                  fm={fm}
+                  name={"budget_end_date"}
+                  label={"Budget End Date"}
+                  type={"date"}
+                />
+              </div>
+              <div>
+                <Field
+                  fm={fm}
+                  name={"status"}
+                  label={"Status"}
+                  type={"dropdown"}
+                  disabled={true}
+                  onLoad={async () => {
+                    return [
+                      {
+                        value: "open",
+                        label: "Open",
+                      },
+                      {
+                        value: "draft",
+                        label: "Draft",
+                      },
+                      {
+                        value: "close",
+                        label: "Close",
+                      },
+                    ];
+                  }}
+                />
               </div>
             </div>
+          </div>
           </>
         );
       }}

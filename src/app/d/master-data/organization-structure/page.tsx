@@ -5,6 +5,7 @@ import { Popover } from "@/app/components/Popover/Popover";
 import { TableList } from "@/app/components/tablelist/TableList";
 import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
 import api from "@/lib/axios";
+import { events } from "@/lib/event";
 import { getValue } from "@/lib/getValue";
 import { FiFilter } from "react-icons/fi";
 
@@ -144,15 +145,19 @@ function Page() {
               },
             },
             {
-              name: "parent.name",
+              name: "organization.name",
               header: () => <span>Parent</span>,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{getValue(row, "parent.name")}</>;
+                return <>{getValue(row, name)}</>;
               },
             },
           ]}
           onLoad={async (param: any) => {
-            const res: any = await api.get("https://julong-portal.avolut.com/api/organization-structures");
+            const params = await events("onload-param", param);
+            const res: any = await api.get(
+              `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organization-structures` +
+                params
+            );
             const data: any[] = res.data.data.OrganizationStructures;
             return data || [];
           }}

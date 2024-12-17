@@ -18,7 +18,6 @@ export const FormBetter: React.FC<any> = ({
     data: null as any,
   });
   useEffect(() => {
-    console.log("PERUBAHAN DATA", fm.data);
   }, [fm.data]);
   return (
     <div className="flex flex-col flex-grow">
@@ -47,7 +46,6 @@ export const FormBetter: React.FC<any> = ({
               // Buat versi baru dari `local.render`
               form.render = () => {
                 // Panggil fungsi asli
-                console.log("CEK");
                 originalRender();
 
                 // Tambahkan logika tambahan untuk sinkronisasi
@@ -57,7 +55,6 @@ export const FormBetter: React.FC<any> = ({
                   render: form.render,
                   data: form.data,
                 });
-                console.log(fm.data)
               };
               form.render();
               if (typeof onInit === "function") {

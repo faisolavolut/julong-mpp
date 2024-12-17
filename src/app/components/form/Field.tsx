@@ -93,7 +93,7 @@ export const Field: React.FC<any> = ({
                 required={required}
                 type={type}
                 disabled={is_disable}
-                on_change={onChange}
+                onChange={onChange}
               />
             </>
           )}

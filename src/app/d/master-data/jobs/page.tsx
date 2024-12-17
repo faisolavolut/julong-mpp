@@ -1,6 +1,7 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
 import api from "@/lib/axios";
+import { events } from "@/lib/event";
 import { getValue } from "@/lib/getValue";
 
 function Page() {
@@ -32,7 +33,7 @@ function Page() {
               header: () => <span>Name</span>,
               width: 300,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{row.name}</>;
+                return <>{getValue(row, name)}</>;
               },
             },
             {
@@ -40,12 +41,16 @@ function Page() {
               header: () => <span>Parent</span>,
               width: 300,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{row.name}</>;
+                return <>{getValue(row, name)}</>;
               },
             },
           ]}
           onLoad={async (param: any) => {
-            const res: any = await api.get("https://julong-portal.avolut.com/api/jobs");
+            const params = await events("onload-param", param);
+            const res: any = await api.get(
+              `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs` +
+                params
+            );
             const data: any[] = res.data.data.jobs;
             return data || [];
           }}

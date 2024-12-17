@@ -17,6 +17,14 @@ export const shortDate = (date: string | Date) => {
   return "-";
 };
 
+export const normalDate = (date: string | Date) => {
+  if (date instanceof Date || typeof date === "string") {
+    return day(date).format("YYYY-MM-DD");
+  }
+  return null;
+};
+
+
 export const timeAgo = (date: string | Date) => {
   if (date instanceof Date || typeof date === "string") {
     return day(date).fromNow();

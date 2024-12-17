@@ -4,11 +4,9 @@ import { FormBetter } from "@/app/components/form/FormBetter";
 import { Alert } from "@/app/components/ui/alert";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
 import { btn } from "@/app/components/ui/button";
+import api from "@/lib/axios";
 import { getParams } from "@/lib/get-params";
-import { get_params_url } from "@/lib/getParamsUrl";
 import { IoMdSave } from "react-icons/io";
-import { MdDelete } from "react-icons/md";
-
 function Page() {
   const id = getParams("id")
   return (
@@ -59,23 +57,25 @@ function Page() {
         );
       }}
       onSubmit={async (fm: any) => {
-        console.log("MAH")
         const data = fm?.data
         console.log({data})
-        const res = {
+        const param = {
           id,
-          plafon: Number(data.plafon)
+          plafon: Number(data.plafon),
+          job_id: data.job_id
         }
-        console.log(res)
-        // navigate("/d/master-data/plafon")
+        const res: any = await api.put(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons/`, param
+        );
         
       }}
       onLoad={async () => {
-        return {
-          organization: 1,
-          job: 1,
-          name: "pak de",
-        };
+        
+        const res: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons/` +
+            id
+        );
+        return res.data.data
       }}
       header={(fm: any) => {
         return <></>;
@@ -88,34 +88,18 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"organization"}
+                    name={"organization_name"}
                     label={"Organization"}
-                    type={"dropdown"}
-                    onLoad={async () => {
-                      console.log("MASUKL");
-                      return [
-                        {
-                          value: 1,
-                          label: "Organization",
-                        },
-                      ];
-                    }}
+                    disabled={true}
                   />
                 </div>
                 <div>
-                  <Field
+                 
+                <Field
                     fm={fm}
-                    name={"job"}
+                    name={"job_name"}
                     label={"Job"}
-                    type={"dropdown"}
-                    onLoad={async () => {
-                      return [
-                        {
-                          value: 1,
-                          label: "Job",
-                        },
-                      ];
-                    }}
+                    disabled={true}
                   />
                 </div>
                 <div>

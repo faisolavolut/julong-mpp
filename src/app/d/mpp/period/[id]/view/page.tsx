@@ -4,96 +4,137 @@ import { FormBetter } from "@/app/components/form/FormBetter";
 import { Alert } from "@/app/components/ui/alert";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
 import { btn } from "@/app/components/ui/button";
+import api from "@/lib/axios";
+import { getParams } from "@/lib/get-params";
+import { getStatus } from "@/lib/getStatusDate";
 import { IoMdSave } from "react-icons/io";
 
 function Page() {
+  const id = getParams("id")
   return (
-    <FormBetter
-      mode={"view"}
-      onTitle={(fm: any) => {
-        return (
-          <div className="flex flex-row w-full">
-            <div className="flex flex-col py-4 pt-0 flex-grow">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                <span className="">Period</span>
-              </h2>
-              <BreadcrumbBetterLink
-                data={[
-                  {
-                    title: "List Period",
-                    url: "/d/mpp/period",
-                  },
-                  {
-                    title: "Edit",
-                  },
-                ]}
-              />
+      <FormBetter
+        onTitle={(fm: any) => {
+          return (
+            <div className="flex flex-row w-full">
+              <div className="flex flex-col py-4 pt-0 flex-grow">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <span className="">Period</span>
+                </h2>
+                <BreadcrumbBetterLink
+                  data={[
+                    {
+                      title: "List Period",
+                      url: "/d/mpp/period",
+                    },
+                    {
+                      title: "Detail",
+                    },
+                  ]}
+                />
+              </div>
+              <div className="flex flex-row space-x-2"></div>
             </div>
-            <div className="flex flex-row space-x-2">
-            </div>
-          </div>
-        );
-      }}
+          );
+        }}
       onSubmit={async (fm: any) => {
         const data = fm.data;
       }}
       onLoad={async () => {
-        return {};
+        
+        const res: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/` +
+            id
+        );
+        return res.data.data
+        return {
+          id,
+          status: "open"
+        };
       }}
       header={(fm: any) => {
-        return <></>;
+        return (
+          <>
+          </>
+        );
       }}
       children={(fm: any) => {
         return (
           <>
-            <div className={cx("flex flex-col flex-wrap px-4 py-2")}>
-              <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8">
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"title"}
-                    label={"Manpower Planning Name"}
-                    type={"text"}
-                  />
-                </div>
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"start_date"}
-                    label={"Start Date"}
-                    type={"date"}
-                  />
-                </div>
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"end_date"}
-                    label={"End Date"}
-                    type={"date"}
-                  />
-                </div>
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"status"}
-                    label={"Status"}
-                    type={"dropdown"}
-                    onLoad={async () => {
-                      return [
-                        {
-                          value: "open",
-                          label: "Open",
-                        },
-                        {
-                          value: "close",
-                          label: "Close",
-                        },
-                      ];
-                    }}
-                  />
-                </div>
+          <div className={cx("flex flex-col flex-wrap px-4 py-2")}>
+            <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8">
+              <div>
+                <Field
+                  fm={fm}
+                  name={"title"}
+                  label={"Name"}
+                  type={"text"}
+                  disabled={true}
+                />
+              </div>
+              <div></div>
+              <div>
+                <Field
+                  fm={fm}
+                  name={"start_date"}
+                  label={"Start Date"}
+                  type={"date"}
+                  disabled={true}
+                />
+              </div>
+              <div>
+                <Field
+                  fm={fm}
+                  name={"end_date"}
+                  label={"End Date"}
+                  type={"date"}
+                  disabled={true}
+                />
+              </div>
+              <div>
+                <Field
+                  fm={fm}
+                  name={"budget_start_date"}
+                  label={"Budget Start date"}
+                  type={"date"}
+                  disabled={true}
+                />
+              </div>
+              <div>
+                <Field
+                  fm={fm}
+                  name={"budget_end_date"}
+                  label={"Budget End Date"}
+                  type={"date"}
+                  disabled={true}
+                />
+              </div>
+              <div>
+                <Field
+                  fm={fm}
+                  name={"status"}
+                  label={"Status"}
+                  type={"dropdown"}
+                  disabled={true}
+                  onLoad={async () => {
+                    return [
+                      {
+                        value: "open",
+                        label: "Open",
+                      },
+                      {
+                        value: "draft",
+                        label: "Draft",
+                      },
+                      {
+                        value: "close",
+                        label: "Close",
+                      },
+                    ];
+                  }}
+                />
               </div>
             </div>
+          </div>
           </>
         );
       }}

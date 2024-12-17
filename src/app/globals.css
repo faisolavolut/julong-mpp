@@ -119,3 +119,16 @@ line-height: 1rem  !important; /* 16px */
 [data-state="active"] > .right-curve {
   display: block;
 }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-important{
+  animation: spin 1s linear infinite !important;
+}

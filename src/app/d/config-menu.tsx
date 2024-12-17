@@ -20,11 +20,7 @@ export const configMenu = [
     icon: <RiCalendarScheduleLine />,
     children: [
       { title: "Period - Rekrutmen", href: "/d/mpp/period" },
-      { title: "Monitoring MPP - HRD", href: "/d/mpp/monitoring-mpp-hrd" },
-      {
-        title: "Monitoring MPP - Rekrutmen",
-        href: "/d/mpp/monitoring-mpp-rekruitment",
-      },
+      { title: "Location", href: "/d/location" },
     ],
   },
   {
