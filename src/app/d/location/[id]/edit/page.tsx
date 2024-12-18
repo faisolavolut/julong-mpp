@@ -73,11 +73,6 @@ function Page() {
   if (!local.can_edit) {
     notFound();
   }
-  const checkMandatory = (data: any) => {
-    return (
-      data?.approved_by && data?.recommend_by & data?.document_line?.length
-    );
-  };
   const id = getParams("id");
   return (
     <FormBetter
@@ -351,24 +346,31 @@ function Page() {
                   <FiInfo className="text-xl" />
                 </ButtonContainer>
               </Alert>
-              <Alert
-                type={"save"}
-                onClick={() => {
-                  fm.data.status = "DRAFTED";
-                  fm.error = {};
-                  fm.render();
-                  fm.submit();
-                }}
-              >
-                <ButtonContainer className={"bg-primary"}>
-                  <IoMdSave className="text-xl" />
-                  Save
-                </ButtonContainer>
-              </Alert>
-              {local.can_submit && fm.data?.status === "DRAFT" ? (
+              {(fm.data?.status === "DRAFTED" ||
+                fm.data?.status === "REJECTED") && (
+                <Alert
+                  type={"save"}
+                  onClick={() => {
+                    fm.data.status = "DRAFTED";
+                    fm.error = {};
+                    fm.render();
+                    fm.submit();
+                  }}
+                >
+                  <ButtonContainer className={"bg-primary"}>
+                    <IoMdSave className="text-xl" />
+                    Save
+                  </ButtonContainer>
+                </Alert>
+              )}
+
+              {local.can_submit &&
+              (fm.data?.status === "DRAFTED" ||
+                fm.data?.status === "REJECTED") ? (
                 <>
                   {fm.data?.approved_by &&
-                  fm.data?.recommend_by & fm.data?.document_line?.length ? (
+                  fm.data?.recommended_by &&
+                  fm.data?.document_line?.length ? (
                     <>
                       <Alert
                         type={"save"}
@@ -377,6 +379,7 @@ function Page() {
                           fm.data.status = "IN_PROGRESS";
                           fm.error = {};
                           fm.render();
+                          fm.submit();
                         }}
                       >
                         <ButtonContainer className={"bg-primary"}>
@@ -392,7 +395,7 @@ function Page() {
                         onClick={() => {
                           const validate = [
                             "approved_by",
-                            "recommend_by",
+                            "recommended_by",
                             "document_line",
                           ];
                           let count = 0;
@@ -445,17 +448,15 @@ function Page() {
               ) : (
                 <></>
               )}
-              {local.can_submit &&
-              fm.data?.status === "IN_PROGRESS" &&
-              (["hrd"].includes(fm.data?.current_approval) ||
-                fm.data?.current_approval) ? (
+              {local.can_submit && fm.data?.status === "IN_PROGRESS" ? (
                 <>
                   <div className="flex flex-row items-center">
                     <ButtonBetter
                       className={"bg-primary"}
                       onClick={async () => {
                         const data = fm.data;
-                        fm.data.status = "NEED APPROVAL"
+                        fm.error = {};
+                        fm.data.status = "NEED APPROVAL";
                         fm.render();
                         const param = {
                           id: id,
@@ -600,7 +601,12 @@ function Page() {
                     name={"document_date"}
                     label={"Document Date"}
                     type={"date"}
-                    disabled={false}
+                    disabled={
+                      !(
+                        fm.data?.status === "DRAFTED" ||
+                        fm.data?.status === "REJECTED"
+                      )
+                    }
                   />
                 </div>
                 <div>
@@ -655,6 +661,12 @@ function Page() {
                     name={"notes"}
                     label={"Notes"}
                     type={"textarea"}
+                    disabled={
+                      !(
+                        fm.data?.status === "DRAFTED" ||
+                        fm.data?.status === "REJECTED"
+                      )
+                    }
                   />
                 </div>
                 <div>
@@ -678,9 +690,15 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"recommend_by"}
+                    name={"recommended_by"}
                     label={"Recommend by"}
                     type={"text"}
+                    disabled={
+                      !(
+                        fm.data?.status === "DRAFTED" ||
+                        fm.data?.status === "REJECTED"
+                      )
+                    }
                   />
                 </div>
                 <div>
@@ -689,6 +707,12 @@ function Page() {
                     name={"approved_by"}
                     label={"Approved by"}
                     type={"text"}
+                    disabled={
+                      !(
+                        fm.data?.status === "DRAFTED" ||
+                        fm.data?.status === "REJECTED"
+                      )
+                    }
                   />
                 </div>
                 <div>
@@ -727,51 +751,59 @@ function Page() {
                   disabledPagination={true}
                   header={{
                     sideLeft: (tbl: any) => {
-                      return (
-                        <>
-                          <div className="flex flex-row gap-x-2 items-center">
-                            <div className="flex flex-row flex-grow space-x-2">
-                              <ButtonBetter
-                                className="bg-primary"
-                                onClick={() => {
-                                  tbl.addRow({});
-                                  tbl.render();
-                                  fm.render();
-                                  const recruit = fm.data.document_line?.length
-                                    ? fm.data.document_line
-                                        .map(
-                                          (e: any) =>
-                                            getNumber(e.recruit_ph) +
-                                            getNumber(e.recruit_mt)
-                                        )
-                                        .reduce((a: any, b: any) => a + b, 0)
-                                    : 0;
+                      if (
+                        fm.data?.status === "DRAFTED" ||
+                        fm.data?.status === "REJECTED"
+                      )
+                        return (
+                          <>
+                            <div className="flex flex-row gap-x-2 items-center">
+                              <div className="flex flex-row flex-grow space-x-2">
+                                <ButtonBetter
+                                  className="bg-primary"
+                                  onClick={() => {
+                                    tbl.addRow({});
+                                    tbl.render();
+                                    fm.render();
+                                    const recruit = fm.data.document_line
+                                      ?.length
+                                      ? fm.data.document_line
+                                          .map(
+                                            (e: any) =>
+                                              getNumber(e.recruit_ph) +
+                                              getNumber(e.recruit_mt)
+                                          )
+                                          .reduce((a: any, b: any) => a + b, 0)
+                                      : 0;
 
-                                  const totalPromotion = fm.data.document_line
-                                    ?.length
-                                    ? fm.data.document_line
-                                        .map((e: any) => getNumber(e.promotion))
-                                        .reduce((a: any, b: any) => a + b, 0)
-                                    : 0;
-                                  fm.data.total_promote = totalPromotion;
-                                  fm.data.total_recruit = recruit;
-                                  fm.render();
-                                }}
-                              >
-                                <div className="flex items-center gap-x-0.5">
-                                  <HiPlus className="text-xl" />
-                                  <span className="capitalize">Add New</span>
-                                </div>
-                              </ButtonBetter>
+                                    const totalPromotion = fm.data.document_line
+                                      ?.length
+                                      ? fm.data.document_line
+                                          .map((e: any) =>
+                                            getNumber(e.promotion)
+                                          )
+                                          .reduce((a: any, b: any) => a + b, 0)
+                                      : 0;
+                                    fm.data.total_promote = totalPromotion;
+                                    fm.data.total_recruit = recruit;
+                                    fm.render();
+                                  }}
+                                >
+                                  <div className="flex items-center gap-x-0.5">
+                                    <HiPlus className="text-xl" />
+                                    <span className="capitalize">Add New</span>
+                                  </div>
+                                </ButtonBetter>
+                              </div>
+                              {fm.error?.["document_line"] && (
+                                <p className="text-red-500 px-2 text-sm">
+                                  {fm.error?.["document_line"]}
+                                </p>
+                              )}
                             </div>
-                            {fm.error?.["document_line"] && (
-                              <p className="text-red-500 px-2 text-sm">
-                                {fm.error?.["document_line"]}
-                              </p>
-                            )}
-                          </div>
-                        </>
-                      );
+                          </>
+                        );
+                      return <></>;
                     },
                     sideRight: (tbl: any) => {
                       return <></>;
@@ -791,6 +823,12 @@ function Page() {
                               name={"job_level_id"}
                               label={"Organization"}
                               type={"dropdown"}
+                              disabled={
+                                !(
+                                  fm.data?.status === "DRAFTED" ||
+                                  fm.data?.status === "REJECTED"
+                                )
+                              }
                               onChange={() => {
                                 // console.log({ data: fm_row.data });
                                 // tbl.renderRow(fm_row.data);
@@ -825,9 +863,16 @@ function Page() {
                             <Field
                               fm={cloneFM(fm, row)}
                               hidden_label={true}
-                              disabled={!fm_row.data?.job_level_id}
                               name={"job_id"}
                               label={"Organization"}
+                              disabled={
+                                !(
+                                  fm.data?.status === "DRAFTED" ||
+                                  fm.data?.status === "REJECTED"
+                                )
+                                  ? true
+                                  : !fm_row.data?.job_level_id
+                              }
                               type={"dropdown"}
                               onChange={(item: any) => {
                                 console.log({ item });
@@ -920,6 +965,12 @@ function Page() {
                               name={"recruit_ph"}
                               type={"money"}
                               hidden_label={true}
+                              disabled={
+                                !(
+                                  fm.data?.status === "DRAFTED" ||
+                                  fm.data?.status === "REJECTED"
+                                )
+                              }
                               onChange={() => {
                                 const fm_row = cloneFM(fm, row);
                                 const getNumber = (data: any) => {
@@ -959,6 +1010,12 @@ function Page() {
                               name={"recruit_mt"}
                               type={"money"}
                               hidden_label={true}
+                              disabled={
+                                !(
+                                  fm.data?.status === "DRAFTED" ||
+                                  fm.data?.status === "REJECTED"
+                                )
+                              }
                               onChange={() => {
                                 const fm_row = cloneFM(fm, row);
                                 const getNumber = (data: any) => {
@@ -999,6 +1056,12 @@ function Page() {
                               label={"Approved by"}
                               type={"money"}
                               hidden_label={true}
+                              disabled={
+                                !(
+                                  fm.data?.status === "DRAFTED" ||
+                                  fm.data?.status === "REJECTED"
+                                )
+                              }
                               onChange={() => {
                                 const fm_row = cloneFM(fm, row);
                                 const getNumber = (data: any) => {
@@ -1055,6 +1118,11 @@ function Page() {
                       header: () => <span>Action</span>,
                       sortable: false,
                       renderCell: ({ row, name, cell, tbl }: any) => {
+                        if (
+                          fm.data?.status !== "DRAFTED" ||
+                          fm.data?.status !== "REJECTED"
+                        )
+                          return <></>;
                         return (
                           <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                             <ButtonBetter

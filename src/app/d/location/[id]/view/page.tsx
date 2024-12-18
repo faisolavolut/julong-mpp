@@ -59,11 +59,11 @@ function Page() {
     can_approve: false,
     can_reject: false,
     can_process: false,
+    fm: null as any,
   });
   useEffect(() => {
     const run = async () => {
       const roles = await userRoleMe();
-      console.log({roles})
       local.can_approve = getAccess("approve-mpp", roles);
       local.can_reject = getAccess("reject-mpp", roles);
       local.can_process = getAccess("process-mpp", roles);
@@ -354,7 +354,7 @@ function Page() {
                   </div>
                 </ButtonBetter>
               </div>
-              {local.can_approve && fm?.data?.status === "DRAFT" ? (
+              {local.can_reject && fm?.data?.status === "NEED APPROVAL" ? (
                 <Alert
                   type={"save"}
                   content={
@@ -375,111 +375,15 @@ function Page() {
                             id: id,
                             approver_id: get_user("employee.id"),
                             approved_by: get_user("employee.name"),
-                            level: "Level Manager",
-                            status: "APPROVED",
+                            level: "Level Direktur Unit",
+                            status: "REJECTED",
                             notes: data.notes || null,
                           };
-                          const attachments = data.attachment.length
-                            ? data.attachment.map((e: any) => e.data)
-                            : [];
-                          const formData = new FormData();
-                          formData.append("payload", JSON.stringify(param));
-                          if (attachments?.length) {
-                            attachments.forEach((file: any) => {
-                              formData.append("attachments", file); // Nama field unik untuk setiap file
-                            });
+                          if (local.fm) {
+                            local.fm.data.status = "REJECTED";
+                            local.fm.render();
                           }
-
-                          const res: any = await api.put(
-                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/update-status`,
-                            formData,
-                            {
-                              headers: {
-                                "Content-Type": "multipart/form-data",
-                              },
-                            }
-                          );
-                          console.log(param);
-                        }}
-                        onLoad={async () => {
-                          return {
-                            id,
-                          };
-                        }}
-                        showResize={false}
-                        header={(fm: any) => {
-                          return <></>;
-                        }}
-                        children={(fm: any) => {
-                          return (
-                            <></>
-                          );
-                        }}
-                        onFooter={(fm: any) => {
-                          return (
-                            <div
-                              className={cx(css`
-                                .tbl-search {
-                                  display: none !important;
-                                }
-                                .tbl-pagination {
-                                  display: none !important;
-                                }
-                              `)}
-                            >
-
-                              <AlertDialogFooter className="pt-1">
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  className={"bg-primary text-white"}
-                                  onClick={() => {
-                                    fm.data.status = "NEED"
-                                    fm.submit();
-                                  }}
-                                >
-                                  Approve
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </div>
-                          );
-                        }}
-                      />
-                    </>
-                  }
-                >
-                  <ButtonContainer className={"bg-primary"}>
-                    <IoMdSave className="text-xl" />
-                    Process
-                  </ButtonContainer>
-                </Alert>
-              ) : (
-                <></>
-              )}
-              {local.can_reject && fm?.data?.status === "IN_PROGRESS" ? (
-                <Alert
-                  type={"save"}
-                  content={
-                    <>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          update your request from our servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <Form
-                        onSubmit={async (fm: any) => {
-                          const data = fm.data;
-                          const param = {
-                            id: id,
-                            approver_id: get_user("employee.id"),
-                            approved_by: get_user("employee.name"),
-                            level: "Level Manager",
-                            status: "REJECTED",notes: data.notes || null,
-                          };
-                          const attachments = data.attachment.length
+                          const attachments = data?.attachment?.length
                             ? data.attachment.map((e: any) => e.data)
                             : [];
                           const formData = new FormData();
@@ -569,6 +473,7 @@ function Page() {
                                   )}
                                 >
                                   <TableList
+                                    hiddenNoRow={true}
                                     onInit={(tbl: any) => {
                                       fm.fields["tbl"] = tbl;
                                       fm.render();
@@ -652,7 +557,7 @@ function Page() {
                 <></>
               )}
 
-              {local.can_approve && fm?.data?.status === "IN_PROGRESS" ? (
+              {local.can_approve && fm?.data?.status === "NEED APPROVAL" ? (
                 <Alert
                   type={"save"}
                   content={
@@ -673,11 +578,16 @@ function Page() {
                             id: id,
                             approver_id: get_user("employee.id"),
                             approved_by: get_user("employee.name"),
-                            level: "Level Manager",
+                            level: "Level Direktur Unit",
                             status: "APPROVED",
                             notes: data.notes || null,
                           };
-                          const attachments = data.attachment.length
+
+                          if (local.fm) {
+                            local.fm.data.status = "APPROVED";
+                            local.fm.render();
+                          }
+                          const attachments = data?.attachment?.length
                             ? data.attachment.map((e: any) => e.data)
                             : [];
                           const formData = new FormData();
@@ -768,6 +678,7 @@ function Page() {
                                   )}
                                 >
                                   <TableList
+                                    hiddenNoRow={true}
                                     onInit={(tbl: any) => {
                                       fm.fields["tbl"] = tbl;
                                       fm.render();
@@ -856,6 +767,10 @@ function Page() {
       }}
       onSubmit={async (fm: any) => {
         const data = fm.data;
+      }}
+      onInit={(fm: any) => {
+        local.fm = fm;
+        local.render();
       }}
       onLoad={async () => {
         const res: any = await api.get(
@@ -991,7 +906,7 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"recommend_by"}
+                    name={"recommended_by"}
                     label={"Recommend by"}
                     type={"text"}
                   />

@@ -77,7 +77,7 @@ function Page() {
           notes: data.notes,
           total_recruit: 0,
           total_promote: 0,
-          status: "DRAFT",
+          status: "DRAFTED",
           recommended_by: null,
           approved_by: null,
           requestor_id: data.requestor_id,
@@ -134,7 +134,7 @@ function Page() {
           organization_id: id_org,
           job_id: get_user("employee.employee_job.job_id"),
           requestor_id: get_user("employee.id"),
-          status: "DRAFT",
+          status: "DRAFTED",
           organization_location_id: get_user(
             "employee.employee_job.organization_location_id"
           ),
@@ -260,7 +260,7 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"recommend_by"}
+                    name={"recommended_by"}
                     label={"Recommend by"}
                     type={"text"}
                   />

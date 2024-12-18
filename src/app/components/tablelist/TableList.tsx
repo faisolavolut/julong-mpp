@@ -39,7 +39,7 @@ import { FaArrowDownLong, FaArrowUp, FaChevronUp } from "react-icons/fa6";
 import Link from "next/link";
 import { init_column } from "./lib/column";
 import { toast } from "sonner";
-import { Check, Loader2 } from "lucide-react";
+import { Check, Loader2, Sticker } from "lucide-react";
 import { InputSearch } from "../ui/input-search";
 import { Input } from "../ui/input";
 import { FaChevronDown } from "react-icons/fa";
@@ -53,6 +53,7 @@ export const TableList: React.FC<any> = ({
   disabledPagination,
   disabledHeader,
   disabledHeadTable,
+  hiddenNoRow,
   onInit,
 }) => {
   const [data, setData] = useState<any[]>([]);
@@ -80,7 +81,7 @@ export const TableList: React.FC<any> = ({
     },
     renderRow: (row: any) => {
       setData((prev) => [...prev, row]);
-      console.log(data)
+      console.log(data);
       local.data = data;
       local.render();
     },
@@ -322,7 +323,7 @@ export const TableList: React.FC<any> = ({
         <div className="flex flex-col flex-grow">
           <div className="overflow-auto relative flex-grow flex-row">
             <div className="tbl absolute top-0 left-0 inline-block flex-grow w-full h-full align-middle">
-              <div className="">
+              <div className="relative">
                 <Table className="min-w-full divide-y divide-gray-200 ">
                   {!disabledHeadTable ? (
                     <thead className="text-md bg-second group/head text-md uppercase text-gray-700 ">
@@ -475,7 +476,6 @@ export const TableList: React.FC<any> = ({
                             cell,
                             idx,
                             tbl: local,
-
                           };
                           const head = column.find(
                             (e: any) => e?.name === ctx.column.id
@@ -502,6 +502,22 @@ export const TableList: React.FC<any> = ({
                 </Table>
               </div>
             </div>
+            {(!hiddenNoRow && !table.getRowModel().rows?.length) && (
+              <div
+                className={cx(
+                  "flex-1 w-full absolute inset-0 flex flex-col items-center justify-center",
+                  css`
+                    top: 50%;
+                    transform: translateY(-50%);
+                  `
+                )}
+              >
+                <div className="max-w-[15%] flex flex-col items-center">
+                  <Sticker size={35} strokeWidth={1} />
+                  <div className="pt-1 text-center">No&nbsp;Data</div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <Pagination
@@ -577,13 +593,9 @@ export const Pagination: React.FC<any> = ({
         </div>
         <span className="text-md font-normal text-gray-500">
           Page&nbsp;
-          <span className="font-semibold text-gray-900">
-            {page}
-          </span>
+          <span className="font-semibold text-gray-900">{page}</span>
           &nbsp;of&nbsp;
-          <span className="font-semibold text-gray-900">
-            {countPage}
-          </span>
+          <span className="font-semibold text-gray-900">{countPage}</span>
         </span>
 
         <span className="flex items-center pl-2 text-black gap-x-2">
