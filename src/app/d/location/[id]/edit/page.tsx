@@ -21,27 +21,43 @@ import {
   CardHeader,
   CardTitle,
 } from "@/app/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/app/components/ui/dialog";
+import { PreviewImagePopup } from "@/app/components/ui/previewImage";
+import { statusMpp } from "@/constants/status-mpp";
 import api from "@/lib/axios";
 import { cloneFM } from "@/lib/cloneFm";
-import { normalDate } from "@/lib/date";
+import { normalDate, shortDate } from "@/lib/date";
+import { events } from "@/lib/event";
 import { getParams } from "@/lib/get-params";
 import { get_user } from "@/lib/get_user";
 import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getNumber } from "@/lib/getNumber";
+import { getValue } from "@/lib/getValue";
 import { useLocal } from "@/lib/use-local";
+import { AlertTriangle, X } from "lucide-react";
 import { notFound } from "next/navigation";
 import { useEffect } from "react";
 import { FiInfo } from "react-icons/fi";
 import { GoInfo } from "react-icons/go";
 import { HiDocumentDownload, HiPlus } from "react-icons/hi";
 import { IoMdSave } from "react-icons/io";
+import { IoEye } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
+import { toast } from "sonner";
 
 function Page() {
   const local = useLocal({
     can_save: false,
     can_submit: false,
     can_edit: true,
+    can_process: false,
   });
   useEffect(() => {
     const run = async () => {
@@ -49,13 +65,19 @@ function Page() {
       local.can_save = getAccess("save-mpp", roles);
       local.can_submit = getAccess("submit-mpp", roles);
       local.can_edit = getAccess("edit-mpp", roles);
-      local.render()
+      local.can_process = getAccess("process-mpp", roles);
+      local.render();
     };
     run();
   }, []);
-  if(!local.can_edit){
+  if (!local.can_edit) {
     notFound();
   }
+  const checkMandatory = (data: any) => {
+    return (
+      data?.approved_by && data?.recommend_by & data?.document_line?.length
+    );
+  };
   const id = getParams("id");
   return (
     <FormBetter
@@ -63,7 +85,7 @@ function Page() {
         return (
           <div className="flex flex-row w-full">
             <div className="flex flex-col py-4 pt-0 flex-grow">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-semibold text-gray-900">
                 <span className="">Manpower Planning Overview</span>
               </h2>
               <BreadcrumbBetterLink
@@ -80,155 +102,248 @@ function Page() {
             </div>
             <div className="flex flex-row space-x-2">
               <Alert
+                className={"max-w-3xl"}
                 type={"save"}
                 content={
                   <>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
+                    <AlertDialogHeader className="flex flex-row items-center">
+                      <AlertDialogTitle className="flex-grow">
+                        History Notes
                       </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        update your request from our servers.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <Form
-                      onSubmit={async (fm: any) => {
-                        const data = fm.data;
-                      }}
-                      onLoad={async () => {
-                        return {
-                          id,
-                        };
-                      }}
-                      showResize={false}
-                      header={(fm: any) => {
-                        return <></>;
-                      }}
-                      children={(fm: any) => {
-                        return (
-                          <>
-                            <div className={cx("flex flex-col flex-wrap")}>
-                              <div className="grid gap-4 mb-4 grid-cols-1">
-                                <div>
-                                  <Field
-                                    fm={fm}
-                                    name={"notes"}
-                                    label={"Notes"}
-                                    type={"textarea"}
-                                  />
-                                </div>
-                                <div>
-                                  <Field
-                                    fm={fm}
-                                    name={"attachment"}
-                                    label={"Attachment"}
-                                    type={"multi-upload"}
-                                    onChange={(val: any) => {
-                                      console.log(
-                                        fm.fields?.tbl,
-                                        typeof fm.fields?.tbl
-                                      );
-                                      if (typeof fm.fields?.tbl === "object") {
-                                        console.log(
-                                          "attachment",
-                                          fm.data?.attachment
-                                        );
-                                        fm.fields.tbl.reload();
-                                      }
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </>
-                        );
-                      }}
-                      onFooter={(fm: any) => {
-                        return (
-                          <div
-                            className={cx(css`
-                              .tbl-search {
-                                display: none !important;
-                              }
-                              .tbl-pagination {
-                                display: none !important;
-                              }
-                            `)}
-                          >
-                            <div className="w-full flex flex-row">
-                              <div className="flex flex-grow flex-col h-[150px]">
-                                <TableList
-                                  onInit={(tbl: any) => {
-                                    fm.fields["tbl"] = tbl;
-                                    fm.render();
-                                  }}
-                                  disabledHeader={true}
-                                  disabledHeadTable={true}
-                                  disabledPagination={true}
-                                  header={{
-                                    sideLeft: (tbl: any) => {
-                                      return <></>;
-                                    },
-                                    sideRight: (tbl: any) => {
-                                      return <></>;
-                                    },
-                                  }}
-                                  column={[
-                                    {
-                                      name: "level",
-                                      header: () => <span>Job Level</span>,
-                                      renderCell: ({
-                                        row,
-                                        name,
-                                        cell,
-                                        tbl,
-                                      }: any) => {
-                                        return (
-                                          <div className="flex flex-row items-center">
-                                            <div className="flex flex-row flex-grow">
-                                              123
-                                            </div>
 
-                                            <div className="flex items-center gap-x-0.5 whitespace-nowrap">
-                                              <ButtonBetter
-                                                className="bg-red-500"
-                                                onClick={() => {
-                                                  tbl.removeRow(row);
-                                                }}
-                                              >
-                                                <div className="flex items-center">
-                                                  <MdDelete />
-                                                </div>
-                                              </ButtonBetter>
-                                            </div>
-                                          </div>
-                                        );
-                                      },
-                                    },
-                                  ]}
-                                  onLoad={(param: any) => {
-                                    console.log("load", fm.data?.attachment);
-                                    return fm.data?.attachment || [];
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      }}
-                    />
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        className={"bg-red-500 text-white"}
-                        onClick={() => {
-                          fm.submit();
+                      <AlertDialogCancel className="m-0 p-1 h-auto">
+                        <X className="h-4 w-4" />
+                      </AlertDialogCancel>
+                    </AlertDialogHeader>
+
+                    <div
+                      className={cx(
+                        "h-[300px] flex flex-col",
+                        css`
+                          .tbl-search {
+                            display: none !important;
+                          }
+                          .head-tbl-list {
+                            display: none;
+                          }
+                          .tbl-pagination {
+                            display: none !important;
+                          }
+                        `
+                      )}
+                    >
+                      <TableList
+                        disabledPagination={true}
+                        header={{
+                          sideLeft: (tbl: any) => {
+                            return <></>;
+                          },
+                          sideRight: (tbl: any) => {
+                            return <></>;
+                          },
                         }}
-                      >
-                        Reject
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
+                        column={[
+                          {
+                            name: "approver_name",
+                            header: () => <span>Sender</span>,
+                            renderCell: ({ row, name, cell, tbl }: any) => {
+                              return <>{getValue(row, name)}</>;
+                            },
+                          },
+                          {
+                            name: "status",
+                            header: () => <span>Status</span>,
+                            renderCell: ({ row, name, cell, tbl }: any) => {
+                              return (
+                                <div className="uppercase">
+                                  {getValue(row, name)}
+                                </div>
+                              );
+                            },
+                          },
+                          {
+                            name: "created_at",
+                            header: () => <span>Datetime</span>,
+                            renderCell: ({ row, name, cell, tbl }: any) => {
+                              return <>{shortDate(getValue(row, name))}</>;
+                            },
+                          },
+                          {
+                            name: "notes",
+                            header: () => <span>Notes</span>,
+                            renderCell: ({ row, name, cell, tbl }: any) => {
+                              return (
+                                <div className="uppercase">
+                                  {getValue(row, name)}
+                                </div>
+                              );
+                            },
+                          },
+
+                          {
+                            name: "action",
+                            header: () => <span>Action</span>,
+                            sortable: false,
+                            renderCell: ({ row, name, cell }: any) => {
+                              if (!row?.attachments?.length) return <></>;
+                              return (
+                                <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                                  <Dialog>
+                                    <DialogTrigger asChild>
+                                      <div>
+                                        <ButtonContainer variant={"outline"}>
+                                          <div className="flex items-center gap-x-2">
+                                            <IoEye className="text-lg" />
+                                          </div>
+                                        </ButtonContainer>
+                                      </div>
+                                    </DialogTrigger>
+                                    <DialogContent className="max-w-5xl  flex flex-col">
+                                      <DialogHeader>
+                                        <DialogTitle>List File</DialogTitle>
+                                        <DialogDescription className="hidden"></DialogDescription>
+                                      </DialogHeader>
+                                      <div className="flex items-center flex-row space-x-2 flex-grow">
+                                        <div
+                                          className={cx(
+                                            "h-[300px] flex flex-col flex-grow",
+                                            css`
+                                              .tbl-search {
+                                                display: none !important;
+                                              }
+                                              .head-tbl-list {
+                                                display: none;
+                                              }
+                                              .tbl-pagination {
+                                                display: none !important;
+                                              }
+                                            `
+                                          )}
+                                        >
+                                          <TableList
+                                            disabledPagination={true}
+                                            header={{
+                                              sideLeft: (tbl: any) => {
+                                                return <></>;
+                                              },
+                                              sideRight: (tbl: any) => {
+                                                return <></>;
+                                              },
+                                            }}
+                                            column={[
+                                              {
+                                                name: "file_name",
+                                                header: () => (
+                                                  <span>Filename</span>
+                                                ),
+                                                renderCell: ({
+                                                  row,
+                                                  name,
+                                                  cell,
+                                                  tbl,
+                                                }: any) => {
+                                                  return (
+                                                    <>{getValue(row, name)}</>
+                                                  );
+                                                },
+                                              },
+                                              {
+                                                name: "action",
+                                                header: () => (
+                                                  <span>Action</span>
+                                                ),
+                                                sortable: false,
+                                                renderCell: ({
+                                                  row,
+                                                  name,
+                                                  cell,
+                                                }: any) => {
+                                                  const type = getValue(
+                                                    row,
+                                                    "file_type"
+                                                  )
+                                                    ? getValue(
+                                                        row,
+                                                        "file_type"
+                                                      ).startsWith("image/")
+                                                    : false;
+
+                                                  if (type)
+                                                    return (
+                                                      <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                                                        <PreviewImagePopup
+                                                          url={getValue(
+                                                            row,
+                                                            "file_path"
+                                                          )}
+                                                          children={
+                                                            <div>
+                                                              <ButtonContainer
+                                                                variant={
+                                                                  "outline"
+                                                                }
+                                                              >
+                                                                <div className="flex items-center gap-x-2">
+                                                                  <IoEye className="text-lg" />
+                                                                </div>
+                                                              </ButtonContainer>
+                                                            </div>
+                                                          }
+                                                        />
+                                                      </div>
+                                                    );
+
+                                                  return (
+                                                    <>
+                                                      <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                                                        <ButtonBetter
+                                                          variant={"outline"}
+                                                          onClick={() => {
+                                                            window.open(
+                                                              getValue(
+                                                                row,
+                                                                "file_path"
+                                                              ),
+                                                              "_blank"
+                                                            );
+                                                          }}
+                                                        >
+                                                          <div className="flex items-center gap-x-2">
+                                                            <IoEye className="text-lg" />
+                                                          </div>
+                                                        </ButtonBetter>
+                                                      </div>
+                                                    </>
+                                                  );
+                                                },
+                                              },
+                                            ]}
+                                            onLoad={async (param: any) => {
+                                              return row.attachments || [];
+                                            }}
+                                          />
+                                        </div>
+                                      </div>
+                                    </DialogContent>
+                                  </Dialog>
+                                </div>
+                              );
+                            },
+                          },
+                        ]}
+                        onLoad={async (param: any) => {
+                          const params = await events("onload-param", param);
+                          const res: any = await api.get(
+                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/approval-histories/` +
+                              id
+                          );
+                          const data: any[] = res.data.data;
+                          console.log({ data });
+                          if (!Array.isArray(data)) return [];
+                          return data || [];
+                        }}
+                      />
+                    </div>
                   </>
                 }
               >
@@ -240,6 +355,8 @@ function Page() {
                 type={"save"}
                 onClick={() => {
                   fm.data.status = "DRAFTED";
+                  fm.error = {};
+                  fm.render();
                   fm.submit();
                 }}
               >
@@ -248,20 +365,125 @@ function Page() {
                   Save
                 </ButtonContainer>
               </Alert>
-              {local.can_submit ? (
-                <Alert
-                  type={"save"}
-                  onClick={() => {
-                    fm.data.level = "Level HRD";
-                    fm.data.status = "IN_PROGRESS";
-                    fm.submit();
-                  }}
-                >
-                  <ButtonContainer className={"bg-primary"}>
-                    <IoMdSave className="text-xl" />
-                    Submit
-                  </ButtonContainer>
-                </Alert>
+              {local.can_submit && fm.data?.status === "DRAFT" ? (
+                <>
+                  {fm.data?.approved_by &&
+                  fm.data?.recommend_by & fm.data?.document_line?.length ? (
+                    <>
+                      <Alert
+                        type={"save"}
+                        onClick={async () => {
+                          fm.data.level = "Level HRD Location";
+                          fm.data.status = "IN_PROGRESS";
+                          fm.error = {};
+                          fm.render();
+                        }}
+                      >
+                        <ButtonContainer className={"bg-primary"}>
+                          <IoMdSave className="text-xl" />
+                          Submit
+                        </ButtonContainer>
+                      </Alert>
+                    </>
+                  ) : (
+                    <div className="flex flex-row items-center">
+                      <ButtonBetter
+                        className={"bg-primary"}
+                        onClick={() => {
+                          const validate = [
+                            "approved_by",
+                            "recommend_by",
+                            "document_line",
+                          ];
+                          let count = 0;
+                          validate.map((e) => {
+                            if (e === "document_line") {
+                              if (!fm.data?.[e]?.length) {
+                                fm.error[
+                                  e
+                                ] = `A minimum of 1 document line is required to submit.`;
+                                count++;
+                              }
+                            } else {
+                              if (!fm.data?.[e]) {
+                                const label = fm.fields?.[e]?.label;
+                                count++;
+                                fm.error[
+                                  e
+                                ] = `${label} is mandatory for submission`;
+                              }
+                            }
+                          });
+                          toast.error(
+                            <div className="flex flex-col w-full">
+                              <div className="flex text-red-600 items-center">
+                                <AlertTriangle className="h-4 w-4 mr-1" />
+                                Submit Failed
+                                {count > 0 &&
+                                  `, please correct
+                                    ${count} errors`}
+                                .
+                              </div>
+                            </div>,
+                            {
+                              dismissible: true,
+                              className: css`
+                                background: #ffecec;
+                                border: 2px solid red;
+                              `,
+                            }
+                          );
+                          fm.render();
+                        }}
+                      >
+                        <IoMdSave className="text-xl" />
+                        Submit
+                      </ButtonBetter>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
+              {local.can_submit &&
+              fm.data?.status === "IN_PROGRESS" &&
+              (["hrd"].includes(fm.data?.current_approval) ||
+                fm.data?.current_approval) ? (
+                <>
+                  <div className="flex flex-row items-center">
+                    <ButtonBetter
+                      className={"bg-primary"}
+                      onClick={async () => {
+                        const data = fm.data;
+                        fm.data.status = "NEED_APPROVAL"
+                        fm.render();
+                        const param = {
+                          id: id,
+                          approver_id: get_user("employee.id"),
+                          approved_by: get_user("employee.name"),
+                          level: "Level HRD Unit",
+                          status: "NEED_APPROVAL",
+                        };
+                        const formData = new FormData();
+                        formData.append("payload", JSON.stringify(param));
+
+                        const res: any = await api.put(
+                          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/update-status`,
+                          formData,
+                          {
+                            headers: {
+                              "Content-Type": "multipart/form-data",
+                            },
+                          }
+                        );
+                        fm.render();
+                      }}
+                    >
+                      <IoMdSave className="text-xl" />
+                      Process
+                    </ButtonBetter>
+                  </div>
+                </>
               ) : (
                 <></>
               )}
@@ -283,15 +505,15 @@ function Page() {
           total_recruit: data.total_recruit,
           total_promote: data.total_promote,
           status: data.status,
-          recommended_by: null,
-          approved_by: null,
+          recommended_by: data.recommended_by,
+          approved_by: data.approved_by,
           requestor_id: data.requestor_id,
-          organization_location_id: "b61cd44b-e66a-48e3-9bc1-7a5a31b6932d",
+          organization_location_id: data.organization_location_id,
         };
         const document_line = data.document_line.map((e: any) => {
           return {
             ...e,
-            organization_location_id: "b61cd44b-e66a-48e3-9bc1-7a5a31b6932d",
+            organization_location_id: data.organization_location_id,
           };
         });
         const formData = new FormData();
@@ -315,30 +537,6 @@ function Page() {
             mp_planning_lines: document_line,
           }
         );
-        if (data.status === "IN_PROGRESS") {
-          const data_status = {
-            id: id,
-            approver_id: get_user("employee.id"),
-            approved_by: get_user("employee.name"),
-            level: data.level,
-            status: "IN_PROGRESS",
-            notes: data.notes || null,
-          };
-          const attachments = data.attachment.length
-            ? data.attachment.map((e: any) => e.data)
-            : [];
-          const formData = new FormData();
-          formData.append("payload", JSON.stringify(data_status));
-          const res: any = await api.put(
-            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/update-status`,
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
-        }
       }}
       onLoad={async () => {
         const res: any = await api.get(
@@ -498,8 +696,11 @@ function Page() {
                     fm={fm}
                     name={"status"}
                     label={"Status"}
-                    type={"text"}
                     disabled={true}
+                    type={"dropdown"}
+                    onLoad={() => {
+                      return statusMpp;
+                    }}
                   />
                 </div>
               </div>
@@ -528,39 +729,46 @@ function Page() {
                     sideLeft: (tbl: any) => {
                       return (
                         <>
-                          <div className="flex flex-row flex-grow space-x-2">
-                            <ButtonBetter
-                              className="bg-primary"
-                              onClick={() => {
-                                tbl.addRow({});
-                                tbl.render();
-                                fm.render();
-                                const recruit = fm.data.document_line?.length
-                                  ? fm.data.document_line
-                                      .map(
-                                        (e: any) =>
-                                          getNumber(e.recruit_ph) +
-                                          getNumber(e.recruit_mt)
-                                      )
-                                      .reduce((a: any, b: any) => a + b, 0)
-                                  : 0;
+                          <div className="flex flex-row gap-x-2 items-center">
+                            <div className="flex flex-row flex-grow space-x-2">
+                              <ButtonBetter
+                                className="bg-primary"
+                                onClick={() => {
+                                  tbl.addRow({});
+                                  tbl.render();
+                                  fm.render();
+                                  const recruit = fm.data.document_line?.length
+                                    ? fm.data.document_line
+                                        .map(
+                                          (e: any) =>
+                                            getNumber(e.recruit_ph) +
+                                            getNumber(e.recruit_mt)
+                                        )
+                                        .reduce((a: any, b: any) => a + b, 0)
+                                    : 0;
 
-                                const totalPromotion = fm.data.document_line
-                                  ?.length
-                                  ? fm.data.document_line
-                                      .map((e: any) => getNumber(e.promotion))
-                                      .reduce((a: any, b: any) => a + b, 0)
-                                  : 0;
-                                fm.data.total_promote = totalPromotion;
-                                fm.data.total_recruit = recruit;
-                                fm.render();
-                              }}
-                            >
-                              <div className="flex items-center gap-x-0.5">
-                                <HiPlus className="text-xl" />
-                                <span className="capitalize">Add New</span>
-                              </div>
-                            </ButtonBetter>
+                                  const totalPromotion = fm.data.document_line
+                                    ?.length
+                                    ? fm.data.document_line
+                                        .map((e: any) => getNumber(e.promotion))
+                                        .reduce((a: any, b: any) => a + b, 0)
+                                    : 0;
+                                  fm.data.total_promote = totalPromotion;
+                                  fm.data.total_recruit = recruit;
+                                  fm.render();
+                                }}
+                              >
+                                <div className="flex items-center gap-x-0.5">
+                                  <HiPlus className="text-xl" />
+                                  <span className="capitalize">Add New</span>
+                                </div>
+                              </ButtonBetter>
+                            </div>
+                            {fm.error?.["document_line"] && (
+                              <p className="text-red-500 px-2 text-sm">
+                                {fm.error?.["document_line"]}
+                              </p>
+                            )}
                           </div>
                         </>
                       );

@@ -150,7 +150,7 @@ export const SecondaryButton: React.FC<Button> = ({
   const getClassName: () => string = useCallback(() => {
     const ringColor =
       RING_COLOR.focus[primaryColor as keyof typeof RING_COLOR.focus];
-    return ` w-full transition-all duration-300 bg-gray-50 dark:text-gray-700 font-medium border border-gray-300 px-4 py-2.5 text-md rounded-md focus:ring-2 focus:ring-offset-2 hover:bg-gray-50 ${ringColor}`;
+    return ` w-full transition-all duration-300 bg-gray-50 font-medium border border-gray-300 px-4 py-2.5 text-md rounded-md focus:ring-2 focus:ring-offset-2 hover:bg-gray-50 ${ringColor}`;
   }, [primaryColor]);
 
   return (
@@ -214,9 +214,9 @@ export const RoundedButton: React.FC<Button> = ({
   // Functions
   const getClassName = useCallback(() => {
     const darkClass =
-      "dark:text-white/70 dark:hover:bg-white/10 dark:focus:bg-white/10";
+      "";
     const activeClass = active
-      ? "font-semibold bg-gray-50 dark:bg-white/5"
+      ? "font-semibold bg-gray-50 "
       : "";
     const defaultClass = !roundedFull
       ? `w-full tracking-wide ${darkClass} ${activeClass} transition-all duration-300 ${padding} uppercase hover:bg-gray-100 rounded-md focus:ring-1`

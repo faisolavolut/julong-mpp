@@ -130,7 +130,7 @@ export const List: React.FC<any> = ({
             <div className="absolute top-0 left-0 inline-block flex-grow w-full h-full align-middle">
               <div className="shadow ">
                 <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-                  <thead className="bg-gray-100 dark:bg-gray-700 group/head text-md uppercase text-gray-700 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
+                  <thead className="bg-gray-100 dark:bg-gray-700 group/head text-md uppercase text-gray-700  bg-gray-100 dark:bg-gray-700">
                     {table.getHeaderGroups().map((headerGroup) => (
                       <tr key={`${headerGroup.id}`} className={headerGroup.id}>
                         {headerGroup.headers.map((header, index) => {
@@ -260,7 +260,7 @@ export const List: React.FC<any> = ({
                                 );
                           return (
                             <Table.Cell
-                              className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white"
+                              className="whitespace-nowrap p-4 text-base font-medium text-gray-900 "
                               key={cell.id}
                             >
                               {renderData}

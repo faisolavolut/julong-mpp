@@ -34,7 +34,7 @@ function Page() {
         return (
           <div className="flex flex-row w-full">
             <div className="flex flex-col py-4 pt-0 flex-grow">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-semibold text-gray-900 ">
                 <span className="">Manpower Request</span>
               </h2>
               <BreadcrumbBetterLink
@@ -129,7 +129,7 @@ function Page() {
                   </table>
                 </CardContent>
               </Card>
-              <div className="text-md font-semibold text-gray-900 dark:text-white py-4">
+              <div className="text-md font-semibold text-gray-900 py-4">
                 Requirement Data
               </div>
               <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8 ">
@@ -452,7 +452,7 @@ function Page() {
                 </div>
               </div>
 
-              <div className="text-md font-semibold text-gray-900 dark:text-white py-4">
+              <div className="text-md font-semibold text-gray-900 py-4">
                 Job Specification
               </div>
 
@@ -493,7 +493,7 @@ function Page() {
                   />
                 </div>
               </div>
-              <div className="text-md font-semibold text-gray-900 dark:text-white py-4">
+              <div className="text-md font-semibold text-gray-900 py-4">
                 Specific Skills
               </div>
               <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8 ">

@@ -17,7 +17,7 @@ export const TypeInput: React.FC<any> = ({
   let value: any = fm.data?.[name] || "";
   const input = useLocal({
     value: 0 as any,
-    ref: null as any,
+    ref: null as any
   });
   useEffect(() => {
     if (type === "money") {
@@ -25,6 +25,7 @@ export const TypeInput: React.FC<any> = ({
       input.render();
     }
   }, [fm.data?.[name]]);
+  const error = fm.error?.[name];
   switch (type) {
     case "textarea":
       return (
@@ -34,6 +35,20 @@ export const TypeInput: React.FC<any> = ({
             name={name}
             disabled={disabled}
             required={required}
+            className={cx(
+              "text-sm",
+              error
+                ? css`
+                    border-color: red !important;
+                  `
+                : ``,
+              css`
+                background-color: ${disabled
+                    ? "rgb(243 244 246)"
+                    : "transparant"}
+                  ? "";
+              `
+            )}
             placeholder={placeholder || ""}
             value={value}
             onChange={(ev) => {
@@ -81,6 +96,20 @@ export const TypeInput: React.FC<any> = ({
             id={name}
             name={name}
             disabled={disabled}
+            className={cx(
+              "text-sm",
+              error
+                ? css`
+                    border-color: red !important;
+                  `
+                : ``,
+              css`
+                background-color: ${disabled
+                    ? "rgb(243 244 246)"
+                    : "transparant"}
+                  ? "";
+              `
+            )}
             required={required}
             placeholder={placeholder || ""}
             value={formatCurrency(input.value) || ""}
@@ -119,9 +148,18 @@ export const TypeInput: React.FC<any> = ({
       <Input
         id={name}
         name={name}
-        className={cx(css`
-          background-color: ${disabled ? "rgb(243 244 246)" : "transparant" } ? ""
-          `)}
+        className={cx(
+          "text-sm",
+          error
+            ? css`
+                border-color: red !important;
+              `
+            : ``,
+          css`
+            background-color: ${disabled ? "rgb(243 244 246)" : "transparant"} ?
+              "";
+          `
+        )}
         disabled={disabled}
         required={required}
         placeholder={placeholder || ""}

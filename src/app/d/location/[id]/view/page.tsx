@@ -58,12 +58,15 @@ function Page() {
   const local = useLocal({
     can_approve: false,
     can_reject: false,
+    can_process: false,
   });
   useEffect(() => {
     const run = async () => {
       const roles = await userRoleMe();
-      local.can_approve = getAccess("approve-mpp	", roles);
+      console.log({roles})
+      local.can_approve = getAccess("approve-mpp", roles);
       local.can_reject = getAccess("reject-mpp", roles);
+      local.can_process = getAccess("process-mpp", roles);
       local.render();
     };
     run();
@@ -74,7 +77,7 @@ function Page() {
         return (
           <div className="flex flex-row w-full">
             <div className="flex flex-col py-4 pt-0 flex-grow">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-semibold text-gray-900 ">
                 <span className="">Manpower Planning Overview</span>
               </h2>
               <BreadcrumbBetterLink
@@ -351,7 +354,7 @@ function Page() {
                   </div>
                 </ButtonBetter>
               </div>
-              {local.can_reject && fm.data.status === "IN_PROGRESS" ? (
+              {local.can_approve && fm?.data?.status === "DRAFT" ? (
                 <Alert
                   type={"save"}
                   content={
@@ -373,7 +376,7 @@ function Page() {
                             approver_id: get_user("employee.id"),
                             approved_by: get_user("employee.name"),
                             level: "Level Manager",
-                            status: "REJECTED",
+                            status: "APPROVED",
                             notes: data.notes || null,
                           };
                           const attachments = data.attachment.length
@@ -397,6 +400,105 @@ function Page() {
                             }
                           );
                           console.log(param);
+                        }}
+                        onLoad={async () => {
+                          return {
+                            id,
+                          };
+                        }}
+                        showResize={false}
+                        header={(fm: any) => {
+                          return <></>;
+                        }}
+                        children={(fm: any) => {
+                          return (
+                            <></>
+                          );
+                        }}
+                        onFooter={(fm: any) => {
+                          return (
+                            <div
+                              className={cx(css`
+                                .tbl-search {
+                                  display: none !important;
+                                }
+                                .tbl-pagination {
+                                  display: none !important;
+                                }
+                              `)}
+                            >
+
+                              <AlertDialogFooter className="pt-1">
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className={"bg-primary text-white"}
+                                  onClick={() => {
+                                    fm.data.status = "NEED"
+                                    fm.submit();
+                                  }}
+                                >
+                                  Approve
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </div>
+                          );
+                        }}
+                      />
+                    </>
+                  }
+                >
+                  <ButtonContainer className={"bg-primary"}>
+                    <IoMdSave className="text-xl" />
+                    Process
+                  </ButtonContainer>
+                </Alert>
+              ) : (
+                <></>
+              )}
+              {local.can_reject && fm?.data?.status === "IN_PROGRESS" ? (
+                <Alert
+                  type={"save"}
+                  content={
+                    <>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          update your request from our servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <Form
+                        onSubmit={async (fm: any) => {
+                          const data = fm.data;
+                          const param = {
+                            id: id,
+                            approver_id: get_user("employee.id"),
+                            approved_by: get_user("employee.name"),
+                            level: "Level Manager",
+                            status: "REJECTED",notes: data.notes || null,
+                          };
+                          const attachments = data.attachment.length
+                            ? data.attachment.map((e: any) => e.data)
+                            : [];
+                          const formData = new FormData();
+                          formData.append("payload", JSON.stringify(param));
+                          if (attachments?.length) {
+                            attachments.forEach((file: any) => {
+                              formData.append("attachments", file); // Nama field unik untuk setiap file
+                            });
+                          }
+
+                          const res: any = await api.put(
+                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/update-status`,
+                            formData,
+                            {
+                              headers: {
+                                "Content-Type": "multipart/form-data",
+                              },
+                            }
+                          );
                         }}
                         onLoad={async () => {
                           return {
@@ -550,7 +652,7 @@ function Page() {
                 <></>
               )}
 
-              {local.can_approve && fm.data.status === "IN_PROGRESS" ? (
+              {local.can_approve && fm?.data?.status === "IN_PROGRESS" ? (
                 <Alert
                   type={"save"}
                   content={

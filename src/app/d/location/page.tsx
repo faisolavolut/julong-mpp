@@ -45,7 +45,7 @@ function Page() {
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-xl font-semibold text-gray-900 ">
           <span className="">Manpower Planning Overview</span>
         </h2>
       </div>

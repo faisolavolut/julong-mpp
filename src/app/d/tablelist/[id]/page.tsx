@@ -74,14 +74,14 @@ function Page() {
             return (
               <>
                 <div className={cx("flex flex-col flex-wrap px-4 py-2")}>
-                  <h2 className="mb-4 text-xl font-semibold leading-none text-gray-900 dark:text-white">
+                  <h2 className="mb-4 text-xl font-semibold leading-none text-gray-900 ">
                     General Information
                   </h2>
                   <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8">
                     <div className="sm:col-span-2">
                       <Label
                         htmlFor="file_input"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Upload avatar
                       </Label>
@@ -98,12 +98,12 @@ function Page() {
                             aria-describedby="file_input_help"
                             id="file_input"
                             name="file_input"
-                            className="w-full text-md text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            className="w-full text-md text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer  focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                           /> */}
                           <TypeUpload fm={fm} name={"file"}/>
                           <Label
                             htmlFor="file_input"
-                            className="mt-1 text-md font-normal text-gray-500 dark:text-gray-300"
+                            className="mt-1 text-md font-normal text-gray-500 "
                           >
                             SVG, PNG, JPG or GIF (MAX. 800x400px).
                           </Label>
@@ -113,7 +113,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="first-name"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         First Name
                       </Label>
@@ -128,7 +128,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="last-name"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Last Name
                       </Label>
@@ -142,7 +142,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="email"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Email
                       </Label>
@@ -157,14 +157,14 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="user-permissions"
-                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 dark:text-white"
+                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 "
                       >
                         User Permissions
                         <Tooltip content="User permissions, part of the overall user management process, are access granted to users to specific resources such as files, applications, networks, or devices.">
                           <button className="ml-1">
                             <svg
                               aria-hidden
-                              className="w-4 h-4 text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-white"
+                              className="w-4 h-4 text-gray-400 hover:text-gray-900"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                               xmlns="http://www.w3.org/2000/svg"
@@ -187,14 +187,14 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="email-status"
-                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 dark:text-white"
+                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 "
                       >
                         Email Status
                         <Tooltip content="As an administrator, you can view the status of a user's email. The status indicates whether a user's email is verified or not.">
                           <button className="ml-1">
                             <svg
                               aria-hidden
-                              className="w-4 h-4 text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-white"
+                              className="w-4 h-4 text-gray-400 hover:text-gray-900"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                               xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +217,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="job-title"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Job Title
                       </Label>
@@ -231,14 +231,14 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="user-role"
-                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 dark:text-white"
+                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 "
                       >
                         User Role
                         <Tooltip content="Flowbite provides 7 predefined roles: Owner, Admin, Editor, Contributor and Viewer. Assign the most suitable role to each user, giving them the most appropriate level of control.">
                           <button className="ml-1">
                             <svg
                               aria-hidden
-                              className="w-4 h-4 text-gray-400 hover:text-gray-900 dark:hover:text-white dark:text-gray-500"
+                              className="w-4 h-4 text-gray-400 hover:text-gray-900 "
                               fill="currentColor"
                               viewBox="0 0 20 20"
                               xmlns="http://www.w3.org/2000/svg"
@@ -264,14 +264,14 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="account"
-                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 dark:text-white"
+                        className="inline-flex items-center mb-2 text-md font-medium text-gray-900 "
                       >
                         Account
                         <Tooltip content="Choose here your account type.">
                           <button className="ml-1">
                             <svg
                               aria-hidden
-                              className="w-4 h-4 text-gray-400 hover:text-gray-900 dark:hover:text-white dark:text-gray-500"
+                              className="w-4 h-4 text-gray-400 hover:text-gray-900 "
                               fill="currentColor"
                               viewBox="0 0 20 20"
                               xmlns="http://www.w3.org/2000/svg"
@@ -295,7 +295,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="password"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Password
                       </Label>
@@ -310,7 +310,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="confirm-password"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Confirm password
                       </Label>
@@ -323,7 +323,7 @@ function Page() {
                       />
                     </div>
                     <div>
-                      <p className="block mb-2 dark:text-white">Assign Role</p>
+                      <p className="block mb-2 ">Assign Role</p>
                       <div className="flex items-center space-x-4">
                         <div className="flex items-center">
                           <Checkbox
@@ -332,7 +332,7 @@ function Page() {
                           />
                           <Label
                             htmlFor="inline-checkbox"
-                            className="ml-2 text-md font-medium text-gray-900 dark:text-gray-300"
+                            className="ml-2 text-md font-medium text-gray-900 "
                           >
                             Administrator
                           </Label>
@@ -344,7 +344,7 @@ function Page() {
                           />
                           <Label
                             htmlFor="inline-2-checkbox"
-                            className="ml-2 text-md font-medium text-gray-900 dark:text-gray-300"
+                            className="ml-2 text-md font-medium text-gray-900 "
                           >
                             Member
                           </Label>
@@ -356,7 +356,7 @@ function Page() {
                           />
                           <Label
                             htmlFor="inline-3-checked-checkbox"
-                            className="ml-2 text-md font-medium text-gray-900 dark:text-gray-300"
+                            className="ml-2 text-md font-medium text-gray-900 "
                           >
                             Viewer
                           </Label>
@@ -364,14 +364,14 @@ function Page() {
                       </div>
                     </div>
                   </div>
-                  <h2 className="mb-4 text-xl font-semibold leading-none text-gray-900 dark:text-white">
+                  <h2 className="mb-4 text-xl font-semibold leading-none text-gray-900 ">
                     Additional Information
                   </h2>
                   <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8">
                     <div>
                       <Label
                         htmlFor="country"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Country
                       </Label>
@@ -389,7 +389,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="city"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         City
                       </Label>
@@ -403,7 +403,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="address"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Address
                       </Label>
@@ -417,7 +417,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="zip"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         ZIP
                       </Label>
@@ -432,7 +432,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="timezone"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Timezone
                       </Label>
@@ -447,7 +447,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="phone-number"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Phone Number
                       </Label>
@@ -462,7 +462,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="linkedin"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Linkedin URL
                       </Label>
@@ -477,7 +477,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="facebook"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Facebook
                       </Label>
@@ -492,7 +492,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="github"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Github
                       </Label>
@@ -507,7 +507,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="dribbble"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Dribbble
                       </Label>
@@ -522,7 +522,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="instagram"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Instagram
                       </Label>
@@ -537,7 +537,7 @@ function Page() {
                     <div>
                       <Label
                         htmlFor="personal-website"
-                        className="block mb-2 dark:text-white"
+                        className="block mb-2 "
                       >
                         Personal Website
                       </Label>

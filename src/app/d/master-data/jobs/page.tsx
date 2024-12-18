@@ -8,7 +8,7 @@ function Page() {
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-xl font-semibold text-gray-900 ">
           <span className="">Jobs</span>
         </h2>
       </div>
@@ -22,7 +22,7 @@ function Page() {
           }}
           column={[
             {
-              name: "organization_structure.organization.name",
+              name: "organization_name",
               header: () => <span>Organization</span>,
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, name)}</>;

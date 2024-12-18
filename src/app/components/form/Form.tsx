@@ -71,6 +71,7 @@ export const Form: React.FC<any> = ({
     },
     fields: {} as any,
     render: () => {},
+    error: {} as any,
     mode,
   });
   useEffect(() => {

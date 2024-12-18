@@ -62,7 +62,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
             <li>
               <div
                 className={classNames(
-                  " flex-row flex items-center cursor-pointer items-center w-full rounded-lg text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 flex flex-row",
+                  " flex-row flex items-center cursor-pointer items-center w-full rounded-lg text-base font-normal text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-row",
                   isParentActive && !depth
                     ? " text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group bg-white shadow-md  shadow-[#31367875] hover:!bg-white  transition-all duration-200  dark:bg-gray-700"
                     : " ",
@@ -95,9 +95,9 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                   {!depth ? (
                     <div
                       className={classNames(
-                        "   text-dark-700 w-8 h-8 rounded-lg text-center flex flex-row items-center justify-center",
+                        " w-8 h-8 rounded-lg text-center flex flex-row items-center justify-center",
                         isParentActive
-                          ? "bg-[#313678] text-white "
+                          ? "bg-[#313678] text-white active-menu-icon"
                           : "bg-white shadow-lg text-black",
                         !mini
                           ? "mr-1  p-2 shadow-gray-300"
@@ -148,7 +148,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                   if (item?.href) setCurrentPage(item.href);
                 }}
                 className={classNames(
-                  " flex-row flex items-center cursor-pointer items-center w-full rounded-lg text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 flex flex-row  py-2.5 px-4",
+                  " flex-row flex items-center cursor-pointer items-center w-full rounded-lg text-base font-normal text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-row  py-2.5 px-4",
                   isActive
                     ? " py-2.5 px-4 text-base font-normal text-dark-500 rounded-lg  group     shadow-[#31367875]   transition-all duration-200  dark:bg-gray-700"
                     : "",
@@ -382,7 +382,7 @@ const LanguageDropdown: FC = function () {
         <li>
           <a
             href="#"
-            className="block py-2 px-4 text-md text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+            className="block py-2 px-4 text-md text-gray-700 hover:bg-gray-100  dark:hover:bg-gray-600 dark:hover:text-white"
           >
             <div className="inline-flex items-center">
               <svg

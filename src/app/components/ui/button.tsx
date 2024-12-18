@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { FC } from "react";
 
 const btn = cva(
-  " px-4 py-1.5 group relative flex items-stretch justify-center p-0.5 text-center border border-transparent text-white enabled:hover:bg-cyan-800  rounded-md"
+  " text-white px-4 py-1.5 group active-menu-icon relative flex items-stretch justify-center p-0.5 text-center border border-transparent text-white enabled:hover:bg-cyan-800  rounded-md"
 );
 const buttonVariants = cva(
   "px-4 py-1.5 group relative flex items-stretch justify-center p-0.5 text-center border inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -14,7 +14,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-white shadow hover:bg-primary/90",
+          "bg-primary text-white shadow hover:bg-primary/90 active-menu-icon",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:

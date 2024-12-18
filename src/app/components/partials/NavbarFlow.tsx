@@ -35,7 +35,7 @@ const NavFlow: React.FC<any> = ({ minimaze }) => {
             {true && (
               <button
                 onClick={minimaze}
-                className="mr-3 cursor-pointer rounded p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:inline"
+                className="mr-3 cursor-pointer rounded p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 lg:inline"
               >
                 <span className="sr-only">Toggle sidebar</span>
                 <HiMenuAlt1 className="h-6 w-6" />
@@ -73,14 +73,14 @@ const NotificationBellDropdown: FC = function () {
       arrowIcon={false}
       inline
       label={
-        <span className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+        <span className="rounded-lg p-2 hover:bg-gray-100 ">
           <span className="sr-only">Notifications</span>
-          <HiBell className="text-2xl text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white " />
+          <HiBell className="text-2xl text-gray-500 hover:text-gray-900  " />
         </span>
       }
     >
       <div className="max-w-[24rem]">
-        <div className="block rounded-t-xl bg-gray-50 py-2 px-4 text-center text-base font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+        <div className="block rounded-t-xl bg-gray-50 py-2 px-4 text-center text-base font-medium text-gray-700">
           Notifications
         </div>
         <div>
@@ -99,14 +99,14 @@ const NotificationBellDropdown: FC = function () {
               </div>
             </div>
             <div className="w-full pl-3">
-              <div className="mb-1.5 text-md font-normal text-gray-500 dark:text-gray-400">
+              <div className="mb-1.5 text-md font-normal text-gray-500 ">
                 New message from&nbsp;
-                <span className="font-semibold text-gray-900 dark:text-white">
+                <span className="font-semibold text-gray-900 ">
                   Bonnie Green
                 </span>
                 : "Hey, what's up? All set for the presentation?"
               </div>
-              <div className="text-md font-medium text-primary-700 dark:text-primary-400">
+              <div className="text-md font-medium text-primary-700 ">
                 a few moments ago
               </div>
             </div>
@@ -126,17 +126,17 @@ const NotificationBellDropdown: FC = function () {
               </div>
             </div>
             <div className="w-full pl-3">
-              <div className="mb-1.5 text-md font-normal text-gray-500 dark:text-gray-400">
-                <span className="font-semibold text-gray-900 dark:text-white">
+              <div className="mb-1.5 text-md font-normal text-gray-500 ">
+                <span className="font-semibold text-gray-900 ">
                   Jese Leos
                 </span>
                 &nbsp;and&nbsp;
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="font-medium text-gray-900 ">
                   5 others
                 </span>
                 &nbsp;started following you.
               </div>
-              <div className="text-md font-medium text-primary-700 dark:text-primary-400">
+              <div className="text-md font-medium text-primary-700 ">
                 10 minutes ago
               </div>
             </div>
@@ -156,17 +156,17 @@ const NotificationBellDropdown: FC = function () {
               </div>
             </div>
             <div className="w-full pl-3">
-              <div className="mb-1.5 text-md font-normal text-gray-500 dark:text-gray-400">
-                <span className="font-semibold text-gray-900 dark:text-white">
+              <div className="mb-1.5 text-md font-normal text-gray-500 ">
+                <span className="font-semibold text-gray-900 ">
                   Joseph Mcfall
                 </span>
                 &nbsp;and&nbsp;
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="font-medium text-gray-900 ">
                   141 others
                 </span>
                 &nbsp;love your story. See it and view more stories.
               </div>
-              <div className="text-md font-medium text-primary-700 dark:text-primary-400">
+              <div className="text-md font-medium text-primary-700 ">
                 44 minutes ago
               </div>
             </div>
@@ -186,17 +186,17 @@ const NotificationBellDropdown: FC = function () {
               </div>
             </div>
             <div className="w-full pl-3">
-              <div className="mb-1.5 text-md font-normal text-gray-500 dark:text-gray-400">
-                <span className="font-semibold text-gray-900 dark:text-white">
+              <div className="mb-1.5 text-md font-normal text-gray-500 ">
+                <span className="font-semibold text-gray-900 ">
                   Leslie Livingston
                 </span>
                 &nbsp;mentioned you in a comment:&nbsp;
-                <span className="font-medium text-primary-700 dark:text-primary-500">
+                <span className="font-medium text-primary-700 ">
                   @bonnie.green
                 </span>
                 &nbsp;what do you say?
               </div>
-              <div className="text-md font-medium text-primary-700 dark:text-primary-400">
+              <div className="text-md font-medium text-primary-700 ">
                 1 hour ago
               </div>
             </div>
@@ -216,14 +216,14 @@ const NotificationBellDropdown: FC = function () {
               </div>
             </div>
             <div className="w-full pl-3">
-              <div className="mb-1.5 text-md font-normal text-gray-500 dark:text-gray-400">
-                <span className="font-semibold text-gray-900 dark:text-white">
+              <div className="mb-1.5 text-md font-normal text-gray-500 ">
+                <span className="font-semibold text-gray-900 ">
                   Robert Brown
                 </span>
                 &nbsp;posted a new video: Glassmorphism - learn how to implement
                 the new design trend.
               </div>
-              <div className="text-md font-medium text-primary-700 dark:text-primary-400">
+              <div className="text-md font-medium text-primary-700 ">
                 3 hours ago
               </div>
             </div>
@@ -231,7 +231,7 @@ const NotificationBellDropdown: FC = function () {
         </div>
         <a
           href="#"
-          className="block rounded-b-xl bg-gray-50 py-2 text-center text-base font-normal text-gray-900 hover:bg-gray-100 dark:bg-gray-700 dark:text-white dark:hover:underline"
+          className="block rounded-b-xl bg-gray-50 py-2 text-center text-base font-normal text-gray-900 hover:bg-gray-100 dark:bg-gray-700 dark:hover:underline"
         >
           <div className="inline-flex items-center gap-x-2">
             <HiEye className="h-6 w-6" />
@@ -325,11 +325,11 @@ const AppDrawerDropdown: FC = function () {
       label={
         <span className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
           <span className="sr-only">Apps</span>
-          <HiViewGrid className="text-2xl text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white" />
+          <HiViewGrid className="text-2xl text-gray-500 hover:text-gray-900  dark:hover:text-white" />
         </span>
       }
     >
-      <div className="block rounded-t-lg border-b bg-gray-50 py-2 px-4 text-center text-base font-medium text-gray-700 dark:border-b-gray-600 dark:bg-gray-700 dark:text-white">
+      <div className="block rounded-t-lg border-b bg-gray-50 py-2 px-4 text-center text-base font-medium text-gray-700 dark:border-b-gray-600 dark:bg-gray-700 ">
         Apps
       </div>
       <div className="grid grid-cols-3 gap-4 p-4">
@@ -337,8 +337,8 @@ const AppDrawerDropdown: FC = function () {
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
-          <HiShoppingBag className="mx-auto mb-1 h-7 w-7 text-gray-500 dark:text-white" />
-          <div className="text-md font-medium text-gray-900 dark:text-white">
+          <HiShoppingBag className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
+          <div className="text-md font-medium text-gray-900 ">
             Sales
           </div>
         </a>
@@ -346,8 +346,8 @@ const AppDrawerDropdown: FC = function () {
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
-          <HiUsers className="mx-auto mb-1 h-7 w-7 text-gray-500 dark:text-white" />
-          <div className="text-md font-medium text-gray-900 dark:text-white">
+          <HiUsers className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
+          <div className="text-md font-medium text-gray-900 ">
             Users
           </div>
         </a>
@@ -355,8 +355,8 @@ const AppDrawerDropdown: FC = function () {
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
-          <HiInbox className="mx-auto mb-1 h-7 w-7 text-gray-500 dark:text-white" />
-          <div className="text-md font-medium text-gray-900 dark:text-white">
+          <HiInbox className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
+          <div className="text-md font-medium text-gray-900 ">
             Inbox
           </div>
         </a>
@@ -364,8 +364,8 @@ const AppDrawerDropdown: FC = function () {
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
-          <HiUserCircle className="mx-auto mb-1 h-7 w-7 text-gray-500 dark:text-white" />
-          <div className="text-md font-medium text-gray-900 dark:text-white">
+          <HiUserCircle className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
+          <div className="text-md font-medium text-gray-900 ">
             Profile
           </div>
         </a>
@@ -373,8 +373,8 @@ const AppDrawerDropdown: FC = function () {
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
-          <HiCog className="mx-auto mb-1 h-7 w-7 text-gray-500 dark:text-white" />
-          <div className="text-md font-medium text-gray-900 dark:text-white">
+          <HiCog className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
+          <div className="text-md font-medium text-gray-900 ">
             Settings
           </div>
         </a>
@@ -382,8 +382,8 @@ const AppDrawerDropdown: FC = function () {
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
-          <HiArchive className="mx-auto mb-1 h-7 w-7 text-gray-500 dark:text-white" />
-          <div className="text-md font-medium text-gray-900 dark:text-white">
+          <HiArchive className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
+          <div className="text-md font-medium text-gray-900 ">
             Products
           </div>
         </a>
@@ -391,8 +391,8 @@ const AppDrawerDropdown: FC = function () {
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
-          <HiCurrencyDollar className="mx-auto mb-1 h-7 w-7 text-gray-500 dark:text-white" />
-          <div className="text-md font-medium text-gray-900 dark:text-white">
+          <HiCurrencyDollar className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
+          <div className="text-md font-medium text-gray-900 ">
             Pricing
           </div>
         </a>
@@ -400,8 +400,8 @@ const AppDrawerDropdown: FC = function () {
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
-          <HiOutlineTicket className="mx-auto mb-1 h-7 w-7 text-gray-500 dark:text-white" />
-          <div className="text-md font-medium text-gray-900 dark:text-white">
+          <HiOutlineTicket className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
+          <div className="text-md font-medium text-gray-900 ">
             Billing
           </div>
         </a>
@@ -409,8 +409,8 @@ const AppDrawerDropdown: FC = function () {
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
-          <HiLogout className="mx-auto mb-1 h-7 w-7 text-gray-500 dark:text-white" />
-          <div className="text-md font-medium text-gray-900 dark:text-white">
+          <HiLogout className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
+          <div className="text-md font-medium text-gray-900 ">
             Logout
           </div>
         </a>

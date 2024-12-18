@@ -21,7 +21,7 @@ function Page() {
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-xl font-semibold text-gray-900 ">
           <span className="">123</span>
         </h2>
         <Breadcrumb className="breadcrumb">
@@ -46,7 +46,7 @@ function Page() {
               <>
                 <div className="flex flex-row flex-grow px-4 py-4 border-b border-gray-300	items-center">
                   <div className="flex flex-col flex-grow">
-                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+                    <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">
                       All <span className="capitalize">Form Plafon</span>
                     </h1>
                     <div className="flex-grow flex flex-row">

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FieldCheckbox } from "./field/TypeCheckbox";
 import { TypeDropdown } from "./field/TypeDropdown";
 import { TypeInput } from "./field/TypeInput";
@@ -20,6 +21,23 @@ export const Field: React.FC<any> = ({
 }) => {
   let result = null;
   const is_disable = fm.mode === "view" ? true : disabled;
+  const error = fm.error?.[name];
+  useEffect(() => {
+    fm.fields[name] = {
+      label,
+      name,
+      onLoad,
+      type,
+      placeholder,
+      required,
+      disabled,
+      hidden_label,
+      onChange,
+      className,
+      style,
+    };
+    fm.render();
+  }, []);
   return (
     <>
       <div
@@ -31,7 +49,7 @@ export const Field: React.FC<any> = ({
         {!hidden_label ? (
           <label
             className={cx(
-              "block mb-2 text-md font-medium text-gray-900 dark:text-white text-sm",
+              "block mb-2 text-md font-medium text-gray-900  text-sm",
               style === "inline" ? "w-[100px]" : ""
             )}
           >
@@ -40,7 +58,13 @@ export const Field: React.FC<any> = ({
         ) : (
           <></>
         )}
-        <div className={cx("flex flex-row rounded-md flex-grow")}>
+        <div
+          className={cx(
+            error
+              ? "flex flex-row rounded-md flex-grow border-red-500 border"
+              : "flex flex-row rounded-md flex-grow"
+          )}
+        >
           {["upload"].includes(type) ? (
             <>
               <TypeUpload
@@ -50,7 +74,7 @@ export const Field: React.FC<any> = ({
                 mode={"upload"}
               />
             </>
-          ) :["multi-upload"].includes(type) ? (
+          ) : ["multi-upload"].includes(type) ? (
             <>
               <TypeUpload
                 fm={fm}
@@ -98,6 +122,11 @@ export const Field: React.FC<any> = ({
             </>
           )}
         </div>
+        {error ? (
+          <div className="text-sm text-red-500 py-1">{error}</div>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

@@ -58,7 +58,7 @@ function Page() {
               <>
                 <div className="flex flex-row flex-grow px-4 py-4 border-b border-gray-300	items-center">
                   <div className="flex flex-col flex-grow">
-                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+                    <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">
                       <span className="capitalize">Form Manpower Planning</span>
                     </h1>
                     <div className="flex-grow flex flex-row">

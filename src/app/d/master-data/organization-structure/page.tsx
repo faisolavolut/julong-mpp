@@ -13,7 +13,7 @@ function Page() {
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-xl font-semibold text-gray-900 ">
           <span className="">Organization Structure</span>
         </h2>
       </div>

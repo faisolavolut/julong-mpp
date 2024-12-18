@@ -11,10 +11,12 @@
   --foreground: #171717;
 }
 
+
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff;
+    --foreground: #171717;
   }
 }
 
@@ -131,4 +133,8 @@ line-height: 1rem  !important; /* 16px */
 
 .animate-spin-important{
   animation: spin 1s linear infinite !important;
+}
+
+.active-menu-icon svg {
+  fill: white;
 }

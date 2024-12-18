@@ -251,12 +251,12 @@ export const TableList: React.FC<any> = ({
     <>
       <div className="tbl-wrapper flex flex-grow flex-col">
         {!disabledHeader ? (
-          <div className="head-tbl-list block items-start justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+          <div className="head-tbl-list block items-start justify-between border-b border-gray-200 bg-white p-4 sm:flex">
             <div className="flex flex-row items-end">
               <div className="sm:flex flex flex-col space-y-2">
                 {false ? (
                   <div className="">
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+                    <h2 className="text-xl font-semibold text-gray-900  sm:text-2xl">
                       All <span className="">{name ? `${name}s` : ``}</span>
                     </h2>
                   </div>
@@ -284,7 +284,7 @@ export const TableList: React.FC<any> = ({
             </div>
 
             <div className="ml-auto flex items-center flex-row">
-              <div className="tbl-search hidden items-center dark:divide-gray-700 sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100">
+              <div className="tbl-search hidden items-center sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100">
                 <form
                   onSubmit={async (e) => {
                     e.preventDefault();
@@ -489,7 +489,7 @@ export const TableList: React.FC<any> = ({
                                 );
                           return (
                             <Table.Cell
-                              className="text-md px-2  py-1  whitespace-nowrap text-gray-900 dark:text-white"
+                              className="text-md px-2  py-1  whitespace-nowrap text-gray-900 "
                               key={cell.id}
                             >
                               {renderData}
@@ -541,7 +541,7 @@ export const Pagination: React.FC<any> = ({
     local.render();
   }, [page]);
   return (
-    <div className="tbl-pagination sticky text-sm bottom-0 right-0 w-full items-center justify-end text-sm border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+    <div className="tbl-pagination sticky text-sm bottom-0 right-0 w-full items-center justify-end text-sm border-t border-gray-200 bg-white p-4 sm:flex">
       <div className="mb-4 flex items-center sm:mb-0">
         <div
           onClick={() => {
@@ -553,7 +553,7 @@ export const Pagination: React.FC<any> = ({
             "inline-flex  justify-center rounded p-1 ",
             disabledPrevPage
               ? "text-gray-200"
-              : "cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              : "cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-gray-900"
           )}
         >
           <span className="sr-only">Previous page</span>
@@ -569,19 +569,19 @@ export const Pagination: React.FC<any> = ({
             "inline-flex  justify-center rounded p-1 ",
             disabledNextPage
               ? "text-gray-200"
-              : "cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              : "cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-gray-900"
           )}
         >
           <span className="sr-only">Next page</span>
           <HiChevronRight className="text-2xl" />
         </div>
-        <span className="text-md font-normal text-gray-500 dark:text-gray-400">
+        <span className="text-md font-normal text-gray-500">
           Page&nbsp;
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="font-semibold text-gray-900">
             {page}
           </span>
           &nbsp;of&nbsp;
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="font-semibold text-gray-900">
             {countPage}
           </span>
         </span>
@@ -634,7 +634,7 @@ export const Pagination: React.FC<any> = ({
                 }
               }}
               className={classNames(
-                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary px-3 py-2 text-center text-md font-medium text-white hover:bg-primary focus:ring-4 focus:ring-primary-300 dark:bg-primary dark:hover:bg-primary dark:focus:ring-primary-800"
+                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary px-3 py-2 text-center text-md font-medium text-white hover:bg-primary focus:ring-4 focus:ring-primary-300"
               )}
             >
               <HiChevronLeft className="mr-1 text-base" />
@@ -653,7 +653,7 @@ export const Pagination: React.FC<any> = ({
                 }
               }}
               className={classNames(
-                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary px-3 py-2 text-center text-md font-medium text-white hover:bg-primary focus:ring-4 focus:ring-primary-300 dark:bg-primary dark:hover:bg-primary dark:focus:ring-primary-800"
+                "cursor-pointer inline-flex flex-1 items-center justify-center rounded-lg bg-primary px-3 py-2 text-center text-md font-medium text-white hover:bg-primary focus:ring-4 focus:ring-primary-300"
               )}
             >
               Next

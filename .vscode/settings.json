@@ -1,0 +1,24 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "15.235.214.13",
+            "port": 8741,
+            "driver": "PostgreSQL",
+            "username": "postgres",
+            "password": "gEJIfovgvDAroHhqRiKhYVvrkn2OqXfF3tw8xJmnvw7JhrZgN24pTD9iWMIUIUL6",
+            "database": "julong-manpower",
+            "name": "julong-manpower"
+        },
+        {
+            "previewLimit": 50,
+            "server": "15.235.214.13",
+            "port": 8741,
+            "driver": "PostgreSQL",
+            "name": "julong-portal",
+            "database": "julong-portal",
+            "username": "postgres",
+            "password": "gEJIfovgvDAroHhqRiKhYVvrkn2OqXfF3tw8xJmnvw7JhrZgN24pTD9iWMIUIUL6"
+        }
+    ]
+}

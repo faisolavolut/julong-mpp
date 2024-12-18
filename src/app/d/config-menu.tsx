@@ -19,8 +19,8 @@ export const configMenu = [
     title: "Manpower Planning Period",
     icon: <RiCalendarScheduleLine />,
     children: [
-      { title: "Period - Rekrutmen", href: "/d/mpp/period" },
-      { title: "Location", href: "/d/location" },
+      { title: "Period", href: "/d/mpp/period" },
+      { title: "Manpower Planning Overview", href: "/d/location" },
     ],
   },
   {
