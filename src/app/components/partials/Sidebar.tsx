@@ -215,7 +215,6 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
               </Sidebar.ItemGroup>
             </Sidebar.Items>
             {/* <div key="menu">{renderTree(data)}</div> */}
-            {!mini ? <BottomMenu /> : <></>}
           </div>
         </div>
       </Sidebar>

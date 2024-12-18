@@ -1,4 +1,5 @@
 "use client";
+import { AlertBatch } from "@/app/components/comp/AlertBatch";
 import { TableList } from "@/app/components/tablelist/TableList";
 import { Tablist } from "@/app/components/tablist/Tablist";
 import { ButtonBetter } from "@/app/components/ui/button";
@@ -82,37 +83,12 @@ function Page() {
                           if (!local.can_add) return <></>;
                           return (
                             <>
-                              <div className="flex flex-row flex-grow">
-                                <ButtonBetter className="bg-primary">
-                                  <div className="flex items-center gap-x-0.5">
-                                    <HiPlus className="text-xl" />
-                                    <span className="capitalize">
-                                      Create Batch
-                                    </span>
-                                  </div>
-                                </ButtonBetter>
-                              </div>
+                            <AlertBatch/>
                             </>
                           );
                         },
                       }}
                       column={[
-                        {
-                          name: "document_number",
-                          header: () => <span>Document Number</span>,
-                          renderCell: ({ row, name, cell }: any) => {
-                            return <>{getValue(row, name)}</>;
-                          },
-                        },
-                        {
-                          name: "document_date",
-                          header: () => <span>Document Date</span>,
-                          renderCell: ({ row, name, cell }: any) => {
-                            return (
-                              <>{shortDate(new Date(getValue(row, name)))}</>
-                            );
-                          },
-                        },
                         {
                           name: "organization_name",
                           header: () => <span>Organization</span>,
@@ -121,21 +97,21 @@ function Page() {
                           },
                         },
                         {
-                          name: "organization_location_name",
+                          name: "name",
                           header: () => <span>Location</span>,
                           renderCell: ({ row, name, cell }: any) => {
                             return <>{getValue(row, name)}</>;
                           },
                         },
                         {
-                          name: "requestor_name",
-                          header: () => <span>Requestor</span>,
+                          name: "mp_planning_header.document_number",
+                          header: () => <span>Document Number</span>,
                           renderCell: ({ row, name, cell }: any) => {
                             return <>{getValue(row, name)}</>;
                           },
                         },
                         {
-                          name: "status",
+                          name: "mp_planning_header.status",
                           header: () => <span>Status</span>,
                           renderCell: ({ row, name, cell }: any) => {
                             return <>{getValue(row, name)}</>;
@@ -148,44 +124,31 @@ function Page() {
                           renderCell: ({ row, name, cell }: any) => {
                             return (
                               <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                                {local.can_edit ? (
-                                  <ButtonLink
-                                    className="bg-primary"
-                                    href={`/d/location/${row.id}/edit`}
-                                  >
-                                    <div className="flex items-center gap-x-2">
-                                      <HiOutlinePencilAlt className="text-lg" />
-                                    </div>
-                                  </ButtonLink>
-                                ) : (
-                                  <></>
-                                )}
-
                                 <ButtonLink
                                   className="bg-primary"
-                                  href={`/d/location/${row.id}/view`}
+                                  href={`/d/bacth/${row.id}/view`}
                                 >
                                   <div className="flex items-center gap-x-2">
                                     <IoEye className="text-lg" />
                                   </div>
                                 </ButtonLink>
-                                <ButtonBetter variant={"outline"}>
-                                  <div className="flex items-center gap-x-2">
-                                    <HiDocumentDownload className="text-lg" />
-                                  </div>
-                                </ButtonBetter>
                               </div>
                             );
                           },
                         },
                       ]}
                       onLoad={async (param: any) => {
-                        const params = await events("onload-param", param);
+                        const addtional = {
+                          ...param,
+                          status: "APPROVED"
+                        }
+                        const params = await events("onload-param", addtional);
+                        console.log(params)
                         const res: any = await api.get(
-                          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings` +
+                          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` +
                             params
                         );
-                        const data: any[] = res.data.data.mp_planning_headers;
+                        const data: any[] = res.data.data.organization_locations;
                         if (!Array.isArray(data)) return [];
                         return data || [];
                       }}

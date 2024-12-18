@@ -1,4 +1,6 @@
 "use client";
+import { AlertCeoApprove } from "@/app/components/comp/AlertCeoApprove";
+import { AlertCeoReject } from "@/app/components/comp/AlertCeoReject";
 import { TableList } from "@/app/components/tablelist/TableList";
 import { ButtonBetter } from "@/app/components/ui/button";
 import { ButtonLink } from "@/app/components/ui/button-link";
@@ -18,12 +20,6 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useEffect } from "react";
-import {
-  HiDocumentDownload,
-  HiOutlinePencilAlt,
-  HiPlus,
-  HiTrash,
-} from "react-icons/hi";
 import { IoEye } from "react-icons/io5";
 
 function Page() {
@@ -67,8 +63,8 @@ function Page() {
           </div>
           <div className="flex flex-row items-center justify-center">
             <div className="flex flex-row gap-x-1 py-2">
-              <ButtonBetter variant={"reject"}>Reject</ButtonBetter>
-              <ButtonBetter>Approve</ButtonBetter>
+              <AlertCeoReject/>
+              <AlertCeoApprove/>
             </div>
           </div>
         </div>

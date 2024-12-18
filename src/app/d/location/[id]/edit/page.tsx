@@ -531,11 +531,13 @@ function Page() {
             },
           }
         );
+        const deleted_line_ids = data?.deleted_line_ids?.length ? data.deleted_line_ids : []
         await api.post(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/lines/batch/store`,
           {
             mp_planning_header_id: data.id,
             mp_planning_lines: document_line,
+            deleted_line_ids
           }
         );
       }}
@@ -1128,13 +1130,17 @@ function Page() {
                             <ButtonBetter
                               className="bg-red-500"
                               onClick={() => {
+                                const deleted_line_ids: any[] = Array.isArray(fm.data?.deleted_line_ids) ? fm.data?.deleted_line_ids : []
+                                if(row?.id){
+                                  deleted_line_ids.push(row.id)
+                                }
+                                fm.data["deleted_line_ids"] = deleted_line_ids
                                 tbl.removeRow(row);
                                 fm.data.document_line =
                                   fm.data.document_line.filter(
                                     (e: any) => e !== row
                                   );
                                 fm.render();
-                                console.log(fm.data.document_line, row);
                                 const recruit = fm.data.document_line?.length
                                   ? fm.data.document_line
                                       .map(
