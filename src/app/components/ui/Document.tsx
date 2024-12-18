@@ -1,3 +1,4 @@
+"use client";
 import React, { FC } from "react";
 import {
   Page,
@@ -185,32 +186,39 @@ const Row: FC<{
   );
 };
 // Create Document Component
-export const MyDocument = () => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <Image
-          style={{ ...styles.image, marginRight: 10, marginLeft: 10 }}
-          src={`${process.env.NEXT_PUBLIC_BASE_URL}/julong.png`}
-        />
-        <View style={styles.section}>
-          <Text style={styles.title}>JULONG GROUP (INDONESIA)</Text>
-          <Text style={{ textAlign: "center", fontFamily: "Noto Sans SC" }}>
-            聚龙集团印尼区
-          </Text>
-        </View>
+const MyDocument = () => {
+  return <Document>
+  <Page size="A4" style={styles.page}>
+    <View
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+      }}
+    >
+      <Image
+        style={{ ...styles.image, marginRight: 10, marginLeft: 10 }}
+        src={`${process.env.NEXT_PUBLIC_BASE_URL}/julong.png`}
+      />
+      <View style={styles.section}>
+        <Text style={styles.title}>JULONG GROUP (INDONESIA)</Text>
+        <Text style={{ textAlign: "center", fontFamily: "Noto Sans SC" }}>
+          聚龙集团印尼区
+        </Text>
       </View>
+    </View>
+    <View
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        padding: 10,
+        flexGrow: 1,
+      }}
+    >
       <View
         style={{
           display: "flex",
-          flexDirection: "row",
-          padding: 10,
+          flexDirection: "column",
           flexGrow: 1,
         }}
       >
@@ -218,169 +226,183 @@ export const MyDocument = () => (
           style={{
             display: "flex",
             flexDirection: "column",
-            flexGrow: 1,
+            width: "100%",
+            border: 1,
+            borderColor: "black",
           }}
         >
+          <View>
+            <View style={styles.section}>
+              <Text
+                style={{
+                  ...styles.title,
+                  textDecoration: "underline",
+                  marginBottom: 10,
+                }}
+              >
+                STAFF REQUIREMENT
+              </Text>
+            </View>
+          </View>
+          <View style={{ marginBottom: 10, padding: 5 }}>
+            <View
+              style={{
+                ...styles.section,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  width: 100,
+                }}
+              >
+                OPERATING UNIT
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                }}
+              >
+                :
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  paddingVertical: 1,
+                }}
+              >
+                JULONG GROUP
+              </Text>
+            </View>
+
+            <View
+              style={{
+                ...styles.section,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  width: 100,
+                }}
+              >
+                BUDGET YEAR
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                }}
+              >
+                :
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  paddingVertical: 1,
+                }}
+              >
+                2024/2025
+              </Text>
+            </View>
+          </View>
           <View
             style={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              border: 1,
+              borderBottom: 1,
+              borderTop: 1,
               borderColor: "black",
+              display: "flex",
+              flexDirection: "row",
+              width: "100%",
             }}
           >
-            <View>
-              <View style={styles.section}>
-                <Text
-                  style={{
-                    ...styles.title,
-                    textDecoration: "underline",
-                    marginBottom: 10,
-                  }}
-                >
-                  STAFF REQUIREMENT
-                </Text>
-              </View>
-            </View>
-            <View style={{ marginBottom: 10, padding: 5 }}>
-              <View
-                style={{
-                  ...styles.section,
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 12,
-                    width: 100,
-                  }}
-                >
-                  OPERATING UNIT
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                  }}
-                >
-                  :
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    paddingVertical: 1,
-                  }}
-                >
-                  JULONG GROUP
-                </Text>
-              </View>
-
-              <View
-                style={{
-                  ...styles.section,
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 12,
-                    width: 100,
-                  }}
-                >
-                  BUDGET YEAR
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                  }}
-                >
-                  :
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    paddingVertical: 1,
-                  }}
-                >
-                  2024/2025
-                </Text>
-              </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                padding: 5,
+                borderRight: 1,
+                flexGrow: 1,
+                borderColor: "black",
+              }}
+            >
+              <Text style={styles.thead}>Grade</Text>
             </View>
             <View
               style={{
-                borderBottom: 1,
-                borderTop: 1,
-                borderColor: "black",
                 display: "flex",
-                flexDirection: "row",
-                width: "100%",
+                flexDirection: "column",
+                alignItems: "center",
+                borderRight: 1,
+                borderColor: "black",
+                width: 100,
               }}
             >
               <View
                 style={{
                   display: "flex",
-                  flexDirection: "row",
+                  flexDirection: "column",
                   alignItems: "center",
                   padding: 5,
-                  borderRight: 1,
+                }}
+              >
+                <Text style={styles.thead}>Existing</Text>
+              </View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
                   flexGrow: 1,
+                  width: "100%",
+                  borderTop: 1,
                   borderColor: "black",
                 }}
               >
-                <Text style={styles.thead}>Grade</Text>
+                <Text style={styles.thead}>Aug-24</Text>
               </View>
+            </View>
+
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                borderRight: 1,
+                borderColor: "black",
+                width: 200,
+              }}
+            >
               <View
                 style={{
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  borderRight: 1,
-                  borderColor: "black",
-                  width: 100,
+                  padding: 5,
                 }}
               >
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    padding: 5,
-                  }}
-                >
-                  <Text style={styles.thead}>Existing</Text>
-                </View>
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexGrow: 1,
-                    width: "100%",
-                    borderTop: 1,
-                    borderColor: "black",
-                  }}
-                >
-                  <Text style={styles.thead}>Aug-24</Text>
-                </View>
+                <Text style={styles.thead}>2025 BUDGET (Sep24-Aug25)</Text>
               </View>
 
               <View
                 style={{
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "row",
                   alignItems: "center",
-                  borderRight: 1,
-                  borderColor: "black",
                   width: 200,
+                  borderTop: 1,
+                  borderColor: "black",
                 }}
               >
                 <View
@@ -389,193 +411,174 @@ export const MyDocument = () => (
                     flexDirection: "column",
                     alignItems: "center",
                     padding: 5,
-                  }}
-                >
-                  <Text style={styles.thead}>2025 BUDGET (Sep24-Aug25)</Text>
-                </View>
-
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    width: 200,
-                    borderTop: 1,
+                    borderRight: 1,
+                    width: 100,
                     borderColor: "black",
                   }}
                 >
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      padding: 5,
-                      borderRight: 1,
-                      width: 100,
-                      borderColor: "black",
-                    }}
-                  >
-                    <Text style={styles.thead}>Promote</Text>
-                  </View>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      width: 100,
-                      borderColor: "black",
-                    }}
-                  >
-                    <Text style={styles.thead}>Recruit</Text>
-                  </View>
+                  <Text style={styles.thead}>Promote</Text>
                 </View>
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  borderColor: "black",
-                  width: 100,
-                }}
-              >
                 <View
                   style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    padding: 5,
+                    width: 100,
+                    borderColor: "black",
                   }}
                 >
-                  <Text style={styles.thead}>TOTAL</Text>
-                </View>
-
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={styles.thead}>2024/2025</Text>
+                  <Text style={styles.thead}>Recruit</Text>
                 </View>
               </View>
             </View>
-            {/* ROW */}
-            <Row col1=" " />
-            <Row
-              col1="Executives"
-              styleText={{ textDecoration: "underline" }}
-            />
-            <Row
-              styleText={{
-                fontWeight: "light",
-                fontFamily: "roboto-light",
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                borderColor: "black",
+                width: 100,
               }}
-              col1="Gol. 7"
-              col2="1"
-              col3="2"
-              col4="2"
-              col5="2"
-            />
-            <Row
-              styleText={{
-                fontWeight: "light",
-                fontFamily: "roboto-light",
-              }}
-              col1="Gol. 6"
-              col2="1"
-              col3="2"
-              col4="2"
-              col5="2"
-            />
-            <Row
-              styleText={{
-                fontWeight: "light",
-                fontFamily: "roboto-light",
-              }}
-              col1="Gol. 5"
-              col2="1"
-              col3="2"
-              col4="2"
-              col5="2"
-            />
-            <Row
-              styleText={{
-                fontWeight: "light",
-                fontFamily: "roboto-light",
-              }}
-              col1="Gol. 4"
-              col2="1"
-              col3="2"
-              col4="2"
-              col5="2"
-            />
-            <Row
-              footer={true}
-              col1="Sub - Total ="
-              col2="1"
-              col3="2"
-              col4="2"
-              col5="2"
-            />
-            <Row
-              col1="Non - Executives"
-              styleText={{ textDecoration: "underline" }}
-            />
-            <Row
-              styleText={{
-                fontWeight: "light",
-                fontFamily: "roboto-light",
-              }}
-              col1="Gol. 3"
-              col2="1"
-              col3="2"
-              col4="2"
-              col5="2"
-            />
-            <Row
-              styleText={{
-                fontWeight: "light",
-                fontFamily: "roboto-light",
-              }}
-              col1="Gol. 2"
-              col2="1"
-              col3="2"
-              col4="2"
-              col5="2"
-            />{" "}
-            <Row
-              styleText={{
-                fontWeight: "light",
-                fontFamily: "roboto-light",
-              }}
-              col1="Gol. 1"
-              col2="1"
-              col3="2"
-              col4="2"
-              col5="2"
-            />
-            <Row
-              footer={true}
-              col1="Sub - Total ="
-              col2="1"
-              col3="2"
-              col4="2"
-              col5="2"
-            />
-            <Row
-              hideBorder={true}
-              footer={true}
-              col1="TOTAL ="
-              col2="1"
-              col3="2"
-              col4="2"
-              col5="2"
-            />
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  padding: 5,
+                }}
+              >
+                <Text style={styles.thead}>TOTAL</Text>
+              </View>
+
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.thead}>2024/2025</Text>
+              </View>
+            </View>
           </View>
+          {/* ROW */}
+          <Row col1=" " />
+          <Row
+            col1="Executives"
+            styleText={{ textDecoration: "underline" }}
+          />
+          <Row
+            styleText={{
+              fontWeight: "light",
+              fontFamily: "roboto-light",
+            }}
+            col1="Gol. 7"
+            col2="1"
+            col3="2"
+            col4="2"
+            col5="2"
+          />
+          <Row
+            styleText={{
+              fontWeight: "light",
+              fontFamily: "roboto-light",
+            }}
+            col1="Gol. 6"
+            col2="1"
+            col3="2"
+            col4="2"
+            col5="2"
+          />
+          <Row
+            styleText={{
+              fontWeight: "light",
+              fontFamily: "roboto-light",
+            }}
+            col1="Gol. 5"
+            col2="1"
+            col3="2"
+            col4="2"
+            col5="2"
+          />
+          <Row
+            styleText={{
+              fontWeight: "light",
+              fontFamily: "roboto-light",
+            }}
+            col1="Gol. 4"
+            col2="1"
+            col3="2"
+            col4="2"
+            col5="2"
+          />
+          <Row
+            footer={true}
+            col1="Sub - Total ="
+            col2="1"
+            col3="2"
+            col4="2"
+            col5="2"
+          />
+          <Row
+            col1="Non - Executives"
+            styleText={{ textDecoration: "underline" }}
+          />
+          <Row
+            styleText={{
+              fontWeight: "light",
+              fontFamily: "roboto-light",
+            }}
+            col1="Gol. 3"
+            col2="1"
+            col3="2"
+            col4="2"
+            col5="2"
+          />
+          <Row
+            styleText={{
+              fontWeight: "light",
+              fontFamily: "roboto-light",
+            }}
+            col1="Gol. 2"
+            col2="1"
+            col3="2"
+            col4="2"
+            col5="2"
+          />{" "}
+          <Row
+            styleText={{
+              fontWeight: "light",
+              fontFamily: "roboto-light",
+            }}
+            col1="Gol. 1"
+            col2="1"
+            col3="2"
+            col4="2"
+            col5="2"
+          />
+          <Row
+            footer={true}
+            col1="Sub - Total ="
+            col2="1"
+            col3="2"
+            col4="2"
+            col5="2"
+          />
+          <Row
+            hideBorder={true}
+            footer={true}
+            col1="TOTAL ="
+            col2="1"
+            col3="2"
+            col4="2"
+            col5="2"
+          />
         </View>
       </View>
-    </Page>
-  </Document>
-);
+    </View>
+  </Page>
+</Document>;
+};
+
+export default MyDocument
