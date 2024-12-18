@@ -107,12 +107,16 @@ export const AlertCeoReject: FC<any> = () => {
                       return (
                         <div className="flex flex-col gap-y-2 flex-grow pl-6 max-h-[250px] overflow-y-scroll">
                           {local.organization.map((item) => {
-                            const fm_row = cloneFM(fm, { id: item.id });
                             const is_check = fm.data?.organization?.length
                               ? fm.data.organization.find(
                                   (org: any) => org?.id === item.id
                                 )
                               : false;
+                              const data = fm.data?.organization?.length
+                              ? fm.data.organization.find(
+                                  (org: any) => org?.id === item.id
+                                )
+                              : {};
                             return (
                               <div
                                 className="flex flex-col"
@@ -130,7 +134,7 @@ export const AlertCeoReject: FC<any> = () => {
                                           fm.render();
                                         }
                                         // Jika checkbox dicentang, tambahkan item ke array organization
-                                        fm.data.organization.push(fm_row.data);
+                                        fm.data.organization.push({id: item.id});
                                       } else {
                                         // Jika checkbox tidak dicentang, hapus item dari array organization
                                         fm.data["organization"] = fm.data
@@ -153,7 +157,7 @@ export const AlertCeoReject: FC<any> = () => {
                                 {is_check ? (
                                   <div className="pt-1 pb-3">
                                     <Field
-                                      fm={fm_row}
+                                      fm={cloneFM(fm, data)}
                                       hidden_label={true}
                                       name={"notes"}
                                       label={"Organization"}

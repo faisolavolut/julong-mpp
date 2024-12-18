@@ -52,6 +52,7 @@ export const TypeInput: React.FC<any> = ({
             placeholder={placeholder || ""}
             value={value}
             onChange={(ev) => {
+              console.log("MASUK ?")
               fm.data[name] = ev.currentTarget.value;
               fm.render();
 
