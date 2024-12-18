@@ -455,14 +455,14 @@ function Page() {
                       className={"bg-primary"}
                       onClick={async () => {
                         const data = fm.data;
-                        fm.data.status = "NEED_APPROVAL"
+                        fm.data.status = "NEED APPROVAL"
                         fm.render();
                         const param = {
                           id: id,
                           approver_id: get_user("employee.id"),
                           approved_by: get_user("employee.name"),
                           level: "Level HRD Unit",
-                          status: "NEED_APPROVAL",
+                          status: "NEED APPROVAL",
                         };
                         const formData = new FormData();
                         formData.append("payload", JSON.stringify(param));
