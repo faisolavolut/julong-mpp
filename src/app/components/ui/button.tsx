@@ -15,6 +15,8 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-primary text-white shadow hover:bg-primary/90 active-menu-icon",
+          reject:
+            "bg-red-500 text-white shadow hover:bg-red-500 active-menu-icon",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:

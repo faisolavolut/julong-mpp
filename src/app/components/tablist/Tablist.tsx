@@ -37,6 +37,7 @@ export const Tablist: React.FC<any> = ({
   take = 20,
   header,
   tabContent,
+  disabledPagination
 }) => {
   const sideRight =
     typeof header?.sideRight === "function" ? header.sideRight : null;
@@ -93,15 +94,13 @@ export const Tablist: React.FC<any> = ({
         defaultValue={onValue(local.data?.[0])}
       >
         <TabsList className="flex flex-row flex-grow relative w-full bg-gray-50 p-0 rounded-none">
-          <TabSlider className=" ">
+          <TabSlider className=" " disabledPagination={disabledPagination}>
             {local.data.map((e, idx) => {
-              // return <div>
-              //     {onLabel(e)}</div>
               return (
                 <TabsTrigger
                   value={onValue(e)}
                   className={cx(
-                    "p-1.5 px-4 border ",
+                    "p-1.5 px-4 border text-sm",
                     css`
                         z-index: -1;
                     `,
@@ -109,8 +108,6 @@ export const Tablist: React.FC<any> = ({
                   )}
                   key={onValue(e)}
                 >
-                  {/* <b className="left-curve"></b>
-                  <b className="right-curve"></b> */}
 
                   {onLabel(e)}
                 </TabsTrigger>

@@ -21,6 +21,8 @@ export const configMenu = [
     children: [
       { title: "Period", href: "/d/mpp/period" },
       { title: "Manpower Planning Overview", href: "/d/location" },
+      { title: "Batch", href: "/d/batch" },
+      { title: "Batch", href: "/d/batch-ceo" },
     ],
   },
   {
