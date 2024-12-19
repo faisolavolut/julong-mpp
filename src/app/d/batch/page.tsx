@@ -146,7 +146,8 @@ function Page() {
                       ]}
                       onLoad={async (param: any) => {
                         const addtional = {
-                          ...param
+                          ...param,
+          status: "APPROVED"
                         }
                         const params = await events("onload-param", addtional);
                         console.log(params)

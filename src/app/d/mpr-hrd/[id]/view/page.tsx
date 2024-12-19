@@ -5,6 +5,14 @@ import { FormBetter } from "@/app/components/form/FormBetter";
 import { TableList } from "@/app/components/tablelist/TableList";
 import { Tablist } from "@/app/components/tablist/Tablist";
 import { Alert } from "@/app/components/ui/alert";
+import {
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/app/components/ui/alert-dialog";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
 import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
 import {
@@ -76,12 +84,70 @@ function Page() {
             {showApprovel(fm.data, local.permission) && (
               <div className="flex flex-row space-x-2">
                 <Alert
-                  type={"delete"}
-                  onClick={() => {
-                    fm.data.hrd_ho_unit = get_user("employee.id");
-                    fm.submit();
-                    fm.submit();
-                  }}
+                  type={"save"}
+                  content={
+                    <>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          update your request from our servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <Form
+                        onSubmit={async (fm: any) => {}}
+                        onLoad={async () => {
+                          return {
+                            id,
+                          };
+                        }}
+                        showResize={false}
+                        header={(fm: any) => {
+                          return <></>;
+                        }}
+                        children={(fm: any) => {
+                          return (
+                            <>
+                              <div className={cx("flex flex-col flex-wrap")}>
+                                <div className="grid gap-4 mb-4 grid-cols-1">
+                                  <div>
+                                    <Field
+                                      fm={fm}
+                                      name={"notes"}
+                                      label={"Notes"}
+                                      type={"textarea"}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </>
+                          );
+                        }}
+                        onFooter={(fm: any) => {
+                          return (
+                            <div
+                              className={cx("")}
+                            >
+
+                              <AlertDialogFooter className="pt-1">
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className={"bg-red-500 text-white"}
+                                  onClick={() => {
+                                    fm.submit();
+                                  }}
+                                >
+                                  Reject
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </div>
+                          );
+                        }}
+                      />
+                    </>
+                  }
                 >
                   <ButtonContainer className={"bg-red-500"}>
                     <IoMdSave className="text-xl" />
@@ -92,8 +158,12 @@ function Page() {
                 <Alert
                   type={"delete"}
                   onClick={() => {
-                    fm.data.hrd_ho_unit = get_user("employee.id");
-                    fm.submit();
+                    const data = showApprovel(
+                      fm.data,
+                      local.permission,
+                      "approve"
+                    );
+                    console.log({ data });
                   }}
                 >
                   <ButtonContainer className={"bg-primary"}>

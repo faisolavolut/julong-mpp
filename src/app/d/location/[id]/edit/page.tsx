@@ -531,13 +531,15 @@ function Page() {
             },
           }
         );
-        const deleted_line_ids = data?.deleted_line_ids?.length ? data.deleted_line_ids : []
+        const deleted_line_ids = data?.deleted_line_ids?.length
+          ? data.deleted_line_ids
+          : [];
         await api.post(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/lines/batch/store`,
           {
             mp_planning_header_id: data.id,
             mp_planning_lines: document_line,
-            deleted_line_ids
+            deleted_line_ids,
           }
         );
       }}
@@ -881,8 +883,14 @@ function Page() {
                                 const existing = item.data.existing;
                                 fm_row.data.existing = existing;
                                 fm.render();
+                                console.log({
+                                  plafon: getNumber(fm.data.plafon),
+                                  existing: existing,
+                                  turn_over: fm.data.turn_over,
+                                  promotion: getNumber(fm_row.data.promotion),
+                                });
                                 const suggested_recruit =
-                                  getNumber(fm.data.plafon) +
+                                  getNumber(fm.data.plafon) -
                                   getNumber(existing) +
                                   getNumber(fm.data.turn_over) +
                                   getNumber(fm_row.data.promotion);
@@ -1082,7 +1090,7 @@ function Page() {
                                 fm.render();
 
                                 const suggested_recruit =
-                                  getNumber(fm.data.plafon) +
+                                  getNumber(fm.data.plafon) -
                                   getNumber(fm_row.data.existing) +
                                   getNumber(fm.data.turn_over) +
                                   getNumber(fm_row.data.promotion);
@@ -1130,11 +1138,15 @@ function Page() {
                             <ButtonBetter
                               className="bg-red-500"
                               onClick={() => {
-                                const deleted_line_ids: any[] = Array.isArray(fm.data?.deleted_line_ids) ? fm.data?.deleted_line_ids : []
-                                if(row?.id){
-                                  deleted_line_ids.push(row.id)
+                                const deleted_line_ids: any[] = Array.isArray(
+                                  fm.data?.deleted_line_ids
+                                )
+                                  ? fm.data?.deleted_line_ids
+                                  : [];
+                                if (row?.id) {
+                                  deleted_line_ids.push(row.id);
                                 }
-                                fm.data["deleted_line_ids"] = deleted_line_ids
+                                fm.data["deleted_line_ids"] = deleted_line_ids;
                                 tbl.removeRow(row);
                                 fm.data.document_line =
                                   fm.data.document_line.filter(
