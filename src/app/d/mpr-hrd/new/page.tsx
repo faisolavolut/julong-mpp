@@ -269,7 +269,7 @@ function Page() {
                     onChange={() => {
                       const lines = fm.data?.lines || [];
                       const jobs =
-                        lines.find((x) => x?.job_id === fm.data?.job_id) ||
+                        lines.find((x: any) => x?.job_id === fm.data?.job_id) ||
                         null;
                       const remaining_balance =
                         fm.data.recruitment_type === "MT_Management Trainee"
@@ -387,7 +387,7 @@ function Page() {
                       fm.data["job_level_id"] = e.data?.job_level.id;
                       const lines = fm.data?.lines || [];
                       const jobs =
-                        lines.find((x) => x?.job_id === fm.data?.job_id) ||
+                        lines.find((x: any) => x?.job_id === fm.data?.job_id) ||
                         null;
                       const remaining_balance =
                         fm.data.recruitment_type === "MT_Management Trainee"
