@@ -8,6 +8,7 @@ import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
 import { accessMe, getAccess, userRoleMe } from "@/lib/getAccess";
+import { getNumber } from "@/lib/getNumber";
 import { getValue } from "@/lib/getValue";
 import { useLocal } from "@/lib/use-local";
 import { Button } from "flowbite-react";
@@ -25,23 +26,35 @@ function Page() {
   const local = useLocal({
     can_add: false,
     can_edit: false,
+    location_null: 0,
+    batch_lines: [] as string[]
   });
   useEffect(() => {
     const run = async () => {
       const roles = await userRoleMe();
       const access = getAccess("create-mpp", roles);
       if (access) {
-        
         const addtional = {
-          status: "APPROVED"
-        }
+          status: "APPROVED",
+          paging:1,
+          take: 1000
+        };
         const params = await events("onload-param", addtional);
-        console.log(params)
+        console.log(params);
         const res: any = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` +
-            params
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` + params
         );
         if (res?.data?.data?.organization_locations?.length) {
+          console.log(res?.data?.data?.organization_locations);
+          const location_null = res?.data?.data?.organization_locations.filter(
+            (e: any) => !e?.mp_planning_header
+          );
+          
+          const document_line = res?.data?.data?.organization_locations.filter(
+            (e: any) => e?.mp_planning_header
+          );
+          local.batch_lines = document_line.map((e: any) => e?.mp_planning_header?.id)
+          local.location_null = getNumber(location_null?.length);
           local.can_add = true;
         }
       }
@@ -60,7 +73,7 @@ function Page() {
       </div>
       <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
         <Tablist
-        disabledPagination={true}
+          disabledPagination={true}
           take={100}
           onLabel={(row: any) => {
             return row.name;
@@ -78,11 +91,7 @@ function Page() {
             return (
               <>
                 <div className="w-full flex flex-row flex-grow">
-                  <div
-                    className={cx(
-                      "flex flex-grow flex-col h-[350px]",
-                    )}
-                  >
+                  <div className={cx("flex flex-grow flex-col h-[350px]")}>
                     <TableList
                       name="Location"
                       header={{
@@ -90,7 +99,7 @@ function Page() {
                           if (!local.can_add) return <></>;
                           return (
                             <>
-                            <AlertBatch/>
+                              <AlertBatch local={local}/>
                             </>
                           );
                         },
@@ -147,15 +156,15 @@ function Page() {
                       onLoad={async (param: any) => {
                         const addtional = {
                           ...param,
-          status: "APPROVED"
-                        }
+                          status: "APPROVED",
+                        };
                         const params = await events("onload-param", addtional);
-                        console.log(params)
                         const res: any = await api.get(
                           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` +
                             params
                         );
-                        const data: any[] = res.data.data.organization_locations;
+                        const data: any[] =
+                          res.data.data.organization_locations;
                         if (!Array.isArray(data)) return [];
                         return data || [];
                       }}

@@ -833,10 +833,7 @@ function Page() {
                                   fm.data?.status === "REJECTED"
                                 )
                               }
-                              onChange={() => {
-                                // console.log({ data: fm_row.data });
-                                // tbl.renderRow(fm_row.data);
-                              }}
+                              onChange={() => {}}
                               onLoad={async () => {
                                 const res: any = await api.get(
                                   `${process.env.NEXT_PUBLIC_API_PORTAL}/api/job-levels/organization/${fm.data.organization_id}`
@@ -911,13 +908,26 @@ function Page() {
                                 );
                                 const data: any[] = res.data.data;
                                 if (!Array.isArray(data)) return [];
-                                const result = data.map((e) => {
+                                let result = data.map((e) => {
                                   return {
                                     value: e.id,
                                     label: `${e.name}`,
                                     data: e,
                                   };
                                 });
+
+                                if (fm.data?.document_line?.length) {
+                                  let ids = fm.data.document_line.map(
+                                    (e: any) => e.job_id
+                                  );
+                                  ids = ids.filter(
+                                    (e: any) => e !== fm_row?.data?.job_id
+                                  );
+                                  console.log({ids})
+                                  result = result.filter(
+                                    (e) => !ids.includes(e.value)
+                                  );
+                                }
                                 return result || [];
                               }}
                             />
@@ -1128,10 +1138,7 @@ function Page() {
                       header: () => <span>Action</span>,
                       sortable: false,
                       renderCell: ({ row, name, cell, tbl }: any) => {
-                        if (
-                          fm.data?.status !== "DRAFTED" ||
-                          fm.data?.status !== "REJECTED"
-                        )
+                        if (!["DRAFTED", "REJECTED"].includes(fm.data?.status))
                           return <></>;
                         return (
                           <div className="flex items-center gap-x-0.5 whitespace-nowrap">

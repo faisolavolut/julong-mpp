@@ -121,7 +121,7 @@ export const TableList: React.FC<any> = ({
         const res: any = onLoad({
           search: local.search,
           sort: local.sort,
-          take: 10,
+          take,
           paging: 1,
         });
         if (res instanceof Promise) {
@@ -178,7 +178,7 @@ export const TableList: React.FC<any> = ({
       const res: any = onLoad({
         search: local.search,
         sort: local.sort,
-        take: 10,
+        take,
         paging: 1,
       });
       if (res instanceof Promise) {
@@ -230,7 +230,7 @@ export const TableList: React.FC<any> = ({
     state: {
       pagination: {
         pageIndex: 0,
-        pageSize: take,
+        pageSize: 20,
       },
       sorting,
     },
