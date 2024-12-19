@@ -6,6 +6,7 @@ import { Badge } from "../../ui/badge";
 import { GoChevronDown } from "react-icons/go";
 import { IoCloseOutline } from "react-icons/io5";
 import { X } from "lucide-react";
+import uniqBy from "lodash.uniqby";
 
 type OptItem = { value: string; label: string; tag?: string };
 
@@ -311,7 +312,7 @@ export const Typeahead: FC<{
     }
   }
 
-  const valueLabel = local.value?.map((value) => {
+  const valueLabel =  uniqBy(local.value?.map((value) => {
     if (local.mode === "single") {
       const item = options.find((item) => item.value === value);
 
@@ -325,7 +326,8 @@ export const Typeahead: FC<{
 
     const item = local.options.find((e) => e.value === value);
     return item;
-  });
+  }), "value")
+  ;
 
   let inputval = local.search.input;
 
@@ -342,7 +344,7 @@ export const Typeahead: FC<{
       <div
         className={cx(
           local.mode === "single" ? "cursor-pointer" : "cursor-text",
-          "text-black flex relative flex-wrap py-0 items-center w-full h-full flex-1",
+          "text-black flex relative flex-wrap py-0 items-center w-full h-full flex-1 rounded-md border border-gray-300 overflow-hidden ",
           className
         )}
         onClick={() => {
@@ -433,6 +435,7 @@ export const Typeahead: FC<{
           width={
             local.auto_popup_width ? input.current?.offsetWidth : undefined
           }
+          isMulti={local.mode === "multi"}
           selected={({ item, options, idx }) => {
             if (item.value === local.select?.value) {
               return true;
@@ -550,7 +553,7 @@ export const Typeahead: FC<{
               disabled={!disabled ? disabledSearch : disabled}
               spellCheck={false}
               className={cx(
-                "text-black flex h-9 w-full rounded-md border border-gray-300 border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm",
+                "text-black flex h-9 w-full border-input bg-transparent px-3 py-1 text-base border-none shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground md:text-sm focus:outline-none focus:ring-0",
                 local.mode === "single" ? "cursor-pointer" : ""
               )}
               style={{

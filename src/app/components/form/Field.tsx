@@ -23,20 +23,24 @@ export const Field: React.FC<any> = ({
   const is_disable = fm.mode === "view" ? true : disabled;
   const error = fm.error?.[name];
   useEffect(() => {
-    fm.fields[name] = {
-      label,
-      name,
-      onLoad,
-      type,
-      placeholder,
-      required,
-      disabled,
-      hidden_label,
-      onChange,
-      className,
-      style,
-    };
-    fm.render();
+    if (typeof fm.fields?.[name] !== "object") {
+      const fields = fm.fields?.[name];
+      fm.fields[name] = {
+        ...fields,
+        label,
+        name,
+        onLoad,
+        type,
+        placeholder,
+        required,
+        disabled,
+        hidden_label,
+        onChange,
+        className,
+        style,
+      };
+      fm.render();
+    }
   }, []);
   return (
     <>
@@ -62,7 +66,8 @@ export const Field: React.FC<any> = ({
           className={cx(
             error
               ? "flex flex-row rounded-md flex-grow border-red-500 border"
-              : "flex flex-row rounded-md flex-grow"
+              : "flex flex-row rounded-md flex-grow",
+            is_disable ? "bg-gray-100" : ""
           )}
         >
           {["upload"].includes(type) ? (
@@ -96,6 +101,19 @@ export const Field: React.FC<any> = ({
                 onChange={onChange}
               />
             </>
+          ) : ["multi-dropdown"].includes(type) ? (
+            <>
+              <TypeDropdown
+                fm={fm}
+                required={required}
+                name={name}
+                onLoad={onLoad}
+                placeholder={placeholder}
+                disabled={is_disable}
+                onChange={onChange}
+                mode="multi"
+              />
+            </>
           ) : ["checkbox"].includes(type) ? (
             <>
               <FieldCheckbox
@@ -106,6 +124,19 @@ export const Field: React.FC<any> = ({
                 disabled={is_disable}
                 on_change={onChange}
                 className={className}
+              />
+            </>
+          ) : ["single-checkbox"].includes(type) ? (
+            <>
+              <FieldCheckbox
+                fm={fm}
+                name={name}
+                onLoad={onLoad}
+                placeholder={placeholder}
+                disabled={is_disable}
+                on_change={onChange}
+                className={className}
+                mode="single"
               />
             </>
           ) : (

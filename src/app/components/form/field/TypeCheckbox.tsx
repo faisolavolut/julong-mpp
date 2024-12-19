@@ -10,16 +10,20 @@ export const FieldCheckbox: FC<any> = ({
   placeholder,
   disabled,
   className,
+  mode,
 }) => {
   const local = useLocal({
     list: [] as any[],
     reload: async () => {
+      fm.fields[name] = { ...fm.fields?.[name], ...local };
+      fm.render();
       const callback = (res: any[]) => {
         if (Array.isArray(res)) {
           local.list = res;
         } else {
           local.list = [];
         }
+
         local.render();
       };
       const res = onLoad();
@@ -28,7 +32,7 @@ export const FieldCheckbox: FC<any> = ({
     },
   });
   useEffect(() => {
-    fm.fields[name] = local;
+    fm.fields[name] = { ...fm.fields?.[name], ...local };
     const callback = (res: any[]) => {
       if (Array.isArray(res)) {
         local.list = res;
@@ -42,12 +46,23 @@ export const FieldCheckbox: FC<any> = ({
     else callback(res);
   }, []);
 
-  let value = fm.data?.[name];
+  let value =
+    mode === "single" && typeof fm.data?.[name] === "string"
+      ? [fm.data?.[name]]
+      : fm.data?.[name];
 
   let is_tree = false;
   const applyChanges = (selected: any[]) => {
     selected = selected.filter((e) => e);
-    fm.data[name] = selected.map((e) => e.value);
+    const val = selected.map((e) => e.value);
+    if (mode === "single") {
+      console.log(val)
+      selected = val?.[0];
+      
+      fm.data[name] = selected;
+    } else {
+      fm.data[name] = val;
+    }
     fm.render();
   };
   return (
@@ -82,7 +97,11 @@ export const FieldCheckbox: FC<any> = ({
                         (e: any) => e.value !== item.value
                       );
                     } else {
-                      selected.push(item);
+                      if (mode === "single") {
+                        selected = [item];
+                      } else {
+                        selected.push(item);
+                      }
                     }
                     applyChanges(selected);
                   }

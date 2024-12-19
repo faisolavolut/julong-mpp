@@ -30,6 +30,7 @@ function Page() {
                   <div className="flex flex-row">
                     <Popover
                       className="flex-1 rounded-md overflow-hidden"
+                      classNameTrigger= "w-full"
                       content={
                         <div
                           className={cx(

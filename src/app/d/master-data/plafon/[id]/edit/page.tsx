@@ -65,7 +65,7 @@ function Page() {
           job_id: data.job_id
         }
         const res: any = await api.put(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons/`, param
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons`, param
         );
         
       }}

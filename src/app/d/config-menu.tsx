@@ -29,8 +29,8 @@ export const configMenu = [
     title: "Manpower Request",
     icon: <RiTeamFill />    ,
     children: [
-      { title: "Manpower Request - HRD", href: "/d/mpr-hrd" },
-      { title: "Manpower Request - Rekruitment", href: "/d/mpr-rekruitment" },
+      { title: "Manpower Request", href: "/d/mpr-hrd" },
+      { title: "Manpower Request CEO", href: "/d/mpr-ceo" },
     ],
   },
 ];

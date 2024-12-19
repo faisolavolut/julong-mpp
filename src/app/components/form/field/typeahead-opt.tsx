@@ -20,6 +20,7 @@ export const TypeaheadOptions: FC<{
   searching?: boolean;
   searchText?: string;
   width?: number;
+  isMulti?: boolean
 }> = ({
   popup,
   children,
@@ -32,7 +33,7 @@ export const TypeaheadOptions: FC<{
   searching,
   searchText,
   showEmpty,
-  width,
+  width,isMulti
 }) => {
   if (!popup) return children;
   const local = useLocal({
@@ -118,6 +119,7 @@ export const TypeaheadOptions: FC<{
       arrow={false}
       onOpenChange={onOpenChange}
       backdrop={false}
+      classNameTrigger={!isMulti ? "w-full" : ""}
       placement="bottom-start"
       className="flex-1 rounded-md overflow-hidden"
       content={content}

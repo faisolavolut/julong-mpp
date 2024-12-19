@@ -330,6 +330,7 @@ const Datepicker: React.FC<DatepickerType> = ({
   return (
     <DatepickerContext.Provider value={contextValues}>
       <Popover
+      classNameTrigger={ "w-full"}
         arrow={false}
         className="rounded-md"
         onOpenChange={(open: any) => {

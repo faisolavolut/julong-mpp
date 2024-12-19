@@ -184,11 +184,13 @@ export function Popover({
   content,
   modal = false,
   className,
+  classNameTrigger,
   arrow,
   ...restOptions
 }: {
   root?: HTMLElement;
   className?: string;
+  classNameTrigger?: string;
   children: React.ReactNode;
   content?: React.ReactNode;
   arrow?: boolean;
@@ -201,7 +203,7 @@ export function Popover({
     <PopoverContext.Provider value={popover}>
       <PopoverTrigger
         asChild
-        className="w-full h-full cursor-pointer"
+        className={cx("h-full cursor-pointer", classNameTrigger)}
         onClick={
           typeof restOptions.open !== "undefined"
             ? () => {
