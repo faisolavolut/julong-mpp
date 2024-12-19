@@ -56,7 +56,6 @@ function Page() {
                       type={"save"}
                       onClick={() => {
                         const status = getStatus(fm.data.start_date, fm.data.end_date)
-                        // fm.data.status = status === "open" ? "open" : "not_open"
                         fm.data.status = "open"
                         fm.render()
                         fm.submit();

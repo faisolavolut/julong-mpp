@@ -68,28 +68,11 @@ function Page() {
       }}
       onSubmit={async (fm: any) => {
         const data = fm.data;
-        const param: any = {
-          mpp_period_id: data.mpp_period_id,
-          organization_id: data.organization_id,
-          emp_organization_id: data.organization_id,
-          job_id: data.job_id,
-          document_number: data.document_number,
-          document_date: normalDate(data.document_date),
-          notes: data.notes,
-          total_recruit: 0,
-          total_promote: 0,
-          status: "DRAFTED",
-          recommended_by: null,
-          approved_by: null,
-          requestor_id: data.requestor_id,
-          organization_location_id: data.organization_location_id,
-        };
         const prm: any = {
           document_number: data.document_number,
           document_date: normalDate(data.document_date),
           mpp_period_id: data.mpp_period_id,
           recruitment_type: data.recruitment_type,
-
           for_organization_id: data.for_organization_id,
           organization_id: data.for_organization_id,
           emp_organization_id: data.emp_organization_id,
@@ -131,7 +114,6 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests`,
           prm
         );
-        console.log({ res });
       }}
       onLoad={async () => {
         const document_number = await api.get(
@@ -154,7 +136,6 @@ function Page() {
         );
         let categories = [] as any[];
         const data: any[] = ctg.data?.data;
-        console.log({data, ctg})
         if (!Array.isArray(data)) categories = [];
         categories = data.map((e) => {
           return {

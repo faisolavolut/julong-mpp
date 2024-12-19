@@ -1,6 +1,6 @@
 "use client";
 import { useLocal } from "@/lib/use-local";
-import { Check, Loader2 } from "lucide-react";
+import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -32,42 +32,61 @@ export const Form: React.FC<any> = ({
     submit: async () => {
       toast.info(
         <>
-          <Loader2 
-          className={cx(
-            "h-4 w-4 animate-spin-important",
-            css`
-              animation: spin 1s linear infinite !important;
-              @keyframes spin {
-                0% {
-                  transform: rotate(0deg);
+          <Loader2
+            className={cx(
+              "h-4 w-4 animate-spin-important",
+              css`
+                animation: spin 1s linear infinite !important;
+                @keyframes spin {
+                  0% {
+                    transform: rotate(0deg);
+                  }
+                  100% {
+                    transform: rotate(360deg);
+                  }
                 }
-                100% {
-                  transform: rotate(360deg);
-                }
-              }
-            `
-          )} />
+              `
+            )}
+          />
           {"Saving..."}
         </>
       );
-      await onSubmit(local);
-      setTimeout(() => {
-        toast.success(
-          <div
-            className={cx(
-              "cursor-pointer flex flex-col select-none items-stretch flex-1 w-full"
-            )}
-            onClick={() => {
-              toast.dismiss();
-            }}
-          >
-            <div className="flex text-green-700 items-center success-title font-semibold">
-              <Check className="h-6 w-6 mr-1 " />
-              Record Saved
+      try {
+        await onSubmit(local);
+        setTimeout(() => {
+          toast.success(
+            <div
+              className={cx(
+                "cursor-pointer flex flex-col select-none items-stretch flex-1 w-full"
+              )}
+              onClick={() => {
+                toast.dismiss();
+              }}
+            >
+              <div className="flex text-green-700 items-center success-title font-semibold">
+                <Check className="h-6 w-6 mr-1 " />
+                Record Saved
+              </div>
             </div>
-          </div>
+          );
+        }, 1000);
+      } catch (ex: any) {
+        toast.error(
+          <div className="flex flex-col w-full">
+            <div className="flex text-red-600 items-center">
+              <AlertTriangle className="h-4 w-4 mr-1" />
+              Submit Failed {ex.message}.
+            </div>
+          </div>,
+          {
+            dismissible: true,
+            className: css`
+              background: #ffecec;
+              border: 2px solid red;
+            `,
+          }
         );
-      }, 1000);
+      }
     },
     fields: {} as any,
     render: () => {},
@@ -82,7 +101,7 @@ export const Form: React.FC<any> = ({
     local.render();
     toast.info(
       <>
-        <Loader2 
+        <Loader2
           className={cx(
             "h-4 w-4 animate-spin-important",
             css`
@@ -96,7 +115,8 @@ export const Form: React.FC<any> = ({
                 }
               }
             `
-          )} />
+          )}
+        />
         {"Loading..."}
       </>
     );
@@ -116,7 +136,6 @@ export const Form: React.FC<any> = ({
       toast.dismiss();
       toast.success("Data Loaded Successfully!");
     }
-
   }, []);
 
   // Tambahkan dependency ke header agar reaktif

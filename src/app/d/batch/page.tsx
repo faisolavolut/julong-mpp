@@ -31,10 +31,17 @@ function Page() {
       const roles = await userRoleMe();
       const access = getAccess("create-mpp", roles);
       if (access) {
-        const res = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
+        
+        const addtional = {
+          status: "APPROVED"
+        }
+        const params = await events("onload-param", addtional);
+        console.log(params)
+        const res: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` +
+            params
         );
-        if (res?.data?.data) {
+        if (res?.data?.data?.organization_locations?.length) {
           local.can_add = true;
         }
       }
@@ -139,8 +146,7 @@ function Page() {
                       ]}
                       onLoad={async (param: any) => {
                         const addtional = {
-                          ...param,
-                          status: "APPROVED"
+                          ...param
                         }
                         const params = await events("onload-param", addtional);
                         console.log(params)

@@ -59,7 +59,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
             title="Google Tag Manager"
           ></iframe>
         </noscript>
-        <Toaster />
+        <Toaster position="top-right"/>
         {children}
         <Script />
       </body>
