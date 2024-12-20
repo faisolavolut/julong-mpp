@@ -312,23 +312,24 @@ export const Typeahead: FC<{
     }
   }
 
-  const valueLabel =  uniqBy(local.value?.map((value) => {
-    if (local.mode === "single") {
-      const item = options.find((item) => item.value === value);
+  const valueLabel = uniqBy(
+    local.value?.map((value) => {
+      if (local.mode === "single") {
+        const item = options.find((item) => item.value === value);
 
-      if (!local.open && !allow_new) {
-        local.select = item || null;
+        if (!local.open && !allow_new) {
+          local.select = item || null;
 
-        local.search.input = item?.tag || item?.label || "";
+          local.search.input = item?.tag || item?.label || "";
+        }
+        return item;
       }
+
+      const item = local.options.find((e) => e.value === value);
       return item;
-    }
-
-    const item = local.options.find((e) => e.value === value);
-    return item;
-  }), "value")
-  ;
-
+    }),
+    "value"
+  );
   let inputval = local.search.input;
 
   if (!local.open && local.mode === "single" && local.value?.length > 0) {
@@ -564,27 +565,27 @@ export const Typeahead: FC<{
           </div>
         </TypeaheadOptions>
       </div>
-      
+
       {local.mode === "single" && (
-          <>
-            <div
-              className={cx(
-                "typeahead-arrow absolute z-10 inset-0 left-auto flex items-center ",
-                " justify-center w-6 mr-1 my-2 bg-transparant",
-                disabled ? "hidden" : "cursor-pointer"
-              )}
-              onClick={() => {
-                console.log(!disabled);
-                if (!disabled) {
-                  local.value = [];
-                  local.render();
-                }
-              }}
-            >
-              {inputval ? <X size={14} /> : <GoChevronDown size={14} />}
-            </div>
-          </>
-        )}
+        <>
+          <div
+            className={cx(
+              "typeahead-arrow absolute z-10 inset-0 left-auto flex items-center ",
+              " justify-center w-6 mr-1 my-2 bg-transparant",
+              disabled ? "hidden" : "cursor-pointer"
+            )}
+            onClick={() => {
+              if (!disabled) {
+                local.value = [];
+                local.render();
+                if (typeof onChange === "function") onChange(local.value);
+              }
+            }}
+          >
+            {inputval ? <X size={14} /> : <GoChevronDown size={14} />}
+          </div>
+        </>
+      )}
     </div>
   );
 };
