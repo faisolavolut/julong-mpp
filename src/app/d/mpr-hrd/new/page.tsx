@@ -114,6 +114,8 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests`,
           prm
         );
+        
+        navigate("/d/mpr-hrd/"+res.data?.data?.id+"/edit")
       }}
       onLoad={async () => {
         const document_number = await api.get(

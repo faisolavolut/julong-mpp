@@ -23,6 +23,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/app/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/app/components/ui/dialog";
+import { PreviewImagePopup } from "@/app/components/ui/previewImage";
 import api from "@/lib/axios";
 import { cloneFM } from "@/lib/cloneFm";
 import { showApprovel } from "@/lib/conditionalMPR";
@@ -32,13 +41,17 @@ import { getParams } from "@/lib/get-params";
 import { get_user } from "@/lib/get_user";
 import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getNumber } from "@/lib/getNumber";
+import { getValue } from "@/lib/getValue";
+import { isStringEmpty } from "@/lib/isStringEmpty";
 import { useLocal } from "@/lib/use-local";
 import { Breadcrumb, Button } from "flowbite-react";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, X } from "lucide-react";
 import { permission } from "process";
 import { useEffect } from "react";
+import { FiInfo } from "react-icons/fi";
 import { GoInfo } from "react-icons/go";
 import { IoMdSave } from "react-icons/io";
+import { IoEye } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { toast } from "sonner";
 
@@ -84,192 +97,473 @@ function Page() {
                 ]}
               />
             </div>
-            {showApprovel(fm.data, local.permission) && (
-              <div className="flex flex-row space-x-2">
+            <div className="flex flex-row space-x-2">
+              {fm.data?.history?.length && (
                 <Alert
+                  className={"max-w-3xl"}
                   type={"save"}
                   content={
                     <>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
+                      <AlertDialogHeader className="flex flex-row items-center">
+                        <AlertDialogTitle className="flex-grow">
+                          History Notes
                         </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          update your request from our servers.
-                        </AlertDialogDescription>
+
+                        <AlertDialogCancel className="m-0 p-1 h-auto">
+                          <X className="h-4 w-4" />
+                        </AlertDialogCancel>
                       </AlertDialogHeader>
-                      <Form
-                        onSubmit={async (fm: any) => {
-                          const data = showApprovel(
-                            parent_fm.data,
-                            local.permission,
-                            "reject"
-                          );
-                          const param = {
-                            id,
-                            status: data.approve,
-                            level: data.level,
-                            notes: fm.data.notes,
-                            approver_id: get_user("employee.id"),
-                            approved_by: get_user("employee.name"),
-                          };
-                          console.log(param)
-                          return false
-                          try {
-                            const formData = new FormData();
 
-                            // Menambahkan data param ke FormData
-                            formData.append("payload", JSON.stringify(param));
-
-                            const res: any = await api.put(
-                              `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/status`,
-                              formData,
-                              {
-                                headers: {
-                                  "Content-Type": "multipart/form-data",
-                                },
-                              }
-                            );
-                            parent_fm.data.status = data.approve;
-                            parent_fm.render();
-                          } catch (ex: any) {
-                            toast.error(
-                              <div className="flex flex-col w-full">
-                                <div className="flex text-red-600 items-center">
-                                  <AlertTriangle className="h-4 w-4 mr-1" />
-                                  Failed {ex.message}.
-                                </div>
-                              </div>,
-                              {
-                                dismissible: true,
-                                className: css`
-                                  background: #ffecec;
-                                  border: 2px solid red;
-                                `,
-                              }
-                            );
-                          }
-                        }}
-                        onLoad={async () => {
-                          return {
-                            id,
-                          };
-                        }}
-                        showResize={false}
-                        header={(fm: any) => {
-                          return <></>;
-                        }}
-                        children={(fm: any) => {
-                          return (
-                            <>
-                              <div className={cx("flex flex-col flex-wrap")}>
-                                <div className="grid gap-4 mb-4 grid-cols-1">
-                                  <div>
-                                    <Field
-                                      fm={fm}
-                                      name={"notes"}
-                                      label={"Notes"}
-                                      type={"textarea"}
-                                    />
+                      <div
+                        className={cx(
+                          "h-[300px] flex flex-col",
+                          css`
+                            .tbl-search {
+                              display: none !important;
+                            }
+                            .head-tbl-list {
+                              display: none;
+                            }
+                            .tbl-pagination {
+                              display: none !important;
+                            }
+                          `
+                        )}
+                      >
+                        <TableList
+                          disabledPagination={true}
+                          header={{
+                            sideLeft: (tbl: any) => {
+                              return <></>;
+                            },
+                            sideRight: (tbl: any) => {
+                              return <></>;
+                            },
+                          }}
+                          column={[
+                            {
+                              name: "approver_name",
+                              header: () => <span>Sender</span>,
+                              renderCell: ({ row, name, cell, tbl }: any) => {
+                                return <>{getValue(row, name)}</>;
+                              },
+                            },
+                            {
+                              name: "status",
+                              header: () => <span>Status</span>,
+                              renderCell: ({ row, name, cell, tbl }: any) => {
+                                return (
+                                  <div className="uppercase">
+                                    {getValue(row, name)}
                                   </div>
-                                </div>
-                              </div>
-                            </>
-                          );
-                        }}
-                        onFooter={(fm: any) => {
-                          return (
-                            <div className={cx("")}>
-                              <AlertDialogFooter className="pt-1">
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  className={"bg-red-500 text-white"}
-                                  onClick={() => {
-                                    fm.submit();
-                                  }}
-                                >
-                                  Reject
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </div>
-                          );
-                        }}
-                      />
+                                );
+                              },
+                            },
+                            {
+                              name: "created_at",
+                              header: () => <span>Datetime</span>,
+                              renderCell: ({ row, name, cell, tbl }: any) => {
+                                return <>{shortDate(getValue(row, name))}</>;
+                              },
+                            },
+                            {
+                              name: "notes",
+                              header: () => <span>Notes</span>,
+                              renderCell: ({ row, name, cell, tbl }: any) => {
+                                return (
+                                  <div className="uppercase">
+                                    {getValue(row, name)}
+                                  </div>
+                                );
+                              },
+                            },
+
+                            {
+                              name: "action",
+                              header: () => <span>Action</span>,
+                              sortable: false,
+                              renderCell: ({ row, name, cell }: any) => {
+                                if (!row?.attachments?.length) return <></>;
+                                return (
+                                  <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                                    <Dialog>
+                                      <DialogTrigger asChild>
+                                        <div>
+                                          <ButtonContainer variant={"outline"}>
+                                            <div className="flex items-center gap-x-2">
+                                              <IoEye className="text-lg" />
+                                            </div>
+                                          </ButtonContainer>
+                                        </div>
+                                      </DialogTrigger>
+                                      <DialogContent className="max-w-5xl  flex flex-col">
+                                        <DialogHeader>
+                                          <DialogTitle>List File</DialogTitle>
+                                          <DialogDescription className="hidden"></DialogDescription>
+                                        </DialogHeader>
+                                        <div className="flex items-center flex-row space-x-2 flex-grow">
+                                          <div
+                                            className={cx(
+                                              "h-[300px] flex flex-col flex-grow",
+                                              css`
+                                                .tbl-search {
+                                                  display: none !important;
+                                                }
+                                                .head-tbl-list {
+                                                  display: none;
+                                                }
+                                                .tbl-pagination {
+                                                  display: none !important;
+                                                }
+                                              `
+                                            )}
+                                          >
+                                            <TableList
+                                              disabledPagination={true}
+                                              header={{
+                                                sideLeft: (tbl: any) => {
+                                                  return <></>;
+                                                },
+                                                sideRight: (tbl: any) => {
+                                                  return <></>;
+                                                },
+                                              }}
+                                              column={[
+                                                {
+                                                  name: "file_name",
+                                                  header: () => (
+                                                    <span>Filename</span>
+                                                  ),
+                                                  renderCell: ({
+                                                    row,
+                                                    name,
+                                                    cell,
+                                                    tbl,
+                                                  }: any) => {
+                                                    return (
+                                                      <>{getValue(row, name)}</>
+                                                    );
+                                                  },
+                                                },
+                                                {
+                                                  name: "action",
+                                                  header: () => (
+                                                    <span>Action</span>
+                                                  ),
+                                                  sortable: false,
+                                                  renderCell: ({
+                                                    row,
+                                                    name,
+                                                    cell,
+                                                  }: any) => {
+                                                    const type = getValue(
+                                                      row,
+                                                      "file_type"
+                                                    )
+                                                      ? getValue(
+                                                          row,
+                                                          "file_type"
+                                                        ).startsWith("image/")
+                                                      : false;
+
+                                                    if (type)
+                                                      return (
+                                                        <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                                                          <PreviewImagePopup
+                                                            url={getValue(
+                                                              row,
+                                                              "file_path"
+                                                            )}
+                                                            children={
+                                                              <div>
+                                                                <ButtonContainer
+                                                                  variant={
+                                                                    "outline"
+                                                                  }
+                                                                >
+                                                                  <div className="flex items-center gap-x-2">
+                                                                    <IoEye className="text-lg" />
+                                                                  </div>
+                                                                </ButtonContainer>
+                                                              </div>
+                                                            }
+                                                          />
+                                                        </div>
+                                                      );
+
+                                                    return (
+                                                      <>
+                                                        <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                                                          <ButtonBetter
+                                                            variant={"outline"}
+                                                            onClick={() => {
+                                                              window.open(
+                                                                getValue(
+                                                                  row,
+                                                                  "file_path"
+                                                                ),
+                                                                "_blank"
+                                                              );
+                                                            }}
+                                                          >
+                                                            <div className="flex items-center gap-x-2">
+                                                              <IoEye className="text-lg" />
+                                                            </div>
+                                                          </ButtonBetter>
+                                                        </div>
+                                                      </>
+                                                    );
+                                                  },
+                                                },
+                                              ]}
+                                              onLoad={async (param: any) => {
+                                                return row.attachments || [];
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </DialogContent>
+                                    </Dialog>
+                                  </div>
+                                );
+                              },
+                            },
+                          ]}
+                          onLoad={async (param: any) => {
+                            const params = await events("onload-param", param);
+                            const res: any = await api.get(
+                              `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/approval-histories/` +
+                                id
+                            );
+                            const data: any[] = res.data.data;
+                            console.log({ data });
+                            if (!Array.isArray(data)) return [];
+                            return data || [];
+                          }}
+                        />
+                      </div>
                     </>
                   }
                 >
-                  <ButtonContainer className={"bg-red-500"}>
-                    <IoMdSave className="text-xl" />
-                    Reject
+                  <ButtonContainer variant="outline">
+                    <FiInfo className="text-xl" />
                   </ButtonContainer>
                 </Alert>
+              )}
+              {showApprovel(fm.data, local.permission) && (
+                <>
+                  <Alert
+                    type={"save"}
+                    content={
+                      <>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            update your request from our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <Form
+                          onSubmit={async (fm: any) => {
+                            const data = showApprovel(
+                              parent_fm.data,
+                              local.permission,
+                              "reject"
+                            );
+                            const param = {
+                              id,
+                              status: data.approve,
+                              level: data.level,
+                              notes: fm.data.notes,
+                              approver_id: get_user("employee.id"),
+                              approved_by: get_user("employee.name"),
+                            };
+                            try {
+                              const formData = new FormData();
 
-                <Alert
-                  type={"delete"}
-                  onClick={async () => {
-                    const data = showApprovel(
-                      fm.data,
-                      local.permission,
-                      "approve"
-                    );
-                    const fm_data = { ...data };
-                    delete fm_data.level;
-                    delete fm_data.approve;
-                    fm.data.status = data.approve;
-                    fm.data = {
-                      ...fm.data,
-                      ...fm_data,
-                    };
-                    const param = {
-                      id,
-                      status: data.approve,
-                      level: data.level,
-                      approver_id: get_user("employee.id"),
-                      approved_by: get_user("employee.name"),
-                    };
-                    try {
-                      const formData = new FormData();
+                              // Menambahkan data param ke FormData
+                              formData.append("payload", JSON.stringify(param));
 
-                      // Menambahkan data param ke FormData
-                      formData.append("payload", JSON.stringify(param));
-
-                      const res: any = await api.put(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/status`,
-                        formData,
-                        {
-                          headers: {
-                            "Content-Type": "multipart/form-data",
-                          },
-                        }
-                      );
-                      fm.render();
-                    } catch (ex: any) {
-                      toast.error(
-                        <div className="flex flex-col w-full">
-                          <div className="flex text-red-600 items-center">
-                            <AlertTriangle className="h-4 w-4 mr-1" />
-                            Failed {ex.message}.
-                          </div>
-                        </div>,
-                        {
-                          dismissible: true,
-                          className: css`
-                            background: #ffecec;
-                            border: 2px solid red;
-                          `,
-                        }
-                      );
+                              const res: any = await api.put(
+                                `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/status`,
+                                formData,
+                                {
+                                  headers: {
+                                    "Content-Type": "multipart/form-data",
+                                  },
+                                }
+                              );
+                              parent_fm.data.status = data.approve;
+                              parent_fm.render();
+                            } catch (ex: any) {
+                              toast.error(
+                                <div className="flex flex-col w-full">
+                                  <div className="flex text-red-600 items-center">
+                                    <AlertTriangle className="h-4 w-4 mr-1" />
+                                    Failed {ex.message}.
+                                  </div>
+                                </div>,
+                                {
+                                  dismissible: true,
+                                  className: css`
+                                    background: #ffecec;
+                                    border: 2px solid red;
+                                  `,
+                                }
+                              );
+                            }
+                          }}
+                          onLoad={async () => {
+                            return {
+                              id,
+                            };
+                          }}
+                          showResize={false}
+                          header={(fm: any) => {
+                            return <></>;
+                          }}
+                          children={(fm: any) => {
+                            return (
+                              <>
+                                <div className={cx("flex flex-col flex-wrap")}>
+                                  <div className="grid gap-4 mb-4 grid-cols-1">
+                                    <div>
+                                      <Field
+                                        fm={fm}
+                                        name={"notes"}
+                                        label={"Notes"}
+                                        type={"textarea"}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                            );
+                          }}
+                          onFooter={(fm: any) => {
+                            return (
+                              <div className={cx("")}>
+                                <AlertDialogFooter className="pt-1">
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  {isStringEmpty(fm?.data?.notes) ? (
+                                    <ButtonBetter
+                                      variant="reject"
+                                      onClick={() => {
+                                        toast.error(
+                                          <div className="flex flex-col w-full">
+                                            <div className="flex text-red-600 items-center">
+                                              <AlertTriangle className="h-4 w-4 mr-1" />
+                                              Error: Please ensure all required
+                                              fields are filled correctly.
+                                            </div>
+                                          </div>,
+                                          {
+                                            dismissible: true,
+                                            className: css`
+                                              background: #ffecec;
+                                              border: 2px solid red;
+                                            `,
+                                          }
+                                        );
+                                        fm.error["notes"] =
+                                          "A note is required for rejection.";
+                                        fm.render();
+                                      }}
+                                    >
+                                      Reject
+                                    </ButtonBetter>
+                                  ) : (
+                                    <AlertDialogAction
+                                      className={"bg-red-500 text-white"}
+                                      onClick={() => {
+                                        fm.submit();
+                                      }}
+                                    >
+                                      Reject
+                                    </AlertDialogAction>
+                                  )}
+                                </AlertDialogFooter>
+                              </div>
+                            );
+                          }}
+                        />
+                      </>
                     }
-                  }}
-                >
-                  <ButtonContainer className={"bg-primary"}>
-                    <IoMdSave className="text-xl" />
-                    Approve
-                  </ButtonContainer>
-                </Alert>
-              </div>
-            )}
+                  >
+                    <ButtonContainer className={"bg-red-500"}>
+                      <IoMdSave className="text-xl" />
+                      Reject
+                    </ButtonContainer>
+                  </Alert>
+
+                  <Alert
+                    type={"delete"}
+                    onClick={async () => {
+                      const data = showApprovel(
+                        fm.data,
+                        local.permission,
+                        "approve"
+                      );
+                      const fm_data = { ...data };
+                      delete fm_data.level;
+                      delete fm_data.approve;
+                      fm.data.status = data.approve;
+                      fm.data = {
+                        ...fm.data,
+                        ...fm_data,
+                      };
+                      const param = {
+                        id,
+                        status: data.approve,
+                        level: data.level,
+                        approver_id: get_user("employee.id"),
+                        approved_by: get_user("employee.name"),
+                      };
+                      try {
+                        const formData = new FormData();
+
+                        // Menambahkan data param ke FormData
+                        formData.append("payload", JSON.stringify(param));
+
+                        const res: any = await api.put(
+                          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/status`,
+                          formData,
+                          {
+                            headers: {
+                              "Content-Type": "multipart/form-data",
+                            },
+                          }
+                        );
+                        fm.render();
+                      } catch (ex: any) {
+                        toast.error(
+                          <div className="flex flex-col w-full">
+                            <div className="flex text-red-600 items-center">
+                              <AlertTriangle className="h-4 w-4 mr-1" />
+                              Failed {ex.message}.
+                            </div>
+                          </div>,
+                          {
+                            dismissible: true,
+                            className: css`
+                              background: #ffecec;
+                              border: 2px solid red;
+                            `,
+                          }
+                        );
+                      }
+                    }}
+                  >
+                    <ButtonContainer className={"bg-primary"}>
+                      <IoMdSave className="text-xl" />
+                      Approve
+                    </ButtonContainer>
+                  </Alert>
+                </>
+              )}
+            </div>
           </div>
         );
       }}
@@ -303,6 +597,13 @@ function Page() {
         const lines = data.mp_planning_header.mp_planning_lines || [];
         const jobs = lines.find((e: any) => e.job_id === data.job_id);
 
+        let history: any = [];
+        try {
+          const hst = await api.get(
+            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/approval-histories?mpr_header_id=${id}&status=REJECTED`
+          );
+          history = hst?.data?.data || [];
+        } catch (ex) {}
         return {
           id,
           ...data,
@@ -320,6 +621,7 @@ function Page() {
               : 0,
           mpp_name: data.mpp_period.title,
           major_ids: data.request_majors.map((e: any) => e?.["Major"]?.["ID"]),
+          history: history?.data?.data,
         };
       }}
       children={(fm: any) => {

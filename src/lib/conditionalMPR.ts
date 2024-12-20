@@ -32,6 +32,12 @@ export const showApprovel = (
       level: ["Level HRD HO"],
     },
   ]; // tiga status yang dapat memunculkan approval
+  if(data?.status === "NEED APPROVAL" &&
+    data?.organization_category === "Non Field" &&
+    data?.mp_request_type === "OFF_BUDGET"){
+      return null
+
+  }
   const status = a1.find((e) => data?.status === e.status);
   if (status) {
     let result = {} as any;

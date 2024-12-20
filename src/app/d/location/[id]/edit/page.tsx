@@ -334,7 +334,6 @@ function Page() {
                                 id
                             );
                             const data: any[] = res.data.data;
-                            console.log({ data });
                             if (!Array.isArray(data)) return [];
                             return data || [];
                           }}

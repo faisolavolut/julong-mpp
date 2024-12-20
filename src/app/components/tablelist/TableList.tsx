@@ -48,7 +48,7 @@ export const TableList: React.FC<any> = ({
   name,
   column,
   onLoad,
-  take = 20,
+  take = 50,
   header,
   disabledPagination,
   disabledHeader,
@@ -230,7 +230,7 @@ export const TableList: React.FC<any> = ({
     state: {
       pagination: {
         pageIndex: 0,
-        pageSize: 20,
+        pageSize: 50,
       },
       sorting,
     },

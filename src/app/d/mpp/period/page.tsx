@@ -14,17 +14,19 @@ import { IoEye } from "react-icons/io5";
 
 function Page() {
   const local = useLocal({
-    can_add: false
-  })
+    can_add: false,
+  });
   useEffect(() => {
     const run = async () => {
-      const check = await api.get( `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`)
-      console.log({check})
-      if(!check.data.data) local.can_add = true;
-      local.render()
-    }
-    run()
-  }, [])
+      const check = await api.get(
+        `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
+      );
+      console.log({ check });
+      if (!check.data.data) local.can_add = true;
+      local.render();
+    };
+    run();
+  }, []);
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
@@ -37,7 +39,7 @@ function Page() {
           name="period"
           header={{
             sideLeft: (data: any) => {
-              if(!local.can_add) return <></>
+              if (!local.can_add) return <></>;
               return (
                 <>
                   <div className="flex flex-row flex-grow">
@@ -95,7 +97,13 @@ function Page() {
               name: "status",
               header: () => <span>Status</span>,
               renderCell: ({ row, name, cell }: any) => {
-                return <div className="capitalize">{getValue(row, name)}</div>;
+                return (
+                  <div className="capitalize">
+                    {getValue(row, name) === "not_open"
+                      ? "Not Open"
+                      : getValue(row, name)}
+                  </div>
+                );
               },
             },
             {
@@ -103,6 +111,20 @@ function Page() {
               header: () => <span>Action</span>,
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
+                if (getValue(row, name) === "draft") {
+                  return (
+                    <div className="flex items-center gap-x-0.5 whitespace-nowrap">
+                      <ButtonLink
+                        className="bg-primary"
+                        href={`/d/mpp/period/${row.id}/view`}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <IoEye className="text-lg" />
+                        </div>
+                      </ButtonLink>
+                    </div>
+                  );
+                }
                 return (
                   <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                     <ButtonLink
@@ -132,7 +154,7 @@ function Page() {
               `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods` + params
             );
             const data: any[] = res.data.data.mppperiods;
-            console.log(data)
+            console.log(data);
             return data || [];
           }}
           onInit={async (list: any) => {}}

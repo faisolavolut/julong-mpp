@@ -85,7 +85,8 @@ const styles = StyleSheet.create({
   },
 });
 const extractMajors = (data: Array<{ Major: { Major: string } }>): string => {
-  if(data?.length) return ""
+  console.log({data})
+  if(!data?.length) return ""
   return data.map(entry => get(entry, "Major.Major")).join(", ");
 };
 const splitText = (
@@ -100,7 +101,7 @@ const splitText = (
 
 const handleInput = (input: string, mode: "cn" | "id" = "id"): string => {
   const result = splitText(input);
-  if (mode === "cn" && /[\u4e00-\u9fa5]/.test(result.secondPart)) {
+  if (mode === "cn") {
     // Return only the Chinese part
     return result.secondPart;
   } else if (mode === "id") {
@@ -111,7 +112,6 @@ const handleInput = (input: string, mode: "cn" | "id" = "id"): string => {
 };
 // Create Document Component
 const DocumentMPR: FC<any> = ({ data }) => {
-  console.log({ data });
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -613,7 +613,7 @@ const DocumentMPR: FC<any> = ({ data }) => {
             </Text>
           </View>
           <Text>
-            :
+            :{" "}
             {get(data, "marital_status") === "no rules"
               ? "Tidak ada masalah"
               : get(data, "marital_status") === "single"

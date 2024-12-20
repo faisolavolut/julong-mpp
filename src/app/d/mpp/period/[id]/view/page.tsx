@@ -122,6 +122,10 @@ function Page() {
                         label: "Open",
                       },
                       {
+                        value: "not_open",
+                        label: "Not Open",
+                      },
+                      {
                         value: "draft",
                         label: "Draft",
                       },
