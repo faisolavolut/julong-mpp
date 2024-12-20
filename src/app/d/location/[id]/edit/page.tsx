@@ -352,11 +352,12 @@ function Page() {
                 fm.data?.status === "REJECTED") && (
                 <Alert
                   type={"save"}
-                  onClick={() => {
+                  onClick={async () => {
                     fm.data.status = "DRAFTED";
                     fm.error = {};
                     fm.render();
-                    fm.submit();
+                    await fm.submit();
+                    await fm.reload();
                   }}
                 >
                   <ButtonContainer className={"bg-primary"}>
@@ -381,7 +382,8 @@ function Page() {
                           fm.data.status = "IN_PROGRESS";
                           fm.error = {};
                           fm.render();
-                          fm.submit();
+                          await fm.submit();
+                          await fm.reload();
                         }}
                       >
                         <ButtonContainer className={"bg-primary"}>
@@ -446,46 +448,6 @@ function Page() {
                       </ButtonBetter>
                     </div>
                   )}
-                </>
-              ) : (
-                <></>
-              )}
-              {local.can_submit && fm.data?.status === "IN_PROGRESS" ? (
-                <>
-                  <div className="flex flex-row items-center">
-                    <ButtonBetter
-                      className={"bg-primary"}
-                      onClick={async () => {
-                        const data = fm.data;
-                        fm.error = {};
-                        fm.data.status = "NEED APPROVAL";
-                        fm.render();
-                        const param = {
-                          id: id,
-                          approver_id: get_user("employee.id"),
-                          approved_by: get_user("employee.name"),
-                          level: "Level HRD Unit",
-                          status: "NEED APPROVAL",
-                        };
-                        const formData = new FormData();
-                        formData.append("payload", JSON.stringify(param));
-
-                        const res: any = await api.put(
-                          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/update-status`,
-                          formData,
-                          {
-                            headers: {
-                              "Content-Type": "multipart/form-data",
-                            },
-                          }
-                        );
-                        fm.render();
-                      }}
-                    >
-                      <IoMdSave className="text-xl" />
-                      Process
-                    </ButtonBetter>
-                  </div>
                 </>
               ) : (
                 <></>
@@ -898,6 +860,7 @@ function Page() {
                                   getNumber(existing) +
                                   getNumber(fm.data.turn_over) +
                                   getNumber(fm_row.data.promotion);
+
                                 fm_row.data.suggested_recruit =
                                   suggested_recruit;
                                 const total =

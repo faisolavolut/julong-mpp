@@ -179,10 +179,12 @@ function Page() {
                                       `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/update-status`,
                                       param
                                     );
-                                    const batch: any = await api.get(
-                                      `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
-                                    );
-                                    local.batch = batch?.data?.data;
+                                    try {
+                                      const batch: any = await api.get(
+                                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
+                                      );
+                                      local.batch = batch?.data?.data;
+                                    } catch (ex) {}
                                     try {
                                       const batch_ceo: any = await api.get(
                                         `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/APPROVED`

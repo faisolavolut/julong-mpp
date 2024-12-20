@@ -88,6 +88,49 @@ export const Form: React.FC<any> = ({
         );
       }
     },
+    reload: async () => {
+      local.ready = false;
+      local.render();
+      toast.info(
+        <>
+          <Loader2
+            className={cx(
+              "h-4 w-4 animate-spin-important",
+              css`
+                animation: spin 1s linear infinite !important;
+                @keyframes spin {
+                  0% {
+                    transform: rotate(0deg);
+                  }
+                  100% {
+                    transform: rotate(360deg);
+                  }
+                }
+              `
+            )}
+          />
+          {"Loading..."}
+        </>
+      );
+      local.data = null;
+      local.render();
+      const res = onLoad();
+      if (res instanceof Promise) {
+        res.then((data) => {
+          local.ready = true;
+          local.data = data;
+          local.render(); // Panggil render setelah data diperbarui
+          // toast.dismiss();
+          // toast.success("Data Loaded Successfully!");
+        });
+      } else {
+        local.ready = true;
+        local.data = res;
+        local.render(); // Panggil render untuk memicu re-render
+        toast.dismiss();
+        toast.success("Data Loaded Successfully!");
+      }
+    },
     fields: {} as any,
     render: () => {},
     error: {} as any,

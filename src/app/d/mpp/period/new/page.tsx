@@ -33,9 +33,10 @@ function Page() {
             <div className="flex flex-row space-x-2">
               <Alert
                 type={"save"}
-                onClick={() => {
+                onClick={async () => {
                   fm.data.status = "draft";
-                  fm.submit();
+                  await fm.submit();
+                  await fm.reload();
                 }}
               >
                 <div className={cx("bg-primary", btn())}>
@@ -63,9 +64,6 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods`,
           param
         );
-        setTimeout(() => {
-          navigate("/d/mpp/period");
-        }, 1000);
       }}
       onLoad={async () => {
         return {

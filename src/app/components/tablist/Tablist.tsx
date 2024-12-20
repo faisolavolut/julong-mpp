@@ -93,7 +93,7 @@ export const Tablist: React.FC<any> = ({
         className="flex flex-col w-full"
         defaultValue={onValue(local.data?.[0])}
       >
-        <TabsList className="flex flex-row flex-grow relative w-full bg-gray-50 p-0 rounded-none">
+        <TabsList className="flex flex-row relative w-full bg-gray-50 p-0 rounded-none">
           <TabSlider className=" " disabledPagination={disabledPagination}>
             {local.data.map((e, idx) => {
               return (
