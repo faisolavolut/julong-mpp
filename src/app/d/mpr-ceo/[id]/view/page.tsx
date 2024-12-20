@@ -108,7 +108,7 @@ function Page() {
           <div className="flex flex-grow bg-[#525659] overflow-y-scroll flex-col items-center relative">
             {local.data && (
               <PDFViewer className="flex-grow w-full">
-                <DocumentMPR />
+                <DocumentMPR  data={local.data}/>
               </PDFViewer>
             )}
           </div>

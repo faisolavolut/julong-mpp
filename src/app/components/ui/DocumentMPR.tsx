@@ -10,6 +10,9 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { Style } from "@react-pdf/types";
+import get from "lodash.get";
+import { dayDate } from "@/lib/date";
+import { getNumber } from "@/lib/getNumber";
 Font.register({
   family: "Noto Sans SC",
   src: `${process.env.NEXT_PUBLIC_BASE_URL}/NotoSerifSC-Regular.ttf`,
@@ -81,116 +84,34 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
-const Row: FC<{
-  col1?: string;
-  col2?: string;
-  col3?: string;
-  col4?: string;
-  col5?: string;
-  style?: Style;
-  styleText?: Style;
-  footer?: boolean;
-  hideBorder?: boolean;
-}> = ({
-  col1,
-  col2,
-  col3,
-  col4,
-  col5,
-  style,
-  styleText,
-  footer,
-  hideBorder,
-}) => {
-  return (
-    <View
-      style={{
-        borderColor: "black",
-        display: "flex",
-        flexDirection: "row",
-        width: "100%",
-        ...style,
-      }}
-    >
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          borderRight: 1,
-          flexGrow: 1,
-          borderColor: "black",
-          justifyContent: footer ? "flex-end" : "flex-start",
-          borderBottom: 0,
-          padding: 5,
-        }}
-      >
-        {col1 && <Text style={styleText}>{col1}</Text>}
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          width: 100,
-          borderRight: 1,
-          borderColor: "black",
-          borderTop: footer && !hideBorder ? 1 : 0,
-          borderBottom: footer && !hideBorder ? 1 : 0,
-        }}
-      >
-        {col2 && <Text style={styleText}>{col2}</Text>}
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 5,
-          width: 99.5,
-          borderRight: 1,
-          borderTop: footer && !hideBorder ? 1 : 0,
-          borderBottom: footer && !hideBorder ? 1 : 0,
-        }}
-      >
-        {col3 && <Text style={styleText}>{col3}</Text>}
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          width: 100.5,
-          borderRight: 1,
-          borderColor: "black",
-          borderTop: footer && !hideBorder ? 1 : 0,
-          borderBottom: footer && !hideBorder ? 1 : 0,
-        }}
-      >
-        {col4 && <Text style={styleText}>{col4}</Text>}
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          borderColor: "black",
-          width: 100,
-          borderTop: footer && !hideBorder ? 1 : 0,
-          borderBottom: footer && !hideBorder ? 1 : 0,
-        }}
-      >
-        {col5 && <Text style={styleText}>{col5}</Text>}
-      </View>
-    </View>
-  );
+const extractMajors = (data: Array<{ Major: { Major: string } }>): string => {
+  if(data?.length) return ""
+  return data.map(entry => get(entry, "Major.Major")).join(", ");
+};
+const splitText = (
+  input: string
+): { firstPart: string; secondPart: string } => {
+  const match = input.match(/^(.+?)\s+([^\s]+)$/); // Match "text text"
+  return {
+    firstPart: match?.[1] || "",
+    secondPart: match?.[2] || "",
+  };
+};
+
+const handleInput = (input: string, mode: "cn" | "id" = "id"): string => {
+  const result = splitText(input);
+  if (mode === "cn" && /[\u4e00-\u9fa5]/.test(result.secondPart)) {
+    // Return only the Chinese part
+    return result.secondPart;
+  } else if (mode === "id") {
+    // Return only the non-Chinese part
+    return result.firstPart;
+  }
+  return ""; // Return empty string if the condition doesn't match the mode
 };
 // Create Document Component
-const DocumentMPR = () => {
+const DocumentMPR: FC<any> = ({ data }) => {
+  console.log({ data });
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -309,7 +230,7 @@ const DocumentMPR = () => {
                     height: 20,
                   }}
                 >
-                  <Text>FRM-HRD-15-01</Text>
+                  <Text>{get(data, "document_number")}</Text>
                 </View>
               </View>
               <View
@@ -398,7 +319,7 @@ const DocumentMPR = () => {
                     height: 20,
                   }}
                 >
-                  <Text>01 Oktober 2020</Text>
+                  <Text>{dayDate(get(data, "document_date"))}</Text>
                 </View>
               </View>
               <View
@@ -439,7 +360,6 @@ const DocumentMPR = () => {
                     width: 130,
                     height: 20,
                     borderColor: "black",
-                    borderRight: 1,
                   }}
                 >
                   <Text>1 dari 1</Text>
@@ -524,7 +444,7 @@ const DocumentMPR = () => {
           </View>
 
           <Text>
-            : 0 ( Pria{" "}
+            : {getNumber(get(data, "male_needs"))} ( Pria{" "}
             <Text
               style={{
                 ...styles.chineseFont,
@@ -551,7 +471,7 @@ const DocumentMPR = () => {
             >
               或
             </Text>{" "}
-            0 ( Wanita{" "}
+            {getNumber(get(data, "female_needs"))} ( Wanita{" "}
             <Text
               style={{
                 ...styles.chineseFont,
@@ -588,13 +508,20 @@ const DocumentMPR = () => {
               身份
             </Text>
           </View>
-          <Text>: Penggantian, karena Undur diri </Text>
+          <Text>
+            :{" "}
+            {get(data, "is_replacement") === "penambahan"
+              ? "Penambahan"
+              : "Penggantian"}
+            , karena {handleInput(get(data, "request_category.Name"), "id")}{" "}
+          </Text>
           <Text
             style={{
               ...styles.chineseFont,
             }}
           >
-            代替，原因为 离职
+            {get(data, "is_replacement") === "penambahan" ? "增加" : "代替"}，
+            {handleInput(get(data, "request_category.Name"), "cn")}
           </Text>
         </View>
         <View
@@ -630,7 +557,7 @@ const DocumentMPR = () => {
           >
             最小
           </Text>
-          <Text> 18 Tahun </Text>
+          <Text> {get(data, "minimum_age")} Tahun </Text>
           <Text
             style={{
               ...styles.chineseFont,
@@ -646,7 +573,7 @@ const DocumentMPR = () => {
           >
             最大
           </Text>
-          <Text> 50 Tahun </Text>
+          <Text> {get(data, "maximum_age")} Tahun </Text>
           <Text
             style={{
               ...styles.chineseFont,
@@ -686,29 +613,26 @@ const DocumentMPR = () => {
             </Text>
           </View>
           <Text>
-            : Single{" "}
+            :
+            {get(data, "marital_status") === "no rules"
+              ? "Tidak ada masalah"
+              : get(data, "marital_status") === "single"
+              ? "Single"
+              : get(data, "marital_status") === "married"
+              ? "Maried"
+              : "-"}{" "}
             <Text
               style={{
                 ...styles.chineseFont,
               }}
             >
-              未婚
-            </Text>
-            {" / "}Menikah{" "}
-            <Text
-              style={{
-                ...styles.chineseFont,
-              }}
-            >
-              已婚
-            </Text>
-            {" / "}Tidak ada masalah{" "}
-            <Text
-              style={{
-                ...styles.chineseFont,
-              }}
-            >
-              没问题
+              {get(data, "marital_status") === "no rules"
+              ? "没问题"
+              : get(data, "marital_status") === "single"
+              ? "未婚"
+              : get(data, "marital_status") === "married"
+              ? "已婚"
+              : "-"}
             </Text>
           </Text>
         </View>
@@ -743,7 +667,7 @@ const DocumentMPR = () => {
               </Text>
             </Text>
           </View>
-          <Text>:</Text>
+          <Text>: {get(data, "organization_name")}</Text>
         </View>
 
         {/* Jabatan */}
@@ -776,7 +700,7 @@ const DocumentMPR = () => {
               </Text>
             </Text>
           </View>
-          <Text>:</Text>
+          <Text>: {get(data, "job_name")}</Text>
         </View>
 
         {/* Golongan */}
@@ -809,7 +733,7 @@ const DocumentMPR = () => {
               </Text>
             </Text>
           </View>
-          <Text>:</Text>
+          <Text>: {get(data, "job_level_name")}</Text>
         </View>
 
         {/* Harapan Tanggal Masuk Kerja */}
@@ -842,7 +766,7 @@ const DocumentMPR = () => {
               </Text>
             </Text>
           </View>
-          <Text>:</Text>
+          <Text>: {dayDate(get(data, "expected_date"))}</Text>
         </View>
         <View
           style={{
@@ -903,14 +827,7 @@ const DocumentMPR = () => {
             </Text>
           </View>
           <Text>
-            : SMA/STM{" "}
-            <Text
-              style={{
-                ...styles.chineseFont,
-              }}
-            >
-              高中/技术高中
-            </Text>
+            : {get(data, "minimum_education")}
           </Text>
         </View>
         {/* Jurusan */}
@@ -943,7 +860,7 @@ const DocumentMPR = () => {
               </Text>
             </Text>
           </View>
-          <Text>:</Text>
+          <Text>: {extractMajors(get(data, "request_majors"))}</Text>
         </View>
 
         {/* Pengalaman Kerja */}
@@ -976,7 +893,7 @@ const DocumentMPR = () => {
               </Text>
             </Text>
           </View>
-          <Text>:</Text>
+          <Text>: {get(data, "experiences")}</Text>
         </View>
 
         {/* Kualifikasi yang Dibutuhkan */}
@@ -1009,7 +926,7 @@ const DocumentMPR = () => {
               </Text>
             </Text>
           </View>
-          <Text>:</Text>
+          <Text>: {get(data, "required_qualification")}</Text>
         </View>
         <View
           style={{
@@ -1038,7 +955,7 @@ const DocumentMPR = () => {
               </Text>
             </Text>
           </View>
-          <Text>: {" "}</Text>
+          <Text>: </Text>
           <View
             style={{
               display: "flex",
@@ -1062,11 +979,11 @@ const DocumentMPR = () => {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  width: 80
+                  width: 80,
                 }}
               >
                 <Text>
-                  -{" "}Sertifikat{" "}
+                  - Sertifikat{" "}
                   <Text
                     style={{
                       ...styles.chineseFont,
@@ -1076,7 +993,7 @@ const DocumentMPR = () => {
                   </Text>
                 </Text>
               </View>
-              <Text>:</Text>
+              <Text>: {get(data, "certificate")}</Text>
             </View>
 
             {/* Komputer */}
@@ -1094,11 +1011,11 @@ const DocumentMPR = () => {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  width: 80
+                  width: 80,
                 }}
               >
                 <Text>
-                -{" "}Komputer{" "}
+                  - Komputer{" "}
                   <Text
                     style={{
                       ...styles.chineseFont,
@@ -1108,7 +1025,7 @@ const DocumentMPR = () => {
                   </Text>
                 </Text>
               </View>
-              <Text>:</Text>
+              <Text>: {get(data, "computer_skill")}</Text>
             </View>
 
             {/* Bahasa */}
@@ -1126,11 +1043,11 @@ const DocumentMPR = () => {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  width: 80
+                  width: 80,
                 }}
               >
                 <Text>
-                -{" "}Bahasa{" "}
+                  - Bahasa{" "}
                   <Text
                     style={{
                       ...styles.chineseFont,
@@ -1140,7 +1057,7 @@ const DocumentMPR = () => {
                   </Text>
                 </Text>
               </View>
-              <Text>:</Text>
+              <Text>: {get(data, "language_skill")}</Text>
             </View>
 
             {/* Lainnya */}
@@ -1162,7 +1079,7 @@ const DocumentMPR = () => {
                 }}
               >
                 <Text>
-                -{" "}Lainnya{" "}
+                  - Lainnya{" "}
                   <Text
                     style={{
                       ...styles.chineseFont,
@@ -1172,7 +1089,7 @@ const DocumentMPR = () => {
                   </Text>
                 </Text>
               </View>
-              <Text>:</Text>
+              <Text>: {get(data, "other_skill")}</Text>
             </View>
           </View>
         </View>
@@ -1207,7 +1124,7 @@ const DocumentMPR = () => {
               </Text>
             </Text>
           </View>
-          <Text>:</Text>
+          <Text>: {get(data, "jobdesc")}</Text>
         </View>
 
         {/* Rentang Gaji/Bulan */}
@@ -1240,7 +1157,7 @@ const DocumentMPR = () => {
               </Text>
             </Text>
           </View>
-          <Text>:</Text>
+          <Text>: {get(data, "salary_min")} -  {get(data, "salary_max")} </Text>
         </View>
 
         {/* FOOTER */}
@@ -1304,7 +1221,7 @@ const DocumentMPR = () => {
                   width: 80,
                 }}
               >
-                <Text>: </Text>
+                <Text>: {get(data, "requestor_name")} </Text>
               </View>
             </View>
             <View
@@ -1475,7 +1392,7 @@ const DocumentMPR = () => {
                       width: 50,
                     }}
                   >
-                    <Text>: </Text>
+                    <Text>: {get(data, "department_head_name")}</Text>
                   </View>
                 </View>
                 <View
@@ -1575,7 +1492,7 @@ const DocumentMPR = () => {
                       width: 50,
                     }}
                   >
-                    <Text>: </Text>
+                    <Text>: {get(data, "vp_gm_director_name")}</Text>
                   </View>
                 </View>
                 <View
@@ -1802,7 +1719,7 @@ const DocumentMPR = () => {
                       width: 50,
                     }}
                   >
-                    <Text>: </Text>
+                    <Text>: {get(data, "hrd_ho_unit_name")}</Text>
                   </View>
                 </View>
 

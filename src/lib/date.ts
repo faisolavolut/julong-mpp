@@ -10,6 +10,12 @@ export const longDate = (date: string | Date) => {
   return "-";
 };
 
+export const dayDate = (date: string | Date) => {
+  if (date instanceof Date || typeof date === "string") {
+    return day(date).format("DD MMMM YYYY");
+  }
+  return "-";
+};
 export const shortDate = (date: string | Date) => {
   if (date instanceof Date || typeof date === "string") {
     return day(date).format("DD/MM/YYYY");
