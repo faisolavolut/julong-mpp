@@ -52,7 +52,6 @@ function Page() {
           take: 1000,
         };
         const params = await events("onload-param", addtional);
-        console.log(params);
         const res: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` + params
         );
@@ -114,6 +113,7 @@ function Page() {
             ];
           }}
           tabContent={(data: any) => {
+            console.log(data);
             return (
               <>
                 <div className="w-full flex flex-col flex-grow">
@@ -250,69 +250,122 @@ function Page() {
                           );
                         },
                       }}
-                      column={[
-                        {
-                          name: "organization_name",
-                          header: () => <span>Organization</span>,
-                          renderCell: ({ row, name, cell }: any) => {
-                            return <>{getValue(row, name)}</>;
-                          },
-                        },
-                        {
-                          name: "name",
-                          header: () => <span>Location</span>,
-                          renderCell: ({ row, name, cell }: any) => {
-                            return <>{getValue(row, name)}</>;
-                          },
-                        },
-                        {
-                          name: "mp_planning_header.document_number",
-                          header: () => <span>Document Number</span>,
-                          renderCell: ({ row, name, cell }: any) => {
-                            return <>{getValue(row, name)}</>;
-                          },
-                        },
-                        {
-                          name: "mp_planning_header.status",
-                          header: () => <span>Status</span>,
-                          renderCell: ({ row, name, cell }: any) => {
-                            return <>{getValue(row, name)}</>;
-                          },
-                        },
-                        // {
-                        //   name: "action",
-                        //   header: () => <span>Action</span>,
-                        //   sortable: false,
-                        //   renderCell: ({ row, name, cell }: any) => {
-                        //     return (
-                        //       <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                        //         <ButtonLink
-                        //           className="bg-primary"
-                        //           href={`/d/bacth/${row.id}/view`}
-                        //         >
-                        //           <div className="flex items-center gap-x-2">
-                        //             <IoEye className="text-lg" />
-                        //           </div>
-                        //         </ButtonLink>
-                        //       </div>
-                        //     );
-                        //   },
-                        // },
-                      ]}
+                      column={
+                        data?.id === "completed"
+                          ? [
+                              {
+                                name: "document_number",
+                                header: () => <span>Batch Number</span>,
+                                renderCell: ({ row, name, cell }: any) => {
+                                  return <>{getValue(row, name)}</>;
+                                },
+                              },
+                              {
+                                name: "mpp_period.title",
+                                header: () => <span>MPP Period Name</span>,
+                                renderCell: ({ row, name, cell }: any) => {
+                                  return <>{getValue(row, name)}</>;
+                                },
+                              },
+                              {
+                                name: "mpp_period.budget_start_date",
+                                header: () => <span>Budget Start Date</span>,
+                                renderCell: ({ row, name, cell }: any) => {
+                                  return <>{shortDate(getValue(row, name))}</>;
+                                },
+                              },
+                              {
+                                name: "mpp_period.budget_end_date",
+                                header: () => <span>Budget End Date</span>,
+                                renderCell: ({ row, name, cell }: any) => {
+                                  return <>{shortDate(getValue(row, name))}</>;
+                                },
+                              },
+                            ]
+                          : [
+                              {
+                                name: "organization_name",
+                                header: () => <span>Organization</span>,
+                                renderCell: ({ row, name, cell }: any) => {
+                                  return <>{getValue(row, name)}</>;
+                                },
+                              },
+                              {
+                                name: "name",
+                                header: () => <span>Location</span>,
+                                renderCell: ({ row, name, cell }: any) => {
+                                  return <>{getValue(row, name)}</>;
+                                },
+                              },
+                              {
+                                name: "mp_planning_header.document_number",
+                                header: () => <span>Document Number</span>,
+                                renderCell: ({ row, name, cell }: any) => {
+                                  return <>{getValue(row, name)}</>;
+                                },
+                              },
+                              {
+                                name: "mp_planning_header.status",
+                                header: () => <span>Status</span>,
+                                renderCell: ({ row, name, cell }: any) => {
+                                  return <>{getValue(row, name)}</>;
+                                },
+                              },
+                              // {
+                              //   name: "action",
+                              //   header: () => <span>Action</span>,
+                              //   sortable: false,
+                              //   renderCell: ({ row, name, cell }: any) => {
+                              //     return (
+                              //       <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                              //         <ButtonLink
+                              //           className="bg-primary"
+                              //           href={`/d/bacth/${row.id}/view`}
+                              //         >
+                              //           <div className="flex items-center gap-x-2">
+                              //             <IoEye className="text-lg" />
+                              //           </div>
+                              //         </ButtonLink>
+                              //       </div>
+                              //     );
+                              //   },
+                              // },
+                            ]
+                      }
                       onLoad={async (param: any) => {
-                        const addtional = {
-                          ...param,
-                          status: "APPROVED",
-                        };
-                        const params = await events("onload-param", addtional);
-                        const res: any = await api.get(
-                          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` +
-                            params
-                        );
-                        const data: any[] =
-                          res.data.data.organization_locations;
-                        if (!Array.isArray(data)) return [];
-                        return data || [];
+                        let result: any[] = [];
+                        if (data?.id === "completed") {
+                          const addtional = {
+                            ...param,
+                            status: "APPROVED",
+                          };
+                          const params = await events(
+                            "onload-param",
+                            addtional
+                          );
+                          const res: any = await api.get(
+                            `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/completed` +
+                              params
+                          );
+                          result = res.data.data;
+                        } else {
+                          const addtional = {
+                            ...param,
+                            status: "APPROVED",
+                          };
+                          const params = await events(
+                            "onload-param",
+                            addtional
+                          );
+                          const res: any = await api.get(
+                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` +
+                              params
+                          );
+                          result = res.data.data.organization_locations;
+                        }
+
+                        if (!Array.isArray(result)) return [];
+                        return result || [];
                       }}
                       onInit={async (list: any) => {}}
                     />

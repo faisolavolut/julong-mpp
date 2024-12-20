@@ -849,12 +849,6 @@ function Page() {
                                 const existing = item.data.existing;
                                 fm_row.data.existing = existing;
                                 fm.render();
-                                console.log({
-                                  plafon: getNumber(fm.data.plafon),
-                                  existing: existing,
-                                  turn_over: fm.data.turn_over,
-                                  promotion: getNumber(fm_row.data.promotion),
-                                });
                                 const suggested_recruit =
                                   getNumber(fm.data.plafon) -
                                   getNumber(existing) +

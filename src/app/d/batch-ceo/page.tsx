@@ -40,9 +40,11 @@ function Page() {
           const res = await api.get(
             `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/need-approval`
           );
+          console.log({res})
           if (res?.data?.data) {
             local.data = res?.data?.data;
             local.can_add = true;
+
           }
         } catch (ex) {}
       }
@@ -67,7 +69,7 @@ function Page() {
             {!local.data ? (
               <div
                 className={cx(
-                  "flex-1 w-full inset-0 flex flex-col items-center justify-center",
+                  "flex-1 w-full inset-0 flex flex-col items-center justify-center"
                 )}
               >
                 <div className="max-w-[15%] flex flex-col items-center">
@@ -84,7 +86,7 @@ function Page() {
                 </div>
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row gap-x-1 py-2">
-                    <AlertCeoReject />
+                    <AlertCeoReject fm={local}/>
                     <AlertCeoApprove />
                   </div>
                 </div>
