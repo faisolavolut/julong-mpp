@@ -81,8 +81,8 @@ function Page() {
                 type={"delete"}
                 onClick={() => {
                   fm.data.status = fm.data.mp_planning_header_id
-                    ? "NEED APPROVAL"
-                    : "IN PROGRESS";
+                    ? "IN PROGRESS"
+                    : "NEED APPROVAL";
                   fm.render();
                   if (!fm.data.requestor_name)
                     fm.data.requestor_id = get_user("employee.id");
