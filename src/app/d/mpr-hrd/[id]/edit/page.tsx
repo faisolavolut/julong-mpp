@@ -57,14 +57,6 @@ function Page() {
               />
             </div>
             <div className="flex flex-row space-x-2">
-              <div className="flex flex-row items-center h-full">
-                <ButtonBetter variant="outline" className=" text-sm h-auto">
-                  <div className="flex items-center gap-x-1 ">
-                    <HiDocumentDownload className="text-xl" />
-                    <span>Export</span>
-                  </div>
-                </ButtonBetter>
-              </div>
               <Alert
                 type={"save"}
                 onClick={() => {
@@ -79,7 +71,7 @@ function Page() {
               </Alert>
               <Alert
                 type={"delete"}
-                onClick={() => {
+                onClick={async () => {
                   fm.data.status = fm.data.mp_planning_header_id
                     ? "IN PROGRESS"
                     : "NEED APPROVAL";
@@ -89,7 +81,10 @@ function Page() {
                   if (fm.data.status === "NEED APPROVAL")
                     fm.data.department_head = get_user("employee.id");
                   fm.render();
-                  fm.submit();
+                  await fm.submit();
+                  if (fm.data.status === "IN PROGRESS") {
+                    navigate(`/d/mpr-hrd/${id}/view`);
+                  }
                 }}
               >
                 <ButtonContainer className={"bg-primary"}>
@@ -99,11 +94,12 @@ function Page() {
               </Alert>
               <Alert
                 type={"delete"}
-                onClick={() => {
+                onClick={async () => {
                   fm.data.department_head = get_user("employee.id");
                   fm.data.status = "APPROVED";
                   fm.render();
-                  fm.submit();
+                  await fm.submit();
+                  navigate(`/d/mpr-hrd/${id}/view`);
                 }}
               >
                 <ButtonContainer className={"bg-primary"}>
