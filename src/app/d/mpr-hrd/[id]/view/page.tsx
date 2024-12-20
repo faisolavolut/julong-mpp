@@ -34,11 +34,13 @@ import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getNumber } from "@/lib/getNumber";
 import { useLocal } from "@/lib/use-local";
 import { Breadcrumb, Button } from "flowbite-react";
+import { AlertTriangle } from "lucide-react";
 import { permission } from "process";
 import { useEffect } from "react";
 import { GoInfo } from "react-icons/go";
 import { IoMdSave } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { toast } from "sonner";
 
 function Page() {
   const id = getParams("id");
@@ -63,6 +65,7 @@ function Page() {
   return (
     <FormBetter
       onTitle={(fm: any) => {
+        const parent_fm = fm;
         return (
           <div className="flex flex-row w-full">
             <div className="flex flex-col py-4 pt-0 flex-grow">
@@ -97,7 +100,57 @@ function Page() {
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <Form
-                        onSubmit={async (fm: any) => {}}
+                        onSubmit={async (fm: any) => {
+                          const data = showApprovel(
+                            parent_fm.data,
+                            local.permission,
+                            "reject"
+                          );
+                          const param = {
+                            id,
+                            status: data.approve,
+                            level: data.level,
+                            notes: fm.data.notes,
+                            approver_id: get_user("employee.id"),
+                            approved_by: get_user("employee.name"),
+                          };
+                          console.log(param)
+                          return false
+                          try {
+                            const formData = new FormData();
+
+                            // Menambahkan data param ke FormData
+                            formData.append("payload", JSON.stringify(param));
+
+                            const res: any = await api.put(
+                              `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/status`,
+                              formData,
+                              {
+                                headers: {
+                                  "Content-Type": "multipart/form-data",
+                                },
+                              }
+                            );
+                            parent_fm.data.status = data.approve;
+                            parent_fm.render();
+                          } catch (ex: any) {
+                            toast.error(
+                              <div className="flex flex-col w-full">
+                                <div className="flex text-red-600 items-center">
+                                  <AlertTriangle className="h-4 w-4 mr-1" />
+                                  Failed {ex.message}.
+                                </div>
+                              </div>,
+                              {
+                                dismissible: true,
+                                className: css`
+                                  background: #ffecec;
+                                  border: 2px solid red;
+                                `,
+                              }
+                            );
+                          }
+                        }}
                         onLoad={async () => {
                           return {
                             id,
@@ -127,10 +180,7 @@ function Page() {
                         }}
                         onFooter={(fm: any) => {
                           return (
-                            <div
-                              className={cx("")}
-                            >
-
+                            <div className={cx("")}>
                               <AlertDialogFooter className="pt-1">
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
@@ -157,13 +207,60 @@ function Page() {
 
                 <Alert
                   type={"delete"}
-                  onClick={() => {
+                  onClick={async () => {
                     const data = showApprovel(
                       fm.data,
                       local.permission,
                       "approve"
                     );
-                    console.log({ data });
+                    const fm_data = { ...data };
+                    delete fm_data.level;
+                    delete fm_data.approve;
+                    fm.data.status = data.approve;
+                    fm.data = {
+                      ...fm.data,
+                      ...fm_data,
+                    };
+                    const param = {
+                      id,
+                      status: data.approve,
+                      level: data.level,
+                      approver_id: get_user("employee.id"),
+                      approved_by: get_user("employee.name"),
+                    };
+                    try {
+                      const formData = new FormData();
+
+                      // Menambahkan data param ke FormData
+                      formData.append("payload", JSON.stringify(param));
+
+                      const res: any = await api.put(
+                        `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/status`,
+                        formData,
+                        {
+                          headers: {
+                            "Content-Type": "multipart/form-data",
+                          },
+                        }
+                      );
+                      fm.render();
+                    } catch (ex: any) {
+                      toast.error(
+                        <div className="flex flex-col w-full">
+                          <div className="flex text-red-600 items-center">
+                            <AlertTriangle className="h-4 w-4 mr-1" />
+                            Failed {ex.message}.
+                          </div>
+                        </div>,
+                        {
+                          dismissible: true,
+                          className: css`
+                            background: #ffecec;
+                            border: 2px solid red;
+                          `,
+                        }
+                      );
+                    }
                   }}
                 >
                   <ButtonContainer className={"bg-primary"}>
@@ -217,9 +314,9 @@ function Page() {
           total_needs: data.male_needs + data.female_needs,
           remaining_balance:
             data.recruitment_type === "MT_Management Trainee"
-              ? jobs.remaining_balance_mt
+              ? getNumber(jobs?.remaining_balance_mt)
               : data.recruitment_type === "PH_Professional Hire"
-              ? jobs.remaining_balance_ph
+              ? getNumber(jobs?.remaining_balance_ph)
               : 0,
           mpp_name: data.mpp_period.title,
           major_ids: data.request_majors.map((e: any) => e?.["Major"]?.["ID"]),
@@ -257,7 +354,6 @@ function Page() {
                     label={"MPP Reference Number"}
                     type={"dropdown"}
                     onChange={(e: any) => {
-                      console.log(e);
                       fm.data.mpp_name = e?.data.mpp_period?.title;
                       fm.data.mpp_period_id = e?.data.mpp_period?.id;
                       const line = e?.data.mp_planning_lines;

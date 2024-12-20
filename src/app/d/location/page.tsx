@@ -119,7 +119,7 @@ function Page() {
               renderCell: ({ row, name, cell }: any) => {
                 return (
                   <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                    {local.can_edit ? (
+                    {local.can_edit && ["REJECTED", "DRAFTED", "DRAFT"].includes(row?.status) ? (
                       <ButtonLink
                         className="bg-primary"
                         href={`/d/location/${row.id}/edit`}
@@ -140,11 +140,11 @@ function Page() {
                         <IoEye className="text-lg" />
                       </div>
                     </ButtonLink>
-                    <ButtonBetter variant={"outline"}>
+                    {/* <ButtonBetter variant={"outline"}>
                       <div className="flex items-center gap-x-2">
                         <HiDocumentDownload className="text-lg" />
                       </div>
-                    </ButtonBetter>
+                    </ButtonBetter> */}
                   </div>
                 );
               },

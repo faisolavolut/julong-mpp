@@ -10,6 +10,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { Style } from "@react-pdf/types";
+import { getNumber } from "@/lib/getNumber";
 Font.register({
   family: "Noto Sans SC",
   src: `${process.env.NEXT_PUBLIC_BASE_URL}/NotoSerifSC-Regular.ttf`,
@@ -186,399 +187,435 @@ const Row: FC<{
   );
 };
 // Create Document Component
-const MyDocument = () => {
-  return <Document>
-  <Page size="A4" style={styles.page}>
-    <View
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-      }}
-    >
-      <Image
-        style={{ ...styles.image, marginRight: 10, marginLeft: 10 }}
-        src={`${process.env.NEXT_PUBLIC_BASE_URL}/julong.png`}
-      />
-      <View style={styles.section}>
-        <Text style={styles.title}>JULONG GROUP (INDONESIA)</Text>
-        <Text style={{ textAlign: "center", fontFamily: "Noto Sans SC" }}>
-          聚龙集团印尼区
-        </Text>
-      </View>
-    </View>
-    <View
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        padding: 10,
-        flexGrow: 1,
-      }}
-    >
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          flexGrow: 1,
-        }}
-      >
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            border: 1,
-            borderColor: "black",
-          }}
-        >
-          <View>
-            <View style={styles.section}>
-              <Text
-                style={{
-                  ...styles.title,
-                  textDecoration: "underline",
-                  marginBottom: 10,
-                }}
-              >
-                STAFF REQUIREMENT
-              </Text>
-            </View>
-          </View>
-          <View style={{ marginBottom: 10, padding: 5 }}>
-            <View
-              style={{
-                ...styles.section,
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 12,
-                  width: 100,
-                }}
-              >
-                OPERATING UNIT
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                }}
-              >
-                :
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  paddingVertical: 1,
-                }}
-              >
-                JULONG GROUP
-              </Text>
-            </View>
+const convertRawData = (data: any): any[] => {
+  const formatGradeData = (grade: any): any[] => {
+    const exec = grade?.executive || [];
+    const non = grade?.non_executive || [];
 
-            <View
-              style={{
-                ...styles.section,
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 12,
-                  width: 100,
-                }}
-              >
-                BUDGET YEAR
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                }}
-              >
-                :
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  paddingVertical: 1,
-                }}
-              >
-                2024/2025
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              borderBottom: 1,
-              borderTop: 1,
-              borderColor: "black",
-              display: "flex",
-              flexDirection: "row",
-              width: "100%",
-            }}
-          >
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                padding: 5,
-                borderRight: 1,
-                flexGrow: 1,
-                borderColor: "black",
-              }}
-            >
-              <Text style={styles.thead}>Grade</Text>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                borderRight: 1,
-                borderColor: "black",
-                width: 100,
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  padding: 5,
-                }}
-              >
-                <Text style={styles.thead}>Existing</Text>
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexGrow: 1,
-                  width: "100%",
-                  borderTop: 1,
-                  borderColor: "black",
-                }}
-              >
-                <Text style={styles.thead}>Aug-24</Text>
-              </View>
-            </View>
+    const calculateSubTotal = (items: any[]): any => {
+      return {
+        existing: items.reduce((sum, item) => sum + (item?.existing || 0), 0),
+        promote: items.reduce((sum, item) => sum + (item?.promote || 0), 0),
+        recruit: items.reduce((sum, item) => sum + (item?.recruit || 0), 0),
+        total: items.reduce((sum, item) => sum + (item?.total || 0), 0),
+      };
+    };
 
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                borderRight: 1,
-                borderColor: "black",
-                width: 200,
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  padding: 5,
-                }}
-              >
-                <Text style={styles.thead}>2025 BUDGET (Sep24-Aug25)</Text>
-              </View>
+    const subTotalExecutive = calculateSubTotal(exec);
+    const subTotalNon = calculateSubTotal(non);
 
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  width: 200,
-                  borderTop: 1,
-                  borderColor: "black",
-                }}
-              >
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    padding: 5,
-                    borderRight: 1,
-                    width: 100,
-                    borderColor: "black",
-                  }}
-                >
-                  <Text style={styles.thead}>Promote</Text>
-                </View>
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    width: 100,
-                    borderColor: "black",
-                  }}
-                >
-                  <Text style={styles.thead}>Recruit</Text>
-                </View>
-              </View>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                borderColor: "black",
-                width: 100,
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  padding: 5,
-                }}
-              >
-                <Text style={styles.thead}>TOTAL</Text>
-              </View>
+    const rows: any[] = [];
 
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={styles.thead}>2024/2025</Text>
-              </View>
-            </View>
-          </View>
-          {/* ROW */}
-          <Row col1=" " />
-          <Row
-            col1="Executives"
-            styleText={{ textDecoration: "underline" }}
-          />
-          <Row
-            styleText={{
-              fontWeight: "light",
-              fontFamily: "roboto-light",
-            }}
-            col1="Gol. 7"
-            col2="1"
-            col3="2"
-            col4="2"
-            col5="2"
-          />
-          <Row
-            styleText={{
-              fontWeight: "light",
-              fontFamily: "roboto-light",
-            }}
-            col1="Gol. 6"
-            col2="1"
-            col3="2"
-            col4="2"
-            col5="2"
-          />
-          <Row
-            styleText={{
-              fontWeight: "light",
-              fontFamily: "roboto-light",
-            }}
-            col1="Gol. 5"
-            col2="1"
-            col3="2"
-            col4="2"
-            col5="2"
-          />
-          <Row
-            styleText={{
-              fontWeight: "light",
-              fontFamily: "roboto-light",
-            }}
-            col1="Gol. 4"
-            col2="1"
-            col3="2"
-            col4="2"
-            col5="2"
-          />
-          <Row
-            footer={true}
-            col1="Sub - Total ="
-            col2="1"
-            col3="2"
-            col4="2"
-            col5="2"
-          />
-          <Row
-            col1="Non - Executives"
-            styleText={{ textDecoration: "underline" }}
-          />
-          <Row
-            styleText={{
-              fontWeight: "light",
-              fontFamily: "roboto-light",
-            }}
-            col1="Gol. 3"
-            col2="1"
-            col3="2"
-            col4="2"
-            col5="2"
-          />
-          <Row
-            styleText={{
-              fontWeight: "light",
-              fontFamily: "roboto-light",
-            }}
-            col1="Gol. 2"
-            col2="1"
-            col3="2"
-            col4="2"
-            col5="2"
-          />{" "}
-          <Row
-            styleText={{
-              fontWeight: "light",
-              fontFamily: "roboto-light",
-            }}
-            col1="Gol. 1"
-            col2="1"
-            col3="2"
-            col4="2"
-            col5="2"
-          />
-          <Row
-            footer={true}
-            col1="Sub - Total ="
-            col2="1"
-            col3="2"
-            col4="2"
-            col5="2"
-          />
-          <Row
-            hideBorder={true}
-            footer={true}
-            col1="TOTAL ="
-            col2="1"
-            col3="2"
-            col4="2"
-            col5="2"
-          />
-        </View>
-      </View>
-    </View>
-  </Page>
-</Document>;
+    const addRowData = (label: string, data: any[], subTotal: any): void => {
+      rows.push({ col1: label });
+      data.forEach((e) => {
+        rows.push({
+          col1: e?.job_level_name,
+          col2: e?.existing,
+          col3: e?.promote,
+          col4: e?.recruit,
+          col5: e?.total,
+        });
+      });
+      rows.push({
+        col1: "Sub - Total =",
+        col2: subTotal?.existing,
+        col3: subTotal?.promote,
+        col4: subTotal?.recruit,
+        col5: subTotal?.total,
+      });
+    };
+
+    if (exec.length) {
+      addRowData("Executives", exec, subTotalExecutive);
+    }
+
+    if (non.length) {
+      addRowData("Non-Executives", non, subTotalNon);
+    }
+
+    const totalRow = grade?.total?.[0] || {};
+    rows.push({
+      col1: "Total =",
+      col2: totalRow.existing || 0,
+      col3: totalRow.promote || 0,
+      col4: totalRow.recruit || 0,
+      col5: totalRow.total || 0,
+    });
+
+    return rows;
+  };
+
+  const processOverall = (overall: any, type: string, label: string): any => {
+    return {
+      type,
+      label,
+      operatingUnit: overall.operating_unit,
+      budgetYear: overall.budget_year,
+      rows: formatGradeData(overall.grade),
+    };
+  };
+
+  const result: any[] = [];
+
+  if (data.overall) {
+    result.push(processOverall(data.overall, "overall", "Overall"));
+  }
+
+  if (data.organization_overall) {
+    data.organization_overall.forEach((org: any, index: number) => {
+      result.push(
+        processOverall(org.overall, "organization", `Organization ${index + 1}`)
+      );
+      org.location_overall.forEach((loc: any, locIndex: number) => {
+        result.push(
+          processOverall(
+            loc,
+            "location",
+            `Location ${index + 1}.${locIndex + 1}`
+          )
+        );
+      });
+    });
+  }
+
+  return result;
 };
 
-export default MyDocument
+const MyDocument: FC<any> = ({ data }) => {
+  console.log(data);
+  const page = convertRawData(data);
+  console.log({ page });
+  return (
+    <Document>
+      {page.map((page, pageIndex) => {
+        return (
+          <Page size="A4" style={styles.page} key={"page_" + pageIndex}>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Image
+                style={{ ...styles.image, marginRight: 10, marginLeft: 10 }}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL}/julong.png`}
+              />
+              <View style={styles.section}>
+                <Text style={styles.title}>JULONG GROUP (INDONESIA)</Text>
+                <Text
+                  style={{ textAlign: "center", fontFamily: "Noto Sans SC" }}
+                >
+                  聚龙集团印尼区
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                padding: 10,
+                flexGrow: 1,
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  flexGrow: 1,
+                }}
+              >
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                    border: 1,
+                    borderColor: "black",
+                  }}
+                >
+                  <View>
+                    <View style={styles.section}>
+                      <Text
+                        style={{
+                          ...styles.title,
+                          textDecoration: "underline",
+                          marginBottom: 10,
+                        }}
+                      >
+                        STAFF REQUIREMENT
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ marginBottom: 10, padding: 5 }}>
+                    <View
+                      style={{
+                        ...styles.section,
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          width: 100,
+                        }}
+                      >
+                        OPERATING UNIT
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          paddingLeft: 10,
+                          paddingRight: 10,
+                        }}
+                      >
+                        :
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          paddingVertical: 1,
+                        }}
+                      >
+                        {page?.operatingUnit}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.section,
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          width: 100,
+                        }}
+                      >
+                        BUDGET YEAR
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          paddingLeft: 10,
+                          paddingRight: 10,
+                        }}
+                      >
+                        :
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          paddingVertical: 1,
+                        }}
+                      >
+                        {page?.budgetYear}
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      borderBottom: 1,
+                      borderTop: 1,
+                      borderColor: "black",
+                      display: "flex",
+                      flexDirection: "row",
+                      width: "100%",
+                    }}
+                  >
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        padding: 5,
+                        borderRight: 1,
+                        flexGrow: 1,
+                        borderColor: "black",
+                      }}
+                    >
+                      <Text style={styles.thead}>Grade</Text>
+                    </View>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        borderRight: 1,
+                        borderColor: "black",
+                        width: 100,
+                      }}
+                    >
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          padding: 5,
+                        }}
+                      >
+                        <Text style={styles.thead}>Existing</Text>
+                      </View>
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexGrow: 1,
+                          width: "100%",
+                          borderTop: 1,
+                          borderColor: "black",
+                        }}
+                      >
+                        <Text style={styles.thead}>Aug-24</Text>
+                      </View>
+                    </View>
+
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        borderRight: 1,
+                        borderColor: "black",
+                        width: 200,
+                      }}
+                    >
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          padding: 5,
+                        }}
+                      >
+                        <Text style={styles.thead}>
+                          2025 BUDGET (Sep24-Aug25)
+                        </Text>
+                      </View>
+
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          width: 200,
+                          borderTop: 1,
+                          borderColor: "black",
+                        }}
+                      >
+                        <View
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            padding: 5,
+                            borderRight: 1,
+                            width: 100,
+                            borderColor: "black",
+                          }}
+                        >
+                          <Text style={styles.thead}>Promote</Text>
+                        </View>
+                        <View
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 100,
+                            borderColor: "black",
+                          }}
+                        >
+                          <Text style={styles.thead}>Recruit</Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        borderColor: "black",
+                        width: 100,
+                      }}
+                    >
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          padding: 5,
+                        }}
+                      >
+                        <Text style={styles.thead}>TOTAL</Text>
+                      </View>
+
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text style={styles.thead}>2024/2025</Text>
+                      </View>
+                    </View>
+                  </View>
+                  {/* ROW */}
+                  <Row col1=" " />
+                  {page.rows.map((row: any, rowIndex: any) => (
+                    <Row
+                      key={"page_" + pageIndex + "_row_" + rowIndex}
+                      styleText={{
+                        fontFamily: [
+                          "Executives",
+                          "Non - Executives",
+                          "Sub - Total =",
+                          "Total =",
+                        ].includes(row?.col1)
+                          ? "roboto"
+                          : "roboto-light",
+                        fontWeight: [
+                          "Executives",
+                          "Non - Executives",
+                          "Sub - Total =",
+                          "Total =",
+                        ].includes(row?.col1)
+                          ? "bold"
+                          : "light",
+                        textDecoration: [
+                          "Executives",
+                          "Non - Executives",
+                        ].includes(row?.col1)
+                          ? "underline"
+                          : "none",
+                      }}
+                      col1={row.col1}
+                      col2={row.col2}
+                      col3={row.col3}
+                      col4={row.col4}
+                      col5={row.col5}
+                      footer={row?.col1 === "Sub - Total =" || row?.col1 === "Total =" ? true : false}
+                      hideBorder={
+                        row?.col1 === "Total ="  ? true : false
+                      }
+                    />
+                  ))}
+                </View>
+              </View>
+            </View>
+          </Page>
+        );
+      })}
+    </Document>
+  );
+};
+
+export default MyDocument;

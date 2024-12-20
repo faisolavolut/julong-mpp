@@ -207,9 +207,9 @@ function Page() {
           total_needs: data.male_needs + data.female_needs,
           remaining_balance:
             data.recruitment_type === "MT_Management Trainee"
-              ? jobs.remaining_balance_mt
+              ? getNumber(jobs?.remaining_balance_mt)
               : data.recruitment_type === "PH_Professional Hire"
-              ? jobs.remaining_balance_ph
+              ? getNumber(jobs?.remaining_balance_ph)
               : 0,
           organization_structure_id: data.for_organization_structure_id,
           mpp_name: data.mpp_period.title,

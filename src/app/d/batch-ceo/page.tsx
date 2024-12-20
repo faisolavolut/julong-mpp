@@ -27,6 +27,8 @@ function Page() {
     can_add: false,
     can_edit: false,
     client: false,
+    ready: false,
+    data: null as any
   });
   useEffect(() => {
     const run = async () => {
@@ -34,14 +36,16 @@ function Page() {
       const access = getAccess("create-mpp", roles);
       if (access) {
         const res = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/need-approval`
         );
         if (res?.data?.data) {
+          local.data = res?.data?.data;
           local.can_add = true;
         }
       }
       const edit = getAccess("edit-mpp", roles);
       local.can_edit = edit;
+      local.ready = true;
       local.render();
     };
     run();
@@ -55,19 +59,21 @@ function Page() {
         </h2>
       </div>
       <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
-        <div className="flex flex-grow flex-col">
-          <div className="flex flex-grow bg-[#525659] overflow-y-scroll flex-col items-center relative">
-            <PDFViewer className="flex-grow w-full">
-              <MyDocument />
-            </PDFViewer>
-          </div>
-          <div className="flex flex-row items-center justify-center">
-            <div className="flex flex-row gap-x-1 py-2">
-              <AlertCeoReject/>
-              <AlertCeoApprove/>
+        {local.ready && (
+          <div className="flex flex-grow flex-col">
+            <div className="flex flex-grow bg-[#525659] overflow-y-scroll flex-col items-center relative">
+              <PDFViewer className="flex-grow w-full">
+                <MyDocument data={local.data}/>
+              </PDFViewer>
+            </div>
+            <div className="flex flex-row items-center justify-center">
+              <div className="flex flex-row gap-x-1 py-2">
+                <AlertCeoReject />
+                <AlertCeoApprove />
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

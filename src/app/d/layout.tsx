@@ -34,8 +34,8 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
       } catch (e) {
         navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
       }
-    }
-    run() 
+    };
+    run();
   }, []);
   return (
     <div className="flex h-screen flex-col">
@@ -60,7 +60,9 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
             id="main-content"
             className="flex-grow  relative overflow-y-auto flex flex-row"
           >
-            <main className="flex-grow p-10 flex flex-col">{children}</main>
+            <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-10">
+              <main className="flex-grow flex flex-col">{children}</main>
+            </div>
           </div>
         </div>
       </div>

@@ -113,7 +113,6 @@ function Page() {
         const org = await api.get(
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations/` + id_org
         );
-        console.log({ org });
         const current_open = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
           );
@@ -263,6 +262,7 @@ function Page() {
                     name={"recommended_by"}
                     label={"Recommend by"}
                     type={"text"}
+                    disabled={true}
                   />
                 </div>
                 <div>
@@ -271,6 +271,7 @@ function Page() {
                     name={"approved_by"}
                     label={"Approved by"}
                     type={"text"}
+                    disabled={true}
                   />
                 </div>
                 <div>

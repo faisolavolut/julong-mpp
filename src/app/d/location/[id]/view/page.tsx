@@ -93,267 +93,258 @@ function Page() {
               />
             </div>
             <div className="flex flex-row space-x-2">
-              <Alert
-                className={"max-w-3xl"}
-                type={"save"}
-                content={
-                  <>
-                    <AlertDialogHeader className="flex flex-row items-center">
-                      <AlertDialogTitle className="flex-grow">
-                        History Notes
-                      </AlertDialogTitle>
+              {fm.data?.history?.length && (
+                <Alert
+                  className={"max-w-3xl"}
+                  type={"save"}
+                  content={
+                    <>
+                      <AlertDialogHeader className="flex flex-row items-center">
+                        <AlertDialogTitle className="flex-grow">
+                          History Notes
+                        </AlertDialogTitle>
 
-                      <AlertDialogCancel className="m-0 p-1 h-auto">
-                        <X className="h-4 w-4" />
-                      </AlertDialogCancel>
-                    </AlertDialogHeader>
+                        <AlertDialogCancel className="m-0 p-1 h-auto">
+                          <X className="h-4 w-4" />
+                        </AlertDialogCancel>
+                      </AlertDialogHeader>
 
-                    <div
-                      className={cx(
-                        "h-[300px] flex flex-col",
-                        css`
-                          .tbl-search {
-                            display: none !important;
-                          }
-                          .head-tbl-list {
-                            display: none;
-                          }
-                          .tbl-pagination {
-                            display: none !important;
-                          }
-                        `
-                      )}
-                    >
-                      <TableList
-                        disabledPagination={true}
-                        header={{
-                          sideLeft: (tbl: any) => {
-                            return <></>;
-                          },
-                          sideRight: (tbl: any) => {
-                            return <></>;
-                          },
-                        }}
-                        column={[
-                          {
-                            name: "approver_name",
-                            header: () => <span>Sender</span>,
-                            renderCell: ({ row, name, cell, tbl }: any) => {
-                              return <>{getValue(row, name)}</>;
+                      <div
+                        className={cx(
+                          "h-[300px] flex flex-col",
+                          css`
+                            .tbl-search {
+                              display: none !important;
+                            }
+                            .head-tbl-list {
+                              display: none;
+                            }
+                            .tbl-pagination {
+                              display: none !important;
+                            }
+                          `
+                        )}
+                      >
+                        <TableList
+                          disabledPagination={true}
+                          header={{
+                            sideLeft: (tbl: any) => {
+                              return <></>;
                             },
-                          },
-                          {
-                            name: "status",
-                            header: () => <span>Status</span>,
-                            renderCell: ({ row, name, cell, tbl }: any) => {
-                              return (
-                                <div className="uppercase">
-                                  {getValue(row, name)}
-                                </div>
-                              );
+                            sideRight: (tbl: any) => {
+                              return <></>;
                             },
-                          },
-                          {
-                            name: "created_at",
-                            header: () => <span>Datetime</span>,
-                            renderCell: ({ row, name, cell, tbl }: any) => {
-                              return <>{shortDate(getValue(row, name))}</>;
+                          }}
+                          column={[
+                            {
+                              name: "approver_name",
+                              header: () => <span>Sender</span>,
+                              renderCell: ({ row, name, cell, tbl }: any) => {
+                                return <>{getValue(row, name)}</>;
+                              },
                             },
-                          },
-                          {
-                            name: "notes",
-                            header: () => <span>Notes</span>,
-                            renderCell: ({ row, name, cell, tbl }: any) => {
-                              return (
-                                <div className="uppercase">
-                                  {getValue(row, name)}
-                                </div>
-                              );
+                            {
+                              name: "status",
+                              header: () => <span>Status</span>,
+                              renderCell: ({ row, name, cell, tbl }: any) => {
+                                return (
+                                  <div className="uppercase">
+                                    {getValue(row, name)}
+                                  </div>
+                                );
+                              },
                             },
-                          },
+                            {
+                              name: "created_at",
+                              header: () => <span>Datetime</span>,
+                              renderCell: ({ row, name, cell, tbl }: any) => {
+                                return <>{shortDate(getValue(row, name))}</>;
+                              },
+                            },
+                            {
+                              name: "notes",
+                              header: () => <span>Notes</span>,
+                              renderCell: ({ row, name, cell, tbl }: any) => {
+                                return (
+                                  <div className="uppercase">
+                                    {getValue(row, name)}
+                                  </div>
+                                );
+                              },
+                            },
 
-                          {
-                            name: "action",
-                            header: () => <span>Action</span>,
-                            sortable: false,
-                            renderCell: ({ row, name, cell }: any) => {
-                              if (!row?.attachments?.length) return <></>;
-                              return (
-                                <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                                  <Dialog>
-                                    <DialogTrigger asChild>
-                                      <div>
-                                        <ButtonContainer variant={"outline"}>
-                                          <div className="flex items-center gap-x-2">
-                                            <IoEye className="text-lg" />
-                                          </div>
-                                        </ButtonContainer>
-                                      </div>
-                                    </DialogTrigger>
-                                    <DialogContent className="max-w-5xl  flex flex-col">
-                                      <DialogHeader>
-                                        <DialogTitle>List File</DialogTitle>
-                                        <DialogDescription className="hidden"></DialogDescription>
-                                      </DialogHeader>
-                                      <div className="flex items-center flex-row space-x-2 flex-grow">
-                                        <div
-                                          className={cx(
-                                            "h-[300px] flex flex-col flex-grow",
-                                            css`
-                                              .tbl-search {
-                                                display: none !important;
-                                              }
-                                              .head-tbl-list {
-                                                display: none;
-                                              }
-                                              .tbl-pagination {
-                                                display: none !important;
-                                              }
-                                            `
-                                          )}
-                                        >
-                                          <TableList
-                                            disabledPagination={true}
-                                            header={{
-                                              sideLeft: (tbl: any) => {
-                                                return <></>;
-                                              },
-                                              sideRight: (tbl: any) => {
-                                                return <></>;
-                                              },
-                                            }}
-                                            column={[
-                                              {
-                                                name: "file_name",
-                                                header: () => (
-                                                  <span>Filename</span>
-                                                ),
-                                                renderCell: ({
-                                                  row,
-                                                  name,
-                                                  cell,
-                                                  tbl,
-                                                }: any) => {
-                                                  return (
-                                                    <>{getValue(row, name)}</>
-                                                  );
-                                                },
-                                              },
-                                              {
-                                                name: "action",
-                                                header: () => (
-                                                  <span>Action</span>
-                                                ),
-                                                sortable: false,
-                                                renderCell: ({
-                                                  row,
-                                                  name,
-                                                  cell,
-                                                }: any) => {
-                                                  const type = getValue(
-                                                    row,
-                                                    "file_type"
-                                                  )
-                                                    ? getValue(
-                                                        row,
-                                                        "file_type"
-                                                      ).startsWith("image/")
-                                                    : false;
-
-                                                  if (type)
-                                                    return (
-                                                      <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                                                        <PreviewImagePopup
-                                                          url={getValue(
-                                                            row,
-                                                            "file_path"
-                                                          )}
-                                                          children={
-                                                            <div>
-                                                              <ButtonContainer
-                                                                variant={
-                                                                  "outline"
-                                                                }
-                                                              >
-                                                                <div className="flex items-center gap-x-2">
-                                                                  <IoEye className="text-lg" />
-                                                                </div>
-                                                              </ButtonContainer>
-                                                            </div>
-                                                          }
-                                                        />
-                                                      </div>
-                                                    );
-
-                                                  return (
-                                                    <>
-                                                      <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                                                        <ButtonBetter
-                                                          variant={"outline"}
-                                                          onClick={() => {
-                                                            window.open(
-                                                              getValue(
-                                                                row,
-                                                                "file_path"
-                                                              ),
-                                                              "_blank"
-                                                            );
-                                                          }}
-                                                        >
-                                                          <div className="flex items-center gap-x-2">
-                                                            <IoEye className="text-lg" />
-                                                          </div>
-                                                        </ButtonBetter>
-                                                      </div>
-                                                    </>
-                                                  );
-                                                },
-                                              },
-                                            ]}
-                                            onLoad={async (param: any) => {
-                                              return row.attachments || [];
-                                            }}
-                                          />
+                            {
+                              name: "action",
+                              header: () => <span>Action</span>,
+                              sortable: false,
+                              renderCell: ({ row, name, cell }: any) => {
+                                if (!row?.attachments?.length) return <></>;
+                                return (
+                                  <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                                    <Dialog>
+                                      <DialogTrigger asChild>
+                                        <div>
+                                          <ButtonContainer variant={"outline"}>
+                                            <div className="flex items-center gap-x-2">
+                                              <IoEye className="text-lg" />
+                                            </div>
+                                          </ButtonContainer>
                                         </div>
-                                      </div>
-                                    </DialogContent>
-                                  </Dialog>
-                                </div>
-                              );
+                                      </DialogTrigger>
+                                      <DialogContent className="max-w-5xl  flex flex-col">
+                                        <DialogHeader>
+                                          <DialogTitle>List File</DialogTitle>
+                                          <DialogDescription className="hidden"></DialogDescription>
+                                        </DialogHeader>
+                                        <div className="flex items-center flex-row space-x-2 flex-grow">
+                                          <div
+                                            className={cx(
+                                              "h-[300px] flex flex-col flex-grow",
+                                              css`
+                                                .tbl-search {
+                                                  display: none !important;
+                                                }
+                                                .head-tbl-list {
+                                                  display: none;
+                                                }
+                                                .tbl-pagination {
+                                                  display: none !important;
+                                                }
+                                              `
+                                            )}
+                                          >
+                                            <TableList
+                                              disabledPagination={true}
+                                              header={{
+                                                sideLeft: (tbl: any) => {
+                                                  return <></>;
+                                                },
+                                                sideRight: (tbl: any) => {
+                                                  return <></>;
+                                                },
+                                              }}
+                                              column={[
+                                                {
+                                                  name: "file_name",
+                                                  header: () => (
+                                                    <span>Filename</span>
+                                                  ),
+                                                  renderCell: ({
+                                                    row,
+                                                    name,
+                                                    cell,
+                                                    tbl,
+                                                  }: any) => {
+                                                    return (
+                                                      <>{getValue(row, name)}</>
+                                                    );
+                                                  },
+                                                },
+                                                {
+                                                  name: "action",
+                                                  header: () => (
+                                                    <span>Action</span>
+                                                  ),
+                                                  sortable: false,
+                                                  renderCell: ({
+                                                    row,
+                                                    name,
+                                                    cell,
+                                                  }: any) => {
+                                                    const type = getValue(
+                                                      row,
+                                                      "file_type"
+                                                    )
+                                                      ? getValue(
+                                                          row,
+                                                          "file_type"
+                                                        ).startsWith("image/")
+                                                      : false;
+
+                                                    if (type)
+                                                      return (
+                                                        <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                                                          <PreviewImagePopup
+                                                            url={getValue(
+                                                              row,
+                                                              "file_path"
+                                                            )}
+                                                            children={
+                                                              <div>
+                                                                <ButtonContainer
+                                                                  variant={
+                                                                    "outline"
+                                                                  }
+                                                                >
+                                                                  <div className="flex items-center gap-x-2">
+                                                                    <IoEye className="text-lg" />
+                                                                  </div>
+                                                                </ButtonContainer>
+                                                              </div>
+                                                            }
+                                                          />
+                                                        </div>
+                                                      );
+
+                                                    return (
+                                                      <>
+                                                        <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                                                          <ButtonBetter
+                                                            variant={"outline"}
+                                                            onClick={() => {
+                                                              window.open(
+                                                                getValue(
+                                                                  row,
+                                                                  "file_path"
+                                                                ),
+                                                                "_blank"
+                                                              );
+                                                            }}
+                                                          >
+                                                            <div className="flex items-center gap-x-2">
+                                                              <IoEye className="text-lg" />
+                                                            </div>
+                                                          </ButtonBetter>
+                                                        </div>
+                                                      </>
+                                                    );
+                                                  },
+                                                },
+                                              ]}
+                                              onLoad={async (param: any) => {
+                                                return row.attachments || [];
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </DialogContent>
+                                    </Dialog>
+                                  </div>
+                                );
+                              },
                             },
-                          },
-                        ]}
-                        onLoad={async (param: any) => {
-                          const params = await events("onload-param", param);
-                          const res: any = await api.get(
-                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/approval-histories/` +
-                              id
-                          );
-                          const data: any[] = res.data.data;
-                          console.log({ data });
-                          if (!Array.isArray(data)) return [];
-                          return data || [];
-                        }}
-                      />
-                    </div>
-                  </>
-                }
-              >
-                <ButtonContainer variant="outline">
-                  <FiInfo className="text-xl" />
-                </ButtonContainer>
-              </Alert>
-              <div className="flex flex-row items-center h-full">
-                <ButtonBetter
-                  variant="outline"
-                  className="px-4 py-1 text-sm h-auto"
+                          ]}
+                          onLoad={async (param: any) => {
+                            const params = await events("onload-param", param);
+                            const res: any = await api.get(
+                              `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/approval-histories/` +
+                                id
+                            );
+                            const data: any[] = res.data.data;
+                            console.log({ data });
+                            if (!Array.isArray(data)) return [];
+                            return data || [];
+                          }}
+                        />
+                      </div>
+                    </>
+                  }
                 >
-                  <div className="flex items-center gap-x-1 ">
-                    <HiDocumentDownload className="text-xl" />
-                    <span>Export</span>
-                  </div>
-                </ButtonBetter>
-              </div>
+                  <ButtonContainer variant="outline">
+                    <FiInfo className="text-xl" />
+                  </ButtonContainer>
+                </Alert>
+              )}
               {local.can_reject && fm?.data?.status === "NEED APPROVAL" ? (
                 <Alert
                   type={"save"}
@@ -580,23 +571,14 @@ function Page() {
                             approved_by: get_user("employee.name"),
                             level: "Level Direktur Unit",
                             status: "APPROVED",
-                            notes: data.notes || null,
                           };
 
                           if (local.fm) {
                             local.fm.data.status = "APPROVED";
                             local.fm.render();
                           }
-                          const attachments = data?.attachment?.length
-                            ? data.attachment.map((e: any) => e.data)
-                            : [];
                           const formData = new FormData();
                           formData.append("payload", JSON.stringify(param));
-                          if (attachments?.length) {
-                            attachments.forEach((file: any) => {
-                              formData.append("attachments", file); // Nama field unik untuk setiap file
-                            });
-                          }
 
                           const res: any = await api.put(
                             `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/update-status`,
@@ -607,7 +589,6 @@ function Page() {
                               },
                             }
                           );
-                          console.log(param);
                         }}
                         onLoad={async () => {
                           return {
@@ -621,33 +602,6 @@ function Page() {
                         children={(fm: any) => {
                           return (
                             <>
-                              <div className={cx("flex flex-col flex-wrap")}>
-                                <div className="grid gap-4 mb-4 grid-cols-1">
-                                  <div>
-                                    <Field
-                                      fm={fm}
-                                      name={"notes"}
-                                      label={"Notes"}
-                                      type={"textarea"}
-                                    />
-                                  </div>
-                                  <div>
-                                    <Field
-                                      fm={fm}
-                                      name={"attachment"}
-                                      label={"Attachment"}
-                                      type={"multi-upload"}
-                                      onChange={(val: any) => {
-                                        if (
-                                          typeof fm.fields?.tbl === "object"
-                                        ) {
-                                          fm.fields.tbl.reload();
-                                        }
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
                             </>
                           );
                         }}
@@ -776,6 +730,11 @@ function Page() {
         const res: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/` + id
         );
+
+        const history: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/approval-histories/` +
+            id
+        );
         const data = res.data.data;
         return {
           id,
@@ -784,6 +743,7 @@ function Page() {
           budget_year_from: data?.mpp_period?.budget_start_date,
           budget_year_to: data?.mpp_period?.budget_end_date,
           document_line: data?.mp_planning_lines || [],
+          history: history.data.data,
         };
       }}
       showResize={false}

@@ -4,6 +4,13 @@ import { TableList } from "@/app/components/tablelist/TableList";
 import { Tablist } from "@/app/components/tablist/Tablist";
 import { ButtonBetter } from "@/app/components/ui/button";
 import { ButtonLink } from "@/app/components/ui/button-link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/app/components/ui/card";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
@@ -14,6 +21,7 @@ import { useLocal } from "@/lib/use-local";
 import { Button } from "flowbite-react";
 import Link from "next/link";
 import { useEffect } from "react";
+import { GoInfo } from "react-icons/go";
 import {
   HiDocumentDownload,
   HiOutlinePencilAlt,
@@ -27,7 +35,8 @@ function Page() {
     can_add: false,
     can_edit: false,
     location_null: 0,
-    batch_lines: [] as string[]
+    batch_lines: [] as string[],
+    batch: null as any,
   });
   useEffect(() => {
     const run = async () => {
@@ -36,8 +45,8 @@ function Page() {
       if (access) {
         const addtional = {
           status: "APPROVED",
-          paging:1,
-          take: 1000
+          paging: 1,
+          take: 1000,
         };
         const params = await events("onload-param", addtional);
         console.log(params);
@@ -45,18 +54,25 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` + params
         );
         if (res?.data?.data?.organization_locations?.length) {
-          console.log(res?.data?.data?.organization_locations);
           const location_null = res?.data?.data?.organization_locations.filter(
             (e: any) => !e?.mp_planning_header
           );
-          
+
           const document_line = res?.data?.data?.organization_locations.filter(
             (e: any) => e?.mp_planning_header
           );
-          local.batch_lines = document_line.map((e: any) => e?.mp_planning_header?.id)
+          local.batch_lines = document_line.map(
+            (e: any) => e?.mp_planning_header?.id
+          );
           local.location_null = getNumber(location_null?.length);
-          local.can_add = true;
+          local.can_add = document_line?.length ? true : false;
         }
+
+        const batch: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/current-status/NEED APPROVAL`
+        );
+        console.log({batch})
+        local.batch = batch.data.data;
       }
       const edit = getAccess("edit-mpp", roles);
       local.can_edit = edit;
@@ -90,7 +106,36 @@ function Page() {
           tabContent={(data: any) => {
             return (
               <>
-                <div className="w-full flex flex-row flex-grow">
+                <div className="w-full flex flex-col flex-grow">
+                  {local.batch && (
+                    <div className="p-2">
+                      <Card className="w-full">
+                        <CardContent className="p-4 flex flex-row">
+                          <div className=" flex flex-grow">
+                            <table className="text-sm">
+                              <tbody>
+                                <tr>
+                                  <td>Batch Number</td>
+                                  <td>:</td>
+                                  <td>{local.batch?.document_number}</td>
+                                </tr>
+                                <tr>
+                                  <td>Status</td>
+                                  <td>:</td>
+                                  <td>Need Approval</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div className="flex flex-row items-center">
+                          <ButtonBetter>Completed</ButtonBetter>
+
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
+
                   <div className={cx("flex flex-grow flex-col h-[350px]")}>
                     <TableList
                       name="Location"
@@ -99,7 +144,7 @@ function Page() {
                           if (!local.can_add) return <></>;
                           return (
                             <>
-                              <AlertBatch local={local}/>
+                              <AlertBatch local={local} />
                             </>
                           );
                         },
@@ -133,25 +178,25 @@ function Page() {
                             return <>{getValue(row, name)}</>;
                           },
                         },
-                        {
-                          name: "action",
-                          header: () => <span>Action</span>,
-                          sortable: false,
-                          renderCell: ({ row, name, cell }: any) => {
-                            return (
-                              <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                                <ButtonLink
-                                  className="bg-primary"
-                                  href={`/d/bacth/${row.id}/view`}
-                                >
-                                  <div className="flex items-center gap-x-2">
-                                    <IoEye className="text-lg" />
-                                  </div>
-                                </ButtonLink>
-                              </div>
-                            );
-                          },
-                        },
+                        // {
+                        //   name: "action",
+                        //   header: () => <span>Action</span>,
+                        //   sortable: false,
+                        //   renderCell: ({ row, name, cell }: any) => {
+                        //     return (
+                        //       <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                        //         <ButtonLink
+                        //           className="bg-primary"
+                        //           href={`/d/bacth/${row.id}/view`}
+                        //         >
+                        //           <div className="flex items-center gap-x-2">
+                        //             <IoEye className="text-lg" />
+                        //           </div>
+                        //         </ButtonLink>
+                        //       </div>
+                        //     );
+                        //   },
+                        // },
                       ]}
                       onLoad={async (param: any) => {
                         const addtional = {

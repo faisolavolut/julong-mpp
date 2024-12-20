@@ -18,6 +18,9 @@ import api from "@/lib/axios";
 import { Form } from "../form/Form";
 import { Field } from "../form/Field";
 import { cloneFM } from "@/lib/cloneFm";
+import { toast } from "sonner";
+import { AlertTriangle, Check, Loader2 } from "lucide-react";
+import { get_user } from "@/lib/get_user";
 export const AlertCeoReject: FC<any> = () => {
   const local = useLocal({
     organization: [] as any[],
@@ -186,7 +189,80 @@ export const AlertCeoReject: FC<any> = () => {
                 </div>
               </ButtonBetter>
             </DialogClose>
-            <DialogClose asChild>
+            <DialogClose asChild 
+                onClick={async () => {
+                  toast.info(
+                    <>
+                      <Loader2
+                        className={cx(
+                          "h-4 w-4 animate-spin-important",
+                          css`
+                            animation: spin 1s linear infinite !important;
+                            @keyframes spin {
+                              0% {
+                                transform: rotate(0deg);
+                              }
+                              100% {
+                                transform: rotate(360deg);
+                              }
+                            }
+                          `
+                        )}
+                      />
+                      {"Saving..."}
+                    </>
+                  );
+                  try {
+                    const batch = await api.get(
+                      `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
+                    );
+                    const id = batch?.data?.data?.id;
+                    const param = {
+                      id,
+                      status: "REJECTED",
+                      approved_by: get_user("employee.id"),
+                      approver_name: get_user("employee.name"),
+                    };
+
+                    const res = await api.put(
+                      `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/update-status`,
+                      param
+                    );
+                    setTimeout(() => {
+                      toast.success(
+                        <div
+                          className={cx(
+                            "cursor-pointer flex flex-col select-none items-stretch flex-1 w-full"
+                          )}
+                          onClick={() => {
+                            toast.dismiss();
+                          }}
+                        >
+                          <div className="flex text-green-700 items-center success-title font-semibold">
+                            <Check className="h-6 w-6 mr-1 " />
+                            Record Saved
+                          </div>
+                        </div>
+                      );
+                    }, 1000);
+                  } catch (ex: any) {
+                    toast.error(
+                      <div className="flex flex-col w-full">
+                        <div className="flex text-red-600 items-center">
+                          <AlertTriangle className="h-4 w-4 mr-1" />
+                          Submit Failed {ex.message}.
+                        </div>
+                      </div>,
+                      {
+                        dismissible: true,
+                        className: css`
+                          background: #ffecec;
+                          border: 2px solid red;
+                        `,
+                      }
+                    );
+                  }
+                }}>
               <ButtonBetter>
                 <div className="flex items-center gap-x-0.5">
                   <span className="capitalize">Yes</span>

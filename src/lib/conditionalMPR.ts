@@ -13,7 +13,7 @@ export const showApprovel = (
       status: "IN PROGRESS",
       permision: ["approve-mpr-dept-head"],
       column: ["department_head"],
-      level: ["Level Dept Head"],
+      level: ["Level Head Department"],
     },
     {
       status: "NEED APPROVAL",
@@ -23,13 +23,13 @@ export const showApprovel = (
         "approve-mpr-ceo",
       ],
       column: ["department_head", "vp_gm_director", "ceo"],
-      level: ["Level Dept Head", "Level VP/GM/Direktur", "Level CEO"],
+      level: ["Level Head Department", "Level VP", "Level CEO"],
     },
     {
       status: "APPROVED",
       permision: ["approve-mpr-ho"],
       column: ["hrd_ho_unit"],
-      level: ["Level HRD/HO Unit"],
+      level: ["Level HRD HO"],
     },
   ]; // tiga status yang dapat memunculkan approval
   const status = a1.find((e) => data?.status === e.status);
@@ -38,18 +38,20 @@ export const showApprovel = (
     const isPermision = permision.find((e) => status.permision.includes(e));
     if (isPermision) {
       console.log({ permision, er: status.permision });
-      let pass = true
+      let pass = true;
       status.permision.map((e, idx) => {
         if (permision.find((p) => p === e)) {
-          if (pass && !get(result, status.column[idx])) {
-            pass = false;
+          console.log(e, !get(data, status.column[idx]), status.column[idx])
+          if (pass && !get(data, status.column[idx])) {
             result[status.column[idx]] = get_user("employee.id");
             result["level"] = status.level[idx];
+            pass = false;
           }
         }
       });
       if (action) {
         if (action === "approve") {
+          console.log(data,data.mp_request_type,result?.level, data?.organization_category )
           switch (data?.status) {
             case "IN PROGRESS":
               result["approve"] = data?.mp_planning_header_id
@@ -60,6 +62,9 @@ export const showApprovel = (
             case "NEED APPROVAL":
               result["approve"] =
                 result?.level === "Level CEO"
+                  ? "APPROVED"
+                  : result?.level === "Level Head Department" &&
+                    data.mp_request_type === "ON_BUDGET"
                   ? "APPROVED"
                   : data?.organization_category === "Field"
                   ? "APPROVED"

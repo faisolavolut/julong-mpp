@@ -197,327 +197,81 @@ const DocumentMPR = () => {
         <View
           style={{
             display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: "column",
+            border: 1,
+            borderColor: "black",
           }}
         >
           <View
             style={{
               display: "flex",
-              flexDirection: "column",
+              flexDirection: "row",
               alignItems: "center",
-              width: 100,
-              backgroundColor: "red",
-            }}
-          >
-            <Image
-              style={{ ...styles.image, marginRight: 10, marginLeft: 10 }}
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/julong.png`}
-            />
-            <View style={styles.section}>
-              <Text style={styles.title}>JULONG GROUP INDONESIA</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: 100,
-              flexGrow: 1,
-            }}
-          >
-            <View
-              style={{
-                ...styles.section,
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text>FORMULIR</Text>
-              <Text
-                style={{
-                  ...styles.chineseFont,
-                }}
-              >
-                {" "}
-                表单
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              height: "100%",
-            }}
-          >
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingHorizontal: 5,
-                  width: 130
-                }}
-              >
-                <Text>Nomor Dokumen</Text>
-                <Text
-                  style={{
-                    ...styles.chineseFont,
-                  }}
-                >
-                  {" "}
-                  文件编码
-                </Text>
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingHorizontal: 5,
-                  width: 130
-                }}
-              >
-                <Text>FRM-HRD-15-01</Text>
-              </View>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingHorizontal: 5,
-                  width: 130
-                }}
-              >
-                <Text>Revisi</Text>
-                <Text
-                  style={{
-                    ...styles.chineseFont,
-                  }}
-                > 修正
-                </Text>
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingHorizontal: 5,
-                  width: 130
-                }}
-              >
-                <Text>1</Text>
-              </View>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingHorizontal: 5,
-                  width: 130
-                }}
-              >
-                <Text>Tanggal Berlaku</Text>
-                <Text
-                  style={{
-                    ...styles.chineseFont,
-                  }}
-                > 有效期
-                </Text>
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingHorizontal: 5,
-                  width: 130
-                }}
-              >
-                <Text>01 Oktober 2020</Text>
-              </View>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingHorizontal: 5,
-                  width: 130
-                }}
-              >
-                <Text>Halaman</Text>
-                <Text
-                  style={{
-                    ...styles.chineseFont,
-                  }}
-                > 页面
-                </Text>
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingHorizontal: 5,
-                  width: 130
-                }}
-              >
-                <Text>1 dari 1</Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            padding: 10,
-            flexGrow: 1,
-          }}
-        >
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              flexGrow: 1,
             }}
           >
             <View
               style={{
                 display: "flex",
                 flexDirection: "column",
-                width: "100%",
-                border: 1,
+                alignItems: "center",
+                width: 100,
+
+                borderRight: 1,
                 borderColor: "black",
               }}
             >
+              <Image
+                style={{ ...styles.image, marginRight: 10, marginLeft: 10 }}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL}/julong.png`}
+              />
               <View>
-                <View style={styles.section}>
-                  <Text
-                    style={{
-                      ...styles.title,
-                      textDecoration: "underline",
-                      marginBottom: 10,
-                    }}
-                  >
-                    STAFF REQUIREMENT
-                  </Text>
-                </View>
+                <Text style={styles.title}>JULONG GROUP INDONESIA</Text>
               </View>
-              <View style={{ marginBottom: 10, padding: 5 }}>
-                <View
-                  style={{
-                    ...styles.section,
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      width: 100,
-                    }}
-                  >
-                    OPERATING UNIT
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      paddingLeft: 10,
-                      paddingRight: 10,
-                    }}
-                  >
-                    :
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      paddingVertical: 1,
-                    }}
-                  >
-                    JULONG GROUP
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    ...styles.section,
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      width: 100,
-                    }}
-                  >
-                    BUDGET YEAR
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      paddingLeft: 10,
-                      paddingRight: 10,
-                    }}
-                  >
-                    :
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      paddingVertical: 1,
-                    }}
-                  >
-                    2024/2025
-                  </Text>
-                </View>
-              </View>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                width: 100,
+                flexGrow: 1,
+                height: "100%",
+                borderRight: 1,
+                borderColor: "black",
+              }}
+            >
               <View
                 style={{
-                  borderBottom: 1,
-                  borderTop: 1,
-                  borderColor: "black",
                   display: "flex",
                   flexDirection: "row",
-                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <Text>FORMULIR</Text>
+                <Text
+                  style={{
+                    ...styles.chineseFont,
+                  }}
+                >
+                  {" "}
+                  表单
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                height: "100%",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
                 <View
@@ -525,250 +279,1577 @@ const DocumentMPR = () => {
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
-                    padding: 5,
+                    paddingHorizontal: 5,
+                    width: 130,
+                    height: 20,
+                    borderColor: "black",
                     borderRight: 1,
+                    borderBottom: 1,
+                  }}
+                >
+                  <Text>Nomor Dokumen</Text>
+                  <Text
+                    style={{
+                      ...styles.chineseFont,
+                    }}
+                  >
+                    {" "}
+                    文件编码
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 5,
+                    borderColor: "black",
+                    borderBottom: 1,
+                    width: 130,
+                    height: 20,
+                  }}
+                >
+                  <Text>FRM-HRD-15-01</Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 5,
+                    width: 130,
+                    height: 20,
+                    borderColor: "black",
+                    borderRight: 1,
+                    borderBottom: 1,
+                  }}
+                >
+                  <Text>Revisi</Text>
+                  <Text
+                    style={{
+                      ...styles.chineseFont,
+                    }}
+                  >
+                    修正
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 5,
+                    width: 130,
+                    borderColor: "black",
+                    borderBottom: 1,
+                    height: 20,
+                  }}
+                >
+                  <Text>1</Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 5,
+                    width: 130,
+                    height: 20,
+                    borderColor: "black",
+                    borderRight: 1,
+                    borderBottom: 1,
+                  }}
+                >
+                  <Text>Tanggal Berlaku</Text>
+                  <Text
+                    style={{
+                      ...styles.chineseFont,
+                    }}
+                  >
+                    {" "}
+                    有效期
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 5,
+                    width: 130,
+                    borderColor: "black",
+                    borderBottom: 1,
+                    height: 20,
+                  }}
+                >
+                  <Text>01 Oktober 2020</Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 5,
+                    width: 130,
+                    height: 20,
+                    borderColor: "black",
+                    borderRight: 1,
+                  }}
+                >
+                  <Text>Halaman</Text>
+                  <Text
+                    style={{
+                      ...styles.chineseFont,
+                    }}
+                  >
+                    {" "}
+                    页面
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 5,
+                    width: 130,
+                    height: 20,
+                    borderColor: "black",
+                    borderRight: 1,
+                  }}
+                >
+                  <Text>1 dari 1</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              borderTop: 1,
+              borderColor: "black",
+            }}
+          >
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                flexGrow: 1,
+              }}
+            >
+              <Text>KEBUTUHAN TENAGA KERJA</Text>
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                {" "}
+                员工需求
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Text>DATA KEBUTUHAN</Text>
+          <Text
+            style={{
+              ...styles.chineseFont,
+            }}
+          >
+            {" "}
+            需求信息：
+          </Text>
+        </View>
+        {/* BODY */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+          }}
+        >
+          <View
+            style={{
+              width: 140,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Text>Jumlah kebutuhan</Text>
+            <Text
+              style={{
+                ...styles.chineseFont,
+              }}
+            >
+              {" "}
+              需求人数
+            </Text>
+          </View>
+
+          <Text>
+            : 0 ( Pria{" "}
+            <Text
+              style={{
+                ...styles.chineseFont,
+                width: 100,
+              }}
+            >
+              男{" "}
+            </Text>{" "}
+            ) dan{" "}
+            <Text
+              style={{
+                ...styles.chineseFont,
+                width: 100,
+              }}
+            >
+              和
+            </Text>
+            /atau{" "}
+            <Text
+              style={{
+                ...styles.chineseFont,
+                width: 100,
+              }}
+            >
+              或
+            </Text>{" "}
+            0 ( Wanita{" "}
+            <Text
+              style={{
+                ...styles.chineseFont,
+                width: 100,
+              }}
+            >
+              女{" "}
+            </Text>{" "}
+            )
+          </Text>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+          }}
+        >
+          <View
+            style={{
+              width: 140,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Text>Status </Text>
+            <Text
+              style={{
+                ...styles.chineseFont,
+              }}
+            >
+              身份
+            </Text>
+          </View>
+          <Text>: Penggantian, karena Undur diri </Text>
+          <Text
+            style={{
+              ...styles.chineseFont,
+            }}
+          >
+            代替，原因为 离职
+          </Text>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+          }}
+        >
+          <View
+            style={{
+              width: 140,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Text>Usia </Text>
+            <Text
+              style={{
+                ...styles.chineseFont,
+              }}
+            >
+              年龄
+            </Text>
+          </View>
+          <Text>: Minimal </Text>
+          <Text
+            style={{
+              ...styles.chineseFont,
+            }}
+          >
+            最小
+          </Text>
+          <Text> 18 Tahun </Text>
+          <Text
+            style={{
+              ...styles.chineseFont,
+            }}
+          >
+            岁
+          </Text>
+          <Text> / Maksimal </Text>
+          <Text
+            style={{
+              ...styles.chineseFont,
+            }}
+          >
+            最大
+          </Text>
+          <Text> 50 Tahun </Text>
+          <Text
+            style={{
+              ...styles.chineseFont,
+            }}
+          >
+            岁
+          </Text>
+        </View>
+        {/* Status Perkawinan */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Status perkawinan{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                婚姻状况
+              </Text>
+            </Text>
+          </View>
+          <Text>
+            : Single{" "}
+            <Text
+              style={{
+                ...styles.chineseFont,
+              }}
+            >
+              未婚
+            </Text>
+            {" / "}Menikah{" "}
+            <Text
+              style={{
+                ...styles.chineseFont,
+              }}
+            >
+              已婚
+            </Text>
+            {" / "}Tidak ada masalah{" "}
+            <Text
+              style={{
+                ...styles.chineseFont,
+              }}
+            >
+              没问题
+            </Text>
+          </Text>
+        </View>
+
+        {/* PT/Est/Dept */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              PT/Est./Dept.{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                区域/部门
+              </Text>
+            </Text>
+          </View>
+          <Text>:</Text>
+        </View>
+
+        {/* Jabatan */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Jabatan{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                职位
+              </Text>
+            </Text>
+          </View>
+          <Text>:</Text>
+        </View>
+
+        {/* Golongan */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Golongan{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                等级
+              </Text>
+            </Text>
+          </View>
+          <Text>:</Text>
+        </View>
+
+        {/* Harapan Tanggal Masuk Kerja */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Harapan tanggal masuk kerja{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                入职时间期望
+              </Text>
+            </Text>
+          </View>
+          <Text>:</Text>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              SPESIFIKASI JABATAN{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                职位规格
+              </Text>
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Pendidikan minimal{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                最低学历
+              </Text>
+            </Text>
+          </View>
+          <Text>
+            : SMA/STM{" "}
+            <Text
+              style={{
+                ...styles.chineseFont,
+              }}
+            >
+              高中/技术高中
+            </Text>
+          </Text>
+        </View>
+        {/* Jurusan */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Jurusan{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                专业
+              </Text>
+            </Text>
+          </View>
+          <Text>:</Text>
+        </View>
+
+        {/* Pengalaman Kerja */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Pengalaman kerja{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                工作经验
+              </Text>
+            </Text>
+          </View>
+          <Text>:</Text>
+        </View>
+
+        {/* Kualifikasi yang Dibutuhkan */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Kualifikasi yang dibutuhkan{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                任职条件
+              </Text>
+            </Text>
+          </View>
+          <Text>:</Text>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Kemampuan khusus{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                特殊技能
+              </Text>
+            </Text>
+          </View>
+          <Text>: {" "}</Text>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontFamily: "roboto-light",
+              flexWrap: "wrap",
+            }}
+          >
+            {/* Sertifikat */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                fontFamily: "roboto-light",
+                flexWrap: "wrap",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 80
+                }}
+              >
+                <Text>
+                  -{" "}Sertifikat{" "}
+                  <Text
+                    style={{
+                      ...styles.chineseFont,
+                    }}
+                  >
+                    证书
+                  </Text>
+                </Text>
+              </View>
+              <Text>:</Text>
+            </View>
+
+            {/* Komputer */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                fontFamily: "roboto-light",
+                flexWrap: "wrap",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 80
+                }}
+              >
+                <Text>
+                -{" "}Komputer{" "}
+                  <Text
+                    style={{
+                      ...styles.chineseFont,
+                    }}
+                  >
+                    电脑
+                  </Text>
+                </Text>
+              </View>
+              <Text>:</Text>
+            </View>
+
+            {/* Bahasa */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                fontFamily: "roboto-light",
+                flexWrap: "wrap",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 80
+                }}
+              >
+                <Text>
+                -{" "}Bahasa{" "}
+                  <Text
+                    style={{
+                      ...styles.chineseFont,
+                    }}
+                  >
+                    语言
+                  </Text>
+                </Text>
+              </View>
+              <Text>:</Text>
+            </View>
+
+            {/* Lainnya */}
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                fontFamily: "roboto-light",
+                flexWrap: "wrap",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 80,
+                }}
+              >
+                <Text>
+                -{" "}Lainnya{" "}
+                  <Text
+                    style={{
+                      ...styles.chineseFont,
+                    }}
+                  >
+                    其他
+                  </Text>
+                </Text>
+              </View>
+              <Text>:</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Uraian Pekerjaan */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Uraian pekerjaan / Job desc{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                岗位职责
+              </Text>
+            </Text>
+          </View>
+          <Text>:</Text>
+        </View>
+
+        {/* Rentang Gaji/Bulan */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            fontFamily: "roboto-light",
+            flexWrap: "wrap",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: 140,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text>
+              Rentang gaji/bulan{" "}
+              <Text
+                style={{
+                  ...styles.chineseFont,
+                }}
+              >
+                月薪范围
+              </Text>
+            </Text>
+          </View>
+          <Text>:</Text>
+        </View>
+
+        {/* FOOTER */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            border: 1,
+            borderColor: "black",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+
+              borderRight: 1,
+              borderColor: "black",
+            }}
+          >
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                flexGrow: 1,
+                height: 50,
+              }}
+            ></View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 60,
+                }}
+              >
+                <Text>Nama</Text>
+                <Text
+                  style={{
+                    ...styles.chineseFont,
+                  }}
+                >
+                  {" "}
+                  姓名
+                </Text>
+              </View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 80,
+                }}
+              >
+                <Text>: </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 60,
+                }}
+              >
+                <Text>Posisi</Text>
+                <Text
+                  style={{
+                    ...styles.chineseFont,
+                  }}
+                >
+                  {" "}
+                  职位
+                </Text>
+              </View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 80,
+                }}
+              >
+                <Text>: </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 60,
+                }}
+              >
+                <Text>Tanggal</Text>
+                <Text
+                  style={{
+                    ...styles.chineseFont,
+                  }}
+                >
+                  {" "}
+                  日期
+                </Text>
+              </View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 80,
+                }}
+              >
+                <Text>: </Text>
+              </View>
+            </View>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                borderBottom: 1,
+                borderRight: 1,
+                borderColor: "black",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  flexGrow: 1,
+                }}
+              >
+                <Text>Disetujui oleh</Text>
+                <Text
+                  style={{
+                    ...styles.chineseFont,
+                  }}
+                >
+                  {" "}
+                  已批准：
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                flexGrow: 1,
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  borderRight: 1,
+                  borderColor: "black",
+                  flexGrow: 1,
+                }}
+              >
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
                     flexGrow: 1,
-                    borderColor: "black",
+                    height: 50,
                   }}
-                >
-                  <Text style={styles.thead}>Grade</Text>
-                </View>
+                ></View>
                 <View
                   style={{
                     display: "flex",
-                    flexDirection: "column",
+                    flexDirection: "row",
                     alignItems: "center",
-                    borderRight: 1,
-                    borderColor: "black",
-                    width: 100,
                   }}
                 >
                   <View
                     style={{
                       display: "flex",
-                      flexDirection: "column",
+                      flexDirection: "row",
                       alignItems: "center",
-                      padding: 5,
+                      width: 50,
                     }}
                   >
-                    <Text style={styles.thead}>Existing</Text>
+                    <Text>Nama</Text>
+                    <Text
+                      style={{
+                        ...styles.chineseFont,
+                      }}
+                    >
+                      {" "}
+                      姓名
+                    </Text>
                   </View>
                   <View
                     style={{
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "center",
-                      justifyContent: "center",
+                      width: 50,
+                    }}
+                  >
+                    <Text>: </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
                       flexGrow: 1,
-                      width: "100%",
-                      borderTop: 1,
-                      borderColor: "black",
                     }}
                   >
-                    <Text style={styles.thead}>Aug-24</Text>
-                  </View>
-                </View>
-
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    borderRight: 1,
-                    borderColor: "black",
-                    width: 200,
-                  }}
-                >
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      padding: 5,
-                    }}
-                  >
-                    <Text style={styles.thead}>2025 BUDGET (Sep24-Aug25)</Text>
-                  </View>
-
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      width: 200,
-                      borderTop: 1,
-                      borderColor: "black",
-                    }}
-                  >
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        padding: 5,
-                        borderRight: 1,
-                        width: 100,
-                        borderColor: "black",
-                      }}
-                    >
-                      <Text style={styles.thead}>Promote</Text>
-                    </View>
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        width: 100,
-                        borderColor: "black",
-                      }}
-                    >
-                      <Text style={styles.thead}>Recruit</Text>
-                    </View>
+                    <Text>Manager/Dept.Head</Text>
                   </View>
                 </View>
                 <View
                   style={{
                     display: "flex",
-                    flexDirection: "column",
+                    flexDirection: "row",
                     alignItems: "center",
-                    borderColor: "black",
-                    width: 100,
                   }}
                 >
                   <View
                     style={{
                       display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      padding: 5,
-                    }}
-                  >
-                    <Text style={styles.thead}>TOTAL</Text>
-                  </View>
-
-                  <View
-                    style={{
-                      display: "flex",
                       flexDirection: "row",
                       alignItems: "center",
+                      flexGrow: 1,
                     }}
                   >
-                    <Text style={styles.thead}>2024/2025</Text>
+                    <Text
+                      style={{
+                        ...styles.chineseFont,
+                      }}
+                    >
+                      {" "}
+                      经理/部门领导
+                    </Text>
                   </View>
                 </View>
               </View>
               {/* ROW */}
-              <Row col1=" " />
-              <Row
-                col1="Executives"
-                styleText={{ textDecoration: "underline" }}
-              />
-              <Row
-                styleText={{
-                  fontWeight: "light",
-                  fontFamily: "roboto-light",
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  borderRight: 1,
+                  borderColor: "black",
+                  flexGrow: 1,
                 }}
-                col1="Gol. 7"
-                col2="1"
-                col3="2"
-                col4="2"
-                col5="2"
-              />
-              <Row
-                styleText={{
-                  fontWeight: "light",
-                  fontFamily: "roboto-light",
+              >
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    flexGrow: 1,
+                    height: 50,
+                  }}
+                ></View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: 50,
+                    }}
+                  >
+                    <Text>Nama</Text>
+                    <Text
+                      style={{
+                        ...styles.chineseFont,
+                      }}
+                    >
+                      {" "}
+                      姓名
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: 50,
+                    }}
+                  >
+                    <Text>: </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      flexGrow: 1,
+                    }}
+                  >
+                    <Text>VP/GM/Direktur</Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      flexGrow: 1,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...styles.chineseFont,
+                      }}
+                    >
+                      {" "}
+                      总经理/董事/总监
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              {/* ROW */}
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  borderRight: 1,
+                  borderColor: "black",
+                  flexGrow: 1,
+                  height: "100%",
                 }}
-                col1="Gol. 6"
-                col2="1"
-                col3="2"
-                col4="2"
-                col5="2"
-              />
-              <Row
-                styleText={{
-                  fontWeight: "light",
-                  fontFamily: "roboto-light",
+              >
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    flexGrow: 1,
+                    height: 50,
+                  }}
+                ></View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text>CEO</Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      flexGrow: 1,
+                      paddingHorizontal: 4,
+                      fontSize: 8,
+                    }}
+                  >
+                    <Text>*TTD CEO jika luar budget</Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      flexGrow: 1,
+                      fontSize: 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...styles.chineseFont,
+                      }}
+                    >
+                      {" "}
+                      *预算外需求需要CEO批
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                borderBottom: 1,
+                borderColor: "black",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  flexGrow: 1,
+                  paddingHorizontal: 4,
                 }}
-                col1="Gol. 5"
-                col2="1"
-                col3="2"
-                col4="2"
-                col5="2"
-              />
-              <Row
-                styleText={{
-                  fontWeight: "light",
-                  fontFamily: "roboto-light",
+              >
+                <Text>Diverifikasi oleh</Text>
+                <Text
+                  style={{
+                    ...styles.chineseFont,
+                  }}
+                >
+                  {" "}
+                  已审核:
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                flexGrow: 1,
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  flexGrow: 1,
                 }}
-                col1="Gol. 4"
-                col2="1"
-                col3="2"
-                col4="2"
-                col5="2"
-              />
-              <Row
-                footer={true}
-                col1="Sub - Total ="
-                col2="1"
-                col3="2"
-                col4="2"
-                col5="2"
-              />
-              <Row
-                col1="Non - Executives"
-                styleText={{ textDecoration: "underline" }}
-              />
-              <Row
-                styleText={{
-                  fontWeight: "light",
-                  fontFamily: "roboto-light",
-                }}
-                col1="Gol. 3"
-                col2="1"
-                col3="2"
-                col4="2"
-                col5="2"
-              />
-              <Row
-                styleText={{
-                  fontWeight: "light",
-                  fontFamily: "roboto-light",
-                }}
-                col1="Gol. 2"
-                col2="1"
-                col3="2"
-                col4="2"
-                col5="2"
-              />{" "}
-              <Row
-                styleText={{
-                  fontWeight: "light",
-                  fontFamily: "roboto-light",
-                }}
-                col1="Gol. 1"
-                col2="1"
-                col3="2"
-                col4="2"
-                col5="2"
-              />
-              <Row
-                footer={true}
-                col1="Sub - Total ="
-                col2="1"
-                col3="2"
-                col4="2"
-                col5="2"
-              />
-              <Row
-                hideBorder={true}
-                footer={true}
-                col1="TOTAL ="
-                col2="1"
-                col3="2"
-                col4="2"
-                col5="2"
-              />
+              >
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    flexGrow: 1,
+                    height: 50,
+                  }}
+                ></View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: 50,
+                    }}
+                  >
+                    <Text>Nama</Text>
+                    <Text
+                      style={{
+                        ...styles.chineseFont,
+                      }}
+                    >
+                      {" "}
+                      姓名
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: 50,
+                    }}
+                  >
+                    <Text>: </Text>
+                  </View>
+                </View>
+
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      flexGrow: 1,
+                    }}
+                  >
+                    <Text>HRD HO/Unit</Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      flexGrow: 1,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...styles.chineseFont,
+                      }}
+                    >
+                      {" "}
+                      总部/区域人力
+                    </Text>
+                  </View>
+                </View>
+              </View>
             </View>
           </View>
         </View>

@@ -16,7 +16,7 @@ import api from "@/lib/axios";
 import { get_user } from "@/lib/get_user";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
-export const AlertCeoApprove: FC<any> = () => {
+export const AlertCeoApproveMPR: FC<any> = () => {
   return (
     <>
       <Dialog>
@@ -29,7 +29,7 @@ export const AlertCeoApprove: FC<any> = () => {
           <DialogHeader>
             <DialogTitle>Approve</DialogTitle>
             <DialogDescription>
-              Are You Sure to Approve This Batch?
+              Are You Sure to Approve This?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="sm:justify-end">
