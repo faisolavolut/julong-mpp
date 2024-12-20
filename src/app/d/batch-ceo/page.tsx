@@ -16,6 +16,7 @@ const PDFViewer = dynamic(
   { ssr: false }
 );
 import { Button } from "flowbite-react";
+import { Sticker } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -28,20 +29,22 @@ function Page() {
     can_edit: false,
     client: false,
     ready: false,
-    data: null as any
+    data: null as any,
   });
   useEffect(() => {
     const run = async () => {
       const roles = await userRoleMe();
       const access = getAccess("create-mpp", roles);
       if (access) {
-        const res = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/need-approval`
-        );
-        if (res?.data?.data) {
-          local.data = res?.data?.data;
-          local.can_add = true;
-        }
+        try {
+          const res = await api.get(
+            `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/need-approval`
+          );
+          if (res?.data?.data) {
+            local.data = res?.data?.data;
+            local.can_add = true;
+          }
+        } catch (ex) {}
       }
       const edit = getAccess("edit-mpp", roles);
       local.can_edit = edit;
@@ -61,17 +64,32 @@ function Page() {
       <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
         {local.ready && (
           <div className="flex flex-grow flex-col">
-            <div className="flex flex-grow bg-[#525659] overflow-y-scroll flex-col items-center relative">
-              <PDFViewer className="flex-grow w-full">
-                <MyDocument data={local.data}/>
-              </PDFViewer>
-            </div>
-            <div className="flex flex-row items-center justify-center">
-              <div className="flex flex-row gap-x-1 py-2">
-                <AlertCeoReject />
-                <AlertCeoApprove />
+            {!local.data ? (
+              <div
+                className={cx(
+                  "flex-1 w-full inset-0 flex flex-col items-center justify-center",
+                )}
+              >
+                <div className="max-w-[15%] flex flex-col items-center">
+                  <Sticker size={35} strokeWidth={1} />
+                  <div className="pt-1 text-center">No&nbsp;Approval</div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                <div className="flex flex-grow bg-[#525659] overflow-y-scroll flex-col items-center relative">
+                  <PDFViewer className="flex-grow w-full">
+                    <MyDocument data={local.data} />
+                  </PDFViewer>
+                </div>
+                <div className="flex flex-row items-center justify-center">
+                  <div className="flex flex-row gap-x-1 py-2">
+                    <AlertCeoReject />
+                    <AlertCeoApprove />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>

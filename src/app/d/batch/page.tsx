@@ -14,11 +14,13 @@ import {
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
+import { get_user } from "@/lib/get_user";
 import { accessMe, getAccess, userRoleMe } from "@/lib/getAccess";
 import { getNumber } from "@/lib/getNumber";
 import { getValue } from "@/lib/getValue";
 import { useLocal } from "@/lib/use-local";
 import { Button } from "flowbite-react";
+import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 import { GoInfo } from "react-icons/go";
@@ -29,6 +31,7 @@ import {
   HiTrash,
 } from "react-icons/hi";
 import { IoEye } from "react-icons/io5";
+import { toast } from "sonner";
 
 function Page() {
   const local = useLocal({
@@ -68,11 +71,18 @@ function Page() {
           local.can_add = document_line?.length ? true : false;
         }
 
-        const batch: any = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/current-status/NEED APPROVAL`
-        );
-        console.log({batch})
-        local.batch = batch.data.data;
+        try {
+          const batch: any = await api.get(
+            `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
+          );
+          local.batch = batch?.data?.data;
+        } catch (ex) {}
+        try {
+          const batch_ceo: any = await api.get(
+            `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/APPROVED`
+          );
+          local.batch = batch_ceo?.data?.data;
+        } catch (ex) {}
       }
       const edit = getAccess("edit-mpp", roles);
       local.can_edit = edit;
@@ -122,14 +132,103 @@ function Page() {
                                 <tr>
                                   <td>Status</td>
                                   <td>:</td>
-                                  <td>Need Approval</td>
+                                  <td>
+                                    {local.batch?.status !== "APPROVED"
+                                      ? "Waiting Approval CEO"
+                                      : "Need Approval"}
+                                  </td>
                                 </tr>
                               </tbody>
                             </table>
                           </div>
                           <div className="flex flex-row items-center">
-                          <ButtonBetter>Completed</ButtonBetter>
+                            {local.batch?.status === "APPROVED" && (
+                              <ButtonBetter
+                                onClick={async () => {
+                                  toast.info(
+                                    <>
+                                      <Loader2
+                                        className={cx(
+                                          "h-4 w-4 animate-spin-important",
+                                          css`
+                                            animation: spin 1s linear infinite !important;
+                                            @keyframes spin {
+                                              0% {
+                                                transform: rotate(0deg);
+                                              }
+                                              100% {
+                                                transform: rotate(360deg);
+                                              }
+                                            }
+                                          `
+                                        )}
+                                      />
+                                      {"Saving..."}
+                                    </>
+                                  );
+                                  try {
+                                    const id = local.batch.id;
+                                    const param = {
+                                      id,
+                                      status: "COMPLETED",
+                                      approved_by: get_user("employee.id"),
+                                      approver_name: get_user("employee.name"),
+                                    };
 
+                                    const res = await api.put(
+                                      `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/update-status`,
+                                      param
+                                    );
+                                    const batch: any = await api.get(
+                                      `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
+                                    );
+                                    local.batch = batch?.data?.data;
+                                    try {
+                                      const batch_ceo: any = await api.get(
+                                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/APPROVED`
+                                      );
+                                      local.batch = batch_ceo?.data?.data;
+                                    } catch (ex) {}
+                                    local.render();
+                                    setTimeout(() => {
+                                      toast.success(
+                                        <div
+                                          className={cx(
+                                            "cursor-pointer flex flex-col select-none items-stretch flex-1 w-full"
+                                          )}
+                                          onClick={() => {
+                                            toast.dismiss();
+                                          }}
+                                        >
+                                          <div className="flex text-green-700 items-center success-title font-semibold">
+                                            <Check className="h-6 w-6 mr-1 " />
+                                            Record Saved
+                                          </div>
+                                        </div>
+                                      );
+                                    }, 1000);
+                                  } catch (ex: any) {
+                                    toast.error(
+                                      <div className="flex flex-col w-full">
+                                        <div className="flex text-red-600 items-center">
+                                          <AlertTriangle className="h-4 w-4 mr-1" />
+                                          Submit Failed {ex.message}.
+                                        </div>
+                                      </div>,
+                                      {
+                                        dismissible: true,
+                                        className: css`
+                                          background: #ffecec;
+                                          border: 2px solid red;
+                                        `,
+                                      }
+                                    );
+                                  }
+                                }}
+                              >
+                                Completed
+                              </ButtonBetter>
+                            )}
                           </div>
                         </CardContent>
                       </Card>
