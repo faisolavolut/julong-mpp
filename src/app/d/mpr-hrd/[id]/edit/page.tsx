@@ -199,7 +199,7 @@ function Page() {
           divisi: data.for_organization_structure,
           job_level: data.job_level_name,
           location: data.for_organization_location_id,
-          is_replacement: data.is_replacement ? "penambahan" : "penggantian",
+          is_replacement: data.is_replacement ? "penggantian" : "penambahan",
           total_needs: data.male_needs + data.female_needs,
           remaining_balance:
             data.recruitment_type === "MT_Management Trainee"
