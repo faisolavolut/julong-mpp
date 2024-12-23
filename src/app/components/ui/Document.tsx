@@ -253,6 +253,9 @@ const convertRawData = (data: any): any[] => {
       operatingUnit: overall.operating_unit,
       budgetYear: overall.budget_year,
       rows: formatGradeData(overall.grade),
+      budgetRange: overall.budget_range,
+      existingDate: overall.existing_date,
+      
     };
   };
 
@@ -472,7 +475,7 @@ const MyDocument: FC<any> = ({ data }) => {
                           borderColor: "black",
                         }}
                       >
-                        <Text style={styles.thead}>Aug-24</Text>
+                        <Text style={styles.thead}>{page?.existingDate}</Text>
                       </View>
                     </View>
 
@@ -495,7 +498,7 @@ const MyDocument: FC<any> = ({ data }) => {
                         }}
                       >
                         <Text style={styles.thead}>
-                          2025 BUDGET (Sep24-Aug25)
+                          {page?.budgetRange}
                         </Text>
                       </View>
 

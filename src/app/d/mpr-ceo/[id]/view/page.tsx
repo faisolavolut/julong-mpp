@@ -1,6 +1,8 @@
 "use client";
 import { AlertCeoApprove } from "@/app/components/comp/AlertCeoApprove";
+import { AlertCeoApproveMPR } from "@/app/components/comp/AlertCeoApproveMPR";
 import { AlertCeoReject } from "@/app/components/comp/AlertCeoReject";
+import { AlertCeoRejectMPR } from "@/app/components/comp/AlertCeoRejectMPR";
 import { TableList } from "@/app/components/tablelist/TableList";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
 import { ButtonBetter } from "@/app/components/ui/button";
@@ -115,8 +117,8 @@ function Page() {
           {local.data?.is_approve && (
             <div className="flex flex-row items-center justify-center">
               <div className="flex flex-row gap-x-1 py-2">
-                <AlertCeoReject />
-                <AlertCeoApprove />
+                <AlertCeoRejectMPR />
+                <AlertCeoApproveMPR />
               </div>
             </div>
           )}
