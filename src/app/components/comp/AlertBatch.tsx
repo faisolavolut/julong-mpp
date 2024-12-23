@@ -17,6 +17,8 @@ import { get_user } from "@/lib/get_user";
 import api from "@/lib/axios";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
+import { getNumber } from "@/lib/getNumber";
+import { events } from "@/lib/event";
 export const AlertBatch: FC<any> = ({ local }) => {
   // const fm = useLocal({
   //   // open:
@@ -88,10 +90,10 @@ export const AlertBatch: FC<any> = ({ local }) => {
                       approver_name: get_user("employee.name"),
                       batch_lines: local.batch_lines?.length
                         ? local.batch_lines.map((e: any) => {
-                          return {
-                            mp_planning_header_id: e,
-                          }
-                        })
+                            return {
+                              mp_planning_header_id: e,
+                            };
+                          })
                         : [],
                     };
                     await api.post(
@@ -99,6 +101,20 @@ export const AlertBatch: FC<any> = ({ local }) => {
                       data
                     );
                     local.can_add = false;
+                    local.render();
+
+                    try {
+                      const batch: any = await api.get(
+                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
+                      );
+                      local.batch = batch?.data?.data;
+                    } catch (ex) {}
+                    try {
+                      const batch_ceo: any = await api.get(
+                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/APPROVED`
+                      );
+                      local.batch = batch_ceo?.data?.data;
+                    } catch (ex) {}
                     local.render();
                   }
                   setTimeout(() => {

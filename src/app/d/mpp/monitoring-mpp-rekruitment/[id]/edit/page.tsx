@@ -496,12 +496,12 @@ function Page() {
                                 },
                               ]}
                               onLoad={async (param: any) => {
-                                console.log(data);
+                                
                                 return data?.line || [];
                                 const res: any = await api.get(
                                   "https://jsonplaceholder.typicode.com/users"
                                 );
-                                console.log(res);
+                                
                                 return res.data;
                               }}
                               onInit={async (list: any) => {}}

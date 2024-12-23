@@ -105,7 +105,7 @@ function Page() {
             const res: any = await api.get(
               "https://jsonplaceholder.typicode.com/users"
             );
-            console.log(res);
+            
             return res.data;
           }}
           onInit={async (list: any) => {}}

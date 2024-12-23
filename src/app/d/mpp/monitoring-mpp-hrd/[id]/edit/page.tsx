@@ -56,7 +56,7 @@ function Page() {
       }}
       onSubmit={async (fm: any) => {
         const data = fm.data;
-        console.log({ data });
+        
       }}
       onLoad={async () => {
         return {
@@ -523,7 +523,7 @@ function Page() {
                             const res: any = await api.get(
                               "https://jsonplaceholder.typicode.com/users"
                             );
-                            console.log(res);
+                            
                             return res.data;
                           }}
                           onInit={async (list: any) => {}}

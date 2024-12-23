@@ -64,6 +64,7 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods`,
           param
         );
+        navigate("/d/mpp/period/"+res.data?.data?.id+"/edit")
       }}
       onLoad={async () => {
         return {

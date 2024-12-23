@@ -18,7 +18,6 @@ export const TypeDropdown: React.FC<any> = ({
         //   popupClassName={}
         required={required}
         onSelect={({ search, item }) => {
-          console.log(search, item)
           if (item) {
             if (mode === "multi") {
               if (!Array.isArray(fm.data[name])) {
@@ -35,7 +34,6 @@ export const TypeDropdown: React.FC<any> = ({
           if (typeof onChange === "function" && item) {
             onChange(item);
           }
-          console.log(fm.data[name])
           return item?.value || search;
         }}
         disabled={disabled}

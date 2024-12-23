@@ -8,6 +8,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "../ui/resize";
+import get from "lodash.get";
 
 type Local<T> = {
   data: T | null;
@@ -71,11 +72,12 @@ export const Form: React.FC<any> = ({
           );
         }, 1000);
       } catch (ex: any) {
+        const msg = get(ex, "response.data.meta.message") || ex.message
         toast.error(
           <div className="flex flex-col w-full">
             <div className="flex text-red-600 items-center">
               <AlertTriangle className="h-4 w-4 mr-1" />
-              Submit Failed {ex.message}.
+              Submit Failed {msg}.
             </div>
           </div>,
           {

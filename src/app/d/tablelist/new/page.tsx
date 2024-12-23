@@ -26,7 +26,7 @@ function Page() {
       <div className="flex flex-grow flex-col">
         <Form
         onSubmit={async() => {
-          console.log("HALOOO???")
+          
         }}
         onLoad={async () => {
 return {}

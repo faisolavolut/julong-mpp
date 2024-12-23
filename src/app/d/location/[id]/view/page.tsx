@@ -32,6 +32,8 @@ import {
   DialogTrigger,
 } from "@/app/components/ui/dialog";
 import { PreviewImagePopup } from "@/app/components/ui/previewImage";
+import { statusMpp } from "@/constants/status-mpp";
+import { actionToast } from "@/lib/action";
 import api from "@/lib/axios";
 import { cloneFM } from "@/lib/cloneFm";
 import { shortDate } from "@/lib/date";
@@ -333,7 +335,7 @@ function Page() {
                                 id
                             );
                             const data: any[] = res.data.data;
-                            console.log({ data });
+
                             if (!Array.isArray(data)) return [];
                             return data || [];
                           }}
@@ -516,7 +518,6 @@ function Page() {
                                       },
                                     ]}
                                     onLoad={(param: any) => {
-                                      console.log("load", fm.data?.attachment);
                                       return fm.data?.attachment || [];
                                     }}
                                   />
@@ -602,10 +603,7 @@ function Page() {
                           return <></>;
                         }}
                         children={(fm: any) => {
-                          return (
-                            <>
-                            </>
-                          );
+                          return <></>;
                         }}
                         onFooter={(fm: any) => {
                           return (
@@ -684,7 +682,6 @@ function Page() {
                                       },
                                     ]}
                                     onLoad={(param: any) => {
-                                      console.log("load", fm.data?.attachment);
                                       return fm.data?.attachment || [];
                                     }}
                                   />
@@ -718,43 +715,50 @@ function Page() {
                 <></>
               )}
 
-              
-{local.can_submit && fm.data?.status === "IN_PROGRESS" ? (
+              {local.can_process && fm.data?.status === "IN_PROGRESS" ? (
                 <>
-                  <div className="flex flex-row items-center">
-                    <ButtonBetter
-                      className={"bg-primary"}
-                      onClick={async () => {
-                        const data = fm.data;
-                        fm.error = {};
-                        fm.data.status = "NEED APPROVAL";
-                        fm.render();
-                        const param = {
-                          id: id,
-                          approver_id: get_user("employee.id"),
-                          approved_by: get_user("employee.name"),
-                          level: "Level HRD Unit",
-                          status: "NEED APPROVAL",
-                        };
-                        const formData = new FormData();
-                        formData.append("payload", JSON.stringify(param));
+                  <Alert
+                    type={"save"}
+                    msg="This action cannot be undone. This will permanently proccess your MPP."
+                    onClick={async () => {
+                      await actionToast({
+                        task: async () => {
+                          const param = {
+                            id: id,
+                            approver_id: get_user("employee.id"),
+                            approved_by: get_user("employee.name"),
+                            level: "Level HRD Unit",
+                            status: "NEED APPROVAL",
+                          };
+                          const formData = new FormData();
+                          formData.append("payload", JSON.stringify(param));
 
-                        const res: any = await api.put(
-                          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/update-status`,
-                          formData,
-                          {
-                            headers: {
-                              "Content-Type": "multipart/form-data",
-                            },
-                          }
-                        );
-                        fm.render();
-                      }}
-                    >
+                          const res: any = await api.put(
+                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/update-status`,
+                            formData,
+                            {
+                              headers: {
+                                "Content-Type": "multipart/form-data",
+                              },
+                            }
+                          );
+                          fm.render();
+                        },
+                        success: () => {
+                          fm.data.status = "NEED APPROVAL";
+                          fm.render();
+                        },
+                        msg_load: "Update status ",
+                        msg_error: "Update status failed ",
+                        msg_succes: "Update status success ",
+                      });
+                    }}
+                  >
+                    <ButtonContainer className={"bg-primary"}>
                       <IoMdSave className="text-xl" />
                       Process
-                    </ButtonBetter>
-                  </div>
+                    </ButtonContainer>
+                  </Alert>
                 </>
               ) : (
                 <></>
@@ -780,14 +784,24 @@ function Page() {
             id
         );
         const data = res.data.data;
-        return {
+        console.log({
           id,
           ...data,
-          mpp_name: data?.mpp_period?.name,
+          mpp_name: data?.mpp_period?.title,
           budget_year_from: data?.mpp_period?.budget_start_date,
           budget_year_to: data?.mpp_period?.budget_end_date,
           document_line: data?.mp_planning_lines || [],
           history: history.data.data,
+        });
+        return {
+          id,
+          ...data,
+          mpp_name: data?.mpp_period?.title,
+          budget_year_from: data?.mpp_period?.budget_start_date,
+          budget_year_to: data?.mpp_period?.budget_end_date,
+          document_line: data?.mp_planning_lines || [],
+          history: history.data.data,
+          location: data?.organization_location_name,
         };
       }}
       showResize={false}
@@ -928,8 +942,11 @@ function Page() {
                     fm={fm}
                     name={"status"}
                     label={"Status"}
-                    type={"text"}
                     disabled={true}
+                    type={"dropdown"}
+                    onLoad={() => {
+                      return statusMpp;
+                    }}
                   />
                 </div>
               </div>
@@ -978,7 +995,6 @@ function Page() {
                               label={"Organization"}
                               type={"dropdown"}
                               onChange={() => {
-                                // console.log({ data: fm_row.data });
                                 // tbl.renderRow(fm_row.data);
                               }}
                               onLoad={async () => {
@@ -1016,7 +1032,6 @@ function Page() {
                               label={"Organization"}
                               type={"dropdown"}
                               onChange={(item: any) => {
-                                console.log({ item });
                                 const existing = item.data.existing;
                                 fm_row.data.existing = existing;
                                 fm.render();
@@ -1064,7 +1079,7 @@ function Page() {
                               fm={cloneFM(fm, row)}
                               name={"existing"}
                               label={"Approved by"}
-                              type={"text"}
+                              type={"money"}
                               disabled={true}
                               hidden_label={true}
                             />

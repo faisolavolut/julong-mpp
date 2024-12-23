@@ -11,11 +11,15 @@ import { configMenu } from "./config-menu";
 import { useLocal } from "@/lib/use-local";
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
+import get from "lodash.get";
 interface RootLayoutProps {
   children: React.ReactNode;
 }
 const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const [mini, setMini] = useState(false);
+  const local = useLocal({
+    user: null as any,
+  });
   useEffect(() => {
     const localMini = localStorage.getItem("mini");
     if (!localMini) {
@@ -28,6 +32,8 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
         const user = await api.get(
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/users/me`
         );
+        local.user = user?.data?.data;
+        local.render();
         if (!user?.data.data) {
           navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
         }
@@ -61,7 +67,15 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
             className="flex-grow  relative overflow-y-auto flex flex-row"
           >
             <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-10">
-              <main className="flex-grow flex flex-col">{children}</main>
+              {typeof window === "object" ? (
+                get(window, "user") ? (
+                  <main className="flex-grow flex flex-col">{children}</main>
+                ) : (
+                  <></>
+                )
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>

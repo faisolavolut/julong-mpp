@@ -54,6 +54,7 @@ export const TableList: React.FC<any> = ({
   disabledHeader,
   disabledHeadTable,
   hiddenNoRow,
+  disabledHoverRow,
   onInit,
 }) => {
   const [data, setData] = useState<any[]>([]);
@@ -81,7 +82,6 @@ export const TableList: React.FC<any> = ({
     },
     renderRow: (row: any) => {
       setData((prev) => [...prev, row]);
-      console.log(data);
       local.data = data;
       local.render();
     },
@@ -91,7 +91,6 @@ export const TableList: React.FC<any> = ({
       local.render(); // Panggil render untuk memperbarui UI
     },
     reload: async () => {
-      console.log("RELOAD");
       toast.info(
         <>
           <Loader2
@@ -137,7 +136,6 @@ export const TableList: React.FC<any> = ({
           local.data = res;
           local.render();
           setData(res);
-          console.log("HALO", res);
           setTimeout(() => {
             toast.dismiss();
           }, 2000);
@@ -467,7 +465,7 @@ export const TableList: React.FC<any> = ({
 
                   <Table.Body className="divide-y divide-gray-200 bg-white">
                     {table.getRowModel().rows.map((row, idx) => (
-                      <Table.Row key={row.id} className="hover:bg-[#DBDBE7]">
+                      <Table.Row key={row.id} className={cx(disabledHoverRow ? "" : "hover:bg-[#DBDBE7]" )}>
                         {row.getVisibleCells().map((cell) => {
                           const ctx = cell.getContext();
                           const param = {

@@ -31,6 +31,7 @@ import {
 } from "@/app/components/ui/dialog";
 import { PreviewImagePopup } from "@/app/components/ui/previewImage";
 import { statusMpp } from "@/constants/status-mpp";
+import { actionToast } from "@/lib/action";
 import api from "@/lib/axios";
 import { cloneFM } from "@/lib/cloneFm";
 import { normalDate, shortDate } from "@/lib/date";
@@ -354,7 +355,7 @@ function Page() {
                   type={"save"}
                   onClick={async () => {
                     fm.data.status = "DRAFTED";
-                    fm.error = {};
+                    fm.error = null;
                     fm.render();
                     await fm.submit();
                     await fm.reload();
@@ -371,19 +372,18 @@ function Page() {
               (fm.data?.status === "DRAFTED" ||
                 fm.data?.status === "REJECTED") ? (
                 <>
-                  {fm.data?.approved_by &&
-                  fm.data?.recommended_by &&
-                  fm.data?.document_line?.length ? (
+                  {fm.data?.document_line?.length ? (
                     <>
                       <Alert
                         type={"save"}
                         onClick={async () => {
                           fm.data.level = "Level HRD Location";
                           fm.data.status = "IN_PROGRESS";
-                          fm.error = {};
+                          fm.error = null;
                           fm.render();
                           await fm.submit();
                           await fm.reload();
+                          navigate(`/d/location/${id}/view`)
                         }}
                       >
                         <ButtonContainer className={"bg-primary"}>
@@ -397,11 +397,7 @@ function Page() {
                       <ButtonBetter
                         className={"bg-primary"}
                         onClick={() => {
-                          const validate = [
-                            "approved_by",
-                            "recommended_by",
-                            "document_line",
-                          ];
+                          const validate = ["document_line"];
                           let count = 0;
                           validate.map((e) => {
                             if (e === "document_line") {
@@ -452,6 +448,38 @@ function Page() {
               ) : (
                 <></>
               )}
+
+              {/* {["DRAFTED"].includes(fm.data?.status) ? (
+                <>
+                  <Alert
+                    type={"save"}
+                    onClick={async () => {
+                      await actionToast({
+                        task: async () => {
+                          
+                          await api.delete(
+                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/` +
+                              id
+                          );
+                        },
+                        after: () => {
+                          navigate("/d/mpp/period");
+                        },
+                        msg_load: "Delete ",
+                        msg_error: "Delete failed ",
+                        msg_succes: "Delete success ",
+                      });
+                    }}
+                  >
+                    <ButtonContainer variant="destructive">
+                      <MdDelete className="text-xl" />
+                      Delete
+                    </ButtonContainer>
+                  </Alert>
+                </>
+              ) : (
+                <></>
+              )} */}
             </div>
           </div>
         );
@@ -481,9 +509,29 @@ function Page() {
             organization_location_id: data.organization_location_id,
           };
         });
-        const formData = new FormData();
+        const hasDuplicate = (array: any) => {
+          const seen = new Set();
 
-        // Menambahkan data param ke FormData
+          for (const item of array) {
+            const key = `${item.job_level_id}-${item.job_id}`; // Gabungkan untuk identifikasi unik
+            if (seen.has(key)) {
+              return true; // Jika ditemukan duplikat
+            }
+            seen.add(key); // Tambahkan ke Set
+          }
+
+          return false; // Tidak ada duplikat
+        };
+        const result = hasDuplicate(document_line);
+        if (result) {
+          fm.error[
+            "document_line"
+          ] = `A minimum of 1 document line is required to submit.`;
+          throw new Error(`Failed Save duplicate found document line`);
+
+          return false;
+        }
+        const formData = new FormData();
         formData.append("payload", JSON.stringify(param));
 
         const res: any = await api.put(
@@ -498,6 +546,7 @@ function Page() {
         const deleted_line_ids = data?.deleted_line_ids?.length
           ? data.deleted_line_ids
           : [];
+
         await api.post(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/lines/batch/store`,
           {
@@ -665,12 +714,7 @@ function Page() {
                     name={"recommended_by"}
                     label={"Recommend by"}
                     type={"text"}
-                    disabled={
-                      !(
-                        fm.data?.status === "DRAFTED" ||
-                        fm.data?.status === "REJECTED"
-                      )
-                    }
+                    disabled={true}
                   />
                 </div>
                 <div>
@@ -679,12 +723,7 @@ function Page() {
                     name={"approved_by"}
                     label={"Approved by"}
                     type={"text"}
-                    disabled={
-                      !(
-                        fm.data?.status === "DRAFTED" ||
-                        fm.data?.status === "REJECTED"
-                      )
-                    }
+                    disabled={true}
                   />
                 </div>
                 <div>
@@ -720,6 +759,7 @@ function Page() {
             <div className="w-full flex flex-row">
               <div className="flex flex-grow flex-col h-[350px]">
                 <TableList
+                  disabledHoverRow={true}
                   disabledPagination={true}
                   header={{
                     sideLeft: (tbl: any) => {
@@ -850,7 +890,7 @@ function Page() {
                                 fm_row.data.existing = existing;
                                 fm.render();
                                 const suggested_recruit =
-                                  getNumber(fm.data.plafon) -
+                                  getNumber(item.data.job_plafon) -
                                   getNumber(existing) +
                                   getNumber(fm.data.turn_over) +
                                   getNumber(fm_row.data.promotion);
@@ -879,7 +919,6 @@ function Page() {
                                     data: e,
                                   };
                                 });
-                                console.log(fm.data?.document_line);
                                 if (fm.data?.document_line?.length) {
                                   let ids = fm.data.document_line.map(
                                     (e: any) => e.job_id
@@ -887,7 +926,6 @@ function Page() {
                                   ids = ids.filter(
                                     (e: any) => e !== fm_row?.data?.job_id
                                   );
-                                  console.log({ ids });
                                   result = result.filter(
                                     (e) => !ids.includes(e.value)
                                   );
@@ -910,7 +948,7 @@ function Page() {
                               fm={cloneFM(fm, row)}
                               name={"existing"}
                               label={"Approved by"}
-                              type={"text"}
+                              type={"money"}
                               disabled={true}
                               hidden_label={true}
                             />
@@ -942,6 +980,7 @@ function Page() {
                       header: () => <span>Recruit PH</span>,
                       width: 50,
                       renderCell: ({ row, name, cell }: any) => {
+                        const fm_row = cloneFM(fm, row);
                         return (
                           <>
                             <Field
@@ -954,6 +993,8 @@ function Page() {
                                   fm.data?.status === "DRAFTED" ||
                                   fm.data?.status === "REJECTED"
                                 )
+                                  ? true
+                                  : !fm_row.data?.job_level_id
                               }
                               onChange={() => {
                                 const fm_row = cloneFM(fm, row);
@@ -987,6 +1028,7 @@ function Page() {
                       header: () => <span>Recruit MT</span>,
                       width: 50,
                       renderCell: ({ row, name, cell }: any) => {
+                        const fm_row = cloneFM(fm, row);
                         return (
                           <>
                             <Field
@@ -999,6 +1041,8 @@ function Page() {
                                   fm.data?.status === "DRAFTED" ||
                                   fm.data?.status === "REJECTED"
                                 )
+                                  ? true
+                                  : !fm_row.data?.job_level_id
                               }
                               onChange={() => {
                                 const fm_row = cloneFM(fm, row);
@@ -1032,6 +1076,7 @@ function Page() {
                       header: () => <span>Promotion</span>,
                       width: 50,
                       renderCell: ({ row, name, cell }: any) => {
+                        const fm_row = cloneFM(fm, row);
                         return (
                           <>
                             <Field
@@ -1045,6 +1090,8 @@ function Page() {
                                   fm.data?.status === "DRAFTED" ||
                                   fm.data?.status === "REJECTED"
                                 )
+                                  ? true
+                                  : !fm_row.data?.job_level_id
                               }
                               onChange={() => {
                                 const fm_row = cloneFM(fm, row);
@@ -1156,11 +1203,6 @@ function Page() {
                   ]}
                   onLoad={async (param: any) => {
                     return fm.data.document_line;
-                    const res: any = await api.get(
-                      "https://jsonplaceholder.typicode.com/users"
-                    );
-                    console.log(res);
-                    return res.data;
                   }}
                   onInit={async (list: any) => {}}
                 />

@@ -113,7 +113,6 @@ function Page() {
             ];
           }}
           tabContent={(data: any) => {
-            console.log(data);
             return (
               <>
                 <div className="w-full flex flex-col flex-grow">

@@ -69,7 +69,7 @@ function Page() {
                                           label={"Organization"}
                                           type={"dropdown"}
                                           onLoad={async () => {
-                                            console.log("MASUKL");
+                                            
                                             return [
                                               {
                                                 value: 1,

@@ -44,7 +44,7 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons/` +
             id
         );
-        console.log(res.data.data)
+        
         return res.data.data
       }}
       header={(fm: any) => {

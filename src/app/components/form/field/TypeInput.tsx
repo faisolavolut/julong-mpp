@@ -17,11 +17,11 @@ export const TypeInput: React.FC<any> = ({
   let value: any = fm.data?.[name] || "";
   const input = useLocal({
     value: 0 as any,
-    ref: null as any
+    ref: null as any,
   });
   useEffect(() => {
     if (type === "money") {
-      input.value = value;
+      input.value = formatCurrency(value) || "";
       input.render();
     }
   }, [fm.data?.[name]]);
@@ -52,7 +52,6 @@ export const TypeInput: React.FC<any> = ({
             placeholder={placeholder || ""}
             value={value}
             onChange={(ev) => {
-              console.log("MASUK ?")
               fm.data[name] = ev.currentTarget.value;
               fm.render();
 
@@ -98,7 +97,7 @@ export const TypeInput: React.FC<any> = ({
             name={name}
             disabled={disabled}
             className={cx(
-              "text-sm",
+              "text-sm text-right	",
               error
                 ? css`
                     border-color: red !important;
@@ -113,12 +112,16 @@ export const TypeInput: React.FC<any> = ({
             )}
             required={required}
             placeholder={placeholder || ""}
-            value={formatCurrency(input.value) || ""}
+            value={formatCurrency(input.value)}
             type={"text"}
             onChange={(ev) => {
               const rawValue = ev.currentTarget.value
                 .replace(/[^0-9,-]/g, "")
                 .toString();
+              if (rawValue === "0") {
+                input.value = "0";
+                input.render();
+              }
               if (
                 (!rawValue.startsWith(",") || !rawValue.endsWith(",")) &&
                 !rawValue.endsWith("-") &&
@@ -188,10 +191,11 @@ const convertionCurrencyNumber = (value: string) => {
   }
   const rawValue = numberString.replace(/[^0-9,-]/g, "").replace(",", ".");
   return parseFloat(rawValue) || 0;
-  return Number(numberString) || 0;
 };
 const formatCurrency = (value: any) => {
   // Menghapus semua karakter kecuali angka, koma, dan tanda minusif (value === null || value === undefined) return '';
+  if (typeof value === "number" && value === 0) return "0";
+  if (typeof value === "string" && value === "0") return "0";
   if (!value) return "";
   let numberString = "";
   if (typeof value === "number") {

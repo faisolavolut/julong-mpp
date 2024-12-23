@@ -40,7 +40,7 @@ function Page() {
         `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/` + id
       );
       const data = res.data.data;
-      console.log({ data });
+      
       let categories = [] as any[];
       const ctg: any = await api.get(
         `${process.env.NEXT_PUBLIC_API_MPP}/api/request-categories`

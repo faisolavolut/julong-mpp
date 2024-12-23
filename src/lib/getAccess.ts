@@ -20,8 +20,10 @@ export const userRoleMe = async () => {
     `${process.env.NEXT_PUBLIC_API_PORTAL}/api/users/me`
   );
   const data = user?.data.data;
+  const choosed_role = data?.choosed_role
   const roles = data.roles;
-  return roles || []
+  if(!roles?.length) return []
+  return roles.filter((e: any) => e?.name === choosed_role) || []
 };
 export const accessMe = async (keys: string) => {
     const user = await api.get(
@@ -29,7 +31,7 @@ export const accessMe = async (keys: string) => {
     );
     const data = user?.data.data;
     const roles = data.roles;
-    console.log({roles})
+    
     if (!Array.isArray(roles) || !roles?.length) return false;
     for (const role of roles) {
       const permissionExists = role.permissions.some(

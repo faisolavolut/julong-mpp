@@ -336,7 +336,7 @@ function Page() {
                                 id
                             );
                             const data: any[] = res.data.data;
-                            console.log({ data });
+                            
                             if (!Array.isArray(data)) return [];
                             return data || [];
                           }}
@@ -873,9 +873,6 @@ function Page() {
                     type={"dropdown"}
                     disabled={!fm.data?.for_organization_id}
                     onLoad={async () => {
-                      console.log({
-                        for_organization_id: fm.data?.for_organization_id,
-                      });
                       if (!fm.data?.for_organization_id) return [];
                       const param = {
                         paging: 1,
@@ -889,7 +886,7 @@ function Page() {
                       );
 
                       const data: any[] = res.data.data;
-                      console.log({ data });
+                      
                       if (!Array.isArray(data)) return [];
                       return data.map((e) => {
                         return {
@@ -943,7 +940,7 @@ function Page() {
                     label={"Female Needs"}
                     type={"money"}
                     onChange={() => {
-                      console.log("MASUK??");
+                      
                       fm.data.total_needs =
                         getNumber(fm?.data?.male_needs) +
                         getNumber(fm?.data?.female_needs);
@@ -981,7 +978,7 @@ function Page() {
                       ];
                     }}
                     onChange={(item: any) => {
-                      console.log(item, fm);
+                      
                       if (
                         typeof fm?.fields?.request_category_id?.reload ===
                         "function"
@@ -1003,20 +1000,11 @@ function Page() {
                       type={"single-checkbox"}
                       className={"grid grid-cols-3"}
                       onLoad={() => {
-                        console.log("CEK");
                         const is_replacement =
                           fm.data?.is_replacement === "penambahan"
                             ? true
                             : false;
                         if (!fm.data?.is_replacement) return [];
-                        console.log(
-                          fm.data?.categories?.length
-                            ? fm.data?.categories.filter(
-                                (e: any) =>
-                                  e.data?.is_replacement === is_replacement
-                              )
-                            : []
-                        );
                         return fm.data?.categories?.length
                           ? fm.data?.categories.filter(
                               (e: any) =>

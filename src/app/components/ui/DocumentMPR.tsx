@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
   },
 });
 const extractMajors = (data: Array<{ Major: { Major: string } }>): string => {
-  console.log({data})
   if(!data?.length) return ""
   return data.map(entry => get(entry, "Major.Major")).join(", ");
 };

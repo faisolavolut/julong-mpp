@@ -129,7 +129,6 @@ function Page() {
         const org = await api.get(
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations/` + id_org
         );
-        console.log({ org });
         const current_open = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
         );
@@ -203,7 +202,7 @@ function Page() {
                     label={"MPP Reference Number"}
                     type={"dropdown"}
                     onChange={(e: any) => {
-                      console.log(e);
+                      
                       fm.data.mpp_name = e?.data.mpp_period?.title;
                       fm.data.mpp_period_id = e?.data.mpp_period?.id;
                       const line = e?.data.mp_planning_lines;
@@ -475,7 +474,7 @@ function Page() {
                     label={"Female Needs"}
                     type={"money"}
                     onChange={() => {
-                      console.log("MASUK??");
+                      
                       fm.data.total_needs =
                         getNumber(fm?.data?.male_needs) +
                         getNumber(fm?.data?.female_needs);
@@ -513,7 +512,7 @@ function Page() {
                       ];
                     }}
                     onChange={(item: any) => {
-                      console.log(item, fm);
+                      
                       if (
                         typeof fm?.fields?.request_category_id?.reload === "function"
                       )
@@ -534,19 +533,11 @@ function Page() {
                       type={"single-checkbox"}
                       className={"grid grid-cols-3"}
                       onLoad={() => {
-                        console.log("CEK")
                         const is_replacement =
                           fm.data?.is_replacement === "penambahan"
                             ? true
                             : false;
                         if (!fm.data?.is_replacement) return [];
-                        console.log(fm.data?.categories?.length
-                          ? fm.data?.categories.filter(
-                              (e: any) =>
-                                e.data?.
-                              is_replacement === is_replacement
-                            )
-                          : [])
                         return fm.data?.categories?.length
                         ? fm.data?.categories.filter(
                             (e: any) =>

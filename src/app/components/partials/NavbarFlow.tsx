@@ -437,9 +437,7 @@ const UserDropdown: FC = function () {
           neil.sims@flowbite.com
         </span>
       </Dropdown.Header>
-      <Dropdown.Item>Dashboard</Dropdown.Item>
-      <Dropdown.Item>Settings</Dropdown.Item>
-      <Dropdown.Item>Earnings</Dropdown.Item>
+      <Dropdown.Item>Switch Role</Dropdown.Item>
       <Dropdown.Divider />
       <Dropdown.Item>Sign out</Dropdown.Item>
     </Dropdown>

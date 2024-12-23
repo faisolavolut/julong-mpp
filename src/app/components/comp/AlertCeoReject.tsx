@@ -44,7 +44,6 @@ export const AlertCeoReject: FC<any> = ({ lc }) => {
         `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/organizations/${btc?.id}` +
           params
       );
-      console.log({ res });
       const data: any[] = res.data.data;
       const result = data?.length
         ? data.map((e) => {

@@ -283,9 +283,7 @@ const convertRawData = (data: any): any[] => {
 };
 
 const MyDocument: FC<any> = ({ data }) => {
-  console.log(data);
   const page = convertRawData(data);
-  console.log({ page });
   return (
     <Document>
       {page.map((page, pageIndex) => {

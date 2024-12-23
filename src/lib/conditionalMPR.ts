@@ -43,11 +43,9 @@ export const showApprovel = (
     let result = {} as any;
     const isPermision = permision.find((e) => status.permision.includes(e));
     if (isPermision) {
-      console.log({ permision, er: status.permision });
       let pass = true;
       status.permision.map((e, idx) => {
         if (permision.find((p) => p === e)) {
-          console.log(e, !get(data, status.column[idx]), status.column[idx])
           if (pass && !get(data, status.column[idx])) {
             result[status.column[idx]] = get_user("employee.id");
             result["level"] = status.level[idx];
@@ -57,7 +55,6 @@ export const showApprovel = (
       });
       if (action) {
         if (action === "approve") {
-          console.log(data,data.mp_request_type,result?.level, data?.organization_category )
           switch (data?.status) {
             case "IN PROGRESS":
               result["approve"] = data?.mp_planning_header_id

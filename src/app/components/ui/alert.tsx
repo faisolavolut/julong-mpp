@@ -18,6 +18,7 @@ export const Alert: FC<any> = ({
   children,
   className,
   content,
+  msg
 }) => {
   const message: any = {
     save: "Your data will be saved securely. You can update it at any time if needed.",
@@ -37,7 +38,7 @@ export const Alert: FC<any> = ({
                 
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  {message?.[type]}
+                  {message?.[type] || msg}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

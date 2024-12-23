@@ -1,7 +1,9 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
+import { Tablist } from "@/app/components/tablist/Tablist";
 import { ButtonBetter } from "@/app/components/ui/button";
 import { ButtonLink } from "@/app/components/ui/button-link";
+import { columnMpp } from "@/constants/column-mpp";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
@@ -50,116 +52,74 @@ function Page() {
         </h2>
       </div>
       <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
-        <TableList
-          name="Location"
-          header={{
-            sideLeft: (data: any) => {
-              if (!local.can_add) return <></>;
-              return (
-                <>
-                  <div className="flex flex-row flex-grow">
-                    <ButtonLink className="bg-primary" href={"/d/location/new"}>
-                      <div className="flex items-center gap-x-0.5">
-                        <HiPlus className="text-xl" />
-                        <span className="capitalize">Add New</span>
-                      </div>
-                    </ButtonLink>
-                  </div>
-                </>
-              );
-            },
+        <Tablist
+          disabledPagination={true}
+          onLabel={(row: any) => {
+            return row.name;
           }}
-          column={[
-            {
-              name: "document_number",
-              header: () => <span>Document Number</span>,
-              renderCell: ({ row, name, cell }: any) => {
-                return <>{getValue(row, name)}</>;
-              },
-            },
-            {
-              name: "document_date",
-              header: () => <span>Document Date</span>,
-              renderCell: ({ row, name, cell }: any) => {
-                return <>{shortDate(new Date(getValue(row, name)))}</>;
-              },
-            },
-            {
-              name: "organization_name",
-              header: () => <span>Organization</span>,
-              renderCell: ({ row, name, cell }: any) => {
-                return <>{getValue(row, name)}</>;
-              },
-            },
-            {
-              name: "organization_location_name",
-              header: () => <span>Location</span>,
-              renderCell: ({ row, name, cell }: any) => {
-                return <>{getValue(row, name)}</>;
-              },
-            },
-            {
-              name: "requestor_name",
-              header: () => <span>Requestor</span>,
-              renderCell: ({ row, name, cell }: any) => {
-                return <>{getValue(row, name)}</>;
-              },
-            },
-            {
-              name: "status",
-              header: () => <span>Status</span>,
-              renderCell: ({ row, name, cell }: any) => {
-                return <>{getValue(row, name)}</>;
-              },
-            },
-            {
-              name: "action",
-              header: () => <span>Action</span>,
-              sortable: false,
-              renderCell: ({ row, name, cell }: any) => {
-                return (
-                  <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                    {local.can_edit && ["REJECTED", "DRAFTED", "DRAFT"].includes(row?.status) ? (
-                      <ButtonLink
-                        className="bg-primary"
-                        href={`/d/location/${row.id}/edit`}
-                      >
-                        <div className="flex items-center gap-x-2">
-                          <HiOutlinePencilAlt className="text-lg" />
-                        </div>
-                      </ButtonLink>
-                    ) : (
-                      <></>
-                    )}
-
-                    <ButtonLink
-                      className="bg-primary"
-                      href={`/d/location/${row.id}/view`}
-                    >
-                      <div className="flex items-center gap-x-2">
-                        <IoEye className="text-lg" />
-                      </div>
-                    </ButtonLink>
-                    {/* <ButtonBetter variant={"outline"}>
-                      <div className="flex items-center gap-x-2">
-                        <HiDocumentDownload className="text-lg" />
-                      </div>
-                    </ButtonBetter> */}
+          onValue={(row: any) => {
+            return row.id;
+          }}
+          onLoad={async () => {
+            return [
+              { id: "on_going", name: "On going" },
+              { id: "completed", name: "Completed" },
+            ];
+          }}
+          tabContent={(data: any) => {
+            return (
+              <>
+                <div className="w-full flex flex-col flex-grow">
+                  <div className={cx("flex flex-grow flex-col h-[350px]")}>
+                    <TableList
+                      name="Location"
+                      header={{
+                        sideLeft: (data: any) => {
+                          if (!local.can_add) return <></>;
+                          return (
+                            <>
+                              <div className="flex flex-row flex-grow">
+                                <ButtonLink
+                                  className="bg-primary"
+                                  href={"/d/location/new"}
+                                >
+                                  <div className="flex items-center gap-x-0.5">
+                                    <HiPlus className="text-xl" />
+                                    <span className="capitalize">Add New</span>
+                                  </div>
+                                </ButtonLink>
+                              </div>
+                            </>
+                          );
+                        },
+                      }}
+                      column={columnMpp({ ...data, local })}
+                      onLoad={async (param: any) => {
+                        try {
+                          const params = await events("onload-param", param);
+                          const res: any = await api.get(
+                            `${process.env.NEXT_PUBLIC_API_MPP}${
+                              data.id === "completed"
+                                ? "/api/mp-plannings/completed"
+                                : "/api/mp-plannings"
+                            }` + params
+                          );
+                          const result: any[] =
+                            res.data.data.mp_planning_headers;
+                          if (!Array.isArray(result)) return [];
+                          return result || [];
+                        } catch (ex) {
+                          return [];
+                        }
+                      }}
+                      onInit={async (list: any) => {}}
+                    />
+                    ;
                   </div>
-                );
-              },
-            },
-          ]}
-          onLoad={async (param: any) => {
-            const params = await events("onload-param", param);
-            const res: any = await api.get(
-              `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings` + params
+                </div>
+              </>
             );
-            const data: any[] = res.data.data.mp_planning_headers;
-            if (!Array.isArray(data)) return [];
-            return data || [];
           }}
-          onInit={async (list: any) => {}}
         />
       </div>
     </div>

@@ -35,8 +35,8 @@ function Page() {
         <Form
           onSubmit={async (fm: any) => {
             const data = fm.data;
-            console.log({data})
-            console.log("HALOOO???");
+            
+            
           }}
           onLoad={async () => {
             return {};

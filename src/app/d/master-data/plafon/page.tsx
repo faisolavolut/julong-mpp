@@ -13,9 +13,6 @@ import { IoEye, IoSync } from "react-icons/io5";
 import { toast } from "sonner";
 
 function Page() {
-  const local = useLocal({
-    ready: true,
-  });
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
@@ -29,88 +26,7 @@ function Page() {
           header={{
             sideLeft: (data: any) => {
               return (
-                <div className="flex flex-row items-center gap-x-2">
-                  <ButtonBetter
-                    onClick={async () => {
-                      try {
-                        local.ready = false;
-                        local.render();
-                        toast.info(
-                          <>
-                            <Loader2
-                              className={cx(
-                                "h-4 w-4 animate-spin-important",
-                                css`
-                                  animation: spin 1s linear infinite !important;
-                                  @keyframes spin {
-                                    0% {
-                                      transform: rotate(0deg);
-                                    }
-                                    100% {
-                                      transform: rotate(360deg);
-                                    }
-                                  }
-                                `
-                              )}
-                            />
-                            {" Synchronization..."}
-                          </>
-                        );
-
-                        await api.get(
-                          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons/sync`
-                        );
-                        setTimeout(() => {
-                          toast.success(
-                            <div
-                              className={cx(
-                                "cursor-pointer flex flex-col select-none items-stretch flex-1 w-full"
-                              )}
-                              onClick={() => {
-                                toast.dismiss();
-                              }}
-                            >
-                              <div className="flex text-green-700 items-center success-title font-semibold">
-                                <Check className="h-6 w-6 mr-1 " />
-                                Synchronization successful
-                              </div>
-                            </div>
-                          );
-
-                          local.ready = true;
-                          local.render();
-                          setTimeout(() => {
-                            if (typeof window !== "undefined")
-                              window.location.reload();
-                          }, 1000);
-                        }, 1000);
-                      } catch (ex: any) {
-                        toast.error(
-                          <div className="flex flex-col w-full">
-                            <div className="flex text-red-600 items-center">
-                              <AlertTriangle className="h-4 w-4 mr-1" />
-                              Synchronization Failed {ex.message}.
-                            </div>
-                          </div>,
-                          {
-                            dismissible: true,
-                            className: css`
-                              background: #ffecec;
-                              border: 2px solid red;
-                            `,
-                          }
-                        );
-                        local.ready = true;
-                        local.render();
-                      }
-                    }}
-                  >
-                    <IoSync
-                      className={cx(!local.ready ? "animate-spin" : "")}
-                    />{" "}
-                    Synchronization
-                  </ButtonBetter>
-                </div>
+                <></>
               );
             },
           }}

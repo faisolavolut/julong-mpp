@@ -58,7 +58,7 @@ function Page() {
       }}
       onSubmit={async (fm: any) => {
         const data = fm?.data
-        console.log({data})
+        
         const param = {
           id,
           plafon: Number(data.plafon),

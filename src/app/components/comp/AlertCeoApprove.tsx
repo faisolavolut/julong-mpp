@@ -16,7 +16,7 @@ import api from "@/lib/axios";
 import { get_user } from "@/lib/get_user";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
-export const AlertCeoApprove: FC<any> = () => {
+export const AlertCeoApprove: FC<any> = (fm) => {
   return (
     <>
       <Dialog>
@@ -80,6 +80,8 @@ export const AlertCeoApprove: FC<any> = () => {
                       `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/update-status`,
                       param
                     );
+                    fm.data = null;
+                    fm.render();
                     setTimeout(() => {
                       toast.success(
                         <div

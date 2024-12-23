@@ -40,7 +40,6 @@ function Page() {
           const res = await api.get(
             `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/need-approval`
           );
-          console.log({res})
           if (res?.data?.data) {
             local.data = res?.data?.data;
             local.can_add = true;
@@ -87,7 +86,7 @@ function Page() {
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row gap-x-1 py-2">
                     <AlertCeoReject fm={local}/>
-                    <AlertCeoApprove />
+                    <AlertCeoApprove fm={local}/>
                   </div>
                 </div>
               </>

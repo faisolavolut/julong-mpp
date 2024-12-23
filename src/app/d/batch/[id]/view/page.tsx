@@ -305,7 +305,6 @@ function Page() {
                               label={"Organization"}
                               type={"dropdown"}
                               onChange={() => {
-                                // console.log({ data: fm_row.data });
                                 // tbl.renderRow(fm_row.data);
                               }}
                               onLoad={async () => {
@@ -343,7 +342,6 @@ function Page() {
                               label={"Organization"}
                               type={"dropdown"}
                               onChange={(item: any) => {
-                                console.log({ item });
                                 const existing = item.data.existing;
                                 fm_row.data.existing = existing;
                                 fm.render();

@@ -21,7 +21,6 @@ function Page() {
       const check = await api.get(
         `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
       );
-      console.log({ check });
       if (!check.data.data) local.can_add = true;
       local.render();
     };
@@ -111,7 +110,7 @@ function Page() {
               header: () => <span>Action</span>,
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
-                if (getValue(row, name) === "draft") {
+                if (getValue(row, name) !== "draft") {
                   return (
                     <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                       <ButtonLink
@@ -154,7 +153,7 @@ function Page() {
               `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods` + params
             );
             const data: any[] = res.data.data.mppperiods;
-            console.log(data);
+            
             return data || [];
           }}
           onInit={async (list: any) => {}}
