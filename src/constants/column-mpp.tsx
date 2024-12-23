@@ -37,6 +37,21 @@ export const columnMpp = (data: any) => {
           },
         },
         {
+          name: "status",
+          header: () => <span>Status</span>,
+          renderCell: ({ row, name, cell }: any) => {
+            switch (getValue(row, name)) {
+              case "IN_PROGRESS":
+                return <>In Progress</>;
+                break;
+
+              default:
+                return <>{getValue(row, name)}</>;
+                break;
+            }
+          },
+        },
+        {
           name: "action",
           header: () => <span>Action</span>,
           sortable: false,
@@ -99,6 +114,21 @@ export const columnMpp = (data: any) => {
           header: () => <span>Document Date</span>,
           renderCell: ({ row, name, cell }: any) => {
             return <>{shortDate(new Date(getValue(row, name)))}</>;
+          },
+        },
+        {
+          name: "status",
+          header: () => <span>Status</span>,
+          renderCell: ({ row, name, cell }: any) => {
+            switch (getValue(row, name)) {
+              case "IN_PROGRESS":
+                return <>In Progress</>;
+                break;
+
+              default:
+                return <>{getValue(row, name)}</>;
+                break;
+            }
           },
         },
         {
@@ -283,11 +313,6 @@ export const columnMpp = (data: any) => {
                     <IoEye className="text-lg" />
                   </div>
                 </ButtonLink>
-                {/* <ButtonBetter variant={"outline"}>
-            <div className="flex items-center gap-x-2">
-              <HiDocumentDownload className="text-lg" />
-            </div>
-          </ButtonBetter> */}
               </div>
             );
           },

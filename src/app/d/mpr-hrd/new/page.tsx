@@ -534,7 +534,7 @@ function Page() {
                       className={"grid grid-cols-3"}
                       onLoad={() => {
                         const is_replacement =
-                          fm.data?.is_replacement === "penambahan"
+                          fm.data?.is_replacement === "penggantian"
                             ? true
                             : false;
                         if (!fm.data?.is_replacement) return [];
