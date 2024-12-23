@@ -72,7 +72,7 @@ function Page() {
       const permision = listPermision.filter((e) => getAccess(e, roles));
       local.permission = permision;
       local.render();
-      console.log(local.permission)
+      console.log(local.permission);
     };
     run();
   }, []);
@@ -337,7 +337,7 @@ function Page() {
                                 id
                             );
                             const data: any[] = res.data.data;
-                            
+
                             if (!Array.isArray(data)) return [];
                             return data || [];
                           }}
@@ -368,7 +368,7 @@ function Page() {
                         </AlertDialogHeader>
                         <Form
                           onSubmit={async (fm: any) => {
-                            const data = showApprovel(
+                            const data:any = showApprovel(
                               parent_fm.data,
                               local.permission,
                               "reject"
@@ -383,8 +383,6 @@ function Page() {
                             };
                             try {
                               const formData = new FormData();
-
-                              // Menambahkan data param ke FormData
                               formData.append("payload", JSON.stringify(param));
 
                               const res: any = await api.put(
@@ -398,6 +396,7 @@ function Page() {
                               );
                               parent_fm.data.status = data.approve;
                               parent_fm.render();
+                              parent_fm.reload();
                             } catch (ex: any) {
                               toast.error(
                                 <div className="flex flex-col w-full">
@@ -502,7 +501,7 @@ function Page() {
                   <Alert
                     type={"delete"}
                     onClick={async () => {
-                      const data = showApprovel(
+                      const data:any = showApprovel(
                         fm.data,
                         local.permission,
                         "approve"
@@ -538,6 +537,7 @@ function Page() {
                           }
                         );
                         fm.render();
+                        fm.reload();
                       } catch (ex: any) {
                         toast.error(
                           <div className="flex flex-col w-full">
@@ -569,7 +569,7 @@ function Page() {
         );
       }}
       onSubmit={async (fm: any) => {
-        const data = fm.data;
+        const data:any = fm.data;
       }}
       showResize={false}
       header={(fm: any) => {
@@ -580,7 +580,7 @@ function Page() {
         const res: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/` + id
         );
-        const data = res.data.data;
+        const data:any = res.data.data;
 
         let categories = [] as any[];
         const ctg: any = await api.get(
@@ -887,7 +887,7 @@ function Page() {
                       );
 
                       const data: any[] = res.data.data;
-                      
+
                       if (!Array.isArray(data)) return [];
                       return data.map((e) => {
                         return {
@@ -941,7 +941,6 @@ function Page() {
                     label={"Female Needs"}
                     type={"money"}
                     onChange={() => {
-                      
                       fm.data.total_needs =
                         getNumber(fm?.data?.male_needs) +
                         getNumber(fm?.data?.female_needs);
@@ -979,7 +978,6 @@ function Page() {
                       ];
                     }}
                     onChange={(item: any) => {
-                      
                       if (
                         typeof fm?.fields?.request_category_id?.reload ===
                         "function"

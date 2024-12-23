@@ -2,13 +2,14 @@
 
 import get from "lodash.get";
 import { get_user } from "./get_user";
+import { fa } from "@faker-js/faker";
 
 export const showApprovel = (
   data: any,
   permision: string[],
   action?: "approve" | "reject"
 ) => {
-  console.log({data})
+  console.log({ data });
   const a1 = [
     {
       status: "IN PROGRESS",
@@ -33,66 +34,63 @@ export const showApprovel = (
       level: ["Level HRD HO"],
     },
   ]; // tiga status yang dapat memunculkan approval
-
-  if(data?.status === "NEED APPROVAL"){
-    
-  }
-
-  if(data?.status === "NEED APPROVAL" &&
-    data?.organization_category === "Non Field" &&
-    data?.mp_request_type === "OFF_BUDGET"){
+  const role = {
+    head: permision.find((e) => e === "approve-mpr-dept-head"),
+    dir: permision.find((e) => e === "approve-mpr-dir"),
+    ceo: permision.find((e) => e === "approve-mpr-ceo"),
+    ho_unit: permision.find((e) => e === "approve-mpr-ho"),
+  };
+  const isBudget = data?.mp_planning_header_id ? true : false;
+  const isField = data?.organization_category === "Non Field" ? false : true;
+  if (data?.status === "NEED APPROVAL") {
+    if (data?.department_head && !data?.vp_gm_director) {
+      return {
+        approve:
+          action === "reject"
+            ? "REJECTED"
+            : isField
+            ? "APPROVED"
+            : "NEED APPROVAL",
+        level: "Level VP",
+      };
+    } else if (data?.vp_gm_director && !data?.ceo) {
       return null
-
-  }
-  const status = a1.find((e) => data?.status === e.status);
-  if (status) {
-    let result = {} as any;
-    const isPermision = permision.find((e) => status.permision.includes(e));
-    if (isPermision) {
-      let pass = true;
-      status.permision.map((e, idx) => {
-        if (permision.find((p) => p === e)) {
-          if (pass && !get(data, status.column[idx])) {
-            result[status.column[idx]] = get_user("employee.id");
-            result["level"] = status.level[idx];
-            pass = false;
-          }
-        }
-      });
-      if (action) {
-        if (action === "approve") {
-          switch (data?.status) {
-            case "IN PROGRESS":
-              result["approve"] = data?.mp_planning_header_id
-                ? "APPROVED"
-                : "NEED APPROVAL";
-              break;
-
-            case "NEED APPROVAL":
-              result["approve"] =
-                result?.level === "Level CEO"
-                  ? "APPROVED"
-                  : result?.level === "Level Head Department" &&
-                    data.mp_request_type === "ON_BUDGET"
-                  ? "APPROVED"
-                  : data?.organization_category === "Field"
-                  ? "APPROVED"
-                  : "NEED APPROVAL";
-              break;
-            case "APPROVED":
-              result["approve"] = "COMPLETED";
-              break;
-            default:
-              result["approve"] = "APPROVED";
-              break;
-          }
-        } else {
-          result["approve"] = "REJECTED";
-        }
-      }
-      return result;
+      return {
+        approve: action === "reject" ? "REJECTED" : "APPROVED",
+        level: "Level VP",
+      };
+    }
+  } else if (data?.status === "IN PROGRESS") {
+    const isYou = data?.requestor_id === get_user("m_employee.id");
+    if (isYou) {
+      return {
+        approve:
+          action === "reject"
+            ? "REJECTED"
+            : isBudget
+            ? "APPROVED"
+            : "NEED APPROVAL",
+        level: "Level Head Department",
+      };
     }
     return null;
+  } else if (data?.status === "APPROVED") {
+    if (data?.department_head && !data?.vp_gm_director) {
+      return {
+        approve:
+          action === "reject"
+            ? "REJECTED"
+            : isField
+            ? "APPROVED"
+            : "NEED APPROVAL",
+        level: "Level VP",
+      };
+    } else if (data?.vp_gm_director && !data?.ceo) {
+      return {
+        approve: action === "reject" ? "REJECTED" : "COMPLETED",
+        level: "Level HRD HO",
+      };
+    }
   }
   return null;
 };

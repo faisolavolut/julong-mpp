@@ -383,7 +383,7 @@ function Page() {
                           fm.render();
                           await fm.submit();
                           await fm.reload();
-                          navigate(`/d/location/${id}/view`)
+                          navigate(`/d/location/${id}/view`);
                         }}
                       >
                         <ButtonContainer className={"bg-primary"}>
@@ -898,7 +898,9 @@ function Page() {
                                   getNumber(existing) +
                                   getNumber(fm.data.turn_over) +
                                   getNumber(fm_row.data.promotion);
-
+                                fm_row.data.job_plafon = getNumber(
+                                  item.data.job_plafon
+                                );
                                 fm_row.data.suggested_recruit =
                                   suggested_recruit;
                                 const total =
@@ -1115,7 +1117,7 @@ function Page() {
                                 fm.render();
 
                                 const suggested_recruit =
-                                  getNumber(fm.data.plafon) -
+                                  getNumber(fm_row.data.job_plafon) -
                                   getNumber(fm_row.data.existing) +
                                   getNumber(fm.data.turn_over) +
                                   getNumber(fm_row.data.promotion);
