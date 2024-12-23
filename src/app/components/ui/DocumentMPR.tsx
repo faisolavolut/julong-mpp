@@ -509,7 +509,7 @@ const DocumentMPR: FC<any> = ({ data }) => {
           </View>
           <Text>
             :{" "}
-            {get(data, "is_replacement") === "penambahan"
+            {get(data, "is_replacement") === "penggantian"
               ? "Penambahan"
               : "Penggantian"}
             , karena {handleInput(get(data, "request_category.Name"), "id")}{" "}
@@ -519,7 +519,7 @@ const DocumentMPR: FC<any> = ({ data }) => {
               ...styles.chineseFont,
             }}
           >
-            {get(data, "is_replacement") === "penambahan" ? "增加" : "代替"}，
+            {get(data, "is_replacement") === "penggantian" ? "增加" : "代替"}，
             {handleInput(get(data, "request_category.Name"), "cn")}
           </Text>
         </View>
