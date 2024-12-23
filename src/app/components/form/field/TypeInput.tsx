@@ -21,8 +21,12 @@ export const TypeInput: React.FC<any> = ({
   });
   useEffect(() => {
     if (type === "money") {
-      input.value = formatCurrency(value) || "";
+      input.value =
+        typeof fm.data?.[name] === "number" && fm.data?.[name] === 0
+          ? "0"
+          : formatCurrency(value);
       input.render();
+      console.log(name, input.value);
     }
   }, [fm.data?.[name]]);
   const error = fm.error?.[name];

@@ -6,14 +6,6 @@ import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
 import { getValue } from "@/lib/getValue";
-import { Button } from "flowbite-react";
-import Link from "next/link";
-import {
-  HiDocumentDownload,
-  HiOutlinePencilAlt,
-  HiPlus,
-  HiTrash,
-} from "react-icons/hi";
 import { IoEye } from "react-icons/io5";
 
 function Page() {
@@ -98,7 +90,14 @@ function Page() {
             },
           ]}
           onLoad={async (param: any) => {
-            const params = await events("onload-param", param);
+            const pr = {
+              ...param,
+              vp_gm_director: "NOT NULL",
+              ceo: "NULL",
+              status : "NEED APPROVAL"
+            }
+            delete pr["sort"]
+            const params = await events("onload-param", pr);
             const res: any = await api.get(
               `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests` + params
             );
