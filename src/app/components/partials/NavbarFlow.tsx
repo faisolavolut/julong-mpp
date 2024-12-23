@@ -127,13 +127,9 @@ const NotificationBellDropdown: FC = function () {
             </div>
             <div className="w-full pl-3">
               <div className="mb-1.5 text-md font-normal text-gray-500 ">
-                <span className="font-semibold text-gray-900 ">
-                  Jese Leos
-                </span>
+                <span className="font-semibold text-gray-900 ">Jese Leos</span>
                 &nbsp;and&nbsp;
-                <span className="font-medium text-gray-900 ">
-                  5 others
-                </span>
+                <span className="font-medium text-gray-900 ">5 others</span>
                 &nbsp;started following you.
               </div>
               <div className="text-md font-medium text-primary-700 ">
@@ -161,9 +157,7 @@ const NotificationBellDropdown: FC = function () {
                   Joseph Mcfall
                 </span>
                 &nbsp;and&nbsp;
-                <span className="font-medium text-gray-900 ">
-                  141 others
-                </span>
+                <span className="font-medium text-gray-900 ">141 others</span>
                 &nbsp;love your story. See it and view more stories.
               </div>
               <div className="text-md font-medium text-primary-700 ">
@@ -338,81 +332,63 @@ const AppDrawerDropdown: FC = function () {
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
           <HiShoppingBag className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
-          <div className="text-md font-medium text-gray-900 ">
-            Sales
-          </div>
+          <div className="text-md font-medium text-gray-900 ">Sales</div>
         </a>
         <a
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
           <HiUsers className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
-          <div className="text-md font-medium text-gray-900 ">
-            Users
-          </div>
+          <div className="text-md font-medium text-gray-900 ">Users</div>
         </a>
         <a
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
           <HiInbox className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
-          <div className="text-md font-medium text-gray-900 ">
-            Inbox
-          </div>
+          <div className="text-md font-medium text-gray-900 ">Inbox</div>
         </a>
         <a
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
           <HiUserCircle className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
-          <div className="text-md font-medium text-gray-900 ">
-            Profile
-          </div>
+          <div className="text-md font-medium text-gray-900 ">Profile</div>
         </a>
         <a
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
           <HiCog className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
-          <div className="text-md font-medium text-gray-900 ">
-            Settings
-          </div>
+          <div className="text-md font-medium text-gray-900 ">Settings</div>
         </a>
         <a
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
           <HiArchive className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
-          <div className="text-md font-medium text-gray-900 ">
-            Products
-          </div>
+          <div className="text-md font-medium text-gray-900 ">Products</div>
         </a>
         <a
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
           <HiCurrencyDollar className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
-          <div className="text-md font-medium text-gray-900 ">
-            Pricing
-          </div>
+          <div className="text-md font-medium text-gray-900 ">Pricing</div>
         </a>
         <a
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
           <HiOutlineTicket className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
-          <div className="text-md font-medium text-gray-900 ">
-            Billing
-          </div>
+          <div className="text-md font-medium text-gray-900 ">Billing</div>
         </a>
         <a
           href="#"
           className="block rounded-lg p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-600"
         >
           <HiLogout className="mx-auto mb-1 h-7 w-7 text-gray-500 " />
-          <div className="text-md font-medium text-gray-900 ">
-            Logout
-          </div>
+          <div className="text-md font-medium text-gray-900 ">Logout</div>
         </a>
       </div>
     </Dropdown>
@@ -437,7 +413,18 @@ const UserDropdown: FC = function () {
           neil.sims@flowbite.com
         </span>
       </Dropdown.Header>
-      <Dropdown.Item>Switch Role</Dropdown.Item>
+      <Dropdown.Item
+        onClick={() => {
+          if (typeof window === "object")
+            navigate(
+              `${
+                process.env.NEXT_PUBLIC_API_PORTAL
+              }/choose-roles?${encodeURIComponent(window?.location?.href)}`
+            );
+        }}
+      >
+        Switch Role
+      </Dropdown.Item>
       <Dropdown.Divider />
       <Dropdown.Item>Sign out</Dropdown.Item>
     </Dropdown>
