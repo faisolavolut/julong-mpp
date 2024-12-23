@@ -419,7 +419,7 @@ const UserDropdown: FC = function () {
             navigate(
               `${
                 process.env.NEXT_PUBLIC_API_PORTAL
-              }/choose-roles?${encodeURIComponent(window?.location?.href)}`
+              }/choose-roles?url=${encodeURIComponent(window?.location?.href)}`
             );
         }}
       >
