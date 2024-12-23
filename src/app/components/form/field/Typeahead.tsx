@@ -31,6 +31,7 @@ export const Typeahead: FC<{
   mode?: "multi" | "single";
   note?: string;
   disabledSearch?: boolean;
+  onInit?: (e: any) => void;
 }> = ({
   value,
   note,
@@ -48,6 +49,7 @@ export const Typeahead: FC<{
   className,
   popupClassName,
   disabledSearch,
+  onInit,
 }) => {
   const local = useLocal({
     value: [] as string[],
@@ -288,6 +290,44 @@ export const Typeahead: FC<{
       }
     }
   }, [options_fn]);
+  useEffect(() => {
+    if (typeof onInit === "function") {
+      onInit({
+        reload: async () => {
+          if (typeof options_fn === "function" && !local.loading) {
+            local.loading = true;
+            local.loaded = false;
+            local.render();
+            const res = options_fn({
+              search: local.search.input,
+              existing: options,
+            });
+
+            if (res) {
+              const applyOptions = (result: (string | OptItem)[]) => {
+                local.options = result.map((item) => {
+                  if (typeof item === "string")
+                    return { value: item, label: item };
+                  return item;
+                });
+                local.render();
+              };
+
+              if (res instanceof Promise) {
+                const result = await res;
+                applyOptions(result);
+              } else {
+                applyOptions(res);
+              }
+              local.loaded = true;
+              local.loading = false;
+              local.render();
+            }
+          }
+        },
+      });
+    }
+  }, []);
 
   const resetSearch = () => {
     local.search.searching = false;

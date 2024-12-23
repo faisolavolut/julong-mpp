@@ -72,6 +72,7 @@ function Page() {
       const permision = listPermision.filter((e) => getAccess(e, roles));
       local.permission = permision;
       local.render();
+      console.log(local.permission)
     };
     run();
   }, []);
@@ -690,7 +691,7 @@ function Page() {
                   <Field
                     fm={fm}
                     name={"mpp_name"}
-                    label={"MPP Name"}
+                    label={"Periode Name"}
                     type={"text"}
                     disabled={true}
                   />
@@ -1020,7 +1021,7 @@ function Page() {
 
                 <div className="flex flex-col gap-y-1">
                   <div className="block mb-2 text-md font-medium text-gray-900 text-sm inline">
-                    Age (Max/Min)
+                    Age (Min/Max)
                   </div>
                   <div className="flex flex-row flex-grow gap-x-1">
                     <div className="flex-grow">
@@ -1064,7 +1065,7 @@ function Page() {
                           label: "Married",
                         },
                         {
-                          value: "no rules",
+                          value: "any",
                           label: "No Rules",
                         },
                       ];

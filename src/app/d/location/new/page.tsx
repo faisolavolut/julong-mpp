@@ -188,7 +188,7 @@ function Page() {
                   <Field
                     fm={fm}
                     name={"mpp_name"}
-                    label={"MPP Name"}
+                    label={"Periode Name"}
                     type={"text"}
                     disabled={true}
                   />

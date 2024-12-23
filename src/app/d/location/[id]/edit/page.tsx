@@ -634,7 +634,7 @@ function Page() {
                   <Field
                     fm={fm}
                     name={"mpp_name"}
-                    label={"MPP Name"}
+                    label={"Periode Name"}
                     type={"text"}
                     disabled={true}
                   />
@@ -774,7 +774,11 @@ function Page() {
                                 <ButtonBetter
                                   className="bg-primary"
                                   onClick={() => {
-                                    tbl.addRow({});
+                                    tbl.addRow({
+                                      recruit_ph: 0,
+                                      recruit_mt: 0,
+                                      promotion: 0,
+                                    });
                                     tbl.render();
                                     fm.render();
                                     const recruit = fm.data.document_line

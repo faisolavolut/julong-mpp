@@ -42,7 +42,7 @@ function Page() {
                 data={[
                   {
                     title: "List Manpower Request",
-                    url: "/d/mpr-rekruitment",
+                    url: "/d/mpr-hrd",
                   },
                   {
                     title: "Detail",
@@ -94,8 +94,8 @@ function Page() {
           recommended_by: null, // Tidak ada field recommended_by di data asli
           approved_by: null, // Tidak ada field approved_by di data asli
           requestor_id: data.requestor_id,
-          organization_location_id: data.organization_location_id,
-          for_organization_location_id: data.organization_location_id,
+          organization_location_id: data.location,
+          for_organization_location_id: data.location,
           for_organization_structure_id: data.organization_structure_id,
           organization_structure_id: data.organization_structure_id,
           certificate: data.certificate, // Optional
@@ -105,17 +105,19 @@ function Page() {
           jobdesc: data.jobdesc,
           salary_min: data.salary_min,
           salary_max: data.salary_max,
-          is_replacement: data.is_replacement === "penambahan" ? true : false,
-          mp_request_type: data.mp_planning_header_id ? "ON_BUDGET" : "OFF_BUDGET",
+          is_replacement: data.is_replacement === "penggantian" ? true : false,
+          mp_request_type: data.mp_planning_header_id
+            ? "ON_BUDGET"
+            : "OFF_BUDGET",
           mp_planning_header_id: data.mp_planning_header_id,
         };
-        
+
         const res: any = await api.post(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests`,
           prm
         );
-        
-        navigate("/d/mpr-hrd/"+res.data?.data?.id+"/edit")
+
+        navigate("/d/mpr-hrd/" + res.data?.data?.id + "/edit");
       }}
       onLoad={async () => {
         const document_number = await api.get(
@@ -130,8 +132,9 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations/` + id_org
         );
         const current_open = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=complete`
         );
+        console.log(current_open)
         const ctg: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/request-categories`
         );
@@ -152,8 +155,13 @@ function Page() {
           // mpp_name: current_open?.data?.data?.title,
           budget_year_from: current_open?.data?.data?.budget_start_date,
           budget_year_to: current_open?.data?.data?.budget_end_date,
+          mpp_name: current_open?.data?.data?.title,
           requestor: get_user("employee.name"),
           job: get_user("employee.employee_job.name"),
+
+          for_organization_id: get_user(
+            "employee.organization_id"
+          ),
           total_recruit: 0,
           total_promote: 0,
           mpp_period_id: current_open?.data?.data?.id,
@@ -202,9 +210,6 @@ function Page() {
                     label={"MPP Reference Number"}
                     type={"dropdown"}
                     onChange={(e: any) => {
-                      
-                      fm.data.mpp_name = e?.data.mpp_period?.title;
-                      fm.data.mpp_period_id = e?.data.mpp_period?.id;
                       const line = e?.data.mp_planning_lines;
                       fm.data["lines"] = line;
                       fm.render();
@@ -215,9 +220,9 @@ function Page() {
                         take: 500,
                       };
                       const params = await events("onload-param", param);
+                      // /something?organization_id=${get_user("employee.organization_id")}&status=COMPLETED
                       const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings` +
-                          params
+                        `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings`
                       );
 
                       const data: any[] = res.data.data.mp_planning_headers;
@@ -237,7 +242,7 @@ function Page() {
                   <Field
                     fm={fm}
                     name={"mpp_name"}
-                    label={"MPP Name"}
+                    label={"Periode Name"}
                     type={"text"}
                     disabled={true}
                   />
@@ -288,7 +293,7 @@ function Page() {
                     name={"for_organization_id"}
                     label={"For Organization"}
                     type={"dropdown"}
-                    disabled={!fm.data?.recruitment_type}
+                    disabled={true}
                     onChange={(e: any) => {
                       const locations = e.data?.organization_locations;
                       fm.data["list_location"] = locations;
@@ -381,16 +386,17 @@ function Page() {
                       fm.render();
                     }}
                     onLoad={async () => {
+                      if (!fm.data?.for_organization_id) return [];
                       const param = {
                         paging: 1,
                         take: 500,
                       };
                       const params = await events("onload-param", param);
                       const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs` +
+                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}` +
                           params
                       );
-                      const data: any[] = res.data.data.jobs;
+                      const data: any[] = res.data.data;
                       if (!Array.isArray(data)) return [];
                       return data.map((e) => {
                         return {
@@ -419,8 +425,18 @@ function Page() {
                     label={"Location"}
                     type={"dropdown"}
                     disabled={!fm.data?.for_organization_id}
-                    onLoad={() => {
-                      const data: any[] = fm.data?.["list_location"] || [];
+                    onLoad={async () => {
+                      if (!fm.data?.for_organization_id) return [];
+                      const param = {
+                        paging: 1,
+                        take: 1000,
+                      };
+                      const params = await events("onload-param", param);
+                      const res: any = await api.get(
+                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organization-locations/organization/${fm.data?.for_organization_id}` +
+                          params
+                      );
+                      const data: any[] = res.data.data;
                       if (!Array.isArray(data)) return [];
                       return data.map((e) => {
                         return {
@@ -474,7 +490,6 @@ function Page() {
                     label={"Female Needs"}
                     type={"money"}
                     onChange={() => {
-                      
                       fm.data.total_needs =
                         getNumber(fm?.data?.male_needs) +
                         getNumber(fm?.data?.female_needs);
@@ -512,9 +527,9 @@ function Page() {
                       ];
                     }}
                     onChange={(item: any) => {
-                      
                       if (
-                        typeof fm?.fields?.request_category_id?.reload === "function"
+                        typeof fm?.fields?.request_category_id?.reload ===
+                        "function"
                       )
                         fm.fields.request_category_id.reload();
                     }}
@@ -539,12 +554,11 @@ function Page() {
                             : false;
                         if (!fm.data?.is_replacement) return [];
                         return fm.data?.categories?.length
-                        ? fm.data?.categories.filter(
-                            (e: any) =>
-                              e.data?.
-                            is_replacement === is_replacement
-                          )
-                        : [];
+                          ? fm.data?.categories.filter(
+                              (e: any) =>
+                                e.data?.is_replacement === is_replacement
+                            )
+                          : [];
                       }}
                     />
                   </div>
@@ -554,7 +568,7 @@ function Page() {
 
                 <div className="flex flex-col gap-y-1">
                   <div className="block mb-2 text-md font-medium text-gray-900 text-sm inline">
-                    Age (Max/Min)
+                    Age (Min/Max)
                   </div>
                   <div className="flex flex-row flex-grow gap-x-1">
                     <div className="flex-grow">
@@ -598,7 +612,7 @@ function Page() {
                           label: "Married",
                         },
                         {
-                          value: "no rules",
+                          value: "any",
                           label: "No Rules",
                         },
                       ];

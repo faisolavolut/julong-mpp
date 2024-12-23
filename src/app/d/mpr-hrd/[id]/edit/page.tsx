@@ -26,7 +26,10 @@ import { normalDate } from "@/lib/date";
 import { events } from "@/lib/event";
 import { getParams } from "@/lib/get-params";
 import { get_user } from "@/lib/get_user";
+import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getNumber } from "@/lib/getNumber";
+import { useLocal } from "@/lib/use-local";
+import { useEffect } from "react";
 import { GoInfo } from "react-icons/go";
 import { HiDocumentDownload, HiPlus } from "react-icons/hi";
 import { IoMdSave } from "react-icons/io";
@@ -35,6 +38,27 @@ import { MdDelete } from "react-icons/md";
 function Page() {
   const id = getParams("id");
 
+  const local = useLocal({
+    permission: [] as string[],
+    staff: false as boolean,
+    head: false as boolean,
+  });
+  useEffect(() => {
+    const run = async () => {
+      const roles = await userRoleMe();
+      const listPermision = ["save-mpr-staff", "save-mpr-dept-head"];
+      const permision = listPermision.filter((e) => getAccess(e, roles));
+      local.permission = permision;
+      local.staff = listPermision.find((e) => e === "save-mpr-staff")
+        ? true
+        : false;
+      local.head = listPermision.find((e) => e === "save-mpr-dept-head")
+        ? true
+        : false;
+      local.render();
+    };
+    run();
+  }, []);
   return (
     <FormBetter
       onTitle={(fm: any) => {
@@ -57,56 +81,57 @@ function Page() {
               />
             </div>
             <div className="flex flex-row space-x-2">
-              <Alert
-                type={"save"}
-                onClick={() => {
-                  fm.data.status = "DRAFT";
-                  fm.submit();
-                }}
-              >
-                <ButtonContainer className={"bg-primary"}>
-                  <IoMdSave className="text-xl" />
-                  Save
-                </ButtonContainer>
-              </Alert>
-              <Alert
-                type={"delete"}
-                onClick={async () => {
-                  fm.data.status = fm.data.mp_planning_header_id
-                    ? "IN PROGRESS"
-                    : "NEED APPROVAL";
-                  fm.render();
-                  if (!fm.data.requestor_name)
-                    fm.data.requestor_id = get_user("employee.id");
-                  if (fm.data.status === "NEED APPROVAL")
-                    fm.data.department_head = get_user("employee.id");
-                  fm.render();
-                  await fm.submit();
-                  if (fm.data.status === "IN PROGRESS") {
+              {["DRAFT", "REJECTED"].includes(fm.data?.status) && (
+                <Alert
+                  type={"save"}
+                  onClick={() => {
+                    fm.data.status = "DRAFT";
+                    fm.submit();
+                  }}
+                >
+                  <ButtonContainer className={"bg-primary"}>
+                    <IoMdSave className="text-xl" />
+                    Save
+                  </ButtonContainer>
+                </Alert>
+              )}
+              {["DRAFT", "REJECTED"].includes(fm.data?.status) && (
+                <Alert
+                  type={"delete"}
+                  onClick={async () => {
+                    const isYou =
+                      fm.data.requestor_id === get_user("employee.id");
+                    const isOnBudget = fm.data.mp_planning_header_id
+                      ? true
+                      : false;
+                    fm.render();
+                    if (isOnBudget) {
+                      if (isYou) {
+                        if (local.head) {
+                          fm.data.status = "IN PROGRESS";
+                        } else {
+                          fm.data.status = "APPROVED";
+                          fm.data.department_head = get_user("employee.id");
+                        }
+                      }
+                    } else {
+                      if (isYou) {
+                        fm.data.status = "NEED APPROVAL";
+                        fm.data.department_head = get_user("employee.id");
+                      }
+                    }
+                    fm.render();
+                    console.log(fm.data.status)
+                    await fm.submit();
                     navigate(`/d/mpr-hrd/${id}/view`);
-                  }
-                }}
-              >
-                <ButtonContainer className={"bg-primary"}>
-                  <IoMdSave className="text-xl" />
-                  Submit
-                </ButtonContainer>
-              </Alert>
-              <Alert
-                type={"delete"}
-                onClick={async () => {
-                  fm.data.department_head = get_user("employee.id");
-                  fm.data.status = "APPROVED";
-                  fm.render();
-                  await fm.submit();
-                  navigate(`/d/mpr-hrd/${id}/view`);
-                }}
-              >
-                <ButtonContainer className={"bg-primary"}>
-                  <IoMdSave className="text-xl" />
-                  Submit & Approved
-                </ButtonContainer>
-              </Alert>
+                  }}
+                >
+                  <ButtonContainer className={"bg-primary"}>
+                    <IoMdSave className="text-xl" />
+                    Submit
+                  </ButtonContainer>
+                </Alert>
+              )}
             </div>
           </div>
         );
@@ -143,8 +168,8 @@ function Page() {
           vp_gm_director: data.vp_gm_director,
           hrd_ho_unit: data.hrd_ho_unit,
           ceo: data.ceo,
-          organization_location_id: data.organization_location_id,
-          for_organization_location_id: data.organization_location_id,
+          organization_location_id: data.location,
+          for_organization_location_id: data.location,
           for_organization_structure_id: data.organization_structure_id,
           organization_structure_id: data.organization_structure_id,
           certificate: data.certificate, // Optional
@@ -154,17 +179,18 @@ function Page() {
           jobdesc: data.jobdesc,
           salary_min: data.salary_min,
           salary_max: data.salary_max,
-          is_replacement: data.is_replacement === "penambahan" ? true : false,
+          is_replacement: data.is_replacement === "penggantian" ? true : false,
           mp_request_type: data.mp_planning_header_id
             ? "ON_BUDGET"
             : "OFF_BUDGET",
           mp_planning_header_id: data.mp_planning_header_id,
         };
-        
+
         await api.put(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests`,
           prm
         );
+        fm.reload();
       }}
       showResize={false}
       header={(fm: any) => {
@@ -191,7 +217,7 @@ function Page() {
         });
         const lines = data.mp_planning_header.mp_planning_lines || [];
         const jobs = lines.find((e: any) => e.job_id === data.job_id);
-
+        console.log({ data });
         return {
           id,
           ...data,
@@ -244,9 +270,6 @@ function Page() {
                     label={"MPP Reference Number"}
                     type={"dropdown"}
                     onChange={(e: any) => {
-                      
-                      fm.data.mpp_name = e?.data.mpp_period?.title;
-                      fm.data.mpp_period_id = e?.data.mpp_period?.id;
                       const line = e?.data.mp_planning_lines;
                       fm.data["lines"] = line;
                       fm.render();
@@ -279,7 +302,7 @@ function Page() {
                   <Field
                     fm={fm}
                     name={"mpp_name"}
-                    label={"MPP Name"}
+                    label={"Periode Name"}
                     type={"text"}
                     disabled={true}
                   />
@@ -428,11 +451,12 @@ function Page() {
                         take: 500,
                       };
                       const params = await events("onload-param", param);
+                      if (!fm.data?.for_organization_id) return [];
                       const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs` +
+                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}` +
                           params
                       );
-                      const data: any[] = res.data.data.jobs;
+                      const data: any[] = res.data.data;
                       if (!Array.isArray(data)) return [];
                       return data.map((e) => {
                         return {
@@ -462,21 +486,30 @@ function Page() {
                     type={"dropdown"}
                     disabled={!fm.data?.for_organization_id}
                     onLoad={async () => {
+                      console.log("MASUK?? =>", fm.data?.for_organization_id);
                       if (!fm.data?.for_organization_id) return [];
                       const param = {
                         paging: 1,
-                        take: 500,
+                        take: 1000,
                       };
                       const params = await events("onload-param", param);
                       const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organization-locations/organization/` +
-                          fm.data?.for_organization_id +
+                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organization-locations/organization/${fm.data?.for_organization_id}` +
                           params
                       );
-
+                      console.log("MASUK?? =>", res);
                       const data: any[] = res.data.data;
-                      
                       if (!Array.isArray(data)) return [];
+                      console.log(
+                        "MASUK?? =>",
+                        data.map((e) => {
+                          return {
+                            value: e.id,
+                            label: e.name,
+                            data: e,
+                          };
+                        })
+                      );
                       return data.map((e) => {
                         return {
                           value: e.id,
@@ -529,7 +562,6 @@ function Page() {
                     label={"Female Needs"}
                     type={"money"}
                     onChange={() => {
-                      
                       fm.data.total_needs =
                         getNumber(fm?.data?.male_needs) +
                         getNumber(fm?.data?.female_needs);
@@ -567,7 +599,6 @@ function Page() {
                       ];
                     }}
                     onChange={(item: any) => {
-                      
                       if (
                         typeof fm?.fields?.request_category_id?.reload ===
                         "function"
@@ -609,7 +640,7 @@ function Page() {
 
                 <div className="flex flex-col gap-y-1">
                   <div className="block mb-2 text-md font-medium text-gray-900 text-sm inline">
-                    Age (Max/Min)
+                    Age (Min/Max)
                   </div>
                   <div className="flex flex-row flex-grow gap-x-1">
                     <div className="flex-grow">
@@ -653,7 +684,7 @@ function Page() {
                           label: "Married",
                         },
                         {
-                          value: "no rules",
+                          value: "any",
                           label: "No Rules",
                         },
                       ];

@@ -60,7 +60,7 @@ function Page() {
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
                 return (
-                  <div className="flex items-center gap-x-0.5 whitespace-nowrap">
+                  <div className="flex items-center  gap-x-2 whitespace-nowrap">
                     <ButtonLink
                       className="bg-primary"
                       href={`/d/master-data/plafon/${row.id}/view`}

@@ -118,7 +118,7 @@ function Page() {
                   <Field
                     fm={fm}
                     name={"mpp_name"}
-                    label={"MPP Name"}
+                    label={"Periode Name"}
                     type={"dropdown"}
                     onLoad={async () => {
                       return [

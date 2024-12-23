@@ -8,6 +8,7 @@ export const showApprovel = (
   permision: string[],
   action?: "approve" | "reject"
 ) => {
+  console.log({data})
   const a1 = [
     {
       status: "IN PROGRESS",
@@ -32,6 +33,11 @@ export const showApprovel = (
       level: ["Level HRD HO"],
     },
   ]; // tiga status yang dapat memunculkan approval
+
+  if(data?.status === "NEED APPROVAL"){
+    
+  }
+
   if(data?.status === "NEED APPROVAL" &&
     data?.organization_category === "Non Field" &&
     data?.mp_request_type === "OFF_BUDGET"){

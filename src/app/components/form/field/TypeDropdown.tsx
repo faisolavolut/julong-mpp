@@ -1,3 +1,4 @@
+import { useLocal } from "@/lib/use-local";
 import { Typeahead } from "./Typeahead";
 
 export const TypeDropdown: React.FC<any> = ({
@@ -43,6 +44,12 @@ export const TypeDropdown: React.FC<any> = ({
         mode={mode ? mode : "single"}
         placeholder={placeholder}
         options={onLoad}
+        onInit={(e) => {
+          fm.fields[name] = {
+            ...fm.fields[name],
+            ...e
+          }
+        }}
       />
     </>
   );

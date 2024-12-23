@@ -9,6 +9,7 @@ import {
   ResizablePanelGroup,
 } from "../ui/resize";
 import get from "lodash.get";
+import { Skeleton } from "../ui/Skeleton";
 
 type Local<T> = {
   data: T | null;
@@ -72,7 +73,7 @@ export const Form: React.FC<any> = ({
           );
         }, 1000);
       } catch (ex: any) {
-        const msg = get(ex, "response.data.meta.message") || ex.message
+        const msg = get(ex, "response.data.meta.message") || ex.message;
         toast.error(
           <div className="flex flex-col w-full">
             <div className="flex text-red-600 items-center">
@@ -185,7 +186,15 @@ export const Form: React.FC<any> = ({
 
   // Tambahkan dependency ke header agar reaktif
   const HeaderComponent = header(local);
-
+  if (!local.ready)
+    return (
+      <div className="flex flex-grow flex-row items-center justify-center">
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[250px]" />
+          <Skeleton className="h-16 w-[250px]" />
+        </div>
+      </div>
+    );
   return (
     <div className={`flex-grow flex-col flex ${className}`}>
       <div className="flex flex-row">{header(local)}</div>
@@ -200,7 +209,16 @@ export const Form: React.FC<any> = ({
                 local.submit();
               }}
             >
-              {children(local)}
+              {local.ready ? (
+                children(local)
+              ) : (
+                <div>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                  </div>
+                </div>
+              )}
             </form>
           </ResizablePanel>
           <ResizableHandle className="border-none" />
@@ -211,13 +229,22 @@ export const Form: React.FC<any> = ({
       ) : (
         <>
           <form
-            className="flex flex-grow flex-col"
+            className="flex flex-grow flex-col flex-grow"
             onSubmit={(e) => {
               e.preventDefault();
               local.submit();
             }}
           >
-            {children(local)}
+            {local.ready ? (
+              children(local)
+            ) : (
+              <div className="flex flex-grow flex-row items-center justify-center">
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-16 w-[200px]" />
+                </div>
+              </div>
+            )}
           </form>
           {typeof onFooter === "function" ? onFooter(local) : null}
         </>

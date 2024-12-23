@@ -5,9 +5,12 @@ import { ButtonLink } from "@/app/components/ui/button-link";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
+import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getValue } from "@/lib/getValue";
+import { useLocal } from "@/lib/use-local";
 import { Button } from "flowbite-react";
 import Link from "next/link";
+import { useEffect } from "react";
 import {
   HiDocumentDownload,
   HiOutlinePencilAlt,
@@ -17,6 +20,27 @@ import {
 import { IoEye } from "react-icons/io5";
 
 function Page() {
+  
+  const local = useLocal({
+    can_add: false,
+    can_edit: false,
+  });
+  useEffect(() => {
+    const run = async () => {
+      const roles = await userRoleMe();
+      const access = getAccess("create-mpr", roles);
+      if (access) {
+        const res = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=complete`
+        );
+        if (res?.data?.data) {
+          local.can_add = true;
+        }
+      }
+      local.render();
+    };
+    run();
+  }, []);
   return (
    
     <div className="flex flex-col flex-grow">
@@ -30,6 +54,7 @@ function Page() {
           name="Manpower Request Overview"
           header={{
             sideLeft: (data: any) => {
+              if(!local.can_add) return <></>
               return <>
                 <div className="flex flex-row flex-grow">
                   <ButtonLink
