@@ -58,6 +58,7 @@ function Page() {
       });
       const lines = data.mp_planning_header.mp_planning_lines || [];
       const jobs = lines.find((e: any) => e.job_id === data.job_id);
+      console.log({data})
       local.data = {
         id,
         ...data,
@@ -78,7 +79,9 @@ function Page() {
         is_approve:
           data.status === "NEED APPROVAL" &&
           data.organization_category === "Non Field" &&
-          data.mp_request_type === "OFF_BUDGET"
+          data.mp_request_type === "OFF_BUDGET" &&
+          !data.ceo &&
+          data.vp_gm_director
             ? true
             : false,
       };
@@ -117,7 +120,7 @@ function Page() {
           {local.data?.is_approve && (
             <div className="flex flex-row items-center justify-center">
               <div className="flex flex-row gap-x-1 py-2">
-                <AlertCeoRejectMPR fm={local}/>
+                <AlertCeoRejectMPR lc={local}/>
                 <AlertCeoApproveMPR  fm={local}/>
               </div>
             </div>
