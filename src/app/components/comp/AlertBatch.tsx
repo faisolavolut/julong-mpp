@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import { getNumber } from "@/lib/getNumber";
 import { events } from "@/lib/event";
+import get from "lodash.get";
 export const AlertBatch: FC<any> = ({ local }) => {
   // const fm = useLocal({
   //   // open:
@@ -139,7 +140,7 @@ export const AlertBatch: FC<any> = ({ local }) => {
                     <div className="flex flex-col w-full">
                       <div className="flex text-red-600 items-center">
                         <AlertTriangle className="h-4 w-4 mr-1" />
-                        Create Batch Failed {ex.message}.
+                        Create Batch Failed { get(ex, "response.data.meta.message") || ex.message}.
                       </div>
                     </div>,
                     {

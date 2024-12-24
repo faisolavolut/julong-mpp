@@ -45,6 +45,7 @@ import { getValue } from "@/lib/getValue";
 import { isStringEmpty } from "@/lib/isStringEmpty";
 import { useLocal } from "@/lib/use-local";
 import { Breadcrumb, Button } from "flowbite-react";
+import get from "lodash.get";
 import { AlertTriangle, X } from "lucide-react";
 import { permission } from "process";
 import { useEffect } from "react";
@@ -402,7 +403,7 @@ function Page() {
                                 <div className="flex flex-col w-full">
                                   <div className="flex text-red-600 items-center">
                                     <AlertTriangle className="h-4 w-4 mr-1" />
-                                    Failed {ex.message}.
+                                    Failed { get(ex, "response.data.meta.message") || ex.message}.
                                   </div>
                                 </div>,
                                 {
@@ -543,7 +544,7 @@ function Page() {
                           <div className="flex flex-col w-full">
                             <div className="flex text-red-600 items-center">
                               <AlertTriangle className="h-4 w-4 mr-1" />
-                              Failed {ex.message}.
+                              Failed { get(ex, "response.data.meta.message") || ex.message}.
                             </div>
                           </div>,
                           {

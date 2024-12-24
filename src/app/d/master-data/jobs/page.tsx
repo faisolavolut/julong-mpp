@@ -5,6 +5,7 @@ import api from "@/lib/axios";
 import { events } from "@/lib/event";
 import { getValue } from "@/lib/getValue";
 import { useLocal } from "@/lib/use-local";
+import get from "lodash.get";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import { IoSync } from "react-icons/io5";
 import { toast } from "sonner";
@@ -86,7 +87,7 @@ function Page() {
                           <div className="flex flex-col w-full">
                             <div className="flex text-red-600 items-center">
                               <AlertTriangle className="h-4 w-4 mr-1" />
-                              Synchronization Failed {ex.message}.
+                              Synchronization Failed { get(ex, "response.data.meta.message") || ex.message}.
                             </div>
                           </div>,
                           {

@@ -23,6 +23,7 @@ import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import { get_user } from "@/lib/get_user";
 import { getParams } from "@/lib/get-params";
 import { Button } from "flowbite-react";
+import get from "lodash.get";
 export const AlertCeoRejectMPR: FC<any> = ({ lc }) => {
   const id = getParams("id");
   const local = useLocal({
@@ -169,7 +170,7 @@ export const AlertCeoRejectMPR: FC<any> = ({ lc }) => {
                               <div className="flex flex-col w-full">
                                 <div className="flex text-red-600 items-center">
                                   <AlertTriangle className="h-4 w-4 mr-1" />
-                                  Submit Failed {ex.message}.
+                                  Submit Failed { get(ex, "response.data.meta.message") || ex.message}.
                                 </div>
                               </div>,
                               {

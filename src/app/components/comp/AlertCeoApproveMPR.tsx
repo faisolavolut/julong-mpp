@@ -17,6 +17,7 @@ import { get_user } from "@/lib/get_user";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import { getParams } from "@/lib/get-params";
+import get from "lodash.get";
 export const AlertCeoApproveMPR: FC<any> = ({fm}) => {
   const id = getParams("id");
   return (
@@ -111,7 +112,7 @@ export const AlertCeoApproveMPR: FC<any> = ({fm}) => {
                       <div className="flex flex-col w-full">
                         <div className="flex text-red-600 items-center">
                           <AlertTriangle className="h-4 w-4 mr-1" />
-                          Submit Failed {ex.message}.
+                          Submit Failed { get(ex, "response.data.meta.message") || ex.message}.
                         </div>
                       </div>,
                       {

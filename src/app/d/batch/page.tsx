@@ -20,6 +20,7 @@ import { getNumber } from "@/lib/getNumber";
 import { getValue } from "@/lib/getValue";
 import { useLocal } from "@/lib/use-local";
 import { Button } from "flowbite-react";
+import get from "lodash.get";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -213,7 +214,7 @@ function Page() {
                                       <div className="flex flex-col w-full">
                                         <div className="flex text-red-600 items-center">
                                           <AlertTriangle className="h-4 w-4 mr-1" />
-                                          Submit Failed {ex.message}.
+                                          Submit Failed { get(ex, "response.data.meta.message") || ex.message}.
                                         </div>
                                       </div>,
                                       {
