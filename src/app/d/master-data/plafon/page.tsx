@@ -49,9 +49,9 @@ function Page() {
             {
               name: "plafon",
               header: () => <span>Plafon</span>,
-              width: 300,
+              width: 50,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{getValue(row, name)}</>;
+                return <div className="text-right">{getValue(row, name)}</div>;
               },
             },
             {
