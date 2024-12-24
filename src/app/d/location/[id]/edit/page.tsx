@@ -526,12 +526,9 @@ function Page() {
             "document_line"
           ] = `A minimum of 1 document line is required to submit.`;
           throw new Error(`Failed Save duplicate found document line`);
-
-          return false;
         }
         const formData = new FormData();
         formData.append("payload", JSON.stringify(param));
-
         const res: any = await api.put(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings`,
           formData,

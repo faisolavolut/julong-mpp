@@ -37,7 +37,7 @@ export const Tablist: React.FC<any> = ({
   take = 20,
   header,
   tabContent,
-  disabledPagination
+  disabledPagination,
 }) => {
   const sideRight =
     typeof header?.sideRight === "function" ? header.sideRight : null;
@@ -102,13 +102,12 @@ export const Tablist: React.FC<any> = ({
                   className={cx(
                     "p-1.5 px-4 border text-sm",
                     css`
-                        z-index: -1;
+                      z-index: -1;
                     `,
                     !idx ? "ml-1.5" : idx++ === local.data.length ? "mr-2" : ""
                   )}
                   key={onValue(e)}
                 >
-
                   {onLabel(e)}
                 </TabsTrigger>
               );
@@ -117,11 +116,10 @@ export const Tablist: React.FC<any> = ({
         </TabsList>
         {local.data.map((e) => {
           return (
-            <TabsContent
-              value={onValue(e)}
-              key={onValue(e) + "_tabcontent"}
-            >
-              {tabContent(e)}
+            <TabsContent value={onValue(e)} key={onValue(e) + "_tabcontent"}>
+              <div className="flex flex-row flex-grow w-full h-full">
+                {tabContent(e)}
+              </div>
             </TabsContent>
           );
         })}
