@@ -110,7 +110,7 @@ function Page() {
               header: () => <span>Action</span>,
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
-                if (getValue(row, name) !== "draft") {
+                if (getValue(row, "status") !== "draft") {
                   return (
                     <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                       <ButtonLink
@@ -123,27 +123,20 @@ function Page() {
                       </ButtonLink>
                     </div>
                   );
+                } else {
+                  return (
+                    <div className="flex items-center gap-x-0.5 whitespace-nowrap">
+                      <ButtonLink
+                        className="bg-primary"
+                        href={`/d/mpp/period/${row.id}/edit`}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <HiOutlinePencilAlt className="text-lg" />
+                        </div>
+                      </ButtonLink>
+                    </div>
+                  );
                 }
-                return (
-                  <div className="flex items-center gap-x-0.5 whitespace-nowrap">
-                    <ButtonLink
-                      className="bg-primary"
-                      href={`/d/mpp/period/${row.id}/view`}
-                    >
-                      <div className="flex items-center gap-x-2">
-                        <IoEye className="text-lg" />
-                      </div>
-                    </ButtonLink>
-                    <ButtonLink
-                      className="bg-primary"
-                      href={`/d/mpp/period/${row.id}/edit`}
-                    >
-                      <div className="flex items-center gap-x-2">
-                        <HiOutlinePencilAlt className="text-lg" />
-                      </div>
-                    </ButtonLink>
-                  </div>
-                );
               },
             },
           ]}
@@ -153,7 +146,7 @@ function Page() {
               `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods` + params
             );
             const data: any[] = res.data.data.mppperiods;
-            
+
             return data || [];
           }}
           onInit={async (list: any) => {}}
