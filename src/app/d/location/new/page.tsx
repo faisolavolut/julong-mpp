@@ -241,24 +241,6 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"total_recruit"}
-                    label={"Total Recruit"}
-                    type={"money"}
-                    disabled={true}
-                  />
-                </div>
-                <div>
-                  <Field
-                    fm={fm}
-                    name={"total_promote"}
-                    label={"Total Promote"}
-                    type={"money"}
-                    disabled={true}
-                  />
-                </div>
-                <div>
-                  <Field
-                    fm={fm}
                     name={"recommended_by"}
                     label={"Recommend by"}
                     type={"text"}
