@@ -162,7 +162,6 @@ export const columnMpp = (data: any) => {
         },
       ];
       break;
-
     case "Direktur Unit":
       return [
         {
