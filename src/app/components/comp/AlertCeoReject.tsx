@@ -27,6 +27,7 @@ export const AlertCeoReject: FC<any> = ({ lc }) => {
     organization: [] as any[],
     reject: "reject-all" as any,
     fm: null as any,
+    org: [] as string[] 
   });
   useEffect(() => {
     const run = async () => {
@@ -166,6 +167,12 @@ export const AlertCeoReject: FC<any> = ({ lc }) => {
                                           : [];
                                       }
                                       fm.render();
+                                      local.org = fm.data?.organization?.length ? fm.data.organization.map((e: any) => {
+                                        return {
+                                          id:  e.id
+                                        }
+                                      }) : [];
+                                      local.render();
                                     }}
                                   />
                                   <label
@@ -234,7 +241,7 @@ export const AlertCeoReject: FC<any> = ({ lc }) => {
                 try {
                   const isPartial = local.reject === "reject-partially";
                   if (isPartial) {
-                    const partial = local.fm.data.organization;
+                    const partial = local?.org || [];
                     const res = await api.put(
                       `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/lines/reject-partial-pt`,
                       { approver_id: get_user("employee.id"), payload: partial }

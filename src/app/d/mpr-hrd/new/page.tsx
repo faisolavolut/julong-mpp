@@ -170,7 +170,7 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations/` + id_org
         );
         const current_open = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=complete`
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=complete`
         );
         console.log(current_open);
         const ctg: any = await api.get(
@@ -251,25 +251,31 @@ function Page() {
                       fm.render();
                     }}
                     onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                      };
-                      const params = await events("onload-param", param);
-                      // /something?organization_id=${get_user("employee.organization_id")}&status=COMPLETED
-                      const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings`
-                      );
-
-                      const data: any[] = res.data.data.mp_planning_headers;
-                      if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.document_number,
-                          data: e,
+                      try {
+                        if(!fm.data?.mpp_period_id){
+                          return []
+                        }
+                        const param = {
+                          paging: 1,
+                          take: 500,
                         };
-                      });
+                        const params = await events("onload-param", param);
+                        const res: any = await api.get(
+                          `${process.env.NEXT_PUBLIC_API_MPP}/something?organization_id=${fm.data.for_organization_id}&status=COMPLETED&status=${fm.data?.mpp_period_id}`
+                        );
+
+                        const data: any[] = res.data.data.mp_planning_headers;
+                        if (!Array.isArray(data)) return [];
+                        return data.map((e) => {
+                          return {
+                            value: e.id,
+                            label: e.document_number,
+                            data: e,
+                          };
+                        });
+                      } catch (ex) {
+                        return [];
+                      }
                     }}
                   />
                 </div>

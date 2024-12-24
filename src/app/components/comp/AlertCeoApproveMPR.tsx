@@ -16,7 +16,9 @@ import api from "@/lib/axios";
 import { get_user } from "@/lib/get_user";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
+import { getParams } from "@/lib/get-params";
 export const AlertCeoApproveMPR: FC<any> = ({fm}) => {
+  const id = getParams("id");
   return (
     <>
       <Dialog>
@@ -65,10 +67,7 @@ export const AlertCeoApproveMPR: FC<any> = ({fm}) => {
                     </>
                   );
                   try {
-                    const batch = await api.get(
-                      `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
-                    );
-                    const id = batch?.data?.data?.id;
+                    
                     const param = {
                       id,
                       status: "APPROVED",
@@ -76,9 +75,16 @@ export const AlertCeoApproveMPR: FC<any> = ({fm}) => {
                       approver_name: get_user("employee.name"),
                     };
 
+                    const formData = new FormData();
+                    formData.append("payload", JSON.stringify(param));
                     const res = await api.put(
-                      `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/update-status`,
-                      param
+                      `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/status`,
+                      formData,
+                      {
+                        headers: {
+                          "Content-Type": "multipart/form-data",
+                        },
+                      }
                     );
                     setTimeout(() => {
                       fm.data.is_approve  = false;

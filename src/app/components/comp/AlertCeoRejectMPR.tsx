@@ -21,27 +21,14 @@ import { cloneFM } from "@/lib/cloneFm";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import { get_user } from "@/lib/get_user";
+import { getParams } from "@/lib/get-params";
 export const AlertCeoRejectMPR: FC<any> = ({lc}) => {
+  const id = getParams("id");
   const local = useLocal({
     organization: [] as any[],
     reject: "reject-all" as any,
   });
   useEffect(() => {
-    const run = async () => {
-      const res = await api.get(
-        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations`
-      );
-      const data: any[] = res.data.data.organizations;
-      const result = data?.length
-        ? data.map((e) => {
-            return { id: e.id, label: e.name };
-          })
-        : [];
-
-      local.organization = result;
-      local.render();
-    };
-    run();
   }, []);
   const items = [
     {
@@ -68,29 +55,6 @@ export const AlertCeoRejectMPR: FC<any> = ({lc}) => {
             <DialogDescription className="hidden"></DialogDescription>
           </DialogHeader>
           <div className="flex flex-col flex-grow">
-            <div className="flex flex-col gap-y-2 mb-2">
-              {items.map((item) => (
-                <div
-                  className="flex items-center space-x-2"
-                  key={"checkbox_item_reject" + item.id}
-                >
-                  <Checkbox
-                    id={item.id}
-                    checked={local?.reject === item.id}
-                    onCheckedChange={(e) => {
-                      local.reject = item.id;
-                      local.render();
-                    }}
-                  />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {item.label}
-                  </label>
-                </div>
-              ))}
-            </div>
 
             <Form
               onSubmit={async (fm: any) => {}}
@@ -154,10 +118,6 @@ export const AlertCeoRejectMPR: FC<any> = ({lc}) => {
                           </>
                         );
                         try {
-                          const batch = await api.get(
-                            `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
-                          );
-                          const id = batch?.data?.data?.id;
                           const param = {
                             id,
                             status: "REJECTED",
@@ -165,9 +125,16 @@ export const AlertCeoRejectMPR: FC<any> = ({lc}) => {
                             approver_name: get_user("employee.name"),
                           };
 
+                          const formData = new FormData();
+                          formData.append("payload", JSON.stringify(param));
                           const res = await api.put(
-                            `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/update-status`,
-                            param
+                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/status`,
+                            formData,
+                            {
+                              headers: {
+                                "Content-Type": "multipart/form-data",
+                              },
+                            }
                           );
                           setTimeout(() => {
                             lc.data.is_approve  = false;

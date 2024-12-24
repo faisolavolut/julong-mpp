@@ -455,7 +455,6 @@ function Page() {
                     onClick={async () => {
                       await actionToast({
                         task: async () => {
-                          
                           await api.delete(
                             `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/` +
                               id
@@ -577,6 +576,7 @@ function Page() {
           budget_year_to: data?.mpp_period?.budget_end_date,
           document_line: data?.mp_planning_lines || [],
           history: history.data.data,
+          // is_you: data?.
         };
       }}
       showResize={false}
