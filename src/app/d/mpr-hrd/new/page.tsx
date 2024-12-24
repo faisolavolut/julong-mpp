@@ -261,7 +261,7 @@ function Page() {
                         };
                         const params = await events("onload-param", param);
                         const res: any = await api.get(
-                          `${process.env.NEXT_PUBLIC_API_MPP}/something?organization_id=${fm.data.for_organization_id}&status=COMPLETED&status=${fm.data?.mpp_period_id}`
+                          `${process.env.NEXT_PUBLIC_API_MPP}/something?organization_id=${fm.data.for_organization_id}&status=COMPLETED&period_id=${fm.data?.mpp_period_id}`
                         );
 
                         const data: any[] = res.data.data.mp_planning_headers;

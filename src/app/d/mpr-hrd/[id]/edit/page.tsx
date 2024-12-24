@@ -343,25 +343,31 @@ function Page() {
                       fm.render();
                     }}
                     onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                      };
-                      const params = await events("onload-param", param);
-                      const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings` +
-                          params
-                      );
-
-                      const data: any[] = res.data.data.mp_planning_headers;
-                      if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.document_number,
-                          data: e,
+                      try {
+                        if(!fm.data?.mpp_period_id){
+                          return []
+                        }
+                        const param = {
+                          paging: 1,
+                          take: 500,
                         };
-                      });
+                        const params = await events("onload-param", param);
+                        const res: any = await api.get(
+                          `${process.env.NEXT_PUBLIC_API_MPP}/something?organization_id=${fm.data.for_organization_id}&status=COMPLETED&period_id=${fm.data?.mpp_period_id}`
+                        );
+
+                        const data: any[] = res.data.data.mp_planning_headers;
+                        if (!Array.isArray(data)) return [];
+                        return data.map((e) => {
+                          return {
+                            value: e.id,
+                            label: e.document_number,
+                            data: e,
+                          };
+                        });
+                      } catch (ex) {
+                        return [];
+                      }
                     }}
                   />
                 </div>
