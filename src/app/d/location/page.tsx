@@ -30,7 +30,7 @@ function Page() {
         const res = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
         );
-        if (res?.data?.data) {
+        if (res?.data?.data?.mppperiod) {
           local.can_add = true;
         }
       }
