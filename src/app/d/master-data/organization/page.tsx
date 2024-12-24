@@ -44,7 +44,7 @@ function Page() {
             onLoad={async (param: any) => {
               const params = await events("onload-param", param);
               const res: any = await api.get(
-                "https://julong-portal.avolut.com/api/organizations" + params
+                `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations` + params
               );
               const data: any[] = res.data.data.organizations;
               return data || [];

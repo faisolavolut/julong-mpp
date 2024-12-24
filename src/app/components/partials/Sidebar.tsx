@@ -12,6 +12,8 @@ import { FaAngleUp, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Minimize } from "lucide-react";
 import { SidebarLinkBetter } from "../ui/link-better";
 import { detectCase } from "@/utils/detectCase";
+import { Skeleton } from "../ui/Skeleton";
+import { useLocal } from "@/lib/use-local";
 interface TreeMenuItem {
   title: string;
   href?: string;
@@ -27,11 +29,26 @@ interface TreeMenuProps {
 
 const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
   const [currentPage, setCurrentPage] = useState("");
-
+  const local = useLocal({
+    data: data,
+    ready: false as boolean,
+  });
   useEffect(() => {
     if (typeof location === "object") {
       const newPage = window.location.pathname;
       setCurrentPage(newPage);
+    }
+    const run = async () => {
+      local.ready = false;
+      local.render();
+
+      setTimeout(() => {
+        local.ready = true;
+        local.render();
+      }, 1000);
+    };
+    if (typeof window === "object") {
+      run();
     }
   }, []);
 
@@ -207,14 +224,47 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
         aria-label="Sidebar with multi-level dropdown example"
         className={classNames("relative bg-white", mini ? "w-20" : "", css``)}
       >
+        {/* {!local.ready ? (
+          <div
+            className={cx(
+              "absolute",
+              css`
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+              `
+            )}
+          >
+            <div className="flex flex-grow flex-row items-center justify-center">
+              <div className="flex flex-col gap-y-2">
+                <div className="flex flex-row gap-x-2">
+                  <Skeleton className="h-24 flex-grow" />
+                  <Skeleton className="h-24 flex-grow" />
+                </div>
+                <Skeleton className="h-24 w-[230px]" />
+                <div className="flex flex-row gap-x-2">
+                  <Skeleton className="h-24 flex-grow" />
+                  <Skeleton className="h-24 flex-grow" />
+                </div>
+                <Skeleton className="h-24 w-[230px]" />
+              </div>
+            </div>
+          </div>
+        ) : (
+        )} */}
+
         <div className="w-full h-full relative">
           <div className="flex h-full flex-col justify-between w-full absolute top-0 left-0">
             <Sidebar.Items>
-              <Sidebar.ItemGroup className={cx("border-none mt-0", mini ? "flex flex-col gap-y-2" : "")}>
+              <Sidebar.ItemGroup
+                className={cx(
+                  "border-none mt-0",
+                  mini ? "flex flex-col gap-y-2" : ""
+                )}
+              >
                 {renderTree(data)}
               </Sidebar.ItemGroup>
             </Sidebar.Items>
-            {/* <div key="menu">{renderTree(data)}</div> */}
           </div>
         </div>
       </Sidebar>

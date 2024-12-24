@@ -12,7 +12,7 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import {
   Breadcrumb,
   Button,
@@ -246,6 +246,12 @@ export const TableList: React.FC<any> = ({
     onStateChange: setState,
     debugTable: state.pagination.pageIndex > 2,
   }));
+  const handleSearch = useCallback(
+    debouncedHandler(() => {
+      local.reload();
+    }, 1000), // 1 detik jeda
+    []
+  );
   return (
     <>
       <div className="tbl-wrapper flex flex-grow flex-col">
@@ -303,9 +309,7 @@ export const TableList: React.FC<any> = ({
                         const value = e.target.value;
                         local.search = value;
                         local.render();
-                        debouncedHandler(() => {
-                          local.reload();
-                        }, 1000);
+                        handleSearch();
                       }}
                     />
                   </div>

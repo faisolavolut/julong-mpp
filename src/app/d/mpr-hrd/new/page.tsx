@@ -68,6 +68,9 @@ function Page() {
       }}
       onSubmit={async (fm: any) => {
         const data = fm.data;
+        fm.error = {};
+        fm.render();
+        // total_needs
         const prm: any = {
           document_number: data.document_number,
           document_date: normalDate(data.document_date),
@@ -111,6 +114,41 @@ function Page() {
             : "OFF_BUDGET",
           mp_planning_header_id: data.mp_planning_header_id,
         };
+        if (prm.mp_request_type === "ON_BUDGET") {
+          const category = [
+            {
+              value: "MT_Management Trainee",
+              label: "Management Trainee",
+            },
+            {
+              value: "PH_Professional Hire",
+              label: "Professional Hire",
+            },
+            {
+              value: "NS_Non Staff to Staff",
+              label: "Non Staff to Staff",
+            },
+          ];
+          if (
+            prm.recruitment_type === "MT_Management Trainee" ||
+            prm.recruitment_type === "PH_Professional Hire"
+          ) {
+            const total =
+              getNumber(prm.female_needs) + getNumber(prm.male_needs);
+            const remaining_balance = getNumber(data?.remaining_balance);
+            if (total > remaining_balance) {
+              fm.error = {
+                ...fm.error,
+                total_needs:
+                  "Total needs must not exceed the remaining balance",
+              };
+              fm.render();
+              throw new Error(
+                "Failed the total needs exceed the remaining balance."
+              );
+            }
+          }
+        }
 
         const res: any = await api.post(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests`,
@@ -134,7 +172,7 @@ function Page() {
         const current_open = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=complete`
         );
-        console.log(current_open)
+        console.log(current_open);
         const ctg: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/request-categories`
         );
@@ -159,9 +197,7 @@ function Page() {
           requestor: get_user("employee.name"),
           job: get_user("employee.employee_job.name"),
 
-          for_organization_id: get_user(
-            "employee.organization_id"
-          ),
+          for_organization_id: get_user("employee.organization_id"),
           total_recruit: 0,
           total_promote: 0,
           mpp_period_id: current_open?.data?.data?.id,
@@ -306,7 +342,7 @@ function Page() {
                       };
                       const params = await events("onload-param", param);
                       const res: any = await api.get(
-                        "https://julong-portal.avolut.com/api/organizations" +
+                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations` +
                           params
                       );
                       const data: any[] = res.data.data.organizations;
@@ -336,7 +372,7 @@ function Page() {
                       };
                       const params = await events("onload-param", param);
                       const res: any = await api.get(
-                        "https://julong-portal.avolut.com/api/organizations" +
+                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations` +
                           params
                       );
                       const data: any[] = res.data.data.organizations;
@@ -392,6 +428,9 @@ function Page() {
                         take: 500,
                       };
                       const params = await events("onload-param", param);
+                      console.log({
+                        res: `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}`,
+                      });
                       const res: any = await api.get(
                         `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}` +
                           params

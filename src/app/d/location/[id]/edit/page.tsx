@@ -355,7 +355,7 @@ function Page() {
                   type={"save"}
                   onClick={async () => {
                     fm.data.status = "DRAFTED";
-                    fm.error = null;
+                    fm.error = {};
                     fm.render();
                     await fm.submit();
                     await fm.reload();
@@ -379,7 +379,7 @@ function Page() {
                         onClick={async () => {
                           fm.data.level = "Level HRD Location";
                           fm.data.status = "IN_PROGRESS";
-                          fm.error = null;
+                          fm.error = {};
                           fm.render();
                           await fm.submit();
                           await fm.reload();

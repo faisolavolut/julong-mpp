@@ -20,7 +20,6 @@ import {
 import { IoEye } from "react-icons/io5";
 
 function Page() {
-  
   const local = useLocal({
     can_add: false,
     can_edit: false,
@@ -42,7 +41,6 @@ function Page() {
     run();
   }, []);
   return (
-   
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
         <h2 className="text-xl font-semibold text-gray-900 ">
@@ -54,20 +52,19 @@ function Page() {
           name="Manpower Request Overview"
           header={{
             sideLeft: (data: any) => {
-              if(!local.can_add) return <></>
-              return <>
-                <div className="flex flex-row flex-grow">
-                  <ButtonLink
-                    className="bg-primary"
-                    href={"/d/mpr-hrd/new"}
-                  >
-                    <div className="flex items-center gap-x-0.5">
-                      <HiPlus className="text-xl" />
-                      <span className="capitalize">Add Manpower Request</span>
-                    </div>
-                  </ButtonLink>
-                </div>
-              </>;
+              if (!local.can_add) return <></>;
+              return (
+                <>
+                  <div className="flex flex-row flex-grow">
+                    <ButtonLink className="bg-primary" href={"/d/mpr-hrd/new"}>
+                      <div className="flex items-center gap-x-0.5">
+                        <HiPlus className="text-xl" />
+                        <span className="capitalize">Add Manpower Request</span>
+                      </div>
+                    </ButtonLink>
+                  </div>
+                </>
+              );
             },
           }}
           column={[
@@ -120,29 +117,25 @@ function Page() {
               renderCell: ({ row, name, cell }: any) => {
                 return (
                   <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                    <ButtonLink
-                      className="bg-primary"
-                      href={`/d/mpr-hrd/${row.id}/edit`}
-                    >
-                      <div className="flex items-center gap-x-2">
-                        <HiOutlinePencilAlt className="text-lg" />
-                      </div>
-                    </ButtonLink>
-                    <ButtonLink
-                      className="bg-primary"
-                      href={`/d/mpr-hrd/${row.id}/view`}
-                    >
-                      <div className="flex items-center gap-x-2">
-                        <IoEye className="text-lg" />
-                      </div>
-                    </ButtonLink>
-                    <ButtonBetter
-                    variant={"outline"}
-                    >
-                      <div className="flex items-center gap-x-2">
-                        <HiDocumentDownload className="text-lg" />
-                      </div>
-                    </ButtonBetter>
+                    {["DRAFT", "REJECTED"].includes(getValue(row, "status")) ? (
+                      <ButtonLink
+                        className="bg-primary"
+                        href={`/d/mpr-hrd/${row.id}/edit`}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <HiOutlinePencilAlt className="text-lg" />
+                        </div>
+                      </ButtonLink>
+                    ) : (
+                      <ButtonLink
+                        className="bg-primary"
+                        href={`/d/mpr-hrd/${row.id}/view`}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <IoEye className="text-lg" />
+                        </div>
+                      </ButtonLink>
+                    )}
                   </div>
                 );
               },

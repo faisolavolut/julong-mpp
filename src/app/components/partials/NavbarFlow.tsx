@@ -417,16 +417,21 @@ const UserDropdown: FC = function () {
         onClick={() => {
           if (typeof window === "object")
             navigate(
-              `${
-                process.env.NEXT_PUBLIC_API_PORTAL
-              }/choose-roles?state=manpower`
+              `${process.env.NEXT_PUBLIC_API_PORTAL}/choose-roles?state=manpower`
             );
         }}
       >
         Switch Role
       </Dropdown.Item>
       <Dropdown.Divider />
-      <Dropdown.Item>Sign out</Dropdown.Item>
+      <Dropdown.Item
+        onClick={() => {
+          if (typeof window === "object")
+            navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/logout`);
+        }}
+      >
+        Sign out
+      </Dropdown.Item>
     </Dropdown>
   );
 };

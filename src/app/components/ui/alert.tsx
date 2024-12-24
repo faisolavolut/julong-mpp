@@ -42,12 +42,12 @@ export const Alert: FC<any> = ({
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>No</AlertDialogCancel>
                 <AlertDialogAction
                   className={"bg-primary text-white"}
                   onClick={onClick}
                 >
-                  Continue
+                  Yes
                 </AlertDialogAction>
               </AlertDialogFooter>
             </>

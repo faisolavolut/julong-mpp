@@ -186,6 +186,41 @@ function Page() {
           mp_planning_header_id: data.mp_planning_header_id,
         };
 
+        if (prm.mp_request_type === "ON_BUDGET") {
+          const category = [
+            {
+              value: "MT_Management Trainee",
+              label: "Management Trainee",
+            },
+            {
+              value: "PH_Professional Hire",
+              label: "Professional Hire",
+            },
+            {
+              value: "NS_Non Staff to Staff",
+              label: "Non Staff to Staff",
+            },
+          ];
+          if (
+            prm.recruitment_type === "MT_Management Trainee" ||
+            prm.recruitment_type === "PH_Professional Hire"
+          ) {
+            const total =
+              getNumber(prm.female_needs) + getNumber(prm.male_needs);
+            const remaining_balance = getNumber(data?.remaining_balance);
+            if (total > remaining_balance) {
+              fm.error = {
+                ...fm.error,
+                total_needs:
+                  "Total needs must not exceed the remaining balance",
+              };
+              fm.render();
+              throw new Error(
+                "Failed the total needs exceed the remaining balance."
+              );
+            }
+          }
+        }
         await api.put(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests`,
           prm
@@ -366,7 +401,7 @@ function Page() {
                       };
                       const params = await events("onload-param", param);
                       const res: any = await api.get(
-                        "https://julong-portal.avolut.com/api/organizations" +
+                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations` +
                           params
                       );
                       const data: any[] = res.data.data.organizations;
@@ -396,7 +431,7 @@ function Page() {
                       };
                       const params = await events("onload-param", param);
                       const res: any = await api.get(
-                        "https://julong-portal.avolut.com/api/organizations" +
+                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations` +
                           params
                       );
                       const data: any[] = res.data.data.organizations;

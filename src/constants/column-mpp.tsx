@@ -58,8 +58,8 @@ export const columnMpp = (data: any) => {
           renderCell: ({ row, name, cell }: any) => {
             return (
               <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                {data?.local?.can_edit &&
-                ["REJECTED", "DRAFTED", "DRAFT"].includes(row?.status) ? (
+                {["REJECTED", "DRAFTED", "DRAFT"].includes(row?.status) &&
+                data?.local?.can_edit ? (
                   <ButtonLink
                     className="bg-primary"
                     href={`/d/location/${row.id}/edit`}
@@ -69,17 +69,15 @@ export const columnMpp = (data: any) => {
                     </div>
                   </ButtonLink>
                 ) : (
-                  <></>
+                  <ButtonLink
+                    className="bg-primary"
+                    href={`/d/location/${row.id}/view`}
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <IoEye className="text-lg" />
+                    </div>
+                  </ButtonLink>
                 )}
-
-                <ButtonLink
-                  className="bg-primary"
-                  href={`/d/location/${row.id}/view`}
-                >
-                  <div className="flex items-center gap-x-2">
-                    <IoEye className="text-lg" />
-                  </div>
-                </ButtonLink>
               </div>
             );
           },
@@ -138,8 +136,8 @@ export const columnMpp = (data: any) => {
           renderCell: ({ row, name, cell }: any) => {
             return (
               <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                {data?.local?.can_edit &&
-                ["REJECTED", "DRAFTED", "DRAFT"].includes(row?.status) ? (
+                {["REJECTED", "DRAFTED", "DRAFT"].includes(row?.status) &&
+                data?.local?.can_edit ? (
                   <ButtonLink
                     className="bg-primary"
                     href={`/d/location/${row.id}/edit`}
@@ -149,17 +147,15 @@ export const columnMpp = (data: any) => {
                     </div>
                   </ButtonLink>
                 ) : (
-                  <></>
+                  <ButtonLink
+                    className="bg-primary"
+                    href={`/d/location/${row.id}/view`}
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <IoEye className="text-lg" />
+                    </div>
+                  </ButtonLink>
                 )}
-
-                <ButtonLink
-                  className="bg-primary"
-                  href={`/d/location/${row.id}/view`}
-                >
-                  <div className="flex items-center gap-x-2">
-                    <IoEye className="text-lg" />
-                  </div>
-                </ButtonLink>
               </div>
             );
           },
@@ -291,8 +287,8 @@ export const columnMpp = (data: any) => {
           renderCell: ({ row, name, cell }: any) => {
             return (
               <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                {data?.local?.can_edit &&
-                ["REJECTED", "DRAFTED", "DRAFT"].includes(row?.status) ? (
+                {["REJECTED", "DRAFTED", "DRAFT"].includes(row?.status) &&
+                data?.local?.can_edit ? (
                   <ButtonLink
                     className="bg-primary"
                     href={`/d/location/${row.id}/edit`}
@@ -302,17 +298,15 @@ export const columnMpp = (data: any) => {
                     </div>
                   </ButtonLink>
                 ) : (
-                  <></>
+                  <ButtonLink
+                    className="bg-primary"
+                    href={`/d/location/${row.id}/view`}
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <IoEye className="text-lg" />
+                    </div>
+                  </ButtonLink>
                 )}
-
-                <ButtonLink
-                  className="bg-primary"
-                  href={`/d/location/${row.id}/view`}
-                >
-                  <div className="flex items-center gap-x-2">
-                    <IoEye className="text-lg" />
-                  </div>
-                </ButtonLink>
               </div>
             );
           },

@@ -70,7 +70,7 @@ function Page() {
             return (
               <>
                 <div className="w-full flex flex-col flex-grow">
-                  <div className={cx("flex flex-grow flex-col h-[350px]")}>
+                  <div className={cx("flex flex-grow flex-col h-[380px]")}>
                     <TableList
                       name="Location"
                       header={{
@@ -114,7 +114,6 @@ function Page() {
                       }}
                       onInit={async (list: any) => {}}
                     />
-                    ;
                   </div>
                 </div>
               </>

@@ -12,6 +12,7 @@ import { useLocal } from "@/lib/use-local";
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import get from "lodash.get";
+import { Skeleton } from "../components/ui/Skeleton";
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -19,6 +20,8 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const [mini, setMini] = useState(false);
   const local = useLocal({
     user: null as any,
+    data: configMenu,
+    ready: false
   });
   useEffect(() => {
     const localMini = localStorage.getItem("mini");
@@ -33,6 +36,7 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/users/me`
         );
         local.user = user?.data?.data;
+        local.ready = true
         local.render();
         if (!user?.data.data) {
           navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
@@ -52,15 +56,45 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
         }}
       />
       <div className="flex  bg-white flex-grow flex-row">
-        <SidebarProvider>
-          <SidebarTree
-            data={configMenu}
-            minimaze={() => {
-              setMini(!mini);
-            }}
-            mini={mini}
-          />
-        </SidebarProvider>
+        {!local.ready ? (
+          <div className="relative bg-white w-64">
+            <div
+              className={cx(
+                "absolute",
+                css`
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                `
+              )}
+            >
+              <div className="flex flex-grow flex-row items-center justify-center">
+                <div className="flex flex-col gap-y-2">
+                  <div className="flex flex-row gap-x-2">
+                    <Skeleton className="h-24 flex-grow" />
+                    <Skeleton className="h-24 flex-grow" />
+                  </div>
+                  <Skeleton className="h-24 w-[230px]" />
+                  <div className="flex flex-row gap-x-2">
+                    <Skeleton className="h-24 flex-grow" />
+                    <Skeleton className="h-24 flex-grow" />
+                  </div>
+                  <Skeleton className="h-24 w-[230px]" />
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <SidebarProvider>
+            <SidebarTree
+              data={local.data}
+              minimaze={() => {
+                setMini(!mini);
+              }}
+              mini={mini}
+            />
+          </SidebarProvider>
+        )}
         <div className="flex flex-row flex-grow  bg-[#F1F1F1] flex-grow">
           <div
             id="main-content"
