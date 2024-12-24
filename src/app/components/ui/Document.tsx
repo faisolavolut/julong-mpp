@@ -565,7 +565,7 @@ const MyDocument: FC<any> = ({ data }) => {
                           alignItems: "center",
                         }}
                       >
-                        <Text style={styles.thead}>2024/2025</Text>
+                        <Text style={styles.thead}>{page?.budgetYear}</Text>
                       </View>
                     </View>
                   </View>
