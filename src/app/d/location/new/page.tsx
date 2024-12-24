@@ -114,7 +114,7 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations/` + id_org
         );
         const current_open = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
           );
         return {
           id,

@@ -21,7 +21,7 @@ import { cloneFM } from "@/lib/cloneFm";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import { get_user } from "@/lib/get_user";
-export const AlertCeoRejectMPR: FC<any> = () => {
+export const AlertCeoRejectMPR: FC<any> = ({lc}) => {
   const local = useLocal({
     organization: [] as any[],
     reject: "reject-all" as any,
@@ -170,6 +170,8 @@ export const AlertCeoRejectMPR: FC<any> = () => {
                             param
                           );
                           setTimeout(() => {
+                            lc.data.is_approve  = false;
+                            lc.render();
                             toast.success(
                               <div
                                 className={cx(

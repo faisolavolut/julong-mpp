@@ -448,8 +448,7 @@ function Page() {
               ) : (
                 <></>
               )}
-
-              {/* {["DRAFTED"].includes(fm.data?.status) ? (
+              {["DRAFTED", "DRAFT"].includes(fm.data?.status) ? (
                 <>
                   <Alert
                     type={"save"}
@@ -458,12 +457,12 @@ function Page() {
                         task: async () => {
                           
                           await api.delete(
-                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/` +
+                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/` +
                               id
                           );
                         },
                         after: () => {
-                          navigate("/d/mpp/period");
+                          navigate("/d/location");
                         },
                         msg_load: "Delete ",
                         msg_error: "Delete failed ",
@@ -479,7 +478,7 @@ function Page() {
                 </>
               ) : (
                 <></>
-              )} */}
+              )}
             </div>
           </div>
         );

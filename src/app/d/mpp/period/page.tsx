@@ -19,7 +19,7 @@ function Page() {
   useEffect(() => {
     const run = async () => {
       const check = await api.get(
-        `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
+        `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
       );
       if (!check.data.data) local.can_add = true;
       local.render();
@@ -48,7 +48,7 @@ function Page() {
                     >
                       <div className="flex items-center gap-x-0.5">
                         <HiPlus className="text-xl" />
-                        <span className="capitalize">Add period</span>
+                        <span className="capitalize">Add New</span>
                       </div>
                     </ButtonLink>
                   </div>

@@ -25,6 +25,7 @@ function Page() {
               return <></>;
             },
             sideRight: (data: any) => {
+              return <></>
               return (
                 <>
                   <div className="flex flex-row">

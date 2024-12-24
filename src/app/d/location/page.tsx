@@ -14,12 +14,8 @@ import { Button } from "flowbite-react";
 import Link from "next/link";
 import { useEffect } from "react";
 import {
-  HiDocumentDownload,
-  HiOutlinePencilAlt,
   HiPlus,
-  HiTrash,
 } from "react-icons/hi";
-import { IoEye } from "react-icons/io5";
 
 function Page() {
   const local = useLocal({
@@ -32,7 +28,7 @@ function Page() {
       const access = getAccess("create-mpp", roles);
       if (access) {
         const res = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=open`
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
         );
         if (res?.data?.data) {
           local.can_add = true;

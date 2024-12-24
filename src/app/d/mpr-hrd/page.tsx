@@ -59,7 +59,7 @@ function Page() {
                     <ButtonLink className="bg-primary" href={"/d/mpr-hrd/new"}>
                       <div className="flex items-center gap-x-0.5">
                         <HiPlus className="text-xl" />
-                        <span className="capitalize">Add Manpower Request</span>
+                        <span className="capitalize">Add New</span>
                       </div>
                     </ButtonLink>
                   </div>

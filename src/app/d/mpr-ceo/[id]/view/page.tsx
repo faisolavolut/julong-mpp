@@ -117,8 +117,8 @@ function Page() {
           {local.data?.is_approve && (
             <div className="flex flex-row items-center justify-center">
               <div className="flex flex-row gap-x-1 py-2">
-                <AlertCeoRejectMPR />
-                <AlertCeoApproveMPR />
+                <AlertCeoRejectMPR fm={local}/>
+                <AlertCeoApproveMPR  fm={local}/>
               </div>
             </div>
           )}

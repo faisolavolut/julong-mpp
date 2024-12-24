@@ -16,7 +16,7 @@ import api from "@/lib/axios";
 import { get_user } from "@/lib/get_user";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
-export const AlertCeoApproveMPR: FC<any> = () => {
+export const AlertCeoApproveMPR: FC<any> = ({fm}) => {
   return (
     <>
       <Dialog>
@@ -81,6 +81,8 @@ export const AlertCeoApproveMPR: FC<any> = () => {
                       param
                     );
                     setTimeout(() => {
+                      fm.data.is_approve  = false;
+                      fm.render();
                       toast.success(
                         <div
                           className={cx(

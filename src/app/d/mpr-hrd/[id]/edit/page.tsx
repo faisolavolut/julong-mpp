@@ -21,6 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/app/components/ui/card";
+import { actionToast } from "@/lib/action";
 import api from "@/lib/axios";
 import { normalDate } from "@/lib/date";
 import { events } from "@/lib/event";
@@ -131,6 +132,38 @@ function Page() {
                     Submit
                   </ButtonContainer>
                 </Alert>
+              )}
+              
+              {["DRAFTED", "DRAFT"].includes(fm.data?.status) ? (
+                <>
+                  <Alert
+                    type={"save"}
+                    onClick={async () => {
+                      await actionToast({
+                        task: async () => {
+                          
+                          await api.delete(
+                            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/` +
+                              id
+                          );
+                        },
+                        after: () => {
+                          navigate("/d/location");
+                        },
+                        msg_load: "Delete ",
+                        msg_error: "Delete failed ",
+                        msg_succes: "Delete success ",
+                      });
+                    }}
+                  >
+                    <ButtonContainer variant="destructive">
+                      <MdDelete className="text-xl" />
+                      Delete
+                    </ButtonContainer>
+                  </Alert>
+                </>
+              ) : (
+                <></>
               )}
             </div>
           </div>
