@@ -21,7 +21,7 @@ function Page() {
       const check = await api.get(
         `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
       );
-      if (!check.data.data) local.can_add = true;
+      if (!check.data.data?.mppperiod) local.can_add = true;
       local.render();
     };
     run();
