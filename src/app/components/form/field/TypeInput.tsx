@@ -26,7 +26,6 @@ export const TypeInput: React.FC<any> = ({
           ? "0"
           : formatCurrency(value);
       input.render();
-      console.log(name, input.value);
     }
   }, [fm.data?.[name]]);
   const error = fm.error?.[name];

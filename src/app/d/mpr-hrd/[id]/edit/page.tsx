@@ -285,7 +285,6 @@ function Page() {
         });
         const lines = data.mp_planning_header.mp_planning_lines || [];
         const jobs = lines.find((e: any) => e.job_id === data.job_id);
-        console.log({ data });
         return {
           id,
           ...data,
@@ -353,7 +352,7 @@ function Page() {
                         };
                         const params = await events("onload-param", param);
                         const res: any = await api.get(
-                          `${process.env.NEXT_PUBLIC_API_MPP}/something?organization_id=${fm.data.for_organization_id}&status=COMPLETED&period_id=${fm.data?.mpp_period_id}`
+                          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/get-something?organization_id=${fm.data.for_organization_id}&status=COMPLETED&mpp_period_id=${fm.data?.mpp_period_id}`
                         );
 
                         const data: any[] = res.data.data.mp_planning_headers;

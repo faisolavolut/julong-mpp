@@ -172,7 +172,7 @@ function Page() {
         const current_open = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=complete`
         );
-        console.log(current_open);
+        console.log({current_open});
         const ctg: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/request-categories`
         );
@@ -186,21 +186,42 @@ function Page() {
             data: e,
           };
         });
-        return {
+        console.log({
           document_number: document_number.data.data,
           document_date: new Date(),
           organization: org?.data?.data?.name,
           // mpp_name: current_open?.data?.data?.title,
-          budget_year_from: current_open?.data?.data?.budget_start_date,
-          budget_year_to: current_open?.data?.data?.budget_end_date,
-          mpp_name: current_open?.data?.data?.title,
+          budget_year_from: current_open?.data?.data?.mppperiod?.budget_start_date,
+          budget_year_to: current_open?.data?.data?.mppperiod?.budget_end_date,
+          mpp_name: current_open?.data?.data?.mppperiod?.title,
           requestor: get_user("employee.name"),
           job: get_user("employee.employee_job.name"),
 
           for_organization_id: get_user("employee.organization_id"),
           total_recruit: 0,
           total_promote: 0,
-          mpp_period_id: current_open?.data?.data?.id,
+          mpp_period_id: current_open?.data?.data?.mppperiod?.id,
+          organization_id: id_org,
+          requestor_id: get_user("employee.id"),
+          status: "DRAFT",
+          organization_location_id: get_user(
+            "employee.employee_job.organization_location_id"
+          ),
+          categories: categories,
+        })
+        return {
+          document_number: document_number.data.data,
+          document_date: new Date(),
+          organization: org?.data?.data?.name,
+          budget_year_from: current_open?.data?.data?.mppperiod?.budget_start_date,
+          budget_year_to: current_open?.data?.data?.mppperiod?.budget_end_date,
+          mpp_name: current_open?.data?.data?.mppperiod?.title,
+          requestor: get_user("employee.name"),
+          job: get_user("employee.employee_job.name"),
+          for_organization_id: get_user("employee.organization_id"),
+          total_recruit: 0,
+          total_promote: 0,
+          mpp_period_id: current_open?.data?.data?.mppperiod?.id,
           organization_id: id_org,
           requestor_id: get_user("employee.id"),
           status: "DRAFT",
@@ -261,7 +282,7 @@ function Page() {
                         };
                         const params = await events("onload-param", param);
                         const res: any = await api.get(
-                          `${process.env.NEXT_PUBLIC_API_MPP}/something?organization_id=${fm.data.for_organization_id}&status=COMPLETED&period_id=${fm.data?.mpp_period_id}`
+                          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/get-something?organization_id=${fm.data.for_organization_id}&status=COMPLETED&mpp_period_id=${fm.data?.mpp_period_id}`
                         );
 
                         const data: any[] = res.data.data.mp_planning_headers;
