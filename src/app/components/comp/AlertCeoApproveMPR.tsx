@@ -71,8 +71,9 @@ export const AlertCeoApproveMPR: FC<any> = ({fm}) => {
                     const param = {
                       id,
                       status: "APPROVED",
-                      approved_by: get_user("employee.id"),
-                      approver_name: get_user("employee.name"),
+                      level: "Level CEO",
+                      approver_id: get_user("employee.id"),
+                      approved_by: get_user("employee.name"),
                     };
 
                     const formData = new FormData();
