@@ -284,6 +284,17 @@ function Page() {
         });
         const lines = data.mp_planning_header.mp_planning_lines || [];
         const jobs = lines.find((e: any) => e.job_id === data.job_id);
+        let enable_majors = false;
+        if (data?.minimum_education)
+          try {
+            const res: any = await api.get(
+              `${process.env.NEXT_PUBLIC_API_MPP}/api/majors/education-level?education_level=` +
+                data?.minimum_education
+            );
+            if (Array.isArray(res?.data?.data) && res?.data?.data?.length) {
+              enable_majors = true;
+            }
+          } catch (ex) {}
         return {
           id,
           ...data,
@@ -302,6 +313,7 @@ function Page() {
           organization_structure_id: data.for_organization_structure_id,
           mpp_name: data.mpp_period.title,
           major_ids: data.request_majors.map((e: any) => e?.["Major"]?.["ID"]),
+          enable_majors,
         };
       }}
       children={(fm: any) => {
@@ -786,6 +798,7 @@ function Page() {
                     label={"Minimum Education"}
                     type={"dropdown"}
                     onChange={() => {
+                      console.log("CEK");
                       const run = async () => {
                         if (fm.data?.minimum_education) {
                           fm.data.enable_majors = false;
