@@ -135,7 +135,7 @@ function Page() {
                                   <td>
                                     {local.batch?.status !== "APPROVED"
                                       ? "Waiting Approval CEO"
-                                      : "Need Approval"}
+                                      : "Approved By CEO"}
                                   </td>
                                 </tr>
                               </tbody>
