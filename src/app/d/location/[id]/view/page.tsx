@@ -349,7 +349,7 @@ function Page() {
                   </ButtonContainer>
                 </Alert>
               )}
-              {local.can_reject && fm?.data?.status === "NEED APPROVAL" ? (
+              {local.can_reject && fm?.data?.status === "IN PROGRESS" ? (
                 <Alert
                   type={"save"}
                   content={
@@ -551,7 +551,7 @@ function Page() {
                 <></>
               )}
 
-              {local.can_approve && fm?.data?.status === "NEED APPROVAL" ? (
+              {local.can_approve && fm?.data?.status === "IN PROGRESS" ? (
                 <Alert
                   type={"save"}
                   content={
