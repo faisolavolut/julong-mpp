@@ -85,7 +85,7 @@ function Page() {
                 </div>
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row gap-x-1 py-2">
-                    <AlertCeoReject fm={local}/>
+                    <AlertCeoReject lc={local}/>
                     <AlertCeoApprove fm={local}/>
                   </div>
                 </div>
