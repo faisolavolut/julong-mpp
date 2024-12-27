@@ -226,6 +226,12 @@ export const TableList: React.FC<any> = ({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
+    initialState: {
+      pagination: {
+        pageIndex: 0, //custom initial page index
+        pageSize: 25, //custom default page size
+      },
+    },
     state: {
       pagination: {
         pageIndex: 0,
@@ -329,7 +335,7 @@ export const TableList: React.FC<any> = ({
               <div className="relative">
                 <Table className="min-w-full divide-y divide-gray-200 ">
                   {!disabledHeadTable ? (
-                    <thead className="text-md bg-second group/head text-md uppercase text-gray-700 ">
+                    <thead className="text-md bg-second group/head text-md uppercase text-gray-700 sticky top-0">
                       {table.getHeaderGroups().map((headerGroup) => (
                         <tr
                           key={`${headerGroup.id}`}
@@ -473,7 +479,10 @@ export const TableList: React.FC<any> = ({
                       <Table.Row
                         key={row.id}
                         className={cx(
-                          disabledHoverRow ? "" : "hover:bg-[#DBDBE7]"
+                          disabledHoverRow ? "" : "hover:bg-[#DBDBE7]",
+                          css`
+                            height: 44px;
+                          `
                         )}
                       >
                         {row.getVisibleCells().map((cell) => {
@@ -499,7 +508,9 @@ export const TableList: React.FC<any> = ({
                                 );
                           return (
                             <Table.Cell
-                              className="text-md px-2  py-1  whitespace-nowrap text-gray-900 "
+                              className={cx(
+                                "text-md px-2  py-1  whitespace-nowrap text-gray-900 "
+                              )}
                               key={cell.id}
                             >
                               {renderData}
