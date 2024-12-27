@@ -172,7 +172,6 @@ function Page() {
         const current_open = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=complete`
         );
-        console.log({current_open});
         const ctg: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/request-categories`
         );
@@ -191,7 +190,8 @@ function Page() {
           document_date: new Date(),
           organization: org?.data?.data?.name,
           // mpp_name: current_open?.data?.data?.title,
-          budget_year_from: current_open?.data?.data?.mppperiod?.budget_start_date,
+          budget_year_from:
+            current_open?.data?.data?.mppperiod?.budget_start_date,
           budget_year_to: current_open?.data?.data?.mppperiod?.budget_end_date,
           mpp_name: current_open?.data?.data?.mppperiod?.title,
           requestor: get_user("employee.name"),
@@ -208,12 +208,13 @@ function Page() {
             "employee.employee_job.organization_location_id"
           ),
           categories: categories,
-        })
+        });
         return {
           document_number: document_number.data.data,
           document_date: new Date(),
           organization: org?.data?.data?.name,
-          budget_year_from: current_open?.data?.data?.mppperiod?.budget_start_date,
+          budget_year_from:
+            current_open?.data?.data?.mppperiod?.budget_start_date,
           budget_year_to: current_open?.data?.data?.mppperiod?.budget_end_date,
           mpp_name: current_open?.data?.data?.mppperiod?.title,
           requestor: get_user("employee.name"),
@@ -273,8 +274,8 @@ function Page() {
                     }}
                     onLoad={async () => {
                       try {
-                        if(!fm.data?.mpp_period_id){
-                          return []
+                        if (!fm.data?.mpp_period_id) {
+                          return [];
                         }
                         const param = {
                           paging: 1,
@@ -707,6 +708,29 @@ function Page() {
                     name={"minimum_education"}
                     label={"Minimum Education"}
                     type={"dropdown"}
+                    onChange={() => {
+                      const run = async () => {
+                        if (fm.data?.minimum_education) {
+                          fm.data.enable_majors = false;
+                          try {
+                            const res: any = await api.get(
+                              `${process.env.NEXT_PUBLIC_API_MPP}/api/majors/education-level?education_level=` +
+                                fm.data?.minimum_education
+                            );
+                            if (
+                              Array.isArray(res?.data?.data) &&
+                              res?.data?.data?.length
+                            ) {
+                              fm.data.enable_majors = true;
+                            }
+                          } catch (ex) {}
+                        } else {
+                          fm.data.enable_majors = false;
+                        }
+                        fm.render();
+                      };
+                      run();
+                    }}
                     onLoad={() => {
                       return [
                         {
@@ -745,24 +769,21 @@ function Page() {
                     name={"major_ids"}
                     label={"Major"}
                     type={"multi-dropdown"}
-                    // disabled={!fm.data?.minimum_education}
+                    disabled={
+                      !fm.data?.minimum_education || !fm.data?.enable_majors
+                    }
                     onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                        search: fm.data?.minimum_education
-                          ? fm.data.minimum_education
-                          : null,
-                      };
                       if (!fm.data?.minimum_education) {
                         return [];
                       }
-                      const params = await events("onload-param", param);
                       const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/majors` + params
+                        `${process.env.NEXT_PUBLIC_API_MPP}/api/majors/education-level?education_level=` +
+                          fm.data.minimum_education
                       );
                       const data: any[] = res.data.data;
-                      if (!Array.isArray(data)) return [];
+                      if (!Array.isArray(data)) {
+                        return [];
+                      }
                       return data.map((e) => {
                         return {
                           value: e.id,

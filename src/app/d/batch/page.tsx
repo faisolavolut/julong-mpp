@@ -312,25 +312,6 @@ function Page() {
                                   return <>{getValue(row, name)}</>;
                                 },
                               },
-                              // {
-                              //   name: "action",
-                              //   header: () => <span>Action</span>,
-                              //   sortable: false,
-                              //   renderCell: ({ row, name, cell }: any) => {
-                              //     return (
-                              //       <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                              //         <ButtonLink
-                              //           className="bg-primary"
-                              //           href={`/d/bacth/${row.id}/view`}
-                              //         >
-                              //           <div className="flex items-center gap-x-2">
-                              //             <IoEye className="text-lg" />
-                              //           </div>
-                              //         </ButtonLink>
-                              //       </div>
-                              //     );
-                              //   },
-                              // },
                             ]
                       }
                       onLoad={async (param: any) => {

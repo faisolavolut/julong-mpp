@@ -122,7 +122,7 @@ function Page() {
                       }
                     }
                     fm.render();
-                    console.log(fm.data.status)
+                    console.log(fm.data.status);
                     await fm.submit();
                     navigate(`/d/mpr-hrd/${id}/view`);
                   }}
@@ -133,7 +133,7 @@ function Page() {
                   </ButtonContainer>
                 </Alert>
               )}
-              
+
               {["DRAFTED", "DRAFT"].includes(fm.data?.status) ? (
                 <>
                   <Alert
@@ -141,7 +141,6 @@ function Page() {
                     onClick={async () => {
                       await actionToast({
                         task: async () => {
-                          
                           await api.delete(
                             `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/` +
                               id
@@ -343,8 +342,8 @@ function Page() {
                     }}
                     onLoad={async () => {
                       try {
-                        if(!fm.data?.mpp_period_id){
-                          return []
+                        if (!fm.data?.mpp_period_id) {
+                          return [];
                         }
                         const param = {
                           paging: 1,
@@ -786,6 +785,29 @@ function Page() {
                     name={"minimum_education"}
                     label={"Minimum Education"}
                     type={"dropdown"}
+                    onChange={() => {
+                      const run = async () => {
+                        if (fm.data?.minimum_education) {
+                          fm.data.enable_majors = false;
+                          try {
+                            const res: any = await api.get(
+                              `${process.env.NEXT_PUBLIC_API_MPP}/api/majors/education-level?education_level=` +
+                                fm.data?.minimum_education
+                            );
+                            if (
+                              Array.isArray(res?.data?.data) &&
+                              res?.data?.data?.length
+                            ) {
+                              fm.data.enable_majors = true;
+                            }
+                          } catch (ex) {}
+                        } else {
+                          fm.data.enable_majors = false;
+                        }
+                        fm.render();
+                      };
+                      run();
+                    }}
                     onLoad={() => {
                       return [
                         {
@@ -824,24 +846,21 @@ function Page() {
                     name={"major_ids"}
                     label={"Major"}
                     type={"multi-dropdown"}
-                    // disabled={!fm.data?.minimum_education}
+                    disabled={
+                      !fm.data?.minimum_education || !fm.data?.enable_majors
+                    }
                     onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                        search: fm.data?.minimum_education
-                          ? fm.data.minimum_education
-                          : null,
-                      };
                       if (!fm.data?.minimum_education) {
                         return [];
                       }
-                      const params = await events("onload-param", param);
                       const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/majors` + params
+                        `${process.env.NEXT_PUBLIC_API_MPP}/api/majors/education-level?education_level=` +
+                          fm.data.minimum_education
                       );
                       const data: any[] = res.data.data;
-                      if (!Array.isArray(data)) return [];
+                      if (!Array.isArray(data)) {
+                        return [];
+                      }
                       return data.map((e) => {
                         return {
                           value: e.id,
