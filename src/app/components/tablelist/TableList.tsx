@@ -43,6 +43,7 @@ import { Check, Loader2, Sticker } from "lucide-react";
 import { InputSearch } from "../ui/input-search";
 import { Input } from "../ui/input";
 import { FaChevronDown } from "react-icons/fa";
+import get from "lodash.get";
 
 export const TableList: React.FC<any> = ({
   name,
@@ -469,18 +470,25 @@ export const TableList: React.FC<any> = ({
 
                   <Table.Body className="divide-y divide-gray-200 bg-white">
                     {table.getRowModel().rows.map((row, idx) => (
-                      <Table.Row key={row.id} className={cx(disabledHoverRow ? "" : "hover:bg-[#DBDBE7]" )}>
+                      <Table.Row
+                        key={row.id}
+                        className={cx(
+                          disabledHoverRow ? "" : "hover:bg-[#DBDBE7]"
+                        )}
+                      >
                         {row.getVisibleCells().map((cell) => {
                           const ctx = cell.getContext();
                           const param = {
                             row: row.original,
-                            name: ctx.column.id,
+                            name: get(ctx, "column.columnDef.accessorKey"),
                             cell,
                             idx,
                             tbl: local,
                           };
                           const head = column.find(
-                            (e: any) => e?.name === ctx.column.id
+                            (e: any) =>
+                              e?.name ===
+                              get(ctx, "column.columnDef.accessorKey")
                           );
                           const renderData =
                             typeof head?.renderCell === "function"
@@ -504,7 +512,7 @@ export const TableList: React.FC<any> = ({
                 </Table>
               </div>
             </div>
-            {(!hiddenNoRow && !table.getRowModel().rows?.length) && (
+            {!hiddenNoRow && !table.getRowModel().rows?.length && (
               <div
                 className={cx(
                   "flex-1 w-full absolute inset-0 flex flex-col items-center justify-center",

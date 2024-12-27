@@ -241,8 +241,9 @@ function Page() {
                     <TableList
                       name="Location"
                       header={{
-                        sideLeft: (data: any) => {
-                          if (!local.can_add) return <></>;
+                        sideLeft: () => {
+                          if(data.id === "completed") return <></>
+                          if (!local.can_add ) return <></>;
                           return (
                             <>
                               <AlertBatch local={local} />

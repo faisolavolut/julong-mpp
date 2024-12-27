@@ -8,6 +8,7 @@ import { columnMpp } from "@/constants/column-mpp";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
+import { get_user } from "@/lib/get_user";
 import { accessMe, getAccess, userRoleMe } from "@/lib/getAccess";
 import { getValue } from "@/lib/getValue";
 import { useLocal } from "@/lib/use-local";
@@ -79,6 +80,13 @@ function Page() {
               ];
             }}
             tabContent={(data: any) => {
+              const col = columnMpp({
+                ...data,
+                role: local.roles?.name,
+                // role: "HRD Site",
+                local,
+              })
+              console.log({col})
               return (
                 <>
                   <div className="w-full flex flex-col flex-grow">
@@ -86,7 +94,8 @@ function Page() {
                       <TableList
                         name="Location"
                         header={{
-                          sideLeft: (data: any) => {
+                          sideLeft: () => {
+                            if (data?.id === "completed") return <></>
                             if (!local.can_add) return <></>;
                             return (
                               <>
@@ -107,23 +116,53 @@ function Page() {
                             );
                           },
                         }}
-                        column={columnMpp({
-                          ...data,
-                          role: local.roles?.name,
-                          local,
-                        })}
+                        column={col}
                         onLoad={async (param: any) => {
+                          let prm = {
+                            ...param,
+                          };
                           try {
-                            const params = await events("onload-param", param);
+                            let url = "/api/mp-plannings/approver-type";
+                            if (data?.id === "completed") {
+                              url = "/api/mp-plannings/completed";
+                            } else {
+                              const roles = get_user("choosed_role");
+                              url = "/api/mp-plannings/approver-type";
+                              switch (roles) {
+                                case "HRD Site":
+                                  break;
+                                case "HRD Unit":
+                                  prm = {
+                                    approver_type: "manager",
+                                    organization_location_id: get_user(
+                                      "employee.employee_job.organization_location_id"
+                                    ),
+                                  };
+                                  break;
+                                case "Direktur Unit":
+                                  prm = {
+                                    approver_type: "direktur",
+                                    organization_location_id: get_user(
+                                      "employee.employee_job.organization_location_id"
+                                    ),
+                                  };
+                                  break;
+                                default:
+                                  prm = {
+                                    approver_type: "admin",
+                                  };
+                              }
+                            }
+                            const params = await events("onload-param", prm);
                             const res: any = await api.get(
-                              `${process.env.NEXT_PUBLIC_API_MPP}${
-                                data.id === "completed"
-                                  ? "/api/mp-plannings/completed"
-                                  : "/api/mp-plannings"
-                              }` + params
+                              `${process.env.NEXT_PUBLIC_API_MPP}${url}` +
+                                params
                             );
                             const result: any[] =
-                              res.data.data.mp_planning_headers;
+                              data?.id === "completed"
+                                ? res.data.data.mp_planning_headers
+                                : res.data.data.organization_locations;
+                                console.log({result})
                             if (!Array.isArray(result)) return [];
                             return result || [];
                           } catch (ex) {
