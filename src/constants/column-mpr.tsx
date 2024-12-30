@@ -33,9 +33,15 @@ export const rolesMpr = (roles: any[]) => {
       permision: ["read-mpr-ho"],
     },
   ];
-  const yourRole =
-    data.find((e) => e.permision.some((perm) => getAccess(perm, roles)))
-      ?.name || null;
+  const yourRole = data.find((e) => {
+    if (e.name === "superadmin") {
+      // Cek semua izin (and)
+      return e.permision.every((perm) => getAccess(perm, roles));
+    } else {
+      // Cek salah satu izin (or)
+      return e.permision.some((perm) => getAccess(perm, roles));
+    }
+  })?.name || null;
   return yourRole;
 };
 export const columnMpr = (data: any) => {

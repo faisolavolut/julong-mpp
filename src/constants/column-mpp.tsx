@@ -17,30 +17,33 @@ export const rolesMpp = (roles: any[]) => {
     },
     {
       name: "HRD Location",
-      permision: [
-        "read-mpp-hrd-location",
-      ],
+      permision: ["read-mpp-hrd-location"],
     },
     {
       name: "HRD Unit",
-      permision: [
-        "read-mpp-hrd-unit",
-      ],
+      permision: ["read-mpp-hrd-unit"],
     },
     {
       name: "Direktur Unit",
-      permision: [
-        "read-mpp-dir-unit",
-      ],
+      permision: ["read-mpp-dir-unit"],
     },
   ];
-  const yourRole = data.find((e) =>
-    e.permision.some((perm) => getAccess(perm, roles))
-  )?.name || null;
+
+  const yourRole = data.find((e) => {
+    if (e.name === "superadmin") {
+      // Cek semua izin (and)
+      return e.permision.every((perm) => getAccess(perm, roles));
+    } else {
+      // Cek salah satu izin (or)
+      return e.permision.some((perm) => getAccess(perm, roles));
+    }
+  })?.name || null;
+  if(getAccess("read-mpp", roles)) return "superadmin"
   return yourRole;
 };
 export const columnMpp = (data: any) => {
   const access = rolesMpp(typeof data?.local?.roles === "object" ? [data?.local?.roles] : []);
+  console.log({access, role: typeof data?.local?.roles === "object" ? [data?.local?.roles] : []})
   if (data?.id === "on_going") {
     switch (access) {
       case "HRD Location":
