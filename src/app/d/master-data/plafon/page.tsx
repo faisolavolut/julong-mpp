@@ -23,7 +23,7 @@ function Page() {
       const roles = await userRoleMe();
       const result = getAccess("edit-plafon", roles);
       local.edit = result;
-      local.render()
+      local.render();
     };
     run();
   }, []);
@@ -39,9 +39,7 @@ function Page() {
           name="Plafon"
           header={{
             sideLeft: (data: any) => {
-              return (
-                <></>
-              );
+              return <></>;
             },
           }}
           column={[
@@ -75,23 +73,27 @@ function Page() {
               renderCell: ({ row, name, cell }: any) => {
                 return (
                   <div className="flex items-center  gap-x-2 whitespace-nowrap">
-                    <ButtonLink
-                      className="bg-primary"
-                      href={`/d/master-data/plafon/${row.id}/view`}
-                    >
-                      <div className="flex items-center gap-x-2">
-                        <IoEye className="text-lg" />
-                      </div>
-                    </ButtonLink>
-                    {local.edit && 
-                    <ButtonLink
-                      className="bg-primary"
-                      href={`/d/master-data/plafon/${row.id}/edit`}
-                    >
-                      <div className="flex items-center gap-x-2">
-                        <HiOutlinePencilAlt className="text-lg" />
-                      </div>
-                    </ButtonLink>}
+                    {!local.edit && (
+                      <ButtonLink
+                        className="bg-primary"
+                        href={`/d/master-data/plafon/${row.id}/view`}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <IoEye className="text-lg" />
+                        </div>
+                      </ButtonLink>
+                    )}
+
+                    {local.edit && (
+                      <ButtonLink
+                        className="bg-primary"
+                        href={`/d/master-data/plafon/${row.id}/edit`}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <HiOutlinePencilAlt className="text-lg" />
+                        </div>
+                      </ButtonLink>
+                    )}
                   </div>
                 );
               },
