@@ -1,15 +1,49 @@
 import { ButtonLink } from "@/app/components/ui/button-link";
 import { shortDate } from "@/lib/date";
+import { getAccess } from "@/lib/getAccess";
 import { getValue } from "@/lib/getValue";
 import get from "lodash.get";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { IoEye } from "react-icons/io5";
-
+export const rolesMpp = (roles: any[]) => {
+  const data = [
+    {
+      name: "superadmin",
+      permision: [
+        "read-mpp-hrd-location",
+        "read-mpp-hrd-unit",
+        "read-mpp-dir-unit",
+      ],
+    },
+    {
+      name: "HRD Location",
+      permision: [
+        "read-mpp-hrd-location",
+      ],
+    },
+    {
+      name: "HRD Unit",
+      permision: [
+        "read-mpp-hrd-unit",
+      ],
+    },
+    {
+      name: "Direktur Unit",
+      permision: [
+        "read-mpp-dir-unit",
+      ],
+    },
+  ];
+  const yourRole = data.find((e) =>
+    e.permision.some((perm) => getAccess(perm, roles))
+  )?.name || null;
+  return yourRole;
+};
 export const columnMpp = (data: any) => {
+  const access = rolesMpp(typeof data?.local?.roles === "object" ? [data?.local?.roles] : []);
   if (data?.id === "on_going") {
-    console.log(data?.role);
-    switch (data?.role) {
-      case "HRD Site":
+    switch (access) {
+      case "HRD Location":
         return [
           {
             name: "organization_name",

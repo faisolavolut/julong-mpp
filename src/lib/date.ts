@@ -18,7 +18,6 @@ export const dayDate = (date: string | Date) => {
 };
 export const shortDate = (date: string | Date) => {
   if (date instanceof Date || typeof date === "string") {
-    console.log(date)
     const formattedDate = day(date);
     if (formattedDate.isValid()) {
       return formattedDate.format("DD/MM/YYYY");

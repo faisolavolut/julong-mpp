@@ -4,15 +4,29 @@ import { ButtonBetter } from "@/app/components/ui/button";
 import { ButtonLink } from "@/app/components/ui/button-link";
 import api from "@/lib/axios";
 import { events } from "@/lib/event";
+import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getValue } from "@/lib/getValue";
 import { useLocal } from "@/lib/use-local";
 import { Button } from "flowbite-react";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import { HiOutlinePencilAlt, HiPlus, HiTrash } from "react-icons/hi";
 import { IoEye, IoSync } from "react-icons/io5";
 import { toast } from "sonner";
 
 function Page() {
+  const local = useLocal({
+    edit: false,
+  });
+  useEffect(() => {
+    const run = async () => {
+      const roles = await userRoleMe();
+      const result = getAccess("edit-plafon", roles);
+      local.edit = result;
+      local.render()
+    };
+    run();
+  }, []);
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
@@ -69,6 +83,7 @@ function Page() {
                         <IoEye className="text-lg" />
                       </div>
                     </ButtonLink>
+                    {local.edit && 
                     <ButtonLink
                       className="bg-primary"
                       href={`/d/master-data/plafon/${row.id}/edit`}
@@ -76,7 +91,7 @@ function Page() {
                       <div className="flex items-center gap-x-2">
                         <HiOutlinePencilAlt className="text-lg" />
                       </div>
-                    </ButtonLink>
+                    </ButtonLink>}
                   </div>
                 );
               },

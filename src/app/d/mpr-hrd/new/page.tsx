@@ -1,34 +1,45 @@
 "use client";
 import { Field } from "@/app/components/form/Field";
-import { Form } from "@/app/components/form/Form";
 import { FormBetter } from "@/app/components/form/FormBetter";
-import { TableList } from "@/app/components/tablelist/TableList";
-import { Tablist } from "@/app/components/tablist/Tablist";
 import { Alert } from "@/app/components/ui/alert";
 import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/app/components/ui/card";
+import { ButtonContainer } from "@/app/components/ui/button";
 import api from "@/lib/axios";
-import { cloneFM } from "@/lib/cloneFm";
 import { normalDate, shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
 import { getParams } from "@/lib/get-params";
 import { get_user } from "@/lib/get_user";
+import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getNumber } from "@/lib/getNumber";
 import { useLocal } from "@/lib/use-local";
-import { Breadcrumb, Button } from "flowbite-react";
-import { GoInfo } from "react-icons/go";
+import { notFound } from "next/navigation";
+import { useEffect } from "react";
 import { IoMdSave } from "react-icons/io";
-import { MdDelete } from "react-icons/md";
 
 function Page() {
+  const local = useLocal({
+    can_add: false,
+    ready: false as boolean,
+  });
+  useEffect(() => {
+    const run = async () => {
+      local.ready = false;
+      local.render();
+      const roles = await userRoleMe();
+      try {
+        const res = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/current?status=complete`
+        );
+        if (res?.data?.data) {
+          local.can_add = getAccess("create-mpr", roles);
+        }
+      } catch (ex) {}
+      local.ready = true;
+      local.render();
+    };
+    run();
+  }, [])
+    if(local.ready && !local.can_add) return notFound()
   return (
     <FormBetter
       onTitle={(fm: any) => {
@@ -286,7 +297,7 @@ function Page() {
                           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/get-something?organization_id=${fm.data.for_organization_id}&status=COMPLETED&mpp_period_id=${fm.data?.mpp_period_id}`
                         );
 
-                        const data: any[] = res.data.data.mp_planning_headers;
+                        const data: any[] = res.data.data;
                         if (!Array.isArray(data)) return [];
                         return data.map((e) => {
                           return {

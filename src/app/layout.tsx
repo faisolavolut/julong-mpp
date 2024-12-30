@@ -9,8 +9,8 @@ import classnames from "classnames";
 import { css } from "@emotion/css";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Toaster } from 'sonner';
-import dotenv from 'dotenv';
+import { Toaster } from "sonner";
+import dotenv from "dotenv";
 dotenv.config();
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,22 +34,23 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const routerInstance = useRouter();
   useEffect(() => {
     globalThis.router = routerInstance;
-    const user = localStorage.getItem("user")
-    if(user){
-    const w = window as any;
-    w.user = JSON.parse(user);}
-  }, [])
+    const user = localStorage.getItem("user");
+    if (user) {
+      const w = window as any;
+      w.user = JSON.parse(user);
+    }
+  }, []);
 
   return (
     <html lang="en">
       <head>
         <Header title="MPP" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" />
-
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+        />
       </head>
-      <body
-        className={`antialiased bg-gray-50`}
-      >
+      <body className={`antialiased bg-gray-50`}>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-THQTXJ7"
@@ -59,7 +60,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
             title="Google Tag Manager"
           ></iframe>
         </noscript>
-        <Toaster position="top-right"/>
+        <Toaster position="top-right" />
         {children}
         <Script />
       </body>

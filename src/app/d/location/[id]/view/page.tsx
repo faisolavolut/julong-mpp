@@ -63,21 +63,22 @@ function Page() {
     can_process: false,
     can_submit: false,
     fm: null as any,
+    can_approval: false,
   });
   useEffect(() => {
     const run = async () => {
       const roles = await userRoleMe();
-      local.can_approve = getAccess("approve-mpp", roles);
-      local.can_reject = getAccess("reject-mpp", roles);
+      local.can_approval = getAccess("approval-mpp-direktur", roles);
       local.can_process = getAccess("process-mpp", roles);
-      local.can_submit = getAccess("submit-mpp", roles);
       local.render();
+      console.log( local.can_approval)
     };
     run();
   }, []);
   return (
     <FormBetter
       onTitle={(fm: any) => {
+        console.log( fm?.data?.status, fm?.data?.approver_manager_id)
         return (
           <div className="flex flex-row w-full">
             <div className="flex flex-col py-4 pt-0 flex-grow">
@@ -349,7 +350,7 @@ function Page() {
                   </ButtonContainer>
                 </Alert>
               )}
-              {local.can_reject && fm?.data?.status === "NEED APPROVAL" && !fm?.data?.approver_manager_id ? (
+              {local.can_approval && fm?.data?.status === "NEED APPROVAL" && !fm?.data?.approver_manager_id ? (
                 <Alert
                   type={"save"}
                   content={
@@ -551,7 +552,7 @@ function Page() {
                 <></>
               )}
 
-              {local.can_approve && fm?.data?.status === "NEED APPROVAL" && !fm?.data?.approver_manager_id ? (
+              {local.can_approval && fm?.data?.status === "NEED APPROVAL" && !fm?.data?.approver_manager_id ? (
                 <Alert
                   type={"save"}
                   content={
@@ -784,15 +785,6 @@ function Page() {
             id
         );
         const data = res.data.data;
-        console.log({
-          id,
-          ...data,
-          mpp_name: data?.mpp_period?.title,
-          budget_year_from: data?.mpp_period?.budget_start_date,
-          budget_year_to: data?.mpp_period?.budget_end_date,
-          document_line: data?.mp_planning_lines || [],
-          history: history.data.data,
-        });
         return {
           id,
           ...data,

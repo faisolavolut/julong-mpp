@@ -59,14 +59,15 @@ function Page() {
     can_submit: false,
     can_edit: true,
     can_process: false,
+    can_delete: false,
   });
   useEffect(() => {
     const run = async () => {
       const roles = await userRoleMe();
-      local.can_save = getAccess("save-mpp", roles);
+      local.can_save = getAccess("edit-mpp", roles);
       local.can_submit = getAccess("submit-mpp", roles);
       local.can_edit = getAccess("edit-mpp", roles);
-      local.can_process = getAccess("process-mpp", roles);
+      local.can_delete = getAccess("delete-mpp", roles);
       local.render();
     };
     run();
@@ -350,23 +351,24 @@ function Page() {
               )}
 
               {(fm.data?.status === "DRAFTED" ||
-                fm.data?.status === "REJECTED") && (
-                <Alert
-                  type={"save"}
-                  onClick={async () => {
-                    fm.data.status = "DRAFTED";
-                    fm.error = {};
-                    fm.render();
-                    await fm.submit();
-                    await fm.reload();
-                  }}
-                >
-                  <ButtonContainer className={"bg-primary"}>
-                    <IoMdSave className="text-xl" />
-                    Save
-                  </ButtonContainer>
-                </Alert>
-              )}
+                fm.data?.status === "REJECTED") &&
+                local.can_save && (
+                  <Alert
+                    type={"save"}
+                    onClick={async () => {
+                      fm.data.status = "DRAFTED";
+                      fm.error = {};
+                      fm.render();
+                      await fm.submit();
+                      await fm.reload();
+                    }}
+                  >
+                    <ButtonContainer className={"bg-primary"}>
+                      <IoMdSave className="text-xl" />
+                      Save
+                    </ButtonContainer>
+                  </Alert>
+                )}
 
               {local.can_submit &&
               (fm.data?.status === "DRAFTED" ||
@@ -448,7 +450,8 @@ function Page() {
               ) : (
                 <></>
               )}
-              {["DRAFTED", "DRAFT"].includes(fm.data?.status) ? (
+              {["DRAFTED", "DRAFT"].includes(fm.data?.status) &&
+              local.can_delete ? (
                 <>
                   <Alert
                     type={"save"}

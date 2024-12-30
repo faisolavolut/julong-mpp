@@ -9,36 +9,38 @@ export const showApprovel = (
   permision: string[],
   action?: "approve" | "reject"
 ) => {
-  console.log({ data });
+  if(!permision?.length){
+    return null
+  }
   const a1 = [
     {
       status: "IN PROGRESS",
-      permision: ["approve-mpr-dept-head"],
+      permision: ["approval-mpr-dept-head"],
       column: ["department_head"],
       level: ["Level Head Department"],
     },
     {
       status: "NEED APPROVAL",
       permision: [
-        "approve-mpr-dept-head",
-        "approve-mpr-dir",
-        "approve-mpr-ceo",
+        "approval-mpr-dept-head",
+        "approval-mpr-vp",
+        "approval-mpr-ceo",
       ],
       column: ["department_head", "vp_gm_director", "ceo"],
       level: ["Level Head Department", "Level VP", "Level CEO"],
     },
     {
       status: "APPROVED",
-      permision: ["approve-mpr-ho"],
+      permision: ["approval-mpr-ho"],
       column: ["hrd_ho_unit"],
       level: ["Level HRD HO"],
     },
   ]; // tiga status yang dapat memunculkan approval
   const role = {
-    head: permision.find((e) => e === "approve-mpr-dept-head"),
-    dir: permision.find((e) => e === "approve-mpr-dir"),
-    ceo: permision.find((e) => e === "approve-mpr-ceo"),
-    ho_unit: permision.find((e) => e === "approve-mpr-ho"),
+    head: permision.find((e) => e === "approval-mpr-dept-head"),
+    dir: permision.find((e) => e === "approval-mpr-vp"),
+    ceo: permision.find((e) => e === "approval-mpr-ceo"),
+    ho_unit: permision.find((e) => e === "approval-mpr-ho"),
   };
   const isBudget = data?.mp_planning_header_id ? true : false;
   const isField = data?.organization_category === "Non Field" ? false : true;

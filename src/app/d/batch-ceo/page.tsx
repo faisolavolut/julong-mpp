@@ -30,25 +30,21 @@ function Page() {
     client: false,
     ready: false,
     data: null as any,
+    can_approval: false,
   });
   useEffect(() => {
     const run = async () => {
       const roles = await userRoleMe();
-      const access = getAccess("create-mpp", roles);
-      if (access) {
-        try {
-          const res = await api.get(
-            `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/need-approval`
-          );
-          if (res?.data?.data) {
-            local.data = res?.data?.data;
-            local.can_add = true;
-
-          }
-        } catch (ex) {}
-      }
-      const edit = getAccess("edit-mpp", roles);
-      local.can_edit = edit;
+      try {
+        const res = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/need-approval`
+        );
+        if (res?.data?.data) {
+          local.data = res?.data?.data;
+          local.can_add = true;
+        }
+      } catch (ex) {}
+      local.can_approval = getAccess("approval-batch-ceo", roles);
       local.ready = true;
       local.render();
     };
@@ -83,12 +79,14 @@ function Page() {
                     <MyDocument data={local.data} />
                   </PDFViewer>
                 </div>
-                <div className="flex flex-row items-center justify-center">
-                  <div className="flex flex-row gap-x-1 py-2">
-                    <AlertCeoReject lc={local}/>
-                    <AlertCeoApprove fm={local}/>
+                {local.can_approval && (
+                  <div className="flex flex-row items-center justify-center">
+                    <div className="flex flex-row gap-x-1 py-2">
+                      <AlertCeoReject lc={local} />
+                      <AlertCeoApprove fm={local} />
+                    </div>
                   </div>
-                </div>
+                )}
               </>
             )}
           </div>

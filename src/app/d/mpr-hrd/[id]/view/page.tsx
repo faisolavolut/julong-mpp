@@ -65,10 +65,9 @@ function Page() {
     const run = async () => {
       const roles = await userRoleMe();
       const listPermision = [
-        "approve-mpr-dept-head",
-        "approve-mpr-ho",
-        "approve-mpr-dir",
-        "approve-mpr-ceo",
+        "approval-mpr-dept-head",
+        "approval-mpr-ho",
+        "approval-mpr-vp",
       ];
       const permision = listPermision.filter((e) => getAccess(e, roles));
       local.permission = permision;
@@ -369,7 +368,7 @@ function Page() {
                         </AlertDialogHeader>
                         <Form
                           onSubmit={async (fm: any) => {
-                            const data:any = showApprovel(
+                            const data: any = showApprovel(
                               parent_fm.data,
                               local.permission,
                               "reject"
@@ -403,7 +402,10 @@ function Page() {
                                 <div className="flex flex-col w-full">
                                   <div className="flex text-red-600 items-center">
                                     <AlertTriangle className="h-4 w-4 mr-1" />
-                                    Failed { get(ex, "response.data.meta.message") || ex.message}.
+                                    Failed{" "}
+                                    {get(ex, "response.data.meta.message") ||
+                                      ex.message}
+                                    .
                                   </div>
                                 </div>,
                                 {
@@ -502,7 +504,7 @@ function Page() {
                   <Alert
                     type={"delete"}
                     onClick={async () => {
-                      const data:any = showApprovel(
+                      const data: any = showApprovel(
                         fm.data,
                         local.permission,
                         "approve"
@@ -522,6 +524,8 @@ function Page() {
                         approver_id: get_user("employee.id"),
                         approved_by: get_user("employee.name"),
                       };
+                      console.log(param)
+                      return false;
                       try {
                         const formData = new FormData();
 
@@ -544,7 +548,10 @@ function Page() {
                           <div className="flex flex-col w-full">
                             <div className="flex text-red-600 items-center">
                               <AlertTriangle className="h-4 w-4 mr-1" />
-                              Failed { get(ex, "response.data.meta.message") || ex.message}.
+                              Failed{" "}
+                              {get(ex, "response.data.meta.message") ||
+                                ex.message}
+                              .
                             </div>
                           </div>,
                           {
@@ -570,7 +577,7 @@ function Page() {
         );
       }}
       onSubmit={async (fm: any) => {
-        const data:any = fm.data;
+        const data: any = fm.data;
       }}
       showResize={false}
       header={(fm: any) => {
@@ -581,7 +588,7 @@ function Page() {
         const res: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/` + id
         );
-        const data:any = res.data.data;
+        const data: any = res.data.data;
 
         let categories = [] as any[];
         const ctg: any = await api.get(
@@ -606,6 +613,25 @@ function Page() {
           );
           history = hst?.data?.data || [];
         } catch (ex) {}
+        console.log({
+          id,
+          ...data,
+          categories: categories,
+          divisi: data.for_organization_structure,
+          job_level: data.job_level_name,
+          location: data.for_organization_location_id,
+          is_replacement: data.is_replacement ? "penggantian" : "penambahan",
+          total_needs: data.male_needs + data.female_needs,
+          remaining_balance:
+            data.recruitment_type === "MT_Management Trainee"
+              ? getNumber(jobs?.remaining_balance_mt)
+              : data.recruitment_type === "PH_Professional Hire"
+              ? getNumber(jobs?.remaining_balance_ph)
+              : 0,
+          mpp_name: data.mpp_period.title,
+          major_ids: data.request_majors.map((e: any) => e?.["Major"]?.["ID"]),
+          history: history?.data?.data,
+        });
         return {
           id,
           ...data,
@@ -624,6 +650,7 @@ function Page() {
           mpp_name: data.mpp_period.title,
           major_ids: data.request_majors.map((e: any) => e?.["Major"]?.["ID"]),
           history: history?.data?.data,
+          mp_planning_header_doc_no: data?.mp_planning_header?.document_number,
         };
       }}
       children={(fm: any) => {
@@ -654,37 +681,10 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"mp_planning_header_id"}
+                    name={"mp_planning_header_doc_no"}
                     label={"MPP Reference Number"}
-                    type={"dropdown"}
-                    onChange={(e: any) => {
-                      fm.data.mpp_name = e?.data.mpp_period?.title;
-                      fm.data.mpp_period_id = e?.data.mpp_period?.id;
-                      const line = e?.data.mp_planning_lines;
-                      fm.data["lines"] = line;
-                      fm.render();
-                    }}
-                    onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                      };
-                      const params = await events("onload-param", param);
-                      const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings` +
-                          params
-                      );
-
-                      const data: any[] = res.data.data.mp_planning_headers;
-                      if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.document_number,
-                          data: e,
-                        };
-                      });
-                    }}
+                    type={"text"}
+                    disabled={true}
                   />
                 </div>
 
@@ -740,121 +740,30 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"for_organization_id"}
+                    name={"for_organization_name"}
                     label={"For Organization"}
-                    type={"dropdown"}
-                    disabled={!fm.data?.recruitment_type}
-                    onChange={(e: any) => {
-                      const locations = e.data?.organization_locations;
-                      fm.data["list_location"] = locations;
-                      fm.render();
-                    }}
-                    onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                      };
-                      const params = await events("onload-param", param);
-                      const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations` +
-                          params
-                      );
-                      const data: any[] = res.data.data.organizations;
-                      if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.name,
-                          data: e,
-                        };
-                      });
-                    }}
+                    type={"text"}
+                    disabled={true}
                   />
                 </div>
 
                 <div>
                   <Field
                     fm={fm}
-                    name={"emp_organization_id"}
+                    name={"emp_organization_name"}
                     label={"Employment Org"}
-                    type={"dropdown"}
-                    disabled={!fm.data?.for_organization_id}
-                    onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                      };
-                      const params = await events("onload-param", param);
-                      const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations` +
-                          params
-                      );
-                      const data: any[] = res.data.data.organizations;
-                      if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.name,
-                          data: e,
-                        };
-                      });
-                    }}
+                    type={"text"}
+                    disabled={true}
                   />
                 </div>
 
                 <div>
                   <Field
                     fm={fm}
-                    name={"job_id"}
+                    name={"job_name"}
                     label={"Job Position"}
-                    type={"dropdown"}
-                    disabled={!fm.data?.for_organization_id}
-                    onChange={(e: any) => {
-                      const organization_structure_name =
-                        e.data?.organization_structure_name;
-                      fm.data["divisi"] = organization_structure_name;
-                      fm.data["for_organization_id_structure_id"] =
-                        e.data?.organization_structure_id;
-                      fm.data["organization_structure_id"] =
-                        e.data?.organization_structure_id;
-                      fm.data["for_organization_id_structure_id"] =
-                        e.data?.organization_structure_id;
-                      fm.data["job_level"] = e.data?.job_level.name;
-
-                      fm.data["job_level_id"] = e.data?.job_level.id;
-                      const lines = fm.data?.lines || [];
-                      const jobs =
-                        lines.find((x: any) => x?.job_id === fm.data?.job_id) ||
-                        null;
-                      const remaining_balance =
-                        fm.data.recruitment_type === "MT_Management Trainee"
-                          ? getNumber(jobs?.remaining_balance_mt)
-                          : fm.data.recruitment_type === "PH_Professional Hire"
-                          ? getNumber(jobs?.remaining_balance_ph)
-                          : 0;
-                      fm.data.remaining_balance = remaining_balance;
-                      fm.render();
-                    }}
-                    onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                      };
-                      const params = await events("onload-param", param);
-                      const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs` +
-                          params
-                      );
-                      const data: any[] = res.data.data.jobs;
-                      if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.name,
-                          data: e,
-                        };
-                      });
-                    }}
+                    type={"text"}
+                    disabled={true}
                   />
                 </div>
 
@@ -868,36 +777,13 @@ function Page() {
                   />
                 </div>
                 <div>
-                  <Field
+                  
+                <Field
                     fm={fm}
-                    name={"location"}
+                    name={"for_organization_location"}
                     label={"Location"}
-                    type={"dropdown"}
-                    disabled={!fm.data?.for_organization_id}
-                    onLoad={async () => {
-                      if (!fm.data?.for_organization_id) return [];
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                      };
-                      const params = await events("onload-param", param);
-                      const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organization-locations/organization/` +
-                          fm.data?.for_organization_id +
-                          params
-                      );
-
-                      const data: any[] = res.data.data;
-
-                      if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.name,
-                          data: e,
-                        };
-                      });
-                    }}
+                    type={"text"}
+                    disabled={true}
                   />
                 </div>
 
@@ -910,16 +796,6 @@ function Page() {
                     disabled={true}
                   />
                 </div>
-                <div>
-                  <Field
-                    fm={fm}
-                    disabled={true}
-                    name={"remaining_balance"}
-                    label={"Remaining Balance"}
-                    type={"money"}
-                  />
-                </div>
-                <div></div>
                 <div>
                   <Field
                     fm={fm}

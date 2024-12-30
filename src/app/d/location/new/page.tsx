@@ -20,14 +20,43 @@ import { cloneFM } from "@/lib/cloneFm";
 import { normalDate, shortDate } from "@/lib/date";
 import { getParams } from "@/lib/get-params";
 import { get_user } from "@/lib/get_user";
+import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { useLocal } from "@/lib/use-local";
 import { Breadcrumb, Button } from "flowbite-react";
+import { notFound } from "next/navigation";
+import { useEffect } from "react";
 import { GoInfo } from "react-icons/go";
 import { IoMdSave } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 
 function Page() {
-  const id = getParams("id");
+  const local = useLocal({
+    can_add: false,
+    can_edit: false,
+    roles: null as any,
+    ready: false as boolean,
+  });
+  useEffect(() => {
+    const run = async () => {
+      local.ready = false;
+      local.render();
+      const roles = await userRoleMe();
+      const access = getAccess("create-mpp", roles);
+      if (access) {
+        const res = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
+        );
+        if (res?.data?.data?.mppperiod) {
+          local.can_add = true;
+        }
+      }
+      local.ready = true;
+      local.render();
+      console.log();
+    };
+    run();
+  }, []);
+  if(local.ready && !local.can_add) return notFound()
   return (
     <FormBetter
       onTitle={(fm: any) => {
@@ -49,6 +78,7 @@ function Page() {
                 ]}
               />
             </div>
+            {local.can_add ?
             <div className="flex flex-row space-x-2">
               <Alert
                 type={"delete"}
@@ -61,7 +91,7 @@ function Page() {
                   Save
                 </ButtonContainer>
               </Alert>
-            </div>
+            </div> : <></> }
           </div>
         );
       }}
@@ -86,10 +116,7 @@ function Page() {
         const formData = new FormData();
 
         // Menambahkan data param ke FormData
-        formData.append(
-          "payload",
-          JSON.stringify(param)
-        );
+        formData.append("payload", JSON.stringify(param));
         const res: any = await api.post(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings`,
           formData,
@@ -99,7 +126,7 @@ function Page() {
             },
           }
         );
-        navigate("/d/location/"+res.data?.data?.id+"/edit")
+        navigate("/d/location/" + res.data?.data?.id + "/edit");
       }}
       onLoad={async () => {
         const document_number = await api.get(
@@ -115,15 +142,17 @@ function Page() {
         );
         const current_open = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
-          );
+        );
+
+        console.log(get_user("employee.employee_job.name"))
         return {
-          id,
           document_number: document_number.data.data,
           document_date: new Date(),
           organization: org?.data?.data?.name,
           location: location?.data?.data?.name,
           mpp_name: current_open?.data?.data?.mppperiod?.title,
-          budget_year_from: current_open?.data?.data?.mppperiod?.budget_start_date,
+          budget_year_from:
+            current_open?.data?.data?.mppperiod?.budget_start_date,
           budget_year_to: current_open?.data?.data?.mppperiod?.budget_end_date,
           requestor: get_user("employee.name"),
           job: get_user("employee.employee_job.name"),

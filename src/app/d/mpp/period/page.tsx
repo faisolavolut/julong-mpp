@@ -4,6 +4,7 @@ import { ButtonLink } from "@/app/components/ui/button-link";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
+import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getValue } from "@/lib/getValue";
 import { useLocal } from "@/lib/use-local";
 import { Button } from "flowbite-react";
@@ -15,13 +16,18 @@ import { IoEye } from "react-icons/io5";
 function Page() {
   const local = useLocal({
     can_add: false,
+    can_edit: false,
   });
   useEffect(() => {
     const run = async () => {
       const check = await api.get(
         `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
       );
-      if (!check.data.data?.mppperiod) local.can_add = true;
+
+      const roles = await userRoleMe();
+      if (!check.data.data?.mppperiod)
+        local.can_add = getAccess("create-period", roles);
+      local.can_edit = getAccess("edit-period", roles);
       local.render();
     };
     run();
@@ -39,6 +45,7 @@ function Page() {
           header={{
             sideLeft: (data: any) => {
               if (!local.can_add) return <></>;
+              if (!local.can_edit) return <></>;
               return (
                 <>
                   <div className="flex flex-row flex-grow">
@@ -124,6 +131,7 @@ function Page() {
                     </div>
                   );
                 } else {
+                  if (!local.can_edit) return <></>;
                   return (
                     <div className="flex items-center gap-x-0.5 whitespace-nowrap">
                       <ButtonLink

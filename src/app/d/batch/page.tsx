@@ -40,52 +40,49 @@ function Page() {
     can_edit: false,
     location_null: 0,
     batch_lines: [] as string[],
+    can_complete: false,
     batch: null as any,
   });
   useEffect(() => {
     const run = async () => {
       const roles = await userRoleMe();
-      const access = getAccess("create-mpp", roles);
-      if (access) {
-        const addtional = {
-          status: "APPROVED",
-          paging: 1,
-          take: 1000,
-        };
-        const params = await events("onload-param", addtional);
-        const res: any = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` + params
+      const addtional = {
+        status: "APPROVED",
+        paging: 1,
+        take: 1000,
+      };
+      const params = await events("onload-param", addtional);
+      const res: any = await api.get(
+        `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` + params
+      );
+      if (res?.data?.data?.organization_locations?.length) {
+        const location_null = res?.data?.data?.organization_locations.filter(
+          (e: any) => !e?.mp_planning_header
         );
-        if (res?.data?.data?.organization_locations?.length) {
-          const location_null = res?.data?.data?.organization_locations.filter(
-            (e: any) => !e?.mp_planning_header
-          );
 
-          const document_line = res?.data?.data?.organization_locations.filter(
-            (e: any) => e?.mp_planning_header
-          );
-          local.batch_lines = document_line.map(
-            (e: any) => e?.mp_planning_header?.id
-          );
-          local.location_null = getNumber(location_null?.length);
-          local.can_add = document_line?.length ? true : false;
-        }
-
-        try {
-          const batch: any = await api.get(
-            `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
-          );
-          local.batch = batch?.data?.data;
-        } catch (ex) {}
-        try {
-          const batch_ceo: any = await api.get(
-            `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/APPROVED`
-          );
-          local.batch = batch_ceo?.data?.data;
-        } catch (ex) {}
+        const document_line = res?.data?.data?.organization_locations.filter(
+          (e: any) => e?.mp_planning_header
+        );
+        local.batch_lines = document_line.map(
+          (e: any) => e?.mp_planning_header?.id
+        );
+        local.location_null = getNumber(location_null?.length);
+        local.can_add = document_line?.length ? getAccess("create-batch", roles) : false;
       }
-      const edit = getAccess("edit-mpp", roles);
-      local.can_edit = edit;
+
+      try {
+        const batch: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
+        );
+        local.batch = batch?.data?.data;
+      } catch (ex) {}
+      try {
+        const batch_ceo: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/APPROVED`
+        );
+        local.batch = batch_ceo?.data?.data;
+      } catch (ex) {}
+      local.can_complete = getAccess("complete-batch", roles);
       local.render();
     };
     run();
@@ -142,7 +139,7 @@ function Page() {
                             </table>
                           </div>
                           <div className="flex flex-row items-center">
-                            {local.batch?.status === "APPROVED" && (
+                            {local.batch?.status === "APPROVED" && local.can_complete && (
                               <ButtonBetter
                                 onClick={async () => {
                                   toast.info(

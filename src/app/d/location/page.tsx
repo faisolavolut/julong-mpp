@@ -4,7 +4,7 @@ import { Tablist } from "@/app/components/tablist/Tablist";
 import { ButtonBetter } from "@/app/components/ui/button";
 import { ButtonLink } from "@/app/components/ui/button-link";
 import { Skeleton } from "@/app/components/ui/Skeleton";
-import { columnMpp } from "@/constants/column-mpp";
+import { columnMpp, rolesMpp } from "@/constants/column-mpp";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
@@ -35,12 +35,11 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
         );
         if (res?.data?.data?.mppperiod) {
-          local.can_add = true;
+          local.can_add = getAccess("create-mpp", roles);
         }
       }
       local.roles = roles?.[0];
-      const edit = getAccess("edit-mpp", roles);
-      local.can_edit = edit;
+      local.can_edit = getAccess("edit-mpp", roles);
       local.ready = true;
       local.render();
     };
@@ -83,10 +82,8 @@ function Page() {
               const col = columnMpp({
                 ...data,
                 role: local.roles?.name,
-                // role: "HRD Site",
                 local,
               })
-              console.log({col})
               return (
                 <>
                   <div className="w-full flex flex-col flex-grow">
@@ -126,10 +123,10 @@ function Page() {
                             if (data?.id === "completed") {
                               url = "/api/mp-plannings/completed";
                             } else {
-                              const roles = get_user("choosed_role");
+                              const roles = rolesMpp([local.roles]);
                               url = "/api/mp-plannings/approver-type";
                               switch (roles) {
-                                case "HRD Site":
+                                case "HRD Location":
                                   break;
                                 case "HRD Unit":
                                   prm = {
@@ -162,7 +159,6 @@ function Page() {
                               data?.id === "completed"
                                 ? res.data.data.mp_planning_headers
                                 : res.data.data.organization_locations;
-                                console.log({result})
                             if (!Array.isArray(result)) return [];
                             return result || [];
                           } catch (ex) {

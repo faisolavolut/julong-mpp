@@ -3,17 +3,29 @@ import { TableList } from "@/app/components/tablelist/TableList";
 import { ButtonBetter } from "@/app/components/ui/button";
 import api from "@/lib/axios";
 import { events } from "@/lib/event";
+import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getValue } from "@/lib/getValue";
 import { useLocal } from "@/lib/use-local";
 import get from "lodash.get";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import { IoSync } from "react-icons/io5";
 import { toast } from "sonner";
 
 function Page() {
   const local = useLocal({
     ready: true,
+    sync: false,
   });
+  useEffect(() => {
+    const run = async () => {
+      const roles = await userRoleMe();
+      const sync = getAccess("sync-job", roles);
+      local.sync = sync;
+      local.render()
+    };
+    run();
+  }, []);
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
@@ -26,6 +38,7 @@ function Page() {
           name="Job"
           header={{
             sideLeft: (data: any) => {
+              if(!local.sync) return <></>
               return (
                 <div className="flex flex-row items-center gap-x-2">
                   <ButtonBetter
@@ -87,7 +100,10 @@ function Page() {
                           <div className="flex flex-col w-full">
                             <div className="flex text-red-600 items-center">
                               <AlertTriangle className="h-4 w-4 mr-1" />
-                              Synchronization Failed { get(ex, "response.data.meta.message") || ex.message}.
+                              Synchronization Failed{" "}
+                              {get(ex, "response.data.meta.message") ||
+                                ex.message}
+                              .
                             </div>
                           </div>,
                           {
@@ -140,8 +156,7 @@ function Page() {
           onLoad={async (param: any) => {
             const params = await events("onload-param", param);
             const res: any = await api.get(
-              `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs` +
-                params
+              `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs` + params
             );
             const data: any[] = res.data.data.jobs;
             return data || [];

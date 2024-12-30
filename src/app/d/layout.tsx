@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import get from "lodash.get";
 import { Skeleton } from "../components/ui/Skeleton";
+import { userRoleMe } from "@/lib/getAccess";
+import { filterMenuByPermission } from "@/lib/filterMenuByPermission";
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -21,7 +23,7 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const local = useLocal({
     user: null as any,
     data: configMenu,
-    ready: false
+    ready: false,
   });
   useEffect(() => {
     const localMini = localStorage.getItem("mini");
@@ -36,7 +38,12 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/users/me`
         );
         local.user = user?.data?.data;
-        local.ready = true
+
+        const roles = await userRoleMe();
+        const permision = get(roles, "[0].permissions");
+        const menuMe = filterMenuByPermission(configMenu, permision);
+        local.data = menuMe;
+        local.ready = true;
         local.render();
         if (!user?.data.data) {
           navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);

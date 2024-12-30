@@ -43,6 +43,9 @@ function Page() {
     permission: [] as string[],
     staff: false as boolean,
     head: false as boolean,
+    can_edit: false as boolean,
+    can_delete: false as boolean,
+    can_submit: false as boolean,
   });
   useEffect(() => {
     const run = async () => {
@@ -50,12 +53,12 @@ function Page() {
       const listPermision = ["save-mpr-staff", "save-mpr-dept-head"];
       const permision = listPermision.filter((e) => getAccess(e, roles));
       local.permission = permision;
-      local.staff = listPermision.find((e) => e === "save-mpr-staff")
-        ? true
-        : false;
-      local.head = listPermision.find((e) => e === "save-mpr-dept-head")
-        ? true
-        : false;
+      local.can_edit = getAccess("edit-mpr", roles);
+      local.head = getAccess("submit-mpr-dept-head", roles);
+      local.can_delete = getAccess("delete-mpr", roles);
+      local.can_submit =
+        getAccess("submit-mpr-staff", roles) ||
+        getAccess("submit-mpr-dept-head", roles);
       local.render();
     };
     run();
@@ -81,8 +84,8 @@ function Page() {
                 ]}
               />
             </div>
-            <div className="flex flex-row space-x-2">
-              {["DRAFT", "REJECTED"].includes(fm.data?.status) && (
+            <div className="flex flex-row gap-x-2">
+              {(["DRAFT", "REJECTED"].includes(fm.data?.status)&& local.can_edit) && (
                 <Alert
                   type={"save"}
                   onClick={() => {
@@ -96,7 +99,7 @@ function Page() {
                   </ButtonContainer>
                 </Alert>
               )}
-              {["DRAFT", "REJECTED"].includes(fm.data?.status) && (
+              {(["DRAFT", "REJECTED"].includes(fm.data?.status) && local.can_submit) && (
                 <Alert
                   type={"delete"}
                   onClick={async () => {
@@ -134,7 +137,7 @@ function Page() {
                 </Alert>
               )}
 
-              {["DRAFTED", "DRAFT"].includes(fm.data?.status) ? (
+              {(["DRAFTED", "DRAFT"].includes(fm.data?.status) && local.can_delete) ? (
                 <>
                   <Alert
                     type={"save"}
@@ -366,7 +369,7 @@ function Page() {
                           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/get-something?organization_id=${fm.data.for_organization_id}&status=COMPLETED&mpp_period_id=${fm.data?.mpp_period_id}`
                         );
 
-                        const data: any[] = res.data.data.mp_planning_headers;
+                        const data: any[] = res.data.data;
                         if (!Array.isArray(data)) return [];
                         return data.map((e) => {
                           return {
