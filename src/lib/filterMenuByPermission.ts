@@ -3,7 +3,7 @@ export const filterMenuByPermission = (menuConfig: any[], permision: any[]) => {
   const userPermissions = permision?.length
     ? permision.map((e) => get(e, "name"))
     : [];
-    console.log(userPermissions)
+  console.log(userPermissions);
   return menuConfig
     .map((menu) => {
       // Filter children berdasarkan permission user
@@ -26,4 +26,23 @@ export const filterMenuByPermission = (menuConfig: any[], permision: any[]) => {
       return null; // Tidak menyertakan menu yang tidak memiliki permission
     })
     .filter((menu) => menu !== null); // Hapus menu yang null
+};
+
+export const getFirstMenuWithUrl = (menuConfig: any[]): any | null => {
+  for (const menu of menuConfig) {
+    // Jika menu memiliki href langsung, kembalikan menu tersebut
+    if (menu.href) {
+      return menu?.href;
+    }
+
+    // Jika menu memiliki children, cari secara rekursif
+    if (menu.children) {
+      const childWithUrl = getFirstMenuWithUrl(menu.children);
+      if (childWithUrl) {
+        return childWithUrl;
+      }
+    }
+  }
+  // Jika tidak ada menu dengan URL, kembalikan null
+  return null;
 };
