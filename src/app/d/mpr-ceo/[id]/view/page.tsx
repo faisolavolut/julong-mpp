@@ -35,9 +35,11 @@ function Page() {
     can_edit: false,
     client: false,
     data: null as any,
+    can_approval: false,
   });
   useEffect(() => {
     const run = async () => {
+      const roles = await userRoleMe();
       const res: any = await api.get(
         `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/` + id
       );
@@ -85,6 +87,7 @@ function Page() {
             ? true
             : false,
       };
+      local.can_approval = getAccess("approval-mpr-ceo", roles);
       local.render();
     };
     run();
@@ -117,7 +120,7 @@ function Page() {
               </PDFViewer>
             )}
           </div>
-          {local.data?.is_approve && (
+          {local.data?.is_approve && local.can_approval && (
             <div className="flex flex-row items-center justify-center">
               <div className="flex flex-row gap-x-1 py-2">
                 <AlertCeoRejectMPR lc={local}/>
