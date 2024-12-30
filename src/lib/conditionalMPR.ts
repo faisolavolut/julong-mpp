@@ -9,8 +9,8 @@ export const showApprovel = (
   permision: string[],
   action?: "approve" | "reject"
 ) => {
-  if(!permision?.length){
-    return null
+  if (!permision?.length) {
+    return null;
   }
   const a1 = [
     {
@@ -44,6 +44,7 @@ export const showApprovel = (
   };
   const isBudget = data?.mp_planning_header_id ? true : false;
   const isField = data?.organization_category === "Non Field" ? false : true;
+  console.log(data?.status, )
   if (data?.status === "NEED APPROVAL") {
     if (data?.department_head && !data?.vp_gm_director) {
       return {
@@ -56,7 +57,7 @@ export const showApprovel = (
         level: "Level VP",
       };
     } else if (data?.vp_gm_director && !data?.ceo) {
-      return null
+      return null;
       return {
         approve: action === "reject" ? "REJECTED" : "APPROVED",
         level: "Level VP",
@@ -87,7 +88,7 @@ export const showApprovel = (
             : "NEED APPROVAL",
         level: "Level VP",
       };
-    } else if (data?.vp_gm_director && !data?.ceo) {
+    } else if (!data?.hrd_ho_unit) {
       return {
         approve: action === "reject" ? "REJECTED" : "COMPLETED",
         level: "Level HRD HO",

@@ -473,10 +473,14 @@ function Page() {
                       console.log({
                         res: `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}`,
                       });
-                      const res: any = await api.get(
+                      const res: any = fm.data?.mp_planning_header_id ? await api.get(
+                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/mp-plannings/jobs/${fm.data?.mp_planning_header_id}` +
+                          params
+                      ) : await api.get(
                         `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}` +
                           params
                       );
+                      console.log({res})
                       const data: any[] = res.data.data;
                       if (!Array.isArray(data)) return [];
                       return data.map((e) => {
