@@ -279,6 +279,7 @@ function Page() {
                     label={"MPP Reference Number"}
                     type={"dropdown"}
                     onChange={(e: any) => {
+                      console.log({e})
                       const line = e?.data.mp_planning_lines;
                       fm.data["lines"] = line;
                       fm.render();
@@ -330,9 +331,11 @@ function Page() {
                     type={"dropdown"}
                     onChange={() => {
                       const lines = fm.data?.lines || [];
+                      console.log({lines})
                       const jobs =
                         lines.find((x: any) => x?.job_id === fm.data?.job_id) ||
                         null;
+                        console.log({jobs})
                       const remaining_balance =
                         fm.data.recruitment_type === "MT_Management Trainee"
                           ? getNumber(jobs?.remaining_balance_mt)
