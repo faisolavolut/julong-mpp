@@ -84,7 +84,7 @@ export const columnMpr = (data: any) => {
                 data?.local?.can_edit ? (
                   <ButtonLink
                     className="bg-primary"
-                    href={`/d/mpr-hrd/${row.id}/edit`}
+                    href={`/d/mpr/${row.id}/edit`}
                   >
                     <div className="flex items-center gap-x-2">
                       <HiOutlinePencilAlt className="text-lg" />
@@ -93,7 +93,7 @@ export const columnMpr = (data: any) => {
                 ) : (
                   <ButtonLink
                     className="bg-primary"
-                    href={`/d/mpr-hrd/${row.id}/view`}
+                    href={`/d/mpr/${row.id}/view`}
                   >
                     <div className="flex items-center gap-x-2">
                       <IoEye className="text-lg" />
@@ -147,7 +147,7 @@ export const columnMpr = (data: any) => {
                 data?.local?.can_edit ? (
                   <ButtonLink
                     className="bg-primary"
-                    href={`/d/mpr-hrd/${row.id}/edit`}
+                    href={`/d/mpr/${row.id}/edit`}
                   >
                     <div className="flex items-center gap-x-2">
                       <HiOutlinePencilAlt className="text-lg" />
@@ -156,7 +156,7 @@ export const columnMpr = (data: any) => {
                 ) : (
                   <ButtonLink
                     className="bg-primary"
-                    href={`/d/mpr-hrd/${row.id}/view`}
+                    href={`/d/mpr/${row.id}/view`}
                   >
                     <div className="flex items-center gap-x-2">
                       <IoEye className="text-lg" />
@@ -215,7 +215,7 @@ export const columnMpr = (data: any) => {
               <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
                 <ButtonLink
                   className="bg-primary"
-                  href={`/d/mpr-hrd/${row.id}/view`}
+                  href={`/d/mpr/${row.id}/view`}
                 >
                   <div className="flex items-center gap-x-2">
                     <IoEye className="text-lg" />
@@ -273,7 +273,7 @@ export const columnMpr = (data: any) => {
               <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
                 <ButtonLink
                   className="bg-primary"
-                  href={`/d/mpr-hrd/${row.id}/view`}
+                  href={`/d/mpr/${row.id}/view`}
                 >
                   <div className="flex items-center gap-x-2">
                     <IoEye className="text-lg" />
@@ -340,7 +340,7 @@ export const columnMpr = (data: any) => {
                 data?.local?.can_edit ? (
                   <ButtonLink
                     className="bg-primary"
-                    href={`/d/mpr-hrd/${row.id}/edit`}
+                    href={`/d/mpr/${row.id}/edit`}
                   >
                     <div className="flex items-center gap-x-2">
                       <HiOutlinePencilAlt className="text-lg" />
@@ -349,7 +349,7 @@ export const columnMpr = (data: any) => {
                 ) : (
                   <ButtonLink
                     className="bg-primary"
-                    href={`/d/mpr-hrd/${row.id}/view`}
+                    href={`/d/mpr/${row.id}/view`}
                   >
                     <div className="flex items-center gap-x-2">
                       <IoEye className="text-lg" />

@@ -38,7 +38,7 @@ export const configMenu = [
     title: "Manpower Planning Period",
     icon: <RiCalendarScheduleLine />,
     children: [
-      { title: "Period", href: "/d/mpp/period", permision: ["read-period"] },
+      { title: "Period", href: "/d/period", permision: ["read-period"] },
       {
         title: "Manpower Planning Overview",
         href: "/d/location",
@@ -55,7 +55,7 @@ export const configMenu = [
     children: [
       {
         title: "Manpower Request",
-        href: "/d/mpr-hrd",
+        href: "/d/mpr",
         permision: ["read-mpr", "read-mpr-dept-head", "read-mpr-vp", "read-mpr-ho"],
       },
       {
