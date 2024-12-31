@@ -132,7 +132,7 @@ function Page() {
                                 case "HRD Unit":
                                   prm = {
                                     approver_type: "manager",
-                                    organization_location_id: get_user(
+                                    organization_id: get_user(
                                       "employee.employee_job.organization_location_id"
                                     ),
                                   };
@@ -140,7 +140,7 @@ function Page() {
                                 case "Direktur Unit":
                                   prm = {
                                     approver_type: "direktur",
-                                    organization_location_id: get_user(
+                                    organization_id: get_user(
                                       "employee.employee_job.organization_location_id"
                                     ),
                                   };
