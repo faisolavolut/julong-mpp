@@ -1,5 +1,6 @@
 export const statusMpp = [
   { value: "DRAFTED", label: "Draft" },
+  { value: "DRAFT", label: "Draft" },
   { value: "IN_PROGRESS", label: "In Progress" },
   { value: "IN PROGRESS", label: "In Progress" },
   { value: "NEED APPROVAL", label: "Need Approval" },
