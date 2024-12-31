@@ -451,7 +451,7 @@ function Page() {
                       try {
                         const res: any = fm.data?.mp_planning_header_id
                           ? await api.get(
-                              `${process.env.NEXT_PUBLIC_API_PORTAL}/api/mp-plannings/jobs/${fm.data?.mp_planning_header_id}` +
+                              `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/jobs/${fm.data?.mp_planning_header_id}` +
                                 params
                             )
                           : await api.get(
