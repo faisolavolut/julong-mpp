@@ -44,7 +44,6 @@ export const showApprovel = (
   };
   const isBudget = data?.mp_planning_header_id ? true : false;
   const isField = data?.organization_category === "Non Field" ? false : true;
-  console.log(data?.status, )
   if (data?.status === "NEED APPROVAL") {
     if (data?.department_head && !data?.vp_gm_director) {
       return {

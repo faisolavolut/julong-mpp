@@ -72,7 +72,6 @@ function Page() {
       const permision = listPermision.filter((e) => getAccess(e, roles));
       local.permission = permision;
       local.render();
-      console.log(local.permission);
     };
     run();
   }, []);
@@ -524,7 +523,6 @@ function Page() {
                         approver_id: get_user("employee.id"),
                         approved_by: get_user("employee.name"),
                       };
-                      console.log(param)
                       // return false;
                       try {
                         const formData = new FormData();
@@ -613,25 +611,6 @@ function Page() {
           );
           history = hst?.data?.data || [];
         } catch (ex) {}
-        console.log({
-          id,
-          ...data,
-          categories: categories,
-          divisi: data.for_organization_structure,
-          job_level: data.job_level_name,
-          location: data.for_organization_location_id,
-          is_replacement: data.is_replacement ? "penggantian" : "penambahan",
-          total_needs: data.male_needs + data.female_needs,
-          remaining_balance:
-            data.recruitment_type === "MT_Management Trainee"
-              ? getNumber(jobs?.remaining_balance_mt)
-              : data.recruitment_type === "PH_Professional Hire"
-              ? getNumber(jobs?.remaining_balance_ph)
-              : 0,
-          mpp_name: data.mpp_period.title,
-          major_ids: data.request_majors.map((e: any) => e?.["Major"]?.["ID"]),
-          history: history?.data?.data,
-        });
         return {
           id,
           ...data,

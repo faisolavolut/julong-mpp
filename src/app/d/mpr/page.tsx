@@ -52,7 +52,6 @@ function Page() {
       });
       local.ready = true;
       local.render();
-      console.log(local.column);
     };
     run();
   }, []);

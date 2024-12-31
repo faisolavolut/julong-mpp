@@ -43,7 +43,6 @@ export const rolesMpp = (roles: any[]) => {
 };
 export const columnMpp = (data: any) => {
   const access = rolesMpp(typeof data?.local?.roles === "object" ? [data?.local?.roles] : []);
-  console.log({access, role: typeof data?.local?.roles === "object" ? [data?.local?.roles] : []})
   if (data?.id === "on_going") {
     switch (access) {
       case "HRD Location":

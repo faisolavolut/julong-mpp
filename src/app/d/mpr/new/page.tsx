@@ -12,6 +12,7 @@ import { get_user } from "@/lib/get_user";
 import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getNumber } from "@/lib/getNumber";
 import { useLocal } from "@/lib/use-local";
+import get from "lodash.get";
 import { notFound } from "next/navigation";
 import { useEffect } from "react";
 import { IoMdSave } from "react-icons/io";
@@ -38,8 +39,8 @@ function Page() {
       local.render();
     };
     run();
-  }, [])
-    if(local.ready && !local.can_add) return notFound()
+  }, []);
+  if (local.ready && !local.can_add) return notFound();
   return (
     <FormBetter
       onTitle={(fm: any) => {
@@ -196,30 +197,7 @@ function Page() {
             data: e,
           };
         });
-        console.log({
-          document_number: document_number.data.data,
-          document_date: new Date(),
-          organization: org?.data?.data?.name,
-          // mpp_name: current_open?.data?.data?.title,
-          budget_year_from:
-            current_open?.data?.data?.mppperiod?.budget_start_date,
-          budget_year_to: current_open?.data?.data?.mppperiod?.budget_end_date,
-          mpp_name: current_open?.data?.data?.mppperiod?.title,
-          requestor: get_user("employee.name"),
-          job: get_user("employee.employee_job.name"),
 
-          for_organization_id: get_user("employee.organization_id"),
-          total_recruit: 0,
-          total_promote: 0,
-          mpp_period_id: current_open?.data?.data?.mppperiod?.id,
-          organization_id: id_org,
-          requestor_id: get_user("employee.id"),
-          status: "DRAFT",
-          organization_location_id: get_user(
-            "employee.employee_job.organization_location_id"
-          ),
-          categories: categories,
-        });
         return {
           document_number: document_number.data.data,
           document_date: new Date(),
@@ -279,10 +257,12 @@ function Page() {
                     label={"MPP Reference Number"}
                     type={"dropdown"}
                     onChange={(e: any) => {
-                      console.log({e})
                       const line = e?.data.mp_planning_lines;
                       fm.data["lines"] = line;
                       fm.render();
+                      if (typeof fm?.fields?.job_id?.reload === "function") {
+                        fm.fields.job_id.reload();
+                      }
                     }}
                     onLoad={async () => {
                       try {
@@ -331,11 +311,9 @@ function Page() {
                     type={"dropdown"}
                     onChange={() => {
                       const lines = fm.data?.lines || [];
-                      console.log({lines})
                       const jobs =
                         lines.find((x: any) => x?.job_id === fm.data?.job_id) ||
                         null;
-                        console.log({jobs})
                       const remaining_balance =
                         fm.data.recruitment_type === "MT_Management Trainee"
                           ? getNumber(jobs?.remaining_balance_mt)
@@ -470,26 +448,28 @@ function Page() {
                         take: 500,
                       };
                       const params = await events("onload-param", param);
-                      console.log({
-                        res: `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}`,
-                      });
-                      const res: any = fm.data?.mp_planning_header_id ? await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/mp-plannings/jobs/${fm.data?.mp_planning_header_id}` +
-                          params
-                      ) : await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}` +
-                          params
-                      );
-                      console.log({res})
-                      const data: any[] = res.data.data;
-                      if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.name,
-                          data: e,
-                        };
-                      });
+                      try {
+                        const res: any = fm.data?.mp_planning_header_id
+                          ? await api.get(
+                              `${process.env.NEXT_PUBLIC_API_PORTAL}/api/mp-plannings/jobs/${fm.data?.mp_planning_header_id}` +
+                                params
+                            )
+                          : await api.get(
+                              `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}` +
+                                params
+                            );
+                        const data: any[] = res.data.data;
+                        if (!Array.isArray(data)) return [];
+                        return data.map((e) => {
+                          return {
+                            value: e.id,
+                            label: e.name,
+                            data: e,
+                          };
+                        });
+                      } catch (ex) {
+                        return [];
+                      }
                     }}
                   />
                 </div>

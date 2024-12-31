@@ -26,6 +26,7 @@ import {
   HiX,
 } from "react-icons/hi";
 import { siteurl } from "@/lib/siteurl";
+import { get_user } from "@/lib/get_user";
 const NavFlow: React.FC<any> = ({ minimaze }) => {
   return (
     <Navbar fluid>
@@ -408,9 +409,11 @@ const UserDropdown: FC = function () {
       }
     >
       <Dropdown.Header>
-        <span className="block text-md">Neil Sims</span>
+        <span className="block text-md">
+          {get_user("employee.name") ? get_user("employee.name") : "-"}
+        </span>
         <span className="block truncate text-md font-medium">
-          neil.sims@flowbite.com
+          {get_user("employee.email") ? get_user("employee.email") : "-"}
         </span>
       </Dropdown.Header>
       <Dropdown.Item

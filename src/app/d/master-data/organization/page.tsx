@@ -47,7 +47,6 @@ function Page() {
                 `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations` + params
               );
               const data: any[] = res.data.data.organizations;
-              console.log({data, n: data.length})
               return data || [];
             }}
             onInit={async (list: any) => {}}

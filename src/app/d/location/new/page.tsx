@@ -52,7 +52,6 @@ function Page() {
       }
       local.ready = true;
       local.render();
-      console.log();
     };
     run();
   }, []);
@@ -144,7 +143,6 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
         );
 
-        console.log(get_user("employee.employee_job.name"))
         return {
           document_number: document_number.data.data,
           document_date: new Date(),

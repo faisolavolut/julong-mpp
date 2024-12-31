@@ -3,7 +3,6 @@ export const filterMenuByPermission = (menuConfig: any[], permision: any[]) => {
   const userPermissions = permision?.length
     ? permision.map((e) => get(e, "name"))
     : [];
-  console.log(userPermissions);
   return menuConfig
     .map((menu) => {
       // Filter children berdasarkan permission user

@@ -60,7 +60,6 @@ function Page() {
       });
       const lines = data.mp_planning_header.mp_planning_lines || [];
       const jobs = lines.find((e: any) => e.job_id === data.job_id);
-      console.log({data})
       local.data = {
         id,
         ...data,

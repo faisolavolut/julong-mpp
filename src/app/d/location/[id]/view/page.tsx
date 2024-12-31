@@ -71,14 +71,12 @@ function Page() {
       local.can_approval = getAccess("approval-mpp-direktur", roles);
       local.can_process = getAccess("process-mpp", roles);
       local.render();
-      console.log( local.can_approval)
     };
     run();
   }, []);
   return (
     <FormBetter
       onTitle={(fm: any) => {
-        console.log( fm?.data?.status, fm?.data?.approver_manager_id)
         return (
           <div className="flex flex-row w-full">
             <div className="flex flex-col py-4 pt-0 flex-grow">

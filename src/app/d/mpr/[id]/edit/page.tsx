@@ -125,7 +125,6 @@ function Page() {
                       }
                     }
                     fm.render();
-                    console.log(fm.data.status);
                     await fm.submit();
                     navigate(`/d/mpr/${id}/view`);
                   }}
@@ -354,6 +353,9 @@ function Page() {
                       const line = e?.data.mp_planning_lines;
                       fm.data["lines"] = line;
                       fm.render();
+                      if (typeof fm?.fields?.job_id?.reload === "function") {
+                        fm.fields.job_id.reload();
+                      }
                     }}
                     onLoad={async () => {
                       try {
@@ -523,7 +525,6 @@ function Page() {
                       const jobs =
                         lines.find((x: any) => x?.job_id === fm.data?.job_id) ||
                         null;
-                        console.log({jobs})
                       const remaining_balance =
                         fm.data.recruitment_type === "MT_Management Trainee"
                           ? getNumber(jobs?.remaining_balance_mt)
@@ -534,25 +535,34 @@ function Page() {
                       fm.render();
                     }}
                     onLoad={async () => {
+                      if (!fm.data?.for_organization_id) return [];
                       const param = {
                         paging: 1,
                         take: 500,
                       };
                       const params = await events("onload-param", param);
-                      if (!fm.data?.for_organization_id) return [];
-                      const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}` +
-                          params
-                      );
-                      const data: any[] = res.data.data;
-                      if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.name,
-                          data: e,
-                        };
-                      });
+                      try {
+                        const res: any = fm.data?.mp_planning_header_id
+                          ? await api.get(
+                              `${process.env.NEXT_PUBLIC_API_PORTAL}/api/mp-plannings/jobs/${fm.data?.mp_planning_header_id}` +
+                                params
+                            )
+                          : await api.get(
+                              `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/organization/${fm.data?.for_organization_id}` +
+                                params
+                            );
+                        const data: any[] = res.data.data;
+                        if (!Array.isArray(data)) return [];
+                        return data.map((e) => {
+                          return {
+                            value: e.id,
+                            label: e.name,
+                            data: e,
+                          };
+                        });
+                      } catch (ex) {
+                        return [];
+                      }
                     }}
                   />
                 </div>
@@ -574,7 +584,6 @@ function Page() {
                     type={"dropdown"}
                     disabled={!fm.data?.for_organization_id}
                     onLoad={async () => {
-                      console.log("MASUK?? =>", fm.data?.for_organization_id);
                       if (!fm.data?.for_organization_id) return [];
                       const param = {
                         paging: 1,
@@ -585,19 +594,8 @@ function Page() {
                         `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organization-locations/organization/${fm.data?.for_organization_id}` +
                           params
                       );
-                      console.log("MASUK?? =>", res);
                       const data: any[] = res.data.data;
                       if (!Array.isArray(data)) return [];
-                      console.log(
-                        "MASUK?? =>",
-                        data.map((e) => {
-                          return {
-                            value: e.id,
-                            label: e.name,
-                            data: e,
-                          };
-                        })
-                      );
                       return data.map((e) => {
                         return {
                           value: e.id,
@@ -802,7 +800,6 @@ function Page() {
                     label={"Minimum Education"}
                     type={"dropdown"}
                     onChange={() => {
-                      console.log("CEK");
                       const run = async () => {
                         if (fm.data?.minimum_education) {
                           fm.data.enable_majors = false;
