@@ -43,6 +43,7 @@ import { get_user } from "@/lib/get_user";
 import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getNumber } from "@/lib/getNumber";
 import { getValue } from "@/lib/getValue";
+import { isStringEmpty } from "@/lib/isStringEmpty";
 import { useLocal } from "@/lib/use-local";
 import { Breadcrumb, Button } from "flowbite-react";
 import { X } from "lucide-react";
@@ -53,6 +54,7 @@ import { HiDocumentDownload } from "react-icons/hi";
 import { IoMdSave } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
+import { isString } from "util";
 
 function Page() {
   const id = getParams("id");
@@ -348,7 +350,10 @@ function Page() {
                   </ButtonContainer>
                 </Alert>
               )}
-              {local.can_approval && fm?.data?.status === "NEED APPROVAL" && !fm?.data?.approver_manager_id ? (
+              {local.can_approval &&
+              fm?.data?.status === "NEED APPROVAL" &&
+              fm.data?.approver_manager_id &&
+              isStringEmpty(fm?.data?.recommended_by) ? (
                 <Alert
                   type={"save"}
                   content={
@@ -550,7 +555,10 @@ function Page() {
                 <></>
               )}
 
-              {local.can_approval && fm?.data?.status === "NEED APPROVAL" && !fm?.data?.approver_manager_id ? (
+              {local.can_approval &&
+              fm?.data?.status === "NEED APPROVAL" &&
+              fm.data?.approver_manager_id &&
+              isStringEmpty(fm?.data?.recommended_by) ? (
                 <Alert
                   type={"save"}
                   content={
@@ -559,7 +567,9 @@ function Page() {
                         <AlertDialogTitle>
                           Are you absolutely sure?
                         </AlertDialogTitle>
-                        <AlertDialogDescription>Are you sure you want to approve this request? This action is final and cannot be undone
+                        <AlertDialogDescription>
+                          Are you sure you want to approve this request? This
+                          action is final and cannot be undone
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <Form
@@ -781,6 +791,16 @@ function Page() {
             id
         );
         const data = res.data.data;
+        console.log({
+          id,
+          ...data,
+          mpp_name: data?.mpp_period?.title,
+          budget_year_from: data?.mpp_period?.budget_start_date,
+          budget_year_to: data?.mpp_period?.budget_end_date,
+          document_line: data?.mp_planning_lines || [],
+          history: history.data.data,
+          location: data?.organization_location_name,
+        });
         return {
           id,
           ...data,
