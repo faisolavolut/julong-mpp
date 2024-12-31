@@ -45,7 +45,7 @@ export const configMenu = [
         permision: ["read-mpp", "read-mpp-hrd-location", "read-mpp-hrd-unit", "read-mpp-dir-unit", "read-mpp-rekruitmen"],
       },
       { title: "Batch", href: "/d/batch", permision: ["read-batch"] },
-      { title: "Batch", href: "/d/batch-ceo", permision: ["batch-ceo"] },
+      { title: "Batch CEO", href: "/d/batch-ceo", permision: ["batch-ceo"] },
     ],
     permision: ["read-period", "read-mpp", "read-batch", "batch-ceo", "read-mpp-hrd-location", "read-mpp-hrd-unit", "read-mpp-dir-unit", "read-mpp-rekruitmen"],
   },
