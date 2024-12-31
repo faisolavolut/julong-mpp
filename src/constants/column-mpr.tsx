@@ -5,6 +5,7 @@ import { getValue } from "@/lib/getValue";
 import get from "lodash.get";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { IoEye } from "react-icons/io5";
+import { getStatusLabel } from "./status-mpp";
 export const rolesMpr = (roles: any[]) => {
   const data = [
     {
@@ -33,15 +34,16 @@ export const rolesMpr = (roles: any[]) => {
       permision: ["read-mpr-ho"],
     },
   ];
-  const yourRole = data.find((e) => {
-    if (e.name === "superadmin") {
-      // Cek semua izin (and)
-      return e.permision.every((perm) => getAccess(perm, roles));
-    } else {
-      // Cek salah satu izin (or)
-      return e.permision.some((perm) => getAccess(perm, roles));
-    }
-  })?.name || null;
+  const yourRole =
+    data.find((e) => {
+      if (e.name === "superadmin") {
+        // Cek semua izin (and)
+        return e.permision.every((perm) => getAccess(perm, roles));
+      } else {
+        // Cek salah satu izin (or)
+        return e.permision.some((perm) => getAccess(perm, roles));
+      }
+    })?.name || null;
   return yourRole;
 };
 export const columnMpr = (data: any) => {
@@ -76,7 +78,7 @@ export const columnMpr = (data: any) => {
           name: "status",
           header: () => <span>Status</span>,
           renderCell: ({ row, name, cell }: any) => {
-            return <>{getValue(row, name)}</>;
+            return <>{getStatusLabel(getValue(row, name))}</>;
           },
         },
         {
@@ -139,7 +141,7 @@ export const columnMpr = (data: any) => {
           name: "status",
           header: () => <span>Status</span>,
           renderCell: ({ row, name, cell }: any) => {
-            return <>{getValue(row, name)}</>;
+            return <>{getStatusLabel(getValue(row, name))}</>;
           },
         },
         {
@@ -209,7 +211,7 @@ export const columnMpr = (data: any) => {
           name: "status",
           header: () => <span>Status</span>,
           renderCell: ({ row, name, cell }: any) => {
-            return <>{getValue(row, name)}</>;
+            return <>{getStatusLabel(getValue(row, name))}</>;
           },
         },
         {
@@ -267,7 +269,7 @@ export const columnMpr = (data: any) => {
           name: "status",
           header: () => <span>Status</span>,
           renderCell: ({ row, name, cell }: any) => {
-            return <>{getValue(row, name)}</>;
+            return <>{getStatusLabel(getValue(row, name))}</>;
           },
         },
         {
@@ -332,7 +334,7 @@ export const columnMpr = (data: any) => {
           name: "status",
           header: () => <span>Status</span>,
           renderCell: ({ row, name, cell }: any) => {
-            return <>{getValue(row, name)}</>;
+            return <>{getStatusLabel(getValue(row, name))}</>;
           },
         },
         {

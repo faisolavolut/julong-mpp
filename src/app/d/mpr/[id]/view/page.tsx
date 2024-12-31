@@ -32,6 +32,7 @@ import {
   DialogTrigger,
 } from "@/app/components/ui/dialog";
 import { PreviewImagePopup } from "@/app/components/ui/previewImage";
+import { statusMpp } from "@/constants/status-mpp";
 import api from "@/lib/axios";
 import { cloneFM } from "@/lib/cloneFm";
 import { showApprovel } from "@/lib/conditionalMPR";
@@ -611,6 +612,26 @@ function Page() {
           );
           history = hst?.data?.data || [];
         } catch (ex) {}
+        const result = {
+          id,
+          ...data,
+          categories: categories,
+          divisi: data.for_organization_structure,
+          job_level: data.job_level_name,
+          location: data.for_organization_location_id,
+          is_replacement: data.is_replacement ? "penggantian" : "penambahan",
+          total_needs: data.male_needs + data.female_needs,
+          remaining_balance:
+            data.recruitment_type === "MT_Management Trainee"
+              ? getNumber(jobs?.remaining_balance_mt)
+              : data.recruitment_type === "PH_Professional Hire"
+              ? getNumber(jobs?.remaining_balance_ph)
+              : 0,
+          mpp_name: data.mpp_period.title,
+          major_ids: data.request_majors.map((e: any) => e?.["Major"]?.["ID"]),
+          history: history?.data?.data,
+          mp_planning_header_doc_no: data?.mp_planning_header?.document_number,
+        };
         return {
           id,
           ...data,
@@ -756,8 +777,7 @@ function Page() {
                   />
                 </div>
                 <div>
-                  
-                <Field
+                  <Field
                     fm={fm}
                     name={"for_organization_location"}
                     label={"Location"}
@@ -988,26 +1008,12 @@ function Page() {
                     type={"multi-dropdown"}
                     // disabled={!fm.data?.minimum_education}
                     onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                        search: fm.data?.minimum_education
-                          ? fm.data.minimum_education
-                          : null,
-                      };
-                      if (!fm.data?.minimum_education) {
-                        return [];
-                      }
-                      const params = await events("onload-param", param);
-                      const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/majors` + params
-                      );
-                      const data: any[] = res.data.data;
+                      const data = fm.data.request_majors;
                       if (!Array.isArray(data)) return [];
                       return data.map((e) => {
                         return {
-                          value: e.id,
-                          label: e.major,
+                          value: get(e, "Major.ID"),
+                          label: get(e, "Major.Major"),
                           data: e,
                         };
                       });
@@ -1154,6 +1160,10 @@ function Page() {
                     name={"status"}
                     label={"Status"}
                     disabled={true}
+                    type={"dropdown"}
+                    onLoad={() => {
+                      return statusMpp;
+                    }}
                   />
                 </div>
               </div>

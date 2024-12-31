@@ -1,6 +1,7 @@
 "use client";
 import { TableList } from "@/app/components/tablelist/TableList";
 import { ButtonLink } from "@/app/components/ui/button-link";
+import { getStatusLabel } from "@/constants/status-mpp";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
@@ -49,10 +50,7 @@ function Page() {
               return (
                 <>
                   <div className="flex flex-row flex-grow">
-                    <ButtonLink
-                      className="bg-primary"
-                      href={"/d/period/new"}
-                    >
+                    <ButtonLink className="bg-primary" href={"/d/period/new"}>
                       <div className="flex items-center gap-x-0.5">
                         <HiPlus className="text-xl" />
                         <span className="capitalize">Add New</span>
@@ -103,13 +101,7 @@ function Page() {
               name: "status",
               header: () => <span>Status</span>,
               renderCell: ({ row, name, cell }: any) => {
-                return (
-                  <div className="capitalize">
-                    {getValue(row, name) === "not_open"
-                      ? "Not Open"
-                      : getValue(row, name)}
-                  </div>
-                );
+                return <>{getStatusLabel(getValue(row, name))}</>;
               },
             },
             {

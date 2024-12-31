@@ -2,6 +2,7 @@
 import { TableList } from "@/app/components/tablelist/TableList";
 import { ButtonBetter } from "@/app/components/ui/button";
 import { ButtonLink } from "@/app/components/ui/button-link";
+import { getStatusLabel } from "@/constants/status-mpp";
 import api from "@/lib/axios";
 import { shortDate } from "@/lib/date";
 import { events } from "@/lib/event";
@@ -10,7 +11,6 @@ import { IoEye } from "react-icons/io5";
 
 function Page() {
   return (
-   
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
         <h2 className="text-xl font-semibold text-gray-900 ">
@@ -22,8 +22,7 @@ function Page() {
           name="Manpower Request Overview"
           header={{
             sideLeft: (data: any) => {
-              return <>
-              </>;
+              return <></>;
             },
           }}
           column={[
@@ -66,7 +65,7 @@ function Page() {
               name: "status",
               header: () => <span>Status</span>,
               renderCell: ({ row, name, cell }: any) => {
-                return <>{getValue(row, name)}</>;
+                return <>{getStatusLabel(getValue(row, name))}</>;
               },
             },
             {
@@ -94,9 +93,9 @@ function Page() {
               ...param,
               vp_gm_director: "NOT NULL",
               ceo: "NULL",
-              status : "NEED APPROVAL"
-            }
-            delete pr["sort"]
+              status: "NEED APPROVAL",
+            };
+            delete pr["sort"];
             const params = await events("onload-param", pr);
             const res: any = await api.get(
               `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests` + params

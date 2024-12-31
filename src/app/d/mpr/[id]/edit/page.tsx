@@ -149,7 +149,7 @@ function Page() {
                           );
                         },
                         after: () => {
-                          navigate("/d/location");
+                          navigate("/d/mpr");
                         },
                         msg_load: "Delete ",
                         msg_error: "Delete failed ",
