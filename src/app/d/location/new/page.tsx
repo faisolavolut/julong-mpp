@@ -80,7 +80,8 @@ function Page() {
             {local.can_add ?
             <div className="flex flex-row space-x-2">
               <Alert
-                type={"delete"}
+                type={"save"}
+                msg={"Are you sure you want to save this new record?"}
                 onClick={() => {
                   fm.submit();
                 }}

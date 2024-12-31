@@ -27,6 +27,7 @@ import {
 } from "react-icons/hi";
 import { siteurl } from "@/lib/siteurl";
 import { get_user } from "@/lib/get_user";
+import api from "@/lib/axios";
 const NavFlow: React.FC<any> = ({ minimaze }) => {
   return (
     <Navbar fluid>
@@ -428,7 +429,9 @@ const UserDropdown: FC = function () {
       </Dropdown.Item>
       <Dropdown.Divider />
       <Dropdown.Item
-        onClick={() => {
+        onClick={async () => {
+          await api.delete(process.env.NEXT_PUBLIC_BASE_URL + "/api/destroy-cookies");
+          localStorage.removeItem('user');
           if (typeof window === "object")
             navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/logout`);
         }}

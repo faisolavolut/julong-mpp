@@ -127,6 +127,14 @@ function Page() {
                               url = "/api/mp-plannings/approver-type";
                               switch (roles) {
                                 case "HRD Location":
+                                  
+                                // prm = {
+                                //   approver_type: "direktur",
+                                //   organization_location_id: get_user(
+                                //     "employee.employee_job.organization_location_id"
+                                //   ),
+                                // };
+                                //   url = "/api/mp-plannings"
                                   break;
                                 case "HRD Unit":
                                   prm = {

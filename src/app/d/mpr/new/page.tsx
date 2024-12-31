@@ -65,6 +65,7 @@ function Page() {
             <div className="flex flex-row space-x-2">
               <Alert
                 type={"delete"}
+                msg={"Are you sure you want to save this new record?"}
                 onClick={() => {
                   fm.submit();
                 }}
@@ -259,6 +260,17 @@ function Page() {
                     onChange={(e: any) => {
                       const line = e?.data.mp_planning_lines;
                       fm.data["lines"] = line;
+
+                      const jobs =
+                        line.find((x: any) => x?.job_id === fm.data?.job_id) ||
+                        null;
+                      const remaining_balance =
+                        fm.data.recruitment_type === "MT_Management Trainee"
+                          ? getNumber(jobs?.remaining_balance_mt)
+                          : fm.data.recruitment_type === "PH_Professional Hire"
+                          ? getNumber(jobs?.remaining_balance_ph)
+                          : 0;
+                      fm.data.remaining_balance = remaining_balance;
                       fm.render();
                       if (typeof fm?.fields?.job_id?.reload === "function") {
                         fm.fields.job_id.reload();
@@ -416,6 +428,7 @@ function Page() {
                     type={"dropdown"}
                     disabled={!fm.data?.for_organization_id}
                     onChange={(e: any) => {
+                      console.log({ data: e.data });
                       const organization_structure_name =
                         e.data?.organization_structure_name;
                       fm.data["divisi"] = organization_structure_name;
@@ -425,9 +438,8 @@ function Page() {
                         e.data?.organization_structure_id;
                       fm.data["for_organization_id_structure_id"] =
                         e.data?.organization_structure_id;
-                      fm.data["job_level"] = e.data?.job_level.name;
-
-                      fm.data["job_level_id"] = e.data?.job_level.id;
+                      fm.data["job_level"] = get(e, "data.job_level.name");
+                      fm.data["job_level_id"] = e.data?.job_level?.id;
                       const lines = fm.data?.lines || [];
                       const jobs =
                         lines.find((x: any) => x?.job_id === fm.data?.job_id) ||

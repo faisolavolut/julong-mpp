@@ -378,6 +378,7 @@ function Page() {
                     <>
                       <Alert
                         type={"save"}
+                        msg={"Are you sure you want to submit this data? Once submitted, the data will be locked and its status will be updated."}
                         onClick={async () => {
                           fm.data.level = "Level HRD Location";
                           fm.data.status = "IN_PROGRESS";

@@ -503,6 +503,7 @@ function Page() {
 
                   <Alert
                     type={"delete"}
+                    msg="Are you sure you want to approve this request? This action is final and cannot be undone"
                     onClick={async () => {
                       const data: any = showApprovel(
                         fm.data,

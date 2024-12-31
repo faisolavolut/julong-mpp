@@ -77,6 +77,7 @@ export const showApprovel = (
     }
     return null;
   } else if (data?.status === "APPROVED") {
+    console.log(data?.status)
     if (data?.department_head && !data?.vp_gm_director) {
       return {
         approve:

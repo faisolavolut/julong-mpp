@@ -559,9 +559,7 @@ function Page() {
                         <AlertDialogTitle>
                           Are you absolutely sure?
                         </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          update your request from our servers.
+                        <AlertDialogDescription>Are you sure you want to approve this request? This action is final and cannot be undone
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <Form

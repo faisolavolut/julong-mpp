@@ -60,6 +60,9 @@ function Page() {
                 <>
                   <Alert
                     type={"save"}
+                    msg={
+                      "Are you sure you want to submit this data? Once submitted, the data will be locked."
+                    }
                     onClick={() => {
                       fm.data.status = "open";
                       fm.render();
@@ -84,7 +87,6 @@ function Page() {
                     onClick={async () => {
                       await actionToast({
                         task: async () => {
-                          
                           await api.delete(
                             `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/` +
                               id

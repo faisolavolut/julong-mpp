@@ -30,6 +30,7 @@ import { get_user } from "@/lib/get_user";
 import { getAccess, userRoleMe } from "@/lib/getAccess";
 import { getNumber } from "@/lib/getNumber";
 import { useLocal } from "@/lib/use-local";
+import get from "lodash.get";
 import { useEffect } from "react";
 import { GoInfo } from "react-icons/go";
 import { HiDocumentDownload, HiPlus } from "react-icons/hi";
@@ -85,58 +86,64 @@ function Page() {
               />
             </div>
             <div className="flex flex-row gap-x-2">
-              {(["DRAFT", "REJECTED"].includes(fm.data?.status)&& local.can_edit) && (
-                <Alert
-                  type={"save"}
-                  onClick={() => {
-                    fm.data.status = "DRAFT";
-                    fm.submit();
-                  }}
-                >
-                  <ButtonContainer className={"bg-primary"}>
-                    <IoMdSave className="text-xl" />
-                    Save
-                  </ButtonContainer>
-                </Alert>
-              )}
-              {(["DRAFT", "REJECTED"].includes(fm.data?.status) && local.can_submit) && (
-                <Alert
-                  type={"delete"}
-                  onClick={async () => {
-                    const isYou =
-                      fm.data.requestor_id === get_user("employee.id");
-                    const isOnBudget = fm.data.mp_planning_header_id
-                      ? true
-                      : false;
-                    fm.render();
-                    if (isOnBudget) {
-                      if (isYou) {
-                        if (local.head) {
-                          fm.data.status = "IN PROGRESS";
-                        } else {
-                          fm.data.status = "APPROVED";
+              {["DRAFT", "REJECTED"].includes(fm.data?.status) &&
+                local.can_edit && (
+                  <Alert
+                    type={"save"}
+                    onClick={() => {
+                      fm.data.status = "DRAFT";
+                      fm.submit();
+                    }}
+                  >
+                    <ButtonContainer className={"bg-primary"}>
+                      <IoMdSave className="text-xl" />
+                      Save
+                    </ButtonContainer>
+                  </Alert>
+                )}
+              {["DRAFT", "REJECTED"].includes(fm.data?.status) &&
+                local.can_submit && (
+                  <Alert
+                    type={"save"}
+                    msg={
+                      "Are you sure you want to submit this data? Once submitted, the data will be locked and its status will be updated."
+                    }
+                    onClick={async () => {
+                      const isYou =
+                        fm.data.requestor_id === get_user("employee.id");
+                      const isOnBudget = fm.data.mp_planning_header_id
+                        ? true
+                        : false;
+                      fm.render();
+                      if (isOnBudget) {
+                        if (isYou) {
+                          if (local.head) {
+                            fm.data.status = "IN PROGRESS";
+                          } else {
+                            fm.data.status = "APPROVED";
+                            fm.data.department_head = get_user("employee.id");
+                          }
+                        }
+                      } else {
+                        if (isYou) {
+                          fm.data.status = "NEED APPROVAL";
                           fm.data.department_head = get_user("employee.id");
                         }
                       }
-                    } else {
-                      if (isYou) {
-                        fm.data.status = "NEED APPROVAL";
-                        fm.data.department_head = get_user("employee.id");
-                      }
-                    }
-                    fm.render();
-                    await fm.submit();
-                    navigate(`/d/mpr/${id}/view`);
-                  }}
-                >
-                  <ButtonContainer className={"bg-primary"}>
-                    <IoMdSave className="text-xl" />
-                    Submit
-                  </ButtonContainer>
-                </Alert>
-              )}
+                      fm.render();
+                      await fm.submit();
+                      navigate(`/d/mpr/${id}/view`);
+                    }}
+                  >
+                    <ButtonContainer className={"bg-primary"}>
+                      <IoMdSave className="text-xl" />
+                      Submit
+                    </ButtonContainer>
+                  </Alert>
+                )}
 
-              {(["DRAFTED", "DRAFT"].includes(fm.data?.status) && local.can_delete) ? (
+              {["DRAFTED", "DRAFT"].includes(fm.data?.status) &&
+              local.can_delete ? (
                 <>
                   <Alert
                     type={"save"}
@@ -518,9 +525,8 @@ function Page() {
                         e.data?.organization_structure_id;
                       fm.data["for_organization_id_structure_id"] =
                         e.data?.organization_structure_id;
-                      fm.data["job_level"] = e.data?.job_level.name;
-
-                      fm.data["job_level_id"] = e.data?.job_level.id;
+                      fm.data["job_level"] = get(e, "data.job_level.name");
+                      fm.data["job_level_id"] = e.data?.job_level?.id;
                       const lines = fm.data?.lines || [];
                       const jobs =
                         lines.find((x: any) => x?.job_id === fm.data?.job_id) ||

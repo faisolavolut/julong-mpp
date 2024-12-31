@@ -33,6 +33,7 @@ function Page() {
             <div className="flex flex-row space-x-2">
               <Alert
                 type={"save"}
+                msg={"Are you sure you want to save this new record?"}
                 onClick={async () => {
                   fm.data.status = "draft";
                   await fm.submit();
