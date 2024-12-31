@@ -133,7 +133,7 @@ function Page() {
                                   prm = {
                                     approver_type: "manager",
                                     organization_id: get_user(
-                                      "employee.employee_job.organization_location_id"
+                                      "employee.employee_job.organization_id"
                                     ),
                                   };
                                   break;
@@ -141,7 +141,7 @@ function Page() {
                                   prm = {
                                     approver_type: "direktur",
                                     organization_id: get_user(
-                                      "employee.employee_job.organization_location_id"
+                                      "employee.employee_job.organization_id"
                                     ),
                                   };
                                   break;
