@@ -59,39 +59,31 @@ export const columnMpp = (data: any) => {
             },
           },
           {
-            name: "name",
+            name: "organization_location_name",
             header: () => <span>Location</span>,
             renderCell: ({ row, name, cell }: any) => {
               return <>{getValue(row, name)}</>;
             },
           },
           {
-            name: "mp_planning_header.document_number",
+            name: "document_number",
             header: () => <span>Document Number</span>,
             renderCell: ({ row, name, cell }: any) => {
               return <>{getValue(row, name)}</>;
             },
           },
           {
-            name: "mp_planning_header.document_date",
+            name: "document_date",
             header: () => <span>Document Date</span>,
             renderCell: ({ row, name, cell }: any) => {
               return <>{shortDate(new Date(getValue(row, name)))}</>;
             },
           },
           {
-            name: "mp_planning_header.status",
+            name: "status",
             header: () => <span>Status</span>,
             renderCell: ({ row, name, cell }: any) => {
-              switch (getValue(row, name)) {
-                case "IN_PROGRESS":
-                  return <>In Progress</>;
-                  break;
-
-                default:
-                  return <>{getValue(row, name)}</>;
-                  break;
-              }
+              return <>{getStatusLabel(getValue(row, name))}</>;
             },
           },
           {
@@ -99,18 +91,15 @@ export const columnMpp = (data: any) => {
             header: () => <span>Action</span>,
             sortable: false,
             renderCell: ({ row, name, cell }: any) => {
-              if (!get(row, "mp_planning_header.id")) return <></>;
+              if (!get(row, "id")) return <></>;
               return (
                 <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
                   {["REJECTED", "DRAFTED", "DRAFT"].includes(
-                    get(row, "mp_planning_header.status")
+                    get(row, "status")
                   ) && data?.local?.can_edit ? (
                     <ButtonLink
                       className="bg-primary"
-                      href={`/d/location/${get(
-                        row,
-                        "mp_planning_header.id"
-                      )}/edit`}
+                      href={`/d/location/${get(row, "id")}/edit`}
                     >
                       <div className="flex items-center gap-x-2">
                         <HiOutlinePencilAlt className="text-lg" />
@@ -119,10 +108,7 @@ export const columnMpp = (data: any) => {
                   ) : (
                     <ButtonLink
                       className="bg-primary"
-                      href={`/d/location/${get(
-                        row,
-                        "mp_planning_header.id"
-                      )}/view`}
+                      href={`/d/location/${get(row, "id")}/view`}
                     >
                       <div className="flex items-center gap-x-2">
                         <IoEye className="text-lg" />
@@ -169,15 +155,7 @@ export const columnMpp = (data: any) => {
             name: "mp_planning_header.status",
             header: () => <span>Status</span>,
             renderCell: ({ row, name, cell }: any) => {
-              switch (getValue(row, name)) {
-                case "IN_PROGRESS":
-                  return <>In Progress</>;
-                  break;
-
-                default:
-                  return <>{getValue(row, name)}</>;
-                  break;
-              }
+              return <>{getStatusLabel(getValue(row, name))}</>;
             },
           },
           {
@@ -336,15 +314,7 @@ export const columnMpp = (data: any) => {
             name: "mp_planning_header.status",
             header: () => <span>Status</span>,
             renderCell: ({ row, name, cell }: any) => {
-              switch (getValue(row, name)) {
-                case "IN_PROGRESS":
-                  return <>In Progress</>;
-                  break;
-
-                default:
-                  return <>{getValue(row, name)}</>;
-                  break;
-              }
+              return <>{getStatusLabel(getValue(row, name))}</>;
             },
           },
           {
@@ -495,7 +465,6 @@ export const columnMpp = (data: any) => {
             name: "status",
             header: () => <span>Status</span>,
             renderCell: ({ row, name, cell }: any) => {
-             
               return <>{getStatusLabel(getValue(row, name))}</>;
             },
           },
@@ -638,7 +607,6 @@ export const columnMpp = (data: any) => {
             name: "status",
             header: () => <span>Status</span>,
             renderCell: ({ row, name, cell }: any) => {
-              
               return <>{getStatusLabel(getValue(row, name))}</>;
             },
           },

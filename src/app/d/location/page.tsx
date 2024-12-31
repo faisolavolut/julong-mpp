@@ -83,7 +83,7 @@ function Page() {
                 ...data,
                 role: local.roles?.name,
                 local,
-              })
+              });
               return (
                 <>
                   <div className="w-full flex flex-col flex-grow">
@@ -92,7 +92,7 @@ function Page() {
                         name="Location"
                         header={{
                           sideLeft: () => {
-                            if (data?.id === "completed") return <></>
+                            if (data?.id === "completed") return <></>;
                             if (!local.can_add) return <></>;
                             return (
                               <>
@@ -127,14 +127,7 @@ function Page() {
                               url = "/api/mp-plannings/approver-type";
                               switch (roles) {
                                 case "HRD Location":
-                                  
-                                // prm = {
-                                //   approver_type: "direktur",
-                                //   organization_location_id: get_user(
-                                //     "employee.employee_job.organization_location_id"
-                                //   ),
-                                // };
-                                //   url = "/api/mp-plannings"
+                                  url = "/api/mp-plannings";
                                   break;
                                 case "HRD Unit":
                                   prm = {
@@ -164,7 +157,9 @@ function Page() {
                                 params
                             );
                             const result: any[] =
-                              data?.id === "completed"
+                              url === "/api/mp-plannings"
+                                ? res.data.data.mp_planning_headers
+                                : data?.id === "completed"
                                 ? res.data.data.mp_planning_headers
                                 : res.data.data.organization_locations;
                             if (!Array.isArray(result)) return [];
