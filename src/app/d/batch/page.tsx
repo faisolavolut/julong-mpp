@@ -52,22 +52,26 @@ function Page() {
         take: 1000,
       };
       const params = await events("onload-param", addtional);
-      const res: any = await api.get(
-        `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` + params
-      );
-      if (res?.data?.data?.organization_locations?.length) {
-        const location_null = res?.data?.data?.organization_locations.filter(
-          (e: any) => !e?.mp_planning_header
+      try{
+        const res: any = await api.get(
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` + params
         );
+        if (res?.data?.data?.organization_locations?.length) {
+          const location_null = res?.data?.data?.organization_locations.filter(
+            (e: any) => !e?.mp_planning_header
+          );
+  
+          const document_line = res?.data?.data?.organization_locations.filter(
+            (e: any) => e?.mp_planning_header
+          );
+          local.batch_lines = document_line.map(
+            (e: any) => e?.mp_planning_header?.id
+          );
+          local.location_null = getNumber(location_null?.length);
+          local.can_add = document_line?.length ? getAccess("create-batch", roles) : false;
+        }
+      }catch(ex){
 
-        const document_line = res?.data?.data?.organization_locations.filter(
-          (e: any) => e?.mp_planning_header
-        );
-        local.batch_lines = document_line.map(
-          (e: any) => e?.mp_planning_header?.id
-        );
-        local.location_null = getNumber(location_null?.length);
-        local.can_add = document_line?.length ? getAccess("create-batch", roles) : false;
       }
 
       try {

@@ -83,13 +83,12 @@ export const showApprovel = (
     }
     return null;
   } else if (data?.status === "APPROVED") {
-    if (isBudget) {
-      if (role.ho_unit && !data?.hrd_ho_unit) {
-        return {
-          approve: action === "reject" ? "REJECTED" : "COMPLETED",
-          level: "Level HRD HO",
-        };
-      }
+    
+    if (role.ho_unit && !data?.hrd_ho_unit) {
+      return {
+        approve: action === "reject" ? "REJECTED" : "COMPLETED",
+        level: "Level HRD HO",
+      };
     }
   }
   return null;
