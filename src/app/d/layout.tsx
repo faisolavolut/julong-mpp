@@ -15,6 +15,7 @@ import get from "lodash.get";
 import { Skeleton } from "../components/ui/Skeleton";
 import { userRoleMe } from "@/lib/getAccess";
 import { filterMenuByPermission } from "@/lib/filterMenuByPermission";
+import { get_user } from "@/lib/get_user";
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -38,7 +39,10 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/users/me`
         );
         local.user = user?.data?.data;
-
+        if(typeof window === "object"){
+          const w = window as any
+          w.user = user?.data?.data
+        }
         const roles = await userRoleMe();
         const permision = get(roles, "[0].permissions");
         const menuMe = filterMenuByPermission(configMenu, permision);
@@ -108,10 +112,10 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
             className="flex-grow  relative overflow-y-auto flex flex-row"
           >
             <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-10">
-              {typeof window === "object" ? (
+              {typeof get(window, "user") === "object" ? (
                 <main className="flex-grow flex flex-col">{children}</main>
               ) : (
-                <>Loading 123</>
+                <>Loading</>
               )}
             </div>
           </div>
