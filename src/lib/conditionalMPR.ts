@@ -45,26 +45,32 @@ export const showApprovel = (
   const isBudget = data?.mp_planning_header_id ? true : false;
   const isField = data?.organization_category === "Non Field" ? false : true;
   if (data?.status === "NEED APPROVAL") {
-    if (data?.department_head && !data?.vp_gm_director) {
-      return {
-        approve:
-          action === "reject"
-            ? "REJECTED"
-            : isField
-            ? "APPROVED"
-            : "NEED APPROVAL",
-        level: "Level VP",
-      };
-    } else if (data?.vp_gm_director && !data?.ceo) {
-      return null;
-      return {
-        approve: action === "reject" ? "REJECTED" : "APPROVED",
-        level: "Level VP",
-      };
+    if (!isBudget) {
+      if (isField) {
+        if (role.dir && data?.department_head && !data?.vp_gm_director) {
+          return {
+            approve: action === "reject" ? "REJECTED" : "APPROVED",
+            level: "Level VP",
+          };
+        }
+      } else {
+        if (role.dir && data?.department_head && !data?.vp_gm_director) {
+          return {
+            approve: action === "reject" ? "REJECTED" : "NEED APPROVAL",
+            level: "Level VP",
+          };
+        }else if (role.ceo && data?.vp_gm_director && !data?.ceo) {
+          return {
+            approve: action === "reject" ? "REJECTED" : "APPROVED",
+            level: "Level CEO",
+          };
+        }
+      }
     }
   } else if (data?.status === "IN PROGRESS") {
     const isYou = data?.requestor_id === get_user("m_employee.id");
-    if (isYou) {
+    console.log("HALOO");
+    if (!isYou) {
       return {
         approve:
           action === "reject"
@@ -77,22 +83,13 @@ export const showApprovel = (
     }
     return null;
   } else if (data?.status === "APPROVED") {
-    console.log(data?.status)
-    if (data?.department_head && !data?.vp_gm_director) {
-      return {
-        approve:
-          action === "reject"
-            ? "REJECTED"
-            : isField
-            ? "APPROVED"
-            : "NEED APPROVAL",
-        level: "Level VP",
-      };
-    } else if (!data?.hrd_ho_unit) {
-      return {
-        approve: action === "reject" ? "REJECTED" : "COMPLETED",
-        level: "Level HRD HO",
-      };
+    if (isBudget) {
+      if (role.ho_unit && !data?.hrd_ho_unit) {
+        return {
+          approve: action === "reject" ? "REJECTED" : "COMPLETED",
+          level: "Level HRD HO",
+        };
+      }
     }
   }
   return null;

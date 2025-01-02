@@ -38,7 +38,7 @@ export const Alert: FC<any> = ({
                 
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  {message?.[type] || msg}
+                  {msg || message?.[type]}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

@@ -21,7 +21,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/app/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/app/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/app/components/ui/dialog";
 import { PreviewImagePopup } from "@/app/components/ui/previewImage";
 import { actionToast } from "@/lib/action";
 import api from "@/lib/axios";
@@ -92,8 +99,7 @@ function Page() {
               />
             </div>
             <div className="flex flex-row gap-x-2">
-              
-            {fm.data?.history?.length && (
+              {fm.data?.history?.length && (
                 <Alert
                   className={"max-w-3xl"}
                   type={"save"}
@@ -566,14 +572,14 @@ function Page() {
               enable_majors = true;
             }
           } catch (ex) {}
-        
-          let history: any = [];
-          try {
-            const hst = await api.get(
-              `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/approval-histories?mpr_header_id=${id}&status=REJECTED`
-            );
-            history = hst?.data?.data || [];
-          } catch (ex) {}
+
+        let history: any = [];
+        try {
+          const hst = await api.get(
+            `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/approval-histories?mpr_header_id=${id}&status=REJECTED`
+          );
+          history = hst?.data?.data || [];
+        } catch (ex) {}
         return {
           id,
           ...data,
