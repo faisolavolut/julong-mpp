@@ -730,15 +730,14 @@ function Page() {
                     onClick={async () => {
                       await actionToast({
                         task: async () => {
-                          const param = {
+                          const formData = new FormData();
+                          formData.append("payload", JSON.stringify( {
                             id: id,
                             approver_id: get_user("employee.id"),
                             approved_by: get_user("employee.name"),
                             level: "Level HRD Unit",
                             status: "NEED APPROVAL",
-                          };
-                          const formData = new FormData();
-                          formData.append("payload", JSON.stringify(param));
+                          }));
 
                           const res: any = await api.put(
                             `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/update-status`,
