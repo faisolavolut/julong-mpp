@@ -376,7 +376,7 @@ function Page() {
                       fm.render();
                       if (isOnBudget) {
                         if (isYou) {
-                          if (local.head) {
+                          if (!local.head) {
                             fm.data.status = "IN PROGRESS";
                           } else {
                             fm.data.status = "APPROVED";
@@ -385,8 +385,12 @@ function Page() {
                         }
                       } else {
                         if (isYou) {
-                          fm.data.status = "NEED APPROVAL";
-                          fm.data.department_head = get_user("employee.id");
+                          if (!local.head) {
+                            fm.data.status = "IN PROGRESS";
+                          } else {
+                            fm.data.status = "NEED APPROVAL";
+                            fm.data.department_head = get_user("employee.id");
+                          }
                         }
                       }
                       fm.render();
