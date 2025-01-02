@@ -112,7 +112,7 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
             className="flex-grow  relative overflow-y-auto flex flex-row"
           >
             <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-10">
-              {typeof get(window, "user") === "object" ? (
+              {typeof window === "object" ? (
                 <main className="flex-grow flex flex-col">{children}</main>
               ) : (
                 <>Loading</>
