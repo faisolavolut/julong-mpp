@@ -109,13 +109,9 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
           >
             <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-10">
               {typeof window === "object" ? (
-                get(window, "user") ? (
-                  <main className="flex-grow flex flex-col">{children}</main>
-                ) : (
-                  <></>
-                )
+                <main className="flex-grow flex flex-col">{children}</main>
               ) : (
-                <></>
+                <>Loading 123</>
               )}
             </div>
           </div>
