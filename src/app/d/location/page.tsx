@@ -160,7 +160,7 @@ function Page() {
                               url === "/api/mp-plannings"
                                 ? res.data.data.mp_planning_headers
                                 : data?.id === "completed"
-                                ? res.data.data.mp_planning_headers
+                                ? res.data.data
                                 : res.data.data.organization_locations;
                             if (!Array.isArray(result)) return [];
                             return result || [];
