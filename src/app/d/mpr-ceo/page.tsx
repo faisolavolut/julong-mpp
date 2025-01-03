@@ -91,9 +91,7 @@ function Page() {
           onLoad={async (param: any) => {
             const pr = {
               ...param,
-              vp_gm_director: "NOT NULL",
-              ceo: "NULL",
-              status: "NEED APPROVAL",
+              approver_type: "ceo"
             };
             delete pr["sort"];
             const params = await events("onload-param", pr);

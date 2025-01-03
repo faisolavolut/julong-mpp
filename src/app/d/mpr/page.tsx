@@ -82,10 +82,7 @@ function Page() {
                 return (
                   <>
                     <div className="flex flex-row flex-grow">
-                      <ButtonLink
-                        className="bg-primary"
-                        href={"/d/mpr/new"}
-                      >
+                      <ButtonLink className="bg-primary" href={"/d/mpr/new"}>
                         <div className="flex items-center gap-x-0.5">
                           <HiPlus className="text-xl" />
                           <span className="capitalize">Add New</span>
@@ -98,7 +95,20 @@ function Page() {
             }}
             column={local.column}
             onLoad={async (param: any) => {
-              const params = await events("onload-param", param);
+              const prm = {
+                ...param,
+                approver_type:
+                  local.role === "Staff"
+                    ? "requestor"
+                    : local.role === "Departmen Head"
+                    ? "department_head"
+                    : local.role === "Vice President"
+                    ? "vp_gm_director"
+                    : local.role === "HO"
+                    ? "hrd_ho_unit"
+                    : null,
+              };
+              const params = await events("onload-param", prm);
               const res: any = await api.get(
                 `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests` + params
               );
