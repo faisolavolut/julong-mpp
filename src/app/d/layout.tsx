@@ -21,12 +21,15 @@ interface RootLayoutProps {
 }
 const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const [mini, setMini] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
   const local = useLocal({
     user: null as any,
     data: configMenu,
     ready: false,
   });
   useEffect(() => {
+    setIsClient(true);
     const localMini = localStorage.getItem("mini");
     if (!localMini) {
       localStorage.setItem("mini", mini ? "true" : "false");
@@ -112,7 +115,7 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
             className="flex-grow  relative overflow-y-auto flex flex-row"
           >
             <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-10">
-              {typeof window === "object" ? (
+              {isClient ? (
                 <main className="flex-grow flex flex-col">{children}</main>
               ) : (
                 <>Loading</>

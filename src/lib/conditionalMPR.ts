@@ -83,7 +83,6 @@ export const showApprovel = (
     }
     return null;
   } else if (data?.status === "APPROVED") {
-    
     if (role.ho_unit && !data?.hrd_ho_unit) {
       return {
         approve: action === "reject" ? "REJECTED" : "COMPLETED",

@@ -11,7 +11,7 @@ import {
 } from "@react-pdf/renderer";
 import { Style } from "@react-pdf/types";
 import get from "lodash.get";
-import { dayDate } from "@/lib/date";
+import { dayDate, shortDate } from "@/lib/date";
 import { getNumber } from "@/lib/getNumber";
 Font.register({
   family: "Noto Sans SC",
@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
   },
 });
 const extractMajors = (data: Array<{ Major: { Major: string } }>): string => {
-  if(!data?.length) return ""
-  return data.map(entry => get(entry, "Major.Major")).join(", ");
+  if (!data?.length) return "";
+  return data.map((entry) => get(entry, "Major.Major")).join(", ");
 };
 const splitText = (
   input: string
@@ -110,9 +110,15 @@ const handleInput = (input: string, mode: "cn" | "id" = "id"): string => {
   return ""; // Return empty string if the condition doesn't match the mode
 };
 // Create Document Component
-const DocumentMPR: FC<any> = ({ data }) => {
+const DocumentMPR: FC<any> = ({ data, onRender }) => {
   return (
-    <Document>
+    <Document
+      onRender={(e: any) => {
+        if (typeof onRender === "function") {
+          onRender();
+        }
+      }}
+    >
       <Page size="A4" style={styles.page}>
         <View
           style={{
@@ -626,12 +632,12 @@ const DocumentMPR: FC<any> = ({ data }) => {
               }}
             >
               {get(data, "marital_status") === "no rules"
-              ? "没问题"
-              : get(data, "marital_status") === "single"
-              ? "未婚"
-              : get(data, "marital_status") === "married"
-              ? "已婚"
-              : "-"}
+                ? "没问题"
+                : get(data, "marital_status") === "single"
+                ? "未婚"
+                : get(data, "marital_status") === "married"
+                ? "已婚"
+                : "-"}
             </Text>
           </Text>
         </View>
@@ -825,9 +831,7 @@ const DocumentMPR: FC<any> = ({ data }) => {
               </Text>
             </Text>
           </View>
-          <Text>
-            : {get(data, "minimum_education")}
-          </Text>
+          <Text>: {get(data, "minimum_education")}</Text>
         </View>
         {/* Jurusan */}
         <View
@@ -1156,7 +1160,9 @@ const DocumentMPR: FC<any> = ({ data }) => {
               </Text>
             </Text>
           </View>
-          <Text>: {get(data, "salary_min")} -  {get(data, "salary_max")} </Text>
+          <Text>
+            : {get(data, "salary_min")} - {get(data, "salary_max")}{" "}
+          </Text>
         </View>
 
         {/* FOOTER */}
@@ -1220,7 +1226,7 @@ const DocumentMPR: FC<any> = ({ data }) => {
                   width: 80,
                 }}
               >
-                <Text>: {get(data, "requestor_name")} </Text>
+                <Text>: {get(data, "requestor_name")}</Text>
               </View>
             </View>
             <View
@@ -1256,7 +1262,7 @@ const DocumentMPR: FC<any> = ({ data }) => {
                   width: 80,
                 }}
               >
-                <Text>: </Text>
+                <Text>: {get(data, "requestor_employee_job.job_name")}</Text>
               </View>
             </View>
             <View
@@ -1292,7 +1298,7 @@ const DocumentMPR: FC<any> = ({ data }) => {
                   width: 80,
                 }}
               >
-                <Text>: </Text>
+                <Text>: {dayDate(get(data, "created_at"))}</Text>
               </View>
             </View>
           </View>
@@ -1409,7 +1415,11 @@ const DocumentMPR: FC<any> = ({ data }) => {
                       flexGrow: 1,
                     }}
                   >
-                    <Text>Manager/Dept.Head</Text>
+                    <Text>
+                      {get(data, "department_head_employee_job.job_name")
+                        ? get(data, "department_head_employee_job.job_name")
+                        : "Manager/Dept.Head"}
+                    </Text>
                   </View>
                 </View>
                 <View
@@ -1433,7 +1443,9 @@ const DocumentMPR: FC<any> = ({ data }) => {
                       }}
                     >
                       {" "}
-                      经理/部门领导
+                      {get(data, "department_head_employee_job.job_name_chinese")
+                        ? get(data, "department_head_employee_job.job_name_chinese")
+                        : "经理/部门领导"}
                     </Text>
                   </View>
                 </View>
@@ -1509,7 +1521,11 @@ const DocumentMPR: FC<any> = ({ data }) => {
                       flexGrow: 1,
                     }}
                   >
-                    <Text>VP/GM/Direktur</Text>
+                    <Text>
+                      {get(data, "vp_gm_director_employee_job.job_name")
+                        ? get(data, "vp_gm_director_employee_job.job_name")
+                        : "VP/GM/Direktur"}
+                    </Text>
                   </View>
                 </View>
                 <View
@@ -1533,7 +1549,9 @@ const DocumentMPR: FC<any> = ({ data }) => {
                       }}
                     >
                       {" "}
-                      总经理/董事/总监
+                      {get(data, "vp_gm_director_employee_job.job_name_chinese")
+                        ? get(data, "vp_gm_director_employee_job.job_name_chinese")
+                        : "总经理/董事/总监"}
                     </Text>
                   </View>
                 </View>

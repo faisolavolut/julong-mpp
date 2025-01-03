@@ -22,20 +22,24 @@ const PDFViewer = dynamic(
   { ssr: false }
 );
 import { Button } from "flowbite-react";
+import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IoEye } from "react-icons/io5";
 
 function Page() {
   const id = getParams("id");
+  
+    const [isReady, setIsReady] = useState(false);
   const local = useLocal({
     can_add: false,
     can_edit: false,
     client: false,
     data: null as any,
     can_approval: false,
+    ready_document: false,
   });
   useEffect(() => {
     const run = async () => {
@@ -44,7 +48,7 @@ function Page() {
         `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests/` + id
       );
       const data = res.data.data;
-      
+
       let categories = [] as any[];
       const ctg: any = await api.get(
         `${process.env.NEXT_PUBLIC_API_MPP}/api/request-categories`
@@ -58,7 +62,7 @@ function Page() {
           data: e,
         };
       });
-      const lines = data.mp_planning_header.mp_planning_lines || [];
+      const lines = data?.mp_planning_header?.mp_planning_lines || [];
       const jobs = lines.find((e: any) => e.job_id === data.job_id);
       local.data = {
         id,
@@ -112,18 +116,48 @@ function Page() {
       </div>
       <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
         <div className="flex flex-grow flex-col">
-          <div className="flex flex-grow bg-[#525659] overflow-y-scroll flex-col items-center relative">
+          <div
+            className={cx(
+              isReady ? "bg-[#525659]" : "bg-[#b8b8b8]",
+              "flex relative flex-grow  overflow-y-scroll flex-col items-center relative"
+            )}
+          >
+            {!isReady && (
+              <div
+                className={cx(
+                  "absolute flex flex-col items-center justify-center",
+                  css`
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                  `
+                )}
+              >
+                <div className="flex flex-col items-center justify-center bg-white p-4 w-48 rounded-md shadow-md">
+                  <p className="text-center text-sm mb-2">
+                    Please wait while the document is loading.
+                  </p>
+                  <Loader2 className={cx("h-8 w-8 animate-spin")} />
+                </div>
+              </div>
+            )}
+
             {local.data && (
               <PDFViewer className="flex-grow w-full">
-                <DocumentMPR  data={local.data}/>
+                <DocumentMPR
+                  data={local.data}
+                  onRender={() => {
+                    setIsReady(true)
+                  }}
+                />
               </PDFViewer>
             )}
           </div>
           {local.data?.is_approve && local.can_approval && (
             <div className="flex flex-row items-center justify-center">
               <div className="flex flex-row gap-x-1 py-2">
-                <AlertCeoRejectMPR lc={local}/>
-                <AlertCeoApproveMPR  fm={local}/>
+                <AlertCeoRejectMPR lc={local} />
+                <AlertCeoApproveMPR fm={local} />
               </div>
             </div>
           )}
