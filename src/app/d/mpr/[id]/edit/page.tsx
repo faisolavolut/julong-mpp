@@ -551,14 +551,17 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_MPP}/api/request-categories`
         );
         const category: any[] = ctg.data?.data;
-        if (!Array.isArray(category)) categories = [];
-        categories = category.map((e) => {
-          return {
-            value: e?.id,
-            label: e?.name,
-            data: e,
-          };
-        });
+        if (!Array.isArray(category)) {
+          categories = [];
+        } else {
+          categories = category.map((e) => {
+            return {
+              value: e?.id,
+              label: e?.name,
+              data: e,
+            };
+          });
+        }
         const lines = data?.mp_planning_header?.mp_planning_lines || [];
         const jobs = lines.find((e: any) => e?.job_id === data?.job_id);
         let enable_majors = false;
@@ -597,7 +600,9 @@ function Page() {
               : 0,
           organization_structure_id: data?.for_organization_structure_id,
           mpp_name: data?.mpp_period.title,
-          major_ids: data.request_majors.map((e: any) => e?.["Major"]?.["ID"]),
+          major_ids: data?.request_majors?.length
+            ? data.request_majors.map((e: any) => e?.["Major"]?.["ID"])
+            : [],
           enable_majors,
           history: history?.data?.data,
         };
