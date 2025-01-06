@@ -1172,6 +1172,7 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
             flexDirection: "row",
             border: 1,
             borderColor: "black",
+            fontSize: 8,
           }}
         >
           <View
@@ -1179,7 +1180,6 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-
               borderRight: 1,
               borderColor: "black",
             }}
@@ -1197,18 +1197,24 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
               style={{
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "center",
+                alignItems: "flex-start",
               }}
             >
               <View
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   width: 60,
                 }}
               >
-                <Text>Nama</Text>
+                <Text
+                  style={{
+                    fontSize: 8,
+                  }}
+                >
+                  Nama
+                </Text>
                 <Text
                   style={{
                     ...styles.chineseFont,
@@ -1218,29 +1224,39 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                   姓名
                 </Text>
               </View>
+
               <View
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  alignItems: "center",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Text>: </Text>
+              </View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "flex-start",
                   width: 80,
                 }}
               >
-                <Text>: {get(data, "requestor_name")}</Text>
+                <Text>{get(data, "requestor_name")}</Text>
               </View>
             </View>
             <View
               style={{
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "center",
+                alignItems: "flex-start",
               }}
             >
               <View
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   width: 60,
                 }}
               >
@@ -1258,11 +1274,21 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  alignItems: "center",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Text>: </Text>
+              </View>
+
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "flex-start",
                   width: 80,
                 }}
               >
-                <Text>: {get(data, "requestor_employee_job.job_name")}</Text>
+                <Text>{get(data, "requestor_employee_job.job_name")}</Text>
               </View>
             </View>
             <View
@@ -1290,6 +1316,16 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                   日期
                 </Text>
               </View>
+
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text>: </Text>
+              </View>
               <View
                 style={{
                   display: "flex",
@@ -1298,10 +1334,11 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                   width: 80,
                 }}
               >
-                <Text>: {dayDate(get(data, "created_at"))}</Text>
+                <Text>{dayDate(get(data, "created_at"))}</Text>
               </View>
             </View>
           </View>
+
           <View
             style={{
               display: "flex",
@@ -1350,9 +1387,8 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  borderRight: 1,
-                  borderColor: "black",
                   flexGrow: 1,
+                  height: "100%",
                 }}
               >
                 <View
@@ -1368,18 +1404,24 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    alignItems: "center",
+                    alignItems: "flex-start",
                   }}
                 >
                   <View
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      alignItems: "center",
-                      width: 50,
+                      alignItems: "flex-start",
+                      width: 40,
                     }}
                   >
-                    <Text>Nama</Text>
+                    <Text
+                      style={{
+                        fontSize: 8,
+                      }}
+                    >
+                      Nama
+                    </Text>
                     <Text
                       style={{
                         ...styles.chineseFont,
@@ -1389,15 +1431,25 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                       姓名
                     </Text>
                   </View>
+
                   <View
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      alignItems: "center",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <Text>: </Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "flex-start",
                       width: 50,
                     }}
                   >
-                    <Text>: {get(data, "department_head_name")}</Text>
+                    <Text>{get(data, "department_head_name")}</Text>
                   </View>
                 </View>
                 <View
@@ -1413,6 +1465,8 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                       flexDirection: "row",
                       alignItems: "center",
                       flexGrow: 1,
+                      maxWidth: 95,
+                      textAlign: "center",
                     }}
                   >
                     <Text>
@@ -1435,6 +1489,8 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                       flexDirection: "row",
                       alignItems: "center",
                       flexGrow: 1,
+                      maxWidth: 90,
+                      textAlign: "center",
                     }}
                   >
                     <Text
@@ -1443,8 +1499,14 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                       }}
                     >
                       {" "}
-                      {get(data, "department_head_employee_job.job_name_chinese")
-                        ? get(data, "department_head_employee_job.job_name_chinese")
+                      {get(
+                        data,
+                        "department_head_employee_job.job_name_chinese"
+                      )
+                        ? get(
+                            data,
+                            "department_head_employee_job.job_name_chinese"
+                          )
                         : "经理/部门领导"}
                     </Text>
                   </View>
@@ -1457,8 +1519,10 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                   flexDirection: "column",
                   alignItems: "center",
                   borderRight: 1,
+                  borderLeft: 1,
                   borderColor: "black",
                   flexGrow: 1,
+                  height: "100%",
                 }}
               >
                 <View
@@ -1482,7 +1546,7 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "center",
-                      width: 50,
+                      width: 40,
                     }}
                   >
                     <Text>Nama</Text>
@@ -1519,6 +1583,8 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                       flexDirection: "row",
                       alignItems: "center",
                       flexGrow: 1,
+                      maxWidth: 100,
+                      textAlign: "center",
                     }}
                   >
                     <Text>
@@ -1541,6 +1607,8 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                       flexDirection: "row",
                       alignItems: "center",
                       flexGrow: 1,
+                      maxWidth: 90,
+                      textAlign: "center",
                     }}
                   >
                     <Text
@@ -1550,7 +1618,10 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                     >
                       {" "}
                       {get(data, "vp_gm_director_employee_job.job_name_chinese")
-                        ? get(data, "vp_gm_director_employee_job.job_name_chinese")
+                        ? get(
+                            data,
+                            "vp_gm_director_employee_job.job_name_chinese"
+                          )
                         : "总经理/董事/总监"}
                     </Text>
                   </View>
@@ -1647,6 +1718,7 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
             style={{
               display: "flex",
               flexDirection: "column",
+              flexGrow: 1,
             }}
           >
             <View
@@ -1688,9 +1760,11 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
             >
               <View
                 style={{
+                  height: "100%",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
+                  alignContent: "flex-end",
                   flexGrow: 1,
                 }}
               >
@@ -1707,18 +1781,24 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    alignItems: "center",
+                    alignItems: "flex-start",
                   }}
                 >
                   <View
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      alignItems: "center",
-                      width: 50,
+                      alignItems: "flex-start",
+                      width: 40,
                     }}
                   >
-                    <Text>Nama</Text>
+                    <Text
+                      style={{
+                        fontSize: 8,
+                      }}
+                    >
+                      Nama
+                    </Text>
                     <Text
                       style={{
                         ...styles.chineseFont,
@@ -1728,15 +1808,25 @@ const DocumentMPR: FC<any> = ({ data, onRender }) => {
                       姓名
                     </Text>
                   </View>
+
                   <View
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      alignItems: "center",
-                      width: 50,
+                      alignItems: "flex-start",
                     }}
                   >
-                    <Text>: {get(data, "hrd_ho_unit_name")}</Text>
+                    <Text>: </Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "flex-start",
+                      width: 80,
+                    }}
+                  >
+                    <Text>{get(data, "hrd_ho_unit_name")}</Text>
                   </View>
                 </View>
 
