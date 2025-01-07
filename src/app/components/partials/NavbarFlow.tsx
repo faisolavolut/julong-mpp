@@ -28,38 +28,32 @@ import {
 import { siteurl } from "@/lib/siteurl";
 import { get_user } from "@/lib/get_user";
 import api from "@/lib/axios";
+import { dayDate, formatTime, fullDay, shortDate } from "@/lib/date";
 const NavFlow: React.FC<any> = ({ minimaze }) => {
   return (
     <Navbar fluid>
       <div className="w-full p-1 lg:px-5 lg:pl-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            {true && (
-              <button
-                onClick={minimaze}
-                className="mr-3 cursor-pointer rounded p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 lg:inline"
-              >
-                <span className="sr-only">Toggle sidebar</span>
-                <HiMenuAlt1 className="h-6 w-6" />
-              </button>
-            )}
-            <Navbar.Brand href="/">
-              <img
-                alt=""
-                src={siteurl("/julong.png")}
-                className="mr-3 h-6 sm:h-8"
-              />
-              <span className="self-center whitespace-nowrap text-2xl font-semibold text-black">
-                Man Power Management
-              </span>
-            </Navbar.Brand>
-          </div>
-
-          <div className="flex items-center lg:gap-3">
-            <div className="flex items-center">
+          <div className="flex items-center"></div>
+          <div className="flex flex-row gap-x-3  justify-center ">
+            <div className="flex flex-row items-center flex-grow">
               <NotificationBellDropdown />
             </div>
-            <div className="hidden lg:block">
+            <div className="flex flex-row items-center flex-grow">
+              <div className="flex items-end flex-col text-xs">
+                <div>{fullDay(new Date())}</div>
+                <div>{formatTime(new Date())}</div>
+              </div>
+            </div>
+            <div className="flex flex-row items-center flex-grow">
+              <div className="border-l border-gray-500 pl-2 h-full flex items-end justify-center flex-col text-xs max-w-[100px]">
+                <div>
+                  {get_user("employee.name") ? get_user("employee.name") : "-"}
+                </div>
+              </div>
+            </div>
+
+            <div className="hidden lg:flex flex-row justify-center">
               <UserDropdown />
             </div>
           </div>
@@ -430,8 +424,10 @@ const UserDropdown: FC = function () {
       <Dropdown.Divider />
       <Dropdown.Item
         onClick={async () => {
-          await api.delete(process.env.NEXT_PUBLIC_BASE_URL + "/api/destroy-cookies");
-          localStorage.removeItem('user');
+          await api.delete(
+            process.env.NEXT_PUBLIC_BASE_URL + "/api/destroy-cookies"
+          );
+          localStorage.removeItem("user");
           if (typeof window === "object")
             navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/logout`);
         }}

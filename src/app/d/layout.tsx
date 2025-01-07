@@ -5,7 +5,7 @@ import Footer from "@/app/components/partials/Footer";
 
 import { SidebarProvider } from "@/context/SidebarContext";
 import SidebarTree from "@/app/components/partials/Sidebar";
-import { HiChartPie, HiCubeTransparent } from "react-icons/hi";
+import { HiChartPie, HiCubeTransparent, HiMenuAlt1 } from "react-icons/hi";
 import { LuUsers } from "react-icons/lu";
 import { configMenu } from "./config-menu";
 import { useLocal } from "@/lib/use-local";
@@ -16,6 +16,8 @@ import { Skeleton } from "../components/ui/Skeleton";
 import { userRoleMe } from "@/lib/getAccess";
 import { filterMenuByPermission } from "@/lib/filterMenuByPermission";
 import { get_user } from "@/lib/get_user";
+import { Navbar } from "flowbite-react";
+import { siteurl } from "@/lib/siteurl";
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -42,9 +44,9 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
           `${process.env.NEXT_PUBLIC_API_PORTAL}/api/users/me`
         );
         local.user = user?.data?.data;
-        if(typeof window === "object"){
-          const w = window as any
-          w.user = user?.data?.data
+        if (typeof window === "object") {
+          const w = window as any;
+          w.user = user?.data?.data;
         }
         const roles = await userRoleMe();
         const permision = get(roles, "[0].permissions");
@@ -62,16 +64,45 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
     run();
   }, []);
   return (
-    <div className="flex h-screen flex-col">
-      <NavFlow
-        minimaze={() => {
-          setMini(!mini);
-          localStorage.setItem("mini", !mini ? "true" : "false");
-        }}
-      />
-      <div className="flex  bg-white flex-grow flex-row">
+    <div className="flex h-screen flex-row">
+      <div className="flex flex-col">
+        <Navbar fluid className="bg-gray-50">
+          <div className="w-full p-1">
+            <div
+              className={`flex items-center ${
+                mini ? "justify-center" : "justify-between"
+              }`}
+            >
+              <div className={`flex items-center ${mini && "justify-center"}`}>
+                {true && (
+                  <button
+                    onClick={() => {
+                      setMini(!mini);
+                    }}
+                    className={` ${
+                      !mini && "mr-3"
+                    } cursor-pointer rounded p-2 text-primary  lg:inline`}
+                  >
+                    <span className="sr-only">Toggle sidebar</span>
+                    <HiMenuAlt1 className="h-6 w-6" />
+                  </button>
+                )}
+                {!mini && (
+                  <Navbar.Brand href="/">
+                    <img
+                      alt=""
+                      src={siteurl("/midsuit.png")}
+                      className="w-36"
+                    />
+                    <span className="self-center whitespace-nowrap text-2xl font-semibold text-black"></span>
+                  </Navbar.Brand>
+                )}
+              </div>
+            </div>
+          </div>
+        </Navbar>
         {!local.ready ? (
-          <div className="relative bg-white w-64">
+          <div className="relative bg-primary w-64">
             <div
               className={cx(
                 "absolute",
@@ -109,6 +140,14 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
             />
           </SidebarProvider>
         )}
+      </div>
+      <div className="flex  bg-white flex-grow flex-col">
+        <NavFlow
+          minimaze={() => {
+            setMini(!mini);
+            localStorage.setItem("mini", !mini ? "true" : "false");
+          }}
+        />
         <div className="flex flex-row flex-grow  bg-[#F1F1F1] flex-grow">
           <div
             id="main-content"

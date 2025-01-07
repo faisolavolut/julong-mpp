@@ -16,6 +16,12 @@ export const dayDate = (date: string | Date) => {
   }
   return "-";
 };
+export const fullDay = (date: string | Date) => {
+  if (date instanceof Date || typeof date === "string") {
+    return day(date).format("dddd, DD MMMM YYYY");
+  }
+  return "-";
+};
 export const shortDate = (date: string | Date) => {
   if (date instanceof Date || typeof date === "string") {
     const formattedDate = day(date);
