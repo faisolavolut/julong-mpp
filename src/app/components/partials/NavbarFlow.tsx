@@ -39,19 +39,6 @@ const NavFlow: React.FC<any> = ({ minimaze }) => {
             <div className="flex flex-row items-center flex-grow">
               <NotificationBellDropdown />
             </div>
-            <div className="flex flex-row items-center flex-grow">
-              <div className="flex items-end flex-col text-xs">
-                <div>{fullDay(new Date())}</div>
-                <div>{formatTime(new Date())}</div>
-              </div>
-            </div>
-            <div className="flex flex-row items-center flex-grow">
-              <div className="border-l border-gray-500 pl-2 h-full flex items-end justify-center flex-col text-xs max-w-[100px]">
-                <div>
-                  {get_user("employee.name") ? get_user("employee.name") : "-"}
-                </div>
-              </div>
-            </div>
 
             <div className="hidden lg:flex flex-row justify-center">
               <UserDropdown />
@@ -397,10 +384,17 @@ const UserDropdown: FC = function () {
       arrowIcon={false}
       inline
       label={
-        <span>
-          <span className="sr-only">User menu</span>
+        <div className="flex flex-row justify-center">
+          
+          <div className="flex flex-row items-center flex-grow">
+              <div className="border-l border-gray-200 px-2 h-full flex items-end justify-center flex-col text-xs max-w-[100px]">
+                <div>
+                  {get_user("employee.name") ? get_user("employee.name") : "-"}
+                </div>
+              </div>
+            </div>
           <Avatar alt="" img={siteurl("/dog.jpg")} rounded size="sm" />
-        </span>
+        </div>
       }
     >
       <Dropdown.Header>
