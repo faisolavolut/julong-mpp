@@ -47,7 +47,6 @@ export const columnMpp = (data: any) => {
   const access = rolesMpp(
     typeof data?.local?.roles === "object" ? [data?.local?.roles] : []
   );
-  console.log({access})
   if (data?.id === "on_going") {
     switch (access) {
       case "HRD Location":
@@ -172,7 +171,7 @@ export const columnMpp = (data: any) => {
                   ) && data?.local?.can_edit ? (
                     <ButtonLink
                       className="bg-primary"
-                      href={`/d/location/${get(
+                      href={`/d/batch-hrd-unit/${get(
                         row,
                         "mp_planning_header.id"
                       )}/edit`}
@@ -184,7 +183,7 @@ export const columnMpp = (data: any) => {
                   ) : (
                     <ButtonLink
                       className="bg-primary"
-                      href={`/d/location/${get(
+                      href={`/d/batch-hrd-unit/${get(
                         row,
                         "mp_planning_header.id"
                       )}/view`}
@@ -203,31 +202,31 @@ export const columnMpp = (data: any) => {
       case "Direktur Unit":
         return [
           {
-            name: "organization_name",
-            header: () => <span>Organization</span>,
+            name: "document_number",
+            header: () => <span>Batch Number</span>,
             renderCell: ({ row, name, cell }: any) => {
               return <>{getValue(row, name)}</>;
             },
           },
           {
-            name: "name",
-            header: () => <span>Location</span>,
+            name: "mpp_period.title",
+            header: () => <span>MPP Period Name</span>,
             renderCell: ({ row, name, cell }: any) => {
               return <>{getValue(row, name)}</>;
             },
           },
           {
-            name: "mp_planning_header.document_number",
-            header: () => <span>Document Number</span>,
+            name: "mpp_period.budget_start_date",
+            header: () => <span>Budget Start Date</span>,
             renderCell: ({ row, name, cell }: any) => {
-              return <>{getValue(row, name)}</>;
+              return <>{shortDate(getValue(row, name))}</>;
             },
           },
           {
-            name: "mp_planning_header.document_date",
-            header: () => <span>Document Date</span>,
+            name: "mpp_period.budget_end_date",
+            header: () => <span>Budget End Date</span>,
             renderCell: ({ row, name, cell }: any) => {
-              return <>{shortDate(new Date(getValue(row, name)))}</>;
+              return <>{shortDate(getValue(row, name))}</>;
             },
           },
           {
@@ -235,34 +234,12 @@ export const columnMpp = (data: any) => {
             header: () => <span>Action</span>,
             sortable: false,
             renderCell: ({ row, name, cell }: any) => {
-              if (!get(row, "mp_planning_header.id")) return <></>;
+              if (!get(row, "id")) return <></>;
               return (
                 <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                  {data?.local?.can_edit &&
-                  ["REJECTED", "DRAFTED", "DRAFT"].includes(
-                    get(row, "mp_planning_header.status")
-                  ) ? (
-                    <ButtonLink
-                      className="bg-primary"
-                      href={`/d/location/${get(
-                        row,
-                        "mp_planning_header.id"
-                      )}/edit`}
-                    >
-                      <div className="flex items-center gap-x-2">
-                        <HiOutlinePencilAlt className="text-lg" />
-                      </div>
-                    </ButtonLink>
-                  ) : (
-                    <></>
-                  )}
-
                   <ButtonLink
                     className="bg-primary"
-                    href={`/d/location/${get(
-                      row,
-                      "mp_planning_header.id"
-                    )}/view`}
+                    href={`/d/batch-dir-unit/${get(row, "id")}/doc`}
                   >
                     <div className="flex items-center gap-x-2">
                       <IoEye className="text-lg" />
@@ -543,7 +520,7 @@ export const columnMpp = (data: any) => {
                   ["REJECTED", "DRAFTED", "DRAFT"].includes(row?.status) ? (
                     <ButtonLink
                       className="bg-primary"
-                      href={`/d/location/${row.id}/edit`}
+                      href={`/d/batch-dir-unit/${row.id}/edit`}
                     >
                       <div className="flex items-center gap-x-2">
                         <HiOutlinePencilAlt className="text-lg" />
@@ -555,7 +532,7 @@ export const columnMpp = (data: any) => {
 
                   <ButtonLink
                     className="bg-primary"
-                    href={`/d/location/${row.id}/view`}
+                    href={`/d/batch-dir-unit/${row.id}/view`}
                   >
                     <div className="flex items-center gap-x-2">
                       <IoEye className="text-lg" />

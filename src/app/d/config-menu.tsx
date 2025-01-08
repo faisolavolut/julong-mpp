@@ -42,7 +42,17 @@ export const configMenu = [
       {
         title: "Manpower Planning Overview",
         href: "/d/location",
-        permision: ["read-mpp", "read-mpp-hrd-location", "read-mpp-hrd-unit", "read-mpp-dir-unit", "read-mpp-rekruitmen"],
+        permision: ["read-mpp", "read-mpp-hrd-location", "read-mpp-rekruitmen"],
+      },
+      {
+        title: "Manpower Planning Overview",
+        href: "/d/batch-hrd-unit",
+        permision: ["read-mpp-hrd-unit"],
+      },
+      {
+        title: "Manpower Planning Overview",
+        href: "/d/batch-dir-unit",
+        permision: ["read-mpp-dir-unit"],
       },
       { title: "Batch", href: "/d/batch", permision: ["read-batch"] },
       { title: "Batch CEO", href: "/d/batch-ceo", permision: ["batch-ceo"] },

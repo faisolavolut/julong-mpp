@@ -255,7 +255,6 @@ const convertRawData = (data: any): any[] => {
       rows: formatGradeData(overall.grade),
       budgetRange: overall.budget_range,
       existingDate: overall.existing_date,
-      
     };
   };
 
@@ -285,10 +284,16 @@ const convertRawData = (data: any): any[] => {
   return result;
 };
 
-const MyDocument: FC<any> = ({ data }) => {
+const MyDocument: FC<any> = ({ data, onRender }) => {
   const page = convertRawData(data);
   return (
-    <Document>
+    <Document
+      onRender={(e: any) => {
+        if (typeof onRender === "function") {
+          onRender();
+        }
+      }}
+    >
       {page.map((page, pageIndex) => {
         return (
           <Page size="A4" style={styles.page} key={"page_" + pageIndex}>
@@ -497,9 +502,7 @@ const MyDocument: FC<any> = ({ data }) => {
                           padding: 5,
                         }}
                       >
-                        <Text style={styles.thead}>
-                          {page?.budgetRange}
-                        </Text>
+                        <Text style={styles.thead}>{page?.budgetRange}</Text>
                       </View>
 
                       <View
@@ -603,10 +606,12 @@ const MyDocument: FC<any> = ({ data }) => {
                       col3={row.col3}
                       col4={row.col4}
                       col5={row.col5}
-                      footer={row?.col1 === "Sub - Total =" || row?.col1 === "Total =" ? true : false}
-                      hideBorder={
-                        row?.col1 === "Total ="  ? true : false
+                      footer={
+                        row?.col1 === "Sub - Total =" || row?.col1 === "Total ="
+                          ? true
+                          : false
                       }
+                      hideBorder={row?.col1 === "Total =" ? true : false}
                     />
                   ))}
                 </View>

@@ -54,6 +54,7 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
         local.data = menuMe;
         local.ready = true;
         local.render();
+        console.log(local.data)
         if (!user?.data.data) {
           navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
         }

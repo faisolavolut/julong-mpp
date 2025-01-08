@@ -17,10 +17,9 @@ import { get_user } from "@/lib/get_user";
 import api from "@/lib/axios";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
-import { getNumber } from "@/lib/getNumber";
-import { events } from "@/lib/event";
 import get from "lodash.get";
-export const AlertBatch: FC<any> = ({ local }) => {
+import { IoMdSave } from "react-icons/io";
+export const AlertBatchHrdUnit: FC<any> = ({ local }) => {
   return (
     <>
       <Dialog>
@@ -28,15 +27,15 @@ export const AlertBatch: FC<any> = ({ local }) => {
           <div className="flex flex-row flex-grow">
             <ButtonContainer className="bg-primary">
               <div className="flex items-center gap-x-0.5">
-                <HiPlus className="text-xl" />
-                <span className="capitalize">Create Batch</span>
+                <IoMdSave className="text-xl" />
+                <span className="capitalize">Process</span>
               </div>
             </ButtonContainer>
           </div>
         </DialogTrigger>
         <DialogContent className=" flex flex-col">
           <DialogHeader>
-            <DialogTitle>Create Batch</DialogTitle>
+            <DialogTitle>Process and Create Batch</DialogTitle>
             <DialogDescription className="hidden"></DialogDescription>
           </DialogHeader>
           <div className="flex items-center flex-row space-x-2 flex-grow">
@@ -44,9 +43,10 @@ export const AlertBatch: FC<any> = ({ local }) => {
               {local?.location_null
                 ? ` There are still ${formatMoney(
                     local?.location_null
-                  )} locations without an MPP `
+                  )} locations without an MPP. `
                 : ``}
-                Are you sure you want to batch this MPP? Keep in mind, this action can't be undone!
+              Are you sure you want to process dan batch this MPP? Keep in mind,
+              this action can't be undone!
             </div>
           </div>
           <DialogFooter className="sm:justify-end">
@@ -100,20 +100,6 @@ export const AlertBatch: FC<any> = ({ local }) => {
                       data
                     );
                     local.can_add = false;
-                    local.render();
-
-                    try {
-                      const batch: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
-                      );
-                      local.batch = batch?.data?.data;
-                    } catch (ex) {}
-                    try {
-                      const batch_ceo: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/APPROVED`
-                      );
-                      local.batch = batch_ceo?.data?.data;
-                    } catch (ex) {}
                     local.render();
                   }
                   setTimeout(() => {
