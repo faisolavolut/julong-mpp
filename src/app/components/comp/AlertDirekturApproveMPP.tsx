@@ -81,7 +81,7 @@ export const AlertDirekturApproveMPP: FC<any> = ({fm}) => {
                     );
                     
                     setTimeout(() => {
-                      fm.data.is_approve  = false;
+                      fm.can_approval = false;
                       fm.render();
                       toast.success(
                         <div

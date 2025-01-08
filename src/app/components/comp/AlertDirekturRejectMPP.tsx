@@ -132,7 +132,7 @@ export const AlertDirekturRejectMPP: FC<any> = ({ lc }) => {
                               param
                             );
                             setTimeout(() => {
-                              lc.data.is_approve = false;
+                              lc.can_approval = false;
                               lc.render();
                               toast.success(
                                 <div
