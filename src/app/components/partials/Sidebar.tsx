@@ -78,7 +78,11 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
           {hasChildren ? (
             <li className="relative">
               {mini && isParentActive && (
-                <div className="text-[#F8FAFB] absolute top-[-15px] right-0   ">
+                <div
+                  className={cx(
+                    "absolute top-[-15px] right-[-1px] text-layer",
+                  )}
+                >
                   <svg
                     width="184"
                     height="167"
@@ -141,7 +145,13 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                     <div
                       className={classNames(
                         " w-8 h-8  text-center flex flex-row items-center justify-center",
-                        mini ?isParentActive ? "text-primary " : " text-white" : isActive ? "text-primary " : " text-white",
+                        mini
+                          ? isParentActive
+                            ? "text-primary "
+                            : " text-white"
+                          : isActive
+                          ? "text-primary "
+                          : " text-white",
                         !mini ? "mr-1  p-2 " : " text-lg ",
                         mini
                           ? css`
@@ -171,7 +181,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                 </div>
 
                 {mini && isParentActive && (
-                  <div className="text-[#F8FAFB] absolute bottom-[-15px] right-0 ">
+                  <div className=" absolute bottom-[-15px] right-[-1px] text-layer">
                     <svg
                       width="147"
                       height="147"
@@ -203,7 +213,11 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
           ) : (
             <li className="relative">
               {isActive && (
-                <div className="text-[#F8FAFB] absolute top-[-15px] right-0   ">
+                <div
+                  className={cx(
+                    " absolute top-[-15px] right-[-1px] text-layer",
+                  )}
+                >
                   <svg
                     width="184"
                     height="167"
@@ -229,12 +243,13 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                 className={classNames(
                   "relative flex-row flex items-center cursor-pointer items-center w-full rounded-full  rounded-r-none text-base text-gray-900 flex flex-row  py-2.5 px-4",
                   isActive
-                    ? " py-2.5 px-4 text-base   rounded-full  rounded-r-none  group     transition-all duration-200  dark:bg-gray-700"
+                    ? " py-2.5 px-4 text-base   rounded-full  rounded-r-none  group  "
                     : " font-normal",
+                  mini ? "transition-all duration-200" : "",
                   isActive
                     ? !depth
                       ? " bg-layer  font-normal"
-                      : " bg-layer text-primary font-bold"
+                      : " bg-layer  text-primary font-bold"
                     : "text-white",
                   css`
                     & > span {
@@ -269,7 +284,11 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                   )}
                 </div>
                 {isActive && (
-                  <div className="text-[#F8FAFB] absolute bottom-[-15px] right-0 ">
+                  <div
+                    className={cx(
+                      "absolute bottom-[-15px] right-[-1px] text-layer"
+                    )}
+                  >
                     <svg
                       width="147"
                       height="147"

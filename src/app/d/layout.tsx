@@ -96,7 +96,7 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
                       <img
                         alt=""
                         src={siteurl("/hiree-2.png")}
-                        className="w-24"
+                        className="w-32"
                       />
                       <span className="self-center whitespace-nowrap text-2xl font-semibold text-black"></span>
                     </Navbar.Brand>
