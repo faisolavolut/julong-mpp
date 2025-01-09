@@ -62,8 +62,8 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
   const renderTree = (items: TreeMenuItem[], depth: number = 0) => {
     return items.map((item, index) => {
       const hasChildren = item.children && item.children.length > 0;
-      const isActive = item.href && detectCase(currentPage, item.href);
-      const isParentActive = hasChildren && isChildActive(item.children!);
+      let isActive = item.href && detectCase(currentPage, item.href);
+      let isParentActive = hasChildren && isChildActive(item.children!);
       const [isOpen, setIsOpen] = useState(isParentActive);
       useEffect(() => {
         if (isParentActive) {
@@ -76,14 +76,38 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
       return (
         <React.Fragment key={item.href || item.title || index}>
           {hasChildren ? (
-            <li>
+            <li className="relative">
+              {mini && isParentActive && (
+                <div className="text-[#F8FAFB] absolute top-[-15px] right-0   ">
+                  <svg
+                    width="184"
+                    height="167"
+                    viewBox="0 0 184 167"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M17 167C109.232 167 184 92.2316 184 0V167H17ZM0 166.145C5.58984 166.711 11.2611 167 17 167H0V166.145Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              )}
+
               <div
                 className={classNames(
-                  " flex-row flex items-center cursor-pointer items-center w-full rounded-lg text-base font-normal text-gray-900  dark:hover:bg-gray-700 flex flex-row",
-                  isParentActive && !depth
-                    ? " text-base font-normal text-white rounded-lg  group bg-primary shadow-md  shadow-[#31367875]   transition-all duration-200  dark:bg-gray-700"
-                    : " hover:bg-gray-100",
-                  mini ? "m-0 flex-grow w-full" : "py-2.5 px-4 ",
+                  "relative flex-row flex items-center cursor-pointer items-center w-full rounded-full  rounded-r-none text-base font-normal text-gray-900   flex flex-row",
+                  mini
+                    ? isParentActive && !depth
+                      ? " text-base font-normal text-primary rounded-full  rounded-r-none group bg-layer   transition-all duration-200  dark:bg-gray-700"
+                      : " text-white"
+                    : isActive && !depth
+                    ? " text-base font-normal text-primary rounded-full  rounded-r-none group bg-layer   transition-all duration-200  dark:bg-gray-700"
+                    : " text-white",
+                  mini ? "pr-4 m-0 flex-grow w-full" : "py-2.5 px-4 ",
                   mini
                     ? css`
                         margin: 0 !important;
@@ -101,24 +125,24 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                 <div
                   className={cx(
                     "flex flex-row items-center flex-grow",
-                    mini ? "py-2 justify-center  rounded-lg" : " px-3",
+                    mini
+                      ? "py-2 justify-center  rounded-full  rounded-r-none"
+                      : " px-3",
                     mini
                       ? isParentActive
-                        ? "bg-[#313678]"
-                        : "bg-white hover:bg-gray-300 shadow shadow-gray-300"
-                      : ""
+                        ? "bg-layer font-bold "
+                        : "bg-primary  text-white"
+                      : isActive
+                      ? "font-bold text-white "
+                      : "text-white"
                   )}
                 >
                   {!depth ? (
                     <div
                       className={classNames(
-                        " w-8 h-8 rounded-lg text-center flex flex-row items-center justify-center",
-                        isParentActive
-                          ? "bg-[#313678] text-white active-menu-icon"
-                          : "bg-white shadow-lg text-black",
-                        !mini
-                          ? "mr-1  p-2 shadow-gray-300"
-                          : " text-lg shadow-none",
+                        " w-8 h-8  text-center flex flex-row items-center justify-center",
+                        mini ?isParentActive ? "text-primary " : " text-white" : isActive ? "text-primary " : " text-white",
+                        !mini ? "mr-1  p-2 " : " text-lg ",
                         mini
                           ? css`
                               background: transparent !important;
@@ -137,7 +161,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                       <div className="pl-2 flex-grow   text-xs">
                         {item.title}
                       </div>
-                      <div className="text-md">
+                      <div className="text-md px-1">
                         {isOpen ? <FaChevronUp /> : <FaChevronDown />}
                       </div>
                     </>
@@ -145,8 +169,27 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                     <></>
                   )}
                 </div>
-              </div>
 
+                {mini && isParentActive && (
+                  <div className="text-[#F8FAFB] absolute bottom-[-15px] right-0 ">
+                    <svg
+                      width="147"
+                      height="147"
+                      viewBox="0 0 147 147"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M0 0H147V147C147 65.8141 81.1859 0 0 0Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </div>
               <Sidebar.ItemGroup
                 className={classNames(
                   "border-none mt-0",
@@ -158,22 +201,41 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
               </Sidebar.ItemGroup>
             </li>
           ) : (
-            <li>
+            <li className="relative">
+              {isActive && (
+                <div className="text-[#F8FAFB] absolute top-[-15px] right-0   ">
+                  <svg
+                    width="184"
+                    height="167"
+                    viewBox="0 0 184 167"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M17 167C109.232 167 184 92.2316 184 0V167H17ZM0 166.145C5.58984 166.711 11.2611 167 17 167H0V166.145Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              )}
               <SidebarLinkBetter
                 href={item.href}
                 onClick={() => {
                   if (item?.href) setCurrentPage(item.href);
                 }}
                 className={classNames(
-                  " flex-row flex items-center cursor-pointer items-center w-full rounded-lg text-base text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-row  py-2.5 px-4",
+                  "relative flex-row flex items-center cursor-pointer items-center w-full rounded-full  rounded-r-none text-base text-gray-900 flex flex-row  py-2.5 px-4",
                   isActive
-                    ? " py-2.5 px-4 text-base   rounded-lg  group  shadow-[#31367875]   transition-all duration-200  dark:bg-gray-700"
+                    ? " py-2.5 px-4 text-base   rounded-full  rounded-r-none  group     transition-all duration-200  dark:bg-gray-700"
                     : " font-normal",
                   isActive
                     ? !depth
-                      ? " bg-primary shadow-md hover:bg-gray-200 hover:!bg-white  font-normal"
-                      : " bg-primary/10 text-primary font-bold"
-                    : "text-dark-500",
+                      ? " bg-layer  font-normal"
+                      : " bg-layer text-primary font-bold"
+                    : "text-white",
                   css`
                     & > span {
                       white-space: wrap !important;
@@ -188,10 +250,8 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                   {!depth ? (
                     <div
                       className={classNames(
-                        " shadow-gray-300  text-dark-700 w-8 h-8  rounded-lg text-center flex flex-row items-center justify-center shadow-[#313678]",
-                        isActive
-                          ? "bg-[#313678] text-white"
-                          : "bg-white shadow-lg text-black",
+                        "  text-dark-700 w-8 h-8  rounded-lg text-center flex flex-row items-center justify-center ",
+                        isActive ? "bg-[#313678] " : "bg-layer text-white",
                         !mini ? "mr-1  p-2" : " text-lg"
                       )}
                     >
@@ -202,14 +262,31 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
                   )}
                   {!mini ? (
                     <>
-                      <div className="pl-2 text-xs">
-                        {item.title}
-                      </div>
+                      <div className="pl-2 text-xs">{item.title}</div>
                     </>
                   ) : (
                     <></>
                   )}
                 </div>
+                {isActive && (
+                  <div className="text-[#F8FAFB] absolute bottom-[-15px] right-0 ">
+                    <svg
+                      width="147"
+                      height="147"
+                      viewBox="0 0 147 147"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M0 0H147V147C147 65.8141 81.1859 0 0 0Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                )}
               </SidebarLinkBetter>
             </li>
           )}
@@ -223,50 +300,23 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
       <Sidebar
         aria-label="Sidebar with multi-level dropdown example"
         className={classNames(
-          "relative bg-white",
+          "relative bg-primary pt-0",
           mini ? "w-20" : "",
           css`
             > div {
+              background: transparent;
               padding-top: 0;
+              padding-right: 0;
             }
           `
         )}
       >
-        {/* {!local.ready ? (
-          <div
-            className={cx(
-              "absolute",
-              css`
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-              `
-            )}
-          >
-            <div className="flex flex-grow flex-row items-center justify-center">
-              <div className="flex flex-col gap-y-2">
-                <div className="flex flex-row gap-x-2">
-                  <Skeleton className="h-24 flex-grow" />
-                  <Skeleton className="h-24 flex-grow" />
-                </div>
-                <Skeleton className="h-24 w-[230px]" />
-                <div className="flex flex-row gap-x-2">
-                  <Skeleton className="h-24 flex-grow" />
-                  <Skeleton className="h-24 flex-grow" />
-                </div>
-                <Skeleton className="h-24 w-[230px]" />
-              </div>
-            </div>
-          </div>
-        ) : (
-        )} */}
-
         <div className="w-full h-full relative">
           <div className="flex h-full flex-col justify-between w-full absolute top-0 left-0">
             <Sidebar.Items>
               <Sidebar.ItemGroup
                 className={cx(
-                  "border-none mt-0",
+                  "border-none mt-0 pt-4",
                   mini ? "flex flex-col gap-y-2" : ""
                 )}
               >
@@ -282,7 +332,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
 const BottomMenu: FC = function () {
   return (
     <div className="flex items-center justify-center gap-x-5">
-      <button className="rounded-lg p-2 hover:bg-gray-100">
+      <button className="rounded-lg p-2 ">
         <span className="sr-only">Tweaks</span>
         <HiAdjustments className="text-2xl text-gray-500 hover:text-gray-900  " />
       </button>
@@ -290,7 +340,7 @@ const BottomMenu: FC = function () {
         <Tooltip content="Settings page">
           <a
             href="/users/settings"
-            className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+            className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500  hover:text-gray-900"
           >
             <span className="sr-only">Settings page</span>
             <HiCog className="text-2xl text-gray-500 hover:text-gray-900 " />
@@ -310,7 +360,7 @@ const LanguageDropdown: FC = function () {
       arrowIcon={false}
       inline
       label={
-        <span className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white">
+        <span className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:text-gray-900  dark:hover:text-white">
           <span className="sr-only">Current language</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -354,10 +404,7 @@ const LanguageDropdown: FC = function () {
     >
       <ul className="py-1" role="none">
         <li>
-          <a
-            href="#"
-            className="block py-2 px-4 text-md text-gray-700 hover:bg-gray-100 "
-          >
+          <a href="#" className="block py-2 px-4 text-md text-gray-700  ">
             <div className="inline-flex items-center">
               <svg
                 className="mr-2 h-4 w-4 rounded-full"
@@ -395,10 +442,7 @@ const LanguageDropdown: FC = function () {
           </a>
         </li>
         <li>
-          <a
-            href="#"
-            className="block py-2 px-4 text-md text-gray-700 hover:bg-gray-100"
-          >
+          <a href="#" className="block py-2 px-4 text-md text-gray-700 ">
             <div className="inline-flex items-center">
               <svg
                 className="mr-2 h-4 w-4 rounded-full"
@@ -415,10 +459,7 @@ const LanguageDropdown: FC = function () {
           </a>
         </li>
         <li>
-          <a
-            href="#"
-            className="block py-2 px-4 text-md text-gray-700 hover:bg-gray-100 "
-          >
+          <a href="#" className="block py-2 px-4 text-md text-gray-700  ">
             <div className="inline-flex items-center">
               <svg
                 className="mr-2 h-4 w-4 rounded-full"
@@ -437,10 +478,7 @@ const LanguageDropdown: FC = function () {
           </a>
         </li>
         <li>
-          <a
-            href="#"
-            className="block py-2 px-4 text-md text-gray-700 hover:bg-gray-100  dark:hover:bg-gray-600 dark:hover:text-white"
-          >
+          <a href="#" className="block py-2 px-4 text-md text-gray-700 ">
             <div className="inline-flex items-center">
               <svg
                 className="mr-2 h-4 w-4 rounded-full"

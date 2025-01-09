@@ -62,7 +62,7 @@ function Page() {
           <span className="">Manpower Request</span>
         </h2>
       </div>
-      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden border border-gray-300">
         {!local.ready ? (
           <div className="flex-grow flex flex-row items-center justify-center">
             <div className="flex flex-col gap-y-2">

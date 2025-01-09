@@ -1,6 +1,7 @@
 "use client";
 import { AlertBatchHrdUnit } from "@/app/components/comp/AlertBatchHrdUnit";
 import { TableList } from "@/app/components/tablelist/TableList";
+import { TabHeader } from "@/app/components/tablist/TabHeader";
 import { Tablist } from "@/app/components/tablist/Tablist";
 import { ButtonBetter } from "@/app/components/ui/button";
 import { ButtonLink } from "@/app/components/ui/button-link";
@@ -34,6 +35,7 @@ function Page() {
     batch_lines: [] as any[],
     batch: null as any,
     can_process: false,
+    tab: "on_going",
   });
   useEffect(() => {
     const run = async () => {
@@ -69,13 +71,39 @@ function Page() {
     run();
   }, []);
   return (
-    <div className="flex flex-col flex-grow">
-      <div className="flex flex-col py-4 pt-0">
-        <h2 className="text-xl font-semibold text-gray-900 ">
+    <div className="flex flex-col flex-grow gap-y-4">
+      <div className="flex flex-row p-4 items-center bg-white border border-gray-300 rounded-lg">
+        <h2 className="text-xl font-semibold text-gray-900">
           <span className="">Manpower Planning Overview</span>
         </h2>
+        <div className="flex flex-row items-center px-4">
+          <div className="flex flex-row items-center border border-gray-300 rounded-full">
+            <TabHeader
+              disabledPagination={true}
+              onLabel={(row: any) => {
+                return row.name;
+              }}
+              onValue={(row: any) => {
+                return row.id;
+              }}
+              onLoad={async () => {
+                return [
+                  { id: "on_going", name: "On going" },
+                  { id: "completed", name: "Completed" },
+                ];
+              }}
+              onChange={(tab: any) => {
+                local.tab = tab?.id;
+                local.render();
+              }}
+              tabContent={(data: any) => {
+                return <></>;
+              }}
+            />
+          </div>
+        </div>
       </div>
-      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden border border-gray-300">
         {!local.ready ? (
           <div className="flex-grow flex flex-row items-center justify-center">
             <div className="flex flex-col gap-y-2">
@@ -89,6 +117,8 @@ function Page() {
         ) : (
           <Tablist
             disabledPagination={true}
+            hiddenHeaderTab={true}
+            value={local.tab}
             onLabel={(row: any) => {
               return row.name;
             }}

@@ -1,6 +1,7 @@
 "use client";
 import { AlertBatch } from "@/app/components/comp/AlertBatch";
 import { TableList } from "@/app/components/tablelist/TableList";
+import { TabHeader } from "@/app/components/tablist/TabHeader";
 import { Tablist } from "@/app/components/tablist/Tablist";
 import { ButtonBetter } from "@/app/components/ui/button";
 import { ButtonLink } from "@/app/components/ui/button-link";
@@ -42,6 +43,7 @@ function Page() {
     batch_lines: [] as string[],
     can_complete: false,
     batch: null as any,
+    tab: "on_going",
   });
   useEffect(() => {
     const run = async () => {
@@ -52,7 +54,7 @@ function Page() {
         take: 1000,
       };
       const params = await events("onload-param", addtional);
-      try{
+      try {
         const res: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/batch` + params
         );
@@ -60,7 +62,7 @@ function Page() {
           const location_null = res?.data?.data?.organization_locations.filter(
             (e: any) => !e?.mp_planning_header
           );
-  
+
           const document_line = res?.data?.data?.organization_locations.filter(
             (e: any) => e?.mp_planning_header
           );
@@ -68,11 +70,11 @@ function Page() {
             (e: any) => e?.mp_planning_header?.id
           );
           local.location_null = getNumber(location_null?.length);
-          local.can_add = document_line?.length ? getAccess("create-batch", roles) : false;
+          local.can_add = document_line?.length
+            ? getAccess("create-batch", roles)
+            : false;
         }
-      }catch(ex){
-
-      }
+      } catch (ex) {}
 
       try {
         const batch: any = await api.get(
@@ -93,14 +95,42 @@ function Page() {
   }, []);
   return (
     <div className="flex flex-col flex-grow">
-      <div className="flex flex-col py-4 pt-0">
-        <h2 className="text-xl font-semibold text-gray-900 ">
+      <div className="flex flex-row p-4 items-center bg-white border border-gray-300 rounded-lg">
+        <h2 className="text-xl font-semibold text-gray-900">
           <span className="">Batch</span>
         </h2>
+        <div className="flex flex-row items-center px-4">
+          <div className="flex flex-row items-center border border-gray-300 rounded-full">
+            <TabHeader
+              disabledPagination={true}
+              onLabel={(row: any) => {
+                return row.name;
+              }}
+              onValue={(row: any) => {
+                return row.id;
+              }}
+              onLoad={async () => {
+                return [
+                  { id: "on_going", name: "On going" },
+                  { id: "completed", name: "Completed" },
+                ];
+              }}
+              onChange={(tab: any) => {
+                local.tab = tab?.id;
+                local.render();
+              }}
+              tabContent={(data: any) => {
+                return <></>;
+              }}
+            />
+          </div>
+        </div>
       </div>
-      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden border border-gray-300">
         <Tablist
           disabledPagination={true}
+          value={local.tab}
+          hiddenHeaderTab={true}
           take={100}
           onLabel={(row: any) => {
             return row.name;
@@ -143,95 +173,102 @@ function Page() {
                             </table>
                           </div>
                           <div className="flex flex-row items-center">
-                            {local.batch?.status === "APPROVED" && local.can_complete && (
-                              <ButtonBetter
-                                onClick={async () => {
-                                  toast.info(
-                                    <>
-                                      <Loader2
-                                        className={cx(
-                                          "h-4 w-4 animate-spin-important",
-                                          css`
-                                            animation: spin 1s linear infinite !important;
-                                            @keyframes spin {
-                                              0% {
-                                                transform: rotate(0deg);
-                                              }
-                                              100% {
-                                                transform: rotate(360deg);
-                                              }
-                                            }
-                                          `
-                                        )}
-                                      />
-                                      {"Saving..."}
-                                    </>
-                                  );
-                                  try {
-                                    const id = local.batch.id;
-                                    const param = {
-                                      id,
-                                      status: "COMPLETED",
-                                      approved_by: get_user("employee.id"),
-                                      approver_name: get_user("employee.name"),
-                                    };
-
-                                    const res = await api.put(
-                                      `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/update-status`,
-                                      param
-                                    );
-                                    try {
-                                      const batch: any = await api.get(
-                                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
-                                      );
-                                      local.batch = batch?.data?.data;
-                                    } catch (ex) {}
-                                    try {
-                                      const batch_ceo: any = await api.get(
-                                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/APPROVED`
-                                      );
-                                      local.batch = batch_ceo?.data?.data;
-                                    } catch (ex) {}
-                                    local.render();
-                                    setTimeout(() => {
-                                      toast.success(
-                                        <div
+                            {local.batch?.status === "APPROVED" &&
+                              local.can_complete && (
+                                <ButtonBetter
+                                  onClick={async () => {
+                                    toast.info(
+                                      <>
+                                        <Loader2
                                           className={cx(
-                                            "cursor-pointer flex flex-col select-none items-stretch flex-1 w-full"
+                                            "h-4 w-4 animate-spin-important",
+                                            css`
+                                              animation: spin 1s linear infinite !important;
+                                              @keyframes spin {
+                                                0% {
+                                                  transform: rotate(0deg);
+                                                }
+                                                100% {
+                                                  transform: rotate(360deg);
+                                                }
+                                              }
+                                            `
                                           )}
-                                          onClick={() => {
-                                            toast.dismiss();
-                                          }}
-                                        >
-                                          <div className="flex text-green-700 items-center success-title font-semibold">
-                                            <Check className="h-6 w-6 mr-1 " />
-                                            Record Saved
-                                          </div>
-                                        </div>
-                                      );
-                                    }, 1000);
-                                  } catch (ex: any) {
-                                    toast.error(
-                                      <div className="flex flex-col w-full">
-                                        <div className="flex text-red-600 items-center">
-                                          <AlertTriangle className="h-4 w-4 mr-1" />
-                                          Submit Failed { get(ex, "response.data.meta.message") || ex.message}.
-                                        </div>
-                                      </div>,
-                                      {
-                                        dismissible: true,
-                                        className: css`
-                                          background: #ffecec;
-                                          border: 2px solid red;
-                                        `,
-                                      }
+                                        />
+                                        {"Saving..."}
+                                      </>
                                     );
-                                  }
-                                }}
-                              >
-                                Completed
-                              </ButtonBetter>
-                            )}
+                                    try {
+                                      const id = local.batch.id;
+                                      const param = {
+                                        id,
+                                        status: "COMPLETED",
+                                        approved_by: get_user("employee.id"),
+                                        approver_name:
+                                          get_user("employee.name"),
+                                      };
+
+                                      const res = await api.put(
+                                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/update-status`,
+                                        param
+                                      );
+                                      try {
+                                        const batch: any = await api.get(
+                                          `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
+                                        );
+                                        local.batch = batch?.data?.data;
+                                      } catch (ex) {}
+                                      try {
+                                        const batch_ceo: any = await api.get(
+                                          `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/APPROVED`
+                                        );
+                                        local.batch = batch_ceo?.data?.data;
+                                      } catch (ex) {}
+                                      local.render();
+                                      setTimeout(() => {
+                                        toast.success(
+                                          <div
+                                            className={cx(
+                                              "cursor-pointer flex flex-col select-none items-stretch flex-1 w-full"
+                                            )}
+                                            onClick={() => {
+                                              toast.dismiss();
+                                            }}
+                                          >
+                                            <div className="flex text-green-700 items-center success-title font-semibold">
+                                              <Check className="h-6 w-6 mr-1 " />
+                                              Record Saved
+                                            </div>
+                                          </div>
+                                        );
+                                      }, 1000);
+                                    } catch (ex: any) {
+                                      toast.error(
+                                        <div className="flex flex-col w-full">
+                                          <div className="flex text-red-600 items-center">
+                                            <AlertTriangle className="h-4 w-4 mr-1" />
+                                            Submit Failed{" "}
+                                            {get(
+                                              ex,
+                                              "response.data.meta.message"
+                                            ) || ex.message}
+                                            .
+                                          </div>
+                                        </div>,
+                                        {
+                                          dismissible: true,
+                                          className: css`
+                                            background: #ffecec;
+                                            border: 2px solid red;
+                                          `,
+                                        }
+                                      );
+                                    }
+                                  }}
+                                >
+                                  Completed
+                                </ButtonBetter>
+                              )}
                           </div>
                         </CardContent>
                       </Card>
@@ -243,8 +280,8 @@ function Page() {
                       name="Location"
                       header={{
                         sideLeft: () => {
-                          if(data.id === "completed") return <></>
-                          if (!local.can_add ) return <></>;
+                          if (data.id === "completed") return <></>;
+                          if (!local.can_add) return <></>;
                           return (
                             <>
                               <AlertBatch local={local} />

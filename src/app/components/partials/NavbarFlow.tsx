@@ -28,11 +28,10 @@ import {
 import { siteurl } from "@/lib/siteurl";
 import { get_user } from "@/lib/get_user";
 import api from "@/lib/axios";
-import { dayDate, formatTime, fullDay, shortDate } from "@/lib/date";
 const NavFlow: React.FC<any> = ({ minimaze }) => {
   return (
-    <Navbar fluid>
-      <div className="w-full p-1 lg:px-5 lg:pl-3">
+    <Navbar fluid className="bg-transparent pt-0 pr-6 pb-0">
+      <div className="w-full p-1 lg:px-5 lg:pl-3  rounded rounded-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center"></div>
           <div className="flex flex-row gap-x-3  justify-center ">

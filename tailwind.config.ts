@@ -24,6 +24,7 @@ export default {
         "active-text": "#FFFFFF",
         "disabled-stroke": "#94A3B8",
         "disabled-text": "#94A3B8",
+        layer: "#F8FAFB"
       },
       fontFamily: {
         body: [

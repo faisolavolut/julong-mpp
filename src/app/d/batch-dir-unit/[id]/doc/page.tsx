@@ -73,7 +73,7 @@ function Page() {
           ]}
         />
       </div>
-      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden border border-gray-300">
         <div className="flex flex-grow flex-col">
           <div
             className={cx(

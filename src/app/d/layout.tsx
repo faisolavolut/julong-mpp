@@ -54,7 +54,7 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
         local.data = menuMe;
         local.ready = true;
         local.render();
-        console.log(local.data)
+        console.log(local.data);
         if (!user?.data.data) {
           navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
         }
@@ -66,95 +66,99 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
   }, []);
   return (
     <div className="flex h-screen flex-row">
-      <div className="flex flex-col">
-        <Navbar fluid className="bg-gray-50">
-          <div className="w-full p-1">
-            <div
-              className={`flex items-center ${
-                mini ? "justify-center" : "justify-between"
-              }`}
-            >
-              <div className={`flex items-center ${mini && "justify-center"}`}>
-                {true && (
-                  <button
-                    onClick={() => {
-                      setMini(!mini);
-                    }}
-                    className={` ${
-                      !mini && "mr-3"
-                    } cursor-pointer rounded p-2 text-primary  lg:inline`}
-                  >
-                    <span className="sr-only">Toggle sidebar</span>
-                    <HiMenuAlt1 className="h-6 w-6" />
-                  </button>
-                )}
-                {!mini && (
-                  <Navbar.Brand href="/">
-                    <img
-                      alt=""
-                      src={siteurl("/midsuit.png")}
-                      className="w-36"
-                    />
-                    <span className="self-center whitespace-nowrap text-2xl font-semibold text-black"></span>
-                  </Navbar.Brand>
-                )}
-              </div>
-            </div>
-          </div>
-        </Navbar>
-        {!local.ready ? (
-          <div className="relative bg-primary w-64">
-            <div
-              className={cx(
-                "absolute",
-                css`
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -50%);
-                `
-              )}
-            >
-              <div className="flex flex-grow flex-row items-center justify-center">
-                <div className="flex flex-col gap-y-2">
-                  <div className="flex flex-row gap-x-2">
-                    <Skeleton className="h-24 flex-grow" />
-                    <Skeleton className="h-24 flex-grow" />
-                  </div>
-                  <Skeleton className="h-24 w-[230px]" />
-                  <div className="flex flex-row gap-x-2">
-                    <Skeleton className="h-24 flex-grow" />
-                    <Skeleton className="h-24 flex-grow" />
-                  </div>
-                  <Skeleton className="h-24 w-[230px]" />
+      <div className="flex flex-col p-3 bg-layer ">
+        <div className="flex flex-col flex-grow rounded-2xl overflow-hidden">
+          <Navbar fluid className="pb-0 bg-primary">
+            <div className="w-full p-1 pb-0">
+              <div
+                className={`flex items-center ${
+                  mini ? "justify-center" : "justify-between"
+                }`}
+              >
+                <div
+                  className={`flex items-center ${mini && "justify-center"}`}
+                >
+                  {true && (
+                    <button
+                      onClick={() => {
+                        setMini(!mini);
+                      }}
+                      className={` ${
+                        !mini && "mr-3"
+                      } cursor-pointer rounded p-2 text-white  lg:inline`}
+                    >
+                      <span className="sr-only">Toggle sidebar</span>
+                      <HiMenuAlt1 className="h-6 w-6" />
+                    </button>
+                  )}
+                  {!mini && (
+                    <Navbar.Brand href="/">
+                      <img
+                        alt=""
+                        src={siteurl("/hiree-2.png")}
+                        className="w-24"
+                      />
+                      <span className="self-center whitespace-nowrap text-2xl font-semibold text-black"></span>
+                    </Navbar.Brand>
+                  )}
                 </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <SidebarProvider>
-            <SidebarTree
-              data={local.data}
-              minimaze={() => {
-                setMini(!mini);
-              }}
-              mini={mini}
-            />
-          </SidebarProvider>
-        )}
+          </Navbar>
+          {!local.ready ? (
+            <div className="relative bg-primary w-64">
+              <div
+                className={cx(
+                  "absolute",
+                  css`
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                  `
+                )}
+              >
+                <div className="flex flex-grow flex-row items-center justify-center">
+                  <div className="flex flex-col gap-y-2">
+                    <div className="flex flex-row gap-x-2">
+                      <Skeleton className="h-24 flex-grow" />
+                      <Skeleton className="h-24 flex-grow" />
+                    </div>
+                    <Skeleton className="h-24 w-[230px]" />
+                    <div className="flex flex-row gap-x-2">
+                      <Skeleton className="h-24 flex-grow" />
+                      <Skeleton className="h-24 flex-grow" />
+                    </div>
+                    <Skeleton className="h-24 w-[230px]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <SidebarProvider>
+              <SidebarTree
+                data={local.data}
+                minimaze={() => {
+                  setMini(!mini);
+                }}
+                mini={mini}
+              />
+            </SidebarProvider>
+          )}
+        </div>
       </div>
-      <div className="flex  bg-white flex-grow flex-col">
+      <div className="flex  bg-layer flex-grow flex-col py-3">
         <NavFlow
           minimaze={() => {
             setMini(!mini);
             localStorage.setItem("mini", !mini ? "true" : "false");
           }}
         />
-        <div className="flex flex-row flex-grow  bg-[#F1F1F1] flex-grow">
+        <div className="flex flex-row flex-grow  flex-grow">
           <div
             id="main-content"
             className="flex-grow  relative overflow-y-auto flex flex-row"
           >
-            <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-10">
+            <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-4 pt-4 pr-6 pl-3">
               {isClient ? (
                 <main className="flex-grow flex flex-col">{children}</main>
               ) : (

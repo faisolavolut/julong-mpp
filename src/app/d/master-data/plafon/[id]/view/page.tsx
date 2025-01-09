@@ -14,7 +14,7 @@ function Page() {
       onTitle={(fm: any) => {
         return (
           <div className="flex flex-row w-full">
-            <div className="flex flex-col py-4 pt-0 flex-grow">
+            <div className="flex flex-col  pt-0 flex-grow">
               <h2 className="text-xl font-semibold text-gray-900 ">
                 <span className="">Plafon</span>
               </h2>

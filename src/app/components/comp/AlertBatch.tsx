@@ -86,7 +86,6 @@ export const AlertBatch: FC<any> = ({ local }) => {
                     const data = {
                       approver_id: get_user("employee.id"),
                       approver_name: get_user("employee.name"),
-                      approver_type: "DIRECTOR",
                       batch_lines: local.batch_lines?.length
                         ? local.batch_lines.map((e: any) => {
                             return {

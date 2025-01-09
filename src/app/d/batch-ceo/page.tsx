@@ -58,7 +58,7 @@ function Page() {
           <span className="">Manpower Planning Overview</span>
         </h2>
       </div>
-      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden border border-gray-300">
         {local.ready && (
           <div className="flex flex-grow flex-col">
             {!local.data ? (

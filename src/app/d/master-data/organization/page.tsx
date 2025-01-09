@@ -14,7 +14,7 @@ function Page() {
           <span className="">Organizations</span>
         </h2>
       </div>
-      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden border border-gray-200">
         <div className="flex flex-grow flex-col">
           <TableList
             name="Organization"

@@ -34,7 +34,7 @@ function Page() {
           <span className="">Plafon</span>
         </h2>
       </div>
-      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden shadow">
+      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden border border-gray-300">
         <TableList
           name="Plafon"
           header={{
