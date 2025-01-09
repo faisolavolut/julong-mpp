@@ -104,6 +104,7 @@ const SidebarTree: React.FC<TreeMenuProps> = ({ data, minimaze, mini }) => {
               <div
                 className={classNames(
                   "relative flex-row flex items-center cursor-pointer items-center w-full rounded-full  rounded-r-none text-base font-normal text-gray-900   flex flex-row",
+                  
                   mini
                     ? isParentActive && !depth
                       ? " text-base font-normal text-primary rounded-full  rounded-r-none group bg-layer   transition-all duration-200  dark:bg-gray-700"
