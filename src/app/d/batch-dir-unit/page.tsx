@@ -169,7 +169,7 @@ function Page() {
         }
         return columnMpp({
           id: local.tab,
-          role: "Direktur",
+          role: "Direktur Unit",
           local,
         });
       }}
