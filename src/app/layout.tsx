@@ -1,27 +1,19 @@
 "use client";
-import localFont from "next/font/local";
-import "./globals.css";
-import Header from "@/app/components/partials/Header";
-import Script from "@/app/components/partials/Script";
+import "@/app/globals.css";
+import Header from "@/lib/components/partials/Header";
+import Script from "@/lib/components/partials/Script";
 import { v4 as uuidv4 } from "uuid";
-import { navigate } from "@/lib/navigate";
+import { navigate } from "@/lib/utils/navigate";
 import classnames from "classnames";
 import { css } from "@emotion/css";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import dotenv from "dotenv";
+import { userRoleMe } from "@/lib/utils/getAccess";
+import { useLocal } from "@/lib/utils/use-local";
+import { userToken } from "@/lib/helpers/user";
 dotenv.config();
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -31,26 +23,49 @@ globalThis.css = css;
 globalThis.uuid = uuidv4;
 globalThis.navigate = navigate;
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
+  const [isClient, setIsClient] = useState(false);
+  const local = useLocal({
+    ready: false,
+  });
   const routerInstance = useRouter();
   useEffect(() => {
-    globalThis.router = routerInstance;
-    const user = localStorage.getItem("user");
-    if (user) {
-      const w = window as any;
-      w.user = JSON.parse(user);
-    }
+    setIsClient(true);
+    const run = async () => {
+      let isUser = false;
+      try {
+        isUser = await userToken();
+      } catch (ex) {}
+      if (!isUser) {
+        local.ready = true;
+        local.render();
+      } else {
+        try {
+          const roles = await userRoleMe();
+          globalThis.userRole = roles;
+        } catch (ex) {}
+        globalThis.router = routerInstance;
+        const user = localStorage.getItem("user");
+        if (user) {
+          const w = window as any;
+          w.user = JSON.parse(user);
+        }
+        local.ready = true;
+        local.render();
+      }
+    };
+    run();
   }, []);
 
   return (
     <html lang="en">
       <head>
-        <Header title="MPP" />
+        <Header title="Recruitment" />
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
         />
       </head>
-      <body className={`antialiased bg-gray-50`}>
+      <body className={`antialiased bg-gray-50 relative`}>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-THQTXJ7"
@@ -61,7 +76,20 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
           ></iframe>
         </noscript>
         <Toaster position="top-right" />
-        {children}
+        {isClient ? (
+          <>
+            {local.ready ? (
+              children
+            ) : (
+              <div className="h-screen w-screen flex flex-row items-center justify-center">
+                <div className="spinner-better"></div>
+              </div>
+            )}
+          </>
+        ) : (
+          <></>
+        )}
+
         <Script />
       </body>
     </html>

@@ -1,4 +1,4 @@
-import { siteurl } from "@/lib/siteurl";
+import { siteurl } from "@/lib/utils/siteurl";
 
 export default function NotFound() {
   return (

@@ -1,14 +1,13 @@
 "use client";
-import { Field } from "@/app/components/form/Field";
-import { FormBetter } from "@/app/components/form/FormBetter";
-import { Alert } from "@/app/components/ui/alert";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import { btn, ButtonContainer } from "@/app/components/ui/button";
-import { actionToast } from "@/lib/action";
-import api from "@/lib/axios";
-import { normalDate } from "@/lib/date";
-import { getParams } from "@/lib/get-params";
-import { getStatus } from "@/lib/getStatusDate";
+import { Field } from "@/lib/components/form/Field";
+import { FormBetter } from "@/lib/components/form/FormBetter";
+import { Alert } from "@/lib/components/ui/alert";
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import { ButtonContainer } from "@/lib/components/ui/button";
+import { actionToast } from "@/lib/utils/action";
+import api from "@/lib/utils/axios";
+import { normalDate } from "@/lib/utils/date";
+import { getParams } from "@/lib/utils/get-params";
 import { IoMdSave } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 
@@ -44,12 +43,10 @@ function Page() {
                       fm.submit();
                     }}
                   >
-                    <div className={cx("bg-primary", btn())}>
-                      <div className="flex items-center gap-x-0.5">
-                        <IoMdSave className="text-xl" />
-                        Save
-                      </div>
-                    </div>
+                    <ButtonContainer className={cx("bg-primary")}>
+                      <IoMdSave className="text-xl" />
+                      Save
+                    </ButtonContainer>
                   </Alert>
                 </>
               ) : (
@@ -69,12 +66,10 @@ function Page() {
                       fm.submit();
                     }}
                   >
-                    <div className={cx("bg-primary", btn())}>
-                      <div className="flex items-center gap-x-0.5">
-                        <IoMdSave className="text-xl" />
-                        Submit
-                      </div>
-                    </div>
+                    <ButtonContainer className={cx("bg-primary")}>
+                      <IoMdSave className="text-xl" />
+                      Submit
+                    </ButtonContainer>
                   </Alert>
                 </>
               ) : (

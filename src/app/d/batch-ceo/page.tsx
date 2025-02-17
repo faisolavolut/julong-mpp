@@ -1,27 +1,19 @@
 "use client";
 import { AlertCeoApprove } from "@/app/components/comp/AlertCeoApprove";
 import { AlertCeoReject } from "@/app/components/comp/AlertCeoReject";
-import { TableList } from "@/app/components/tablelist/TableList";
-import { ButtonBetter } from "@/app/components/ui/button";
-import { ButtonLink } from "@/app/components/ui/button-link";
-import MyDocument from "@/app/components/ui/Document";
-import api from "@/lib/axios";
-import { shortDate } from "@/lib/date";
-import { events } from "@/lib/event";
-import { accessMe, getAccess, userRoleMe } from "@/lib/getAccess";
-import { getValue } from "@/lib/getValue";
-import { useLocal } from "@/lib/use-local";
+import MyDocument from "@/lib/components/ui/Document";
+import api from "@/lib/utils/axios";
+import { getAccess, userRoleMe } from "@/lib/utils/getAccess";
+import { useLocal } from "@/lib/utils/use-local";
+import { Sticker } from "lucide-react";
+import dynamic from "next/dynamic";
+import { notFound } from "next/navigation";
+import { useEffect } from "react";
+
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
   { ssr: false }
 );
-import { Button } from "flowbite-react";
-import { Sticker } from "lucide-react";
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { useEffect } from "react";
-import { IoEye } from "react-icons/io5";
 
 function Page() {
   const local = useLocal({

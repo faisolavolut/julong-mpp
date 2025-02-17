@@ -1,33 +1,17 @@
 "use client";
-import { Field } from "@/app/components/form/Field";
-import { Form } from "@/app/components/form/Form";
-import { FormBetter } from "@/app/components/form/FormBetter";
-import { TableList } from "@/app/components/tablelist/TableList";
-import { Tablist } from "@/app/components/tablist/Tablist";
-import { Alert } from "@/app/components/ui/alert";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/app/components/ui/card";
-import api from "@/lib/axios";
-import { cloneFM } from "@/lib/cloneFm";
-import { normalDate, shortDate } from "@/lib/date";
-import { getParams } from "@/lib/get-params";
-import { get_user } from "@/lib/get_user";
-import { getAccess, userRoleMe } from "@/lib/getAccess";
-import { useLocal } from "@/lib/use-local";
-import { Breadcrumb, Button } from "flowbite-react";
+import { Field } from "@/lib/components/form/Field";
+import { FormBetter } from "@/lib/components/form/FormBetter";
+import { Alert } from "@/lib/components/ui/alert";
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import { ButtonContainer } from "@/lib/components/ui/button";
+import api from "@/lib/utils/axios";
+import { normalDate } from "@/lib/utils/date";
+import { get_user } from "@/lib/utils/get_user";
+import { getAccess, userRoleMe } from "@/lib/utils/getAccess";
+import { useLocal } from "@/lib/utils/use-local";
 import { notFound } from "next/navigation";
 import { useEffect } from "react";
-import { GoInfo } from "react-icons/go";
 import { IoMdSave } from "react-icons/io";
-import { MdDelete } from "react-icons/md";
 
 function Page() {
   const local = useLocal({
@@ -55,7 +39,7 @@ function Page() {
     };
     run();
   }, []);
-  if(local.ready && !local.can_add) return notFound()
+  if (local.ready && !local.can_add) return notFound();
   return (
     <FormBetter
       onTitle={(fm: any) => {
@@ -77,21 +61,24 @@ function Page() {
                 ]}
               />
             </div>
-            {local.can_add ?
-            <div className="flex flex-row space-x-2 items-center">
-              <Alert
-                type={"save"}
-                msg={"Are you sure you want to save this new record?"}
-                onClick={() => {
-                  fm.submit();
-                }}
-              >
-                <ButtonContainer className={"bg-primary"}>
-                  <IoMdSave className="text-xl" />
-                  Save
-                </ButtonContainer>
-              </Alert>
-            </div> : <></> }
+            {local.can_add ? (
+              <div className="flex flex-row space-x-2 items-center">
+                <Alert
+                  type={"save"}
+                  msg={"Are you sure you want to save this new record?"}
+                  onClick={() => {
+                    fm.submit();
+                  }}
+                >
+                  <ButtonContainer className={"bg-primary"}>
+                    <IoMdSave className="text-xl" />
+                    Save
+                  </ButtonContainer>
+                </Alert>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         );
       }}

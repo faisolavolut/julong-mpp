@@ -8,18 +8,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog";
-import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
-import { IoEye } from "react-icons/io5";
+} from "@/lib/components/ui/dialog";
+import { ButtonBetter, ButtonContainer } from "@/lib/components/ui/button";
 import { HiPlus } from "react-icons/hi";
-import { formatMoney } from "../form/field/TypeInput";
-import { get_user } from "@/lib/get_user";
-import api from "@/lib/axios";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
-import { getNumber } from "@/lib/getNumber";
-import { events } from "@/lib/event";
 import get from "lodash.get";
+import { get_user } from "@/lib/utils/get_user";
+import { apix } from "@/lib/utils/apix";
+import { formatMoney } from "@/lib/components/form/field/TypeInput";
 export const AlertBatch: FC<any> = ({ local }) => {
   return (
     <>
@@ -46,7 +43,8 @@ export const AlertBatch: FC<any> = ({ local }) => {
                     local?.location_null
                   )} locations without an MPP `
                 : ``}
-                Are you sure you want to batch this MPP? Keep in mind, this action can't be undone!
+              Are you sure you want to batch this MPP? Keep in mind, this action
+              can't be undone!
             </div>
           </div>
           <DialogFooter className="sm:justify-end">
@@ -94,24 +92,33 @@ export const AlertBatch: FC<any> = ({ local }) => {
                           })
                         : [],
                     };
-                    await api.post(
-                      `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/create`,
-                      data
-                    );
+                    await apix({
+                      port: "mpp",
+                      value: "data.data.job_postings",
+                      path: `/api/batch/create`,
+                      method: "post",
+                      data: data,
+                    });
                     local.can_add = false;
                     local.render();
 
                     try {
-                      const batch: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/NEED APPROVAL`
-                      );
-                      local.batch = batch?.data?.data;
+                      const batch: any = await apix({
+                        port: "mpp",
+                        value: "data.data",
+                        path: `/api/batch/find-by-status/NEED APPROVAL`,
+                        method: "get",
+                      });
+                      local.batch = batch;
                     } catch (ex) {}
                     try {
-                      const batch_ceo: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-by-status/APPROVED`
-                      );
-                      local.batch = batch_ceo?.data?.data;
+                      const batch_ceo: any = await apix({
+                        port: "mpp",
+                        value: "data.data",
+                        path: `/api/batch/find-by-status/APPROVED`,
+                        method: "get",
+                      });
+                      local.batch = batch_ceo;
                     } catch (ex) {}
                     local.render();
                   }

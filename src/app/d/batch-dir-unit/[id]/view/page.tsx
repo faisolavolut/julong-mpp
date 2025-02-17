@@ -1,56 +1,14 @@
 "use client";
-import { Field } from "@/app/components/form/Field";
-import { Form } from "@/app/components/form/Form";
-import { FormBetter } from "@/app/components/form/FormBetter";
-import { TableList } from "@/app/components/tablelist/TableList";
-import { Tablist } from "@/app/components/tablist/Tablist";
-import { Alert } from "@/app/components/ui/alert";
-import {
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/app/components/ui/alert-dialog";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/app/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/app/components/ui/dialog";
-import { PreviewImagePopup } from "@/app/components/ui/previewImage";
-import api from "@/lib/axios";
-import { cloneFM } from "@/lib/cloneFm";
-import { shortDate } from "@/lib/date";
-import { events } from "@/lib/event";
-import { getParams } from "@/lib/get-params";
-import { get_user } from "@/lib/get_user";
-import { getAccess, userRoleMe } from "@/lib/getAccess";
-import { getNumber } from "@/lib/getNumber";
-import { getValue } from "@/lib/getValue";
-import { useLocal } from "@/lib/use-local";
-import { Breadcrumb, Button } from "flowbite-react";
-import { X } from "lucide-react";
+import { Field } from "@/lib/components/form/Field";
+import { FormBetter } from "@/lib/components/form/FormBetter";
+import { TableList } from "@/lib/components/tablelist/TableList";
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import api from "@/lib/utils/axios";
+import { cloneFM } from "@/lib/utils/cloneFm";
+import { getParams } from "@/lib/utils/get-params";
+import { getAccess, userRoleMe } from "@/lib/utils/getAccess";
+import { useLocal } from "@/lib/utils/use-local";
 import { useEffect } from "react";
-import { FiInfo } from "react-icons/fi";
-import { GoInfo } from "react-icons/go";
-import { HiDocumentDownload } from "react-icons/hi";
-import { IoMdSave } from "react-icons/io";
-import { IoEye } from "react-icons/io5";
-import { MdDelete } from "react-icons/md";
 
 function Page() {
   const id = getParams("id");

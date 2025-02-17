@@ -1,17 +1,16 @@
 "use client";
-import api from "@/lib/axios";
+import get from "lodash.get";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { configMenu } from "./d/config-menu";
+import ServerErrorPage from "./components/comp/500";
+import { useLocal } from "@/lib/utils/use-local";
+import api from "@/lib/utils/axios";
+import { userRoleMe } from "@/lib/utils/getAccess";
 import {
   filterMenuByPermission,
   getFirstMenuWithUrl,
-} from "@/lib/filterMenuByPermission";
-import { userRoleMe } from "@/lib/getAccess";
-import get from "lodash.get";
-import { notFound, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { configMenu } from "./d/config-menu";
-import { read } from "fs";
-import { useLocal } from "@/lib/use-local";
-import ServerErrorPage from "./components/comp/500";
+} from "@/lib/utils/filterMenuByPermission";
 
 function HomePage() {
   const router = useRouter();
@@ -49,7 +48,7 @@ function HomePage() {
     run();
   }, []);
   if (local.ready) {
-    if (!local.access) return <ServerErrorPage/>;
+    if (!local.access) return <ServerErrorPage />;
   }
   return <div className="px-4 pt-6"></div>;
 }

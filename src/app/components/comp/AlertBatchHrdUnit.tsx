@@ -8,13 +8,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog";
-import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
-import { IoEye } from "react-icons/io5";
-import { HiPlus } from "react-icons/hi";
-import { formatMoney } from "../form/field/TypeInput";
-import { get_user } from "@/lib/get_user";
-import api from "@/lib/axios";
+} from "@/lib/components/ui/dialog";
+import { ButtonBetter, ButtonContainer } from "@/lib/components/ui/button";
+import { formatMoney } from "@/lib/components/form/field/TypeInput";
+import { get_user } from "@/lib/utils/get_user";
+import api from "@/lib/utils/axios";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import get from "lodash.get";

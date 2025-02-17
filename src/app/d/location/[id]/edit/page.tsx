@@ -1,26 +1,15 @@
 "use client";
-import { Field } from "@/app/components/form/Field";
-import { Form } from "@/app/components/form/Form";
-import { FormBetter } from "@/app/components/form/FormBetter";
-import { TableList } from "@/app/components/tablelist/TableList";
-import { Alert } from "@/app/components/ui/alert";
+import { Field } from "@/lib/components/form/Field";
+import { FormBetter } from "@/lib/components/form/FormBetter";
+import { TableList } from "@/lib/components/tablelist/TableList";
+import { Alert } from "@/lib/components/ui/alert";
 import {
-  AlertDialogAction,
   AlertDialogCancel,
-  AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/app/components/ui/alert-dialog";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/app/components/ui/card";
+} from "@/lib/components/ui/alert-dialog";
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import { ButtonBetter, ButtonContainer } from "@/lib/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -28,30 +17,29 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog";
-import { PreviewImagePopup } from "@/app/components/ui/previewImage";
+} from "@/lib/components/ui/dialog";
 import { statusMpp } from "@/constants/status-mpp";
-import { actionToast } from "@/lib/action";
-import api from "@/lib/axios";
-import { cloneFM } from "@/lib/cloneFm";
-import { normalDate, shortDate } from "@/lib/date";
-import { events } from "@/lib/event";
-import { getParams } from "@/lib/get-params";
-import { get_user } from "@/lib/get_user";
-import { getAccess, userRoleMe } from "@/lib/getAccess";
-import { getNumber } from "@/lib/getNumber";
-import { getValue } from "@/lib/getValue";
-import { useLocal } from "@/lib/use-local";
+import { actionToast } from "@/lib/utils/action";
+import api from "@/lib/utils/axios";
+import { cloneFM } from "@/lib/utils/cloneFm";
+import { normalDate, shortDate } from "@/lib/utils/date";
+import { events } from "@/lib/utils/event";
+import { getParams } from "@/lib/utils/get-params";
+import { getAccess, userRoleMe } from "@/lib/utils/getAccess";
+import { getNumber } from "@/lib/utils/getNumber";
+import { getValue } from "@/lib/utils/getValue";
+import { useLocal } from "@/lib/utils/use-local";
 import { AlertTriangle, X } from "lucide-react";
 import { notFound } from "next/navigation";
 import { useEffect } from "react";
 import { FiInfo } from "react-icons/fi";
-import { GoInfo } from "react-icons/go";
-import { HiDocumentDownload, HiPlus } from "react-icons/hi";
+import { HiPlus } from "react-icons/hi";
 import { IoMdSave } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { toast } from "sonner";
+import { PreviewImagePopup } from "@/lib/components/ui/previewImage";
+import { TableEditBetter } from "@/lib/components/tablelist/TableBetter";
 
 function Page() {
   const local = useLocal({
@@ -378,7 +366,9 @@ function Page() {
                     <>
                       <Alert
                         type={"save"}
-                        msg={"Are you sure you want to submit this data? Once submitted, the data will be locked and its status will be updated."}
+                        msg={
+                          "Are you sure you want to submit this data? Once submitted, the data will be locked and its status will be updated."
+                        }
                         onClick={async () => {
                           fm.data.level = "Level HRD Location";
                           fm.data.status = "IN_PROGRESS";
@@ -758,7 +748,10 @@ function Page() {
           >
             <div className="w-full flex flex-row">
               <div className="flex flex-grow flex-col h-[350px]">
-                <TableList
+                <TableEditBetter
+                  name="document_line"
+                  delete_name="deleted_line_ids"
+                  fm={fm}
                   disabledHoverRow={true}
                   disabledPagination={true}
                   header={{
@@ -830,7 +823,6 @@ function Page() {
                       name: "level",
                       header: () => <span>Job Level</span>,
                       renderCell: ({ row, name, cell, tbl }: any) => {
-                        const fm_row = cloneFM(fm, row);
                         return (
                           <>
                             <Field
@@ -845,9 +837,6 @@ function Page() {
                                   fm.data?.status === "REJECTED"
                                 )
                               }
-                              onChange={() => {
-                                fm.render();
-                              }}
                               onLoad={async () => {
                                 const res: any = await api.get(
                                   `${process.env.NEXT_PUBLIC_API_PORTAL}/api/job-levels/organization/${fm.data.organization_id}`
@@ -1162,21 +1151,7 @@ function Page() {
                             <ButtonBetter
                               className="bg-red-500"
                               onClick={() => {
-                                const deleted_line_ids: any[] = Array.isArray(
-                                  fm.data?.deleted_line_ids
-                                )
-                                  ? fm.data?.deleted_line_ids
-                                  : [];
-                                if (row?.id) {
-                                  deleted_line_ids.push(row.id);
-                                }
-                                fm.data["deleted_line_ids"] = deleted_line_ids;
                                 tbl.removeRow(row);
-                                fm.data.document_line =
-                                  fm.data.document_line.filter(
-                                    (e: any) => e !== row
-                                  );
-                                fm.render();
                                 const recruit = fm.data.document_line?.length
                                   ? fm.data.document_line
                                       .map(
@@ -1207,9 +1182,6 @@ function Page() {
                       },
                     },
                   ]}
-                  onLoad={async (param: any) => {
-                    return fm.data.document_line;
-                  }}
                   onInit={async (list: any) => {}}
                 />
               </div>

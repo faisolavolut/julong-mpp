@@ -1,21 +1,21 @@
 "use client";
 import { AlertDirekturApproveMPP } from "@/app/components/comp/AlertDirekturApproveMPP";
 import { AlertDirekturRejectMPP } from "@/app/components/comp/AlertDirekturRejectMPP";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import MyDocument from "@/app/components/ui/Document";
-import api from "@/lib/axios";
-import { getParams } from "@/lib/get-params";
-import { accessMe, getAccess, userRoleMe } from "@/lib/getAccess";
-import { useLocal } from "@/lib/use-local";
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import MyDocument from "@/lib/components/ui/Document";
+import api from "@/lib/utils/axios";
+import { getParams } from "@/lib/utils/get-params";
+import { getAccess, userRoleMe } from "@/lib/utils/getAccess";
+import { useLocal } from "@/lib/utils/use-local";
 import get from "lodash.get";
-const PDFViewer = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
-  { ssr: false }
-);
 import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
+const PDFViewer = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
+  { ssr: false }
+);
 
 function Page() {
   const id = getParams("id");
@@ -50,7 +50,7 @@ function Page() {
       } catch (ex) {}
       local.ready = true;
       local.render();
-      console.log(local.can_approval)
+      console.log(local.can_approval);
     };
     run();
   }, []);
@@ -111,17 +111,15 @@ function Page() {
                 />
               </PDFViewer>
             )}
-
-            
           </div>
           {local.can_approval && isReady && (
-              <div className="flex flex-row items-center justify-center">
-                <div className="flex flex-row gap-x-1 py-2">
-                  <AlertDirekturRejectMPP lc={local} />
-                  <AlertDirekturApproveMPP fm={local} />
-                </div>
+            <div className="flex flex-row items-center justify-center">
+              <div className="flex flex-row gap-x-1 py-2">
+                <AlertDirekturRejectMPP lc={local} />
+                <AlertDirekturApproveMPP fm={local} />
               </div>
-            )}
+            </div>
+          )}
         </div>
       </div>
     </div>

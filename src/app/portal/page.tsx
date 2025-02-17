@@ -1,18 +1,18 @@
 "use client";
 
-import api from "@/lib/axios";
-import { get_params_url } from "@/lib/getParamsUrl";
-import { useLocal } from "@/lib/use-local";
+import api from "@/lib/utils/axios";
+import { useLocal } from "@/lib/utils/use-local";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import ServerErrorPage from "../components/comp/500";
-import { userRoleMe } from "@/lib/getAccess";
 import get from "lodash.get";
+import { configMenu } from "../d/config-menu";
+import { get_params_url } from "@/lib/utils/getParamsUrl";
+import { userRoleMe } from "@/lib/utils/getAccess";
 import {
   filterMenuByPermission,
   getFirstMenuWithUrl,
-} from "@/lib/filterMenuByPermission";
-import { configMenu } from "../d/config-menu";
+} from "@/lib/utils/filterMenuByPermission";
 
 function Portal() {
   const local = useLocal({

@@ -1,12 +1,12 @@
 "use client";
-import { Field } from "@/app/components/form/Field";
-import { FormBetter } from "@/app/components/form/FormBetter";
-import { Alert } from "@/app/components/ui/alert";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import { btn } from "@/app/components/ui/button";
-import api from "@/lib/axios";
-import { normalDate } from "@/lib/date";
+import { Field } from "@/lib/components/form/Field";
+import { FormBetter } from "@/lib/components/form/FormBetter";
+import { Alert } from "@/lib/components/ui/alert";
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import api from "@/lib/utils/axios";
+import { normalDate } from "@/lib/utils/date";
 import { IoMdSave } from "react-icons/io";
+import { ButtonContainer } from "@/lib/components/ui/button";
 
 function Page() {
   return (
@@ -40,12 +40,10 @@ function Page() {
                   await fm.reload();
                 }}
               >
-                <div className={cx("bg-primary", btn())}>
-                  <div className="flex items-center gap-x-0.5">
-                    <IoMdSave className="text-xl" />
-                    Save
-                  </div>
-                </div>
+                <ButtonContainer className={"bg-primary"}>
+                  <IoMdSave className="text-xl" />
+                  Save
+                </ButtonContainer>
               </Alert>
             </div>
           </div>
@@ -65,7 +63,7 @@ function Page() {
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods`,
           param
         );
-        navigate("/d/period/"+res.data?.data?.id+"/edit")
+        navigate("/d/period/" + res.data?.data?.id + "/edit");
       }}
       onLoad={async () => {
         return {

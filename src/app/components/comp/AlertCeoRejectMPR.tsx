@@ -8,21 +8,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog";
-import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
-import { Checkbox } from "@/app/components/ui/checkbox";
-import { IoEye } from "react-icons/io5";
-import { HiPlus } from "react-icons/hi";
-import { useLocal } from "@/lib/use-local";
-import api from "@/lib/axios";
-import { Form } from "../form/Form";
-import { Field } from "../form/Field";
-import { cloneFM } from "@/lib/cloneFm";
+} from "@/lib/components/ui/dialog";
+import { ButtonBetter } from "@/lib/components/ui/button";
+import { useLocal } from "@/lib/utils/use-local";
+import api from "@/lib/utils/axios";
+import { Form } from "@/lib/components/form/Form";
+import { Field } from "@/lib/components/form/Field";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
-import { get_user } from "@/lib/get_user";
-import { getParams } from "@/lib/get-params";
-import { Button } from "flowbite-react";
+import { get_user } from "@/lib/utils/get_user";
+import { getParams } from "@/lib/utils/get-params";
 import get from "lodash.get";
 export const AlertCeoRejectMPR: FC<any> = ({ lc }) => {
   const id = getParams("id");
@@ -94,10 +89,14 @@ export const AlertCeoRejectMPR: FC<any> = ({ lc }) => {
                       </ButtonBetter>
                     </DialogClose>
                     {!fm.data?.notes ? (
-                      <ButtonBetter onClick={() => {
-                        fm.error["notes"] = "Field is required"
+                      <ButtonBetter
+                        onClick={() => {
+                          fm.error["notes"] = "Field is required";
                           fm.render();
-                      }}>Yes</ButtonBetter>
+                        }}
+                      >
+                        Yes
+                      </ButtonBetter>
                     ) : (
                       <DialogClose
                         asChild
@@ -132,7 +131,7 @@ export const AlertCeoRejectMPR: FC<any> = ({ lc }) => {
                               level: "Level CEO",
                               approver_id: get_user("employee.id"),
                               approved_by: get_user("employee.name"),
-                              notes: fm.data?.notes
+                              notes: fm.data?.notes,
                             };
 
                             const formData = new FormData();
@@ -170,7 +169,10 @@ export const AlertCeoRejectMPR: FC<any> = ({ lc }) => {
                               <div className="flex flex-col w-full">
                                 <div className="flex text-red-600 items-center">
                                   <AlertTriangle className="h-4 w-4 mr-1" />
-                                  Submit Failed { get(ex, "response.data.meta.message") || ex.message}.
+                                  Submit Failed{" "}
+                                  {get(ex, "response.data.meta.message") ||
+                                    ex.message}
+                                  .
                                 </div>
                               </div>,
                               {

@@ -1,8 +1,7 @@
-import { ButtonLink } from "@/app/components/ui/button-link";
-import { shortDate } from "@/lib/date";
-import { getAccess } from "@/lib/getAccess";
-import { getValue } from "@/lib/getValue";
-import get from "lodash.get";
+import { ButtonLink } from "@/lib/components/ui/button-link";
+import { shortDate } from "@/lib/utils/date";
+import { getAccess } from "@/lib/utils/getAccess";
+import { getValue } from "@/lib/utils/getValue";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { IoEye } from "react-icons/io5";
 import { getStatusLabel } from "./status-mpp";

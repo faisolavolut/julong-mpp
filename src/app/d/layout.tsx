@@ -1,23 +1,18 @@
 "use client";
 import "@/app/globals.css";
-import NavFlow from "@/app/components/partials/NavbarFlow";
-import Footer from "@/app/components/partials/Footer";
-
-import { SidebarProvider } from "@/context/SidebarContext";
-import SidebarTree from "@/app/components/partials/Sidebar";
-import { HiChartPie, HiCubeTransparent, HiMenuAlt1 } from "react-icons/hi";
-import { LuUsers } from "react-icons/lu";
 import { configMenu } from "./config-menu";
-import { useLocal } from "@/lib/use-local";
 import { useEffect, useState } from "react";
-import api from "@/lib/axios";
 import get from "lodash.get";
-import { Skeleton } from "../components/ui/Skeleton";
-import { userRoleMe } from "@/lib/getAccess";
-import { filterMenuByPermission } from "@/lib/filterMenuByPermission";
-import { get_user } from "@/lib/get_user";
+import { useLocal } from "@/lib/utils/use-local";
+import api from "@/lib/utils/axios";
+import { userRoleMe } from "@/lib/utils/getAccess";
+import { filterMenuByPermission } from "@/lib/utils/filterMenuByPermission";
+import { Skeleton } from "@/lib/components/ui/Skeleton";
+import { SidebarProvider } from "@/lib/context/SidebarContext";
 import { Navbar } from "flowbite-react";
-import { siteurl } from "@/lib/siteurl";
+import { siteurl } from "@/lib/utils/siteurl";
+import SidebarBetterTree from "@/lib/components/partials/SidebarBetter";
+
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -27,7 +22,7 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
 
   const local = useLocal({
     user: null as any,
-    data: configMenu,
+    data: [] as any[],
     ready: false,
   });
   useEffect(() => {
@@ -54,7 +49,6 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
         local.data = menuMe;
         local.ready = true;
         local.render();
-        console.log(local.data);
         if (!user?.data.data) {
           navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
         }
@@ -64,11 +58,12 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
     };
     run();
   }, []);
+
   return (
     <div className="flex h-screen flex-row">
       <div className="flex flex-col p-3 bg-layer ">
-        <div className="flex flex-col flex-grow rounded-2xl overflow-hidden">
-          <Navbar fluid className="pb-0 bg-primary">
+        <div className="flex flex-col flex-grow rounded-2xl shadow-md">
+          <Navbar fluid className="pb-0 bg-white relative rounded-t-2xl">
             <div className="w-full p-1 pb-0">
               <div
                 className={`flex items-center ${
@@ -76,26 +71,26 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
                 }`}
               >
                 <div
-                  className={`flex items-center ${mini && "justify-center"}`}
+                  className={`flex items-center ${
+                    mini ? "justify-center" : "p-2"
+                  }`}
                 >
-                  {true && (
-                    <button
-                      onClick={() => {
-                        setMini(!mini);
-                      }}
-                      className={` ${
-                        !mini && "mr-3"
-                      } cursor-pointer rounded p-2 text-white  lg:inline`}
+                  {mini ? (
+                    <div className="w-10">
+                      <img
+                        src={siteurl("/logo.png")}
+                        alt="John Cena"
+                        className=" w-full h-full object-cover "
+                      />
+                    </div>
+                  ) : (
+                    <Navbar.Brand
+                      href="/"
+                      className="flex flex-row items-center justify-center"
                     >
-                      <span className="sr-only">Toggle sidebar</span>
-                      <HiMenuAlt1 className="h-6 w-6" />
-                    </button>
-                  )}
-                  {!mini && (
-                    <Navbar.Brand href="/">
                       <img
                         alt=""
-                        src={siteurl("/hiree-2.png")}
+                        src={siteurl("/logo-full.png")}
                         className="w-32"
                       />
                       <span className="self-center whitespace-nowrap text-2xl font-semibold text-black"></span>
@@ -135,7 +130,7 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
             </div>
           ) : (
             <SidebarProvider>
-              <SidebarTree
+              <SidebarBetterTree
                 data={local.data}
                 minimaze={() => {
                   setMini(!mini);
@@ -147,18 +142,12 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
         </div>
       </div>
       <div className="flex  bg-layer flex-grow flex-col py-3">
-        <NavFlow
-          minimaze={() => {
-            setMini(!mini);
-            localStorage.setItem("mini", !mini ? "true" : "false");
-          }}
-        />
         <div className="flex flex-row flex-grow  flex-grow">
           <div
             id="main-content"
             className="flex-grow  relative overflow-y-auto flex flex-row"
           >
-            <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-4 pt-4 pr-6 pl-3">
+            <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-4 pb-0 pt-0 pr-6 pl-3">
               {isClient ? (
                 <main className="flex-grow flex flex-col">{children}</main>
               ) : (

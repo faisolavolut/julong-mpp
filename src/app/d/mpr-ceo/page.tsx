@@ -1,15 +1,121 @@
 "use client";
-import { TableList } from "@/app/components/tablelist/TableList";
-import { ButtonBetter } from "@/app/components/ui/button";
-import { ButtonLink } from "@/app/components/ui/button-link";
+import { TableList } from "@/lib/components/tablelist/TableList";
+import { ButtonLink } from "@/lib/components/ui/button-link";
 import { getStatusLabel } from "@/constants/status-mpp";
-import api from "@/lib/axios";
-import { shortDate } from "@/lib/date";
-import { events } from "@/lib/event";
-import { getValue } from "@/lib/getValue";
+import api from "@/lib/utils/axios";
+import { shortDate } from "@/lib/utils/date";
+import { events } from "@/lib/utils/event";
+import { getValue } from "@/lib/utils/getValue";
 import { IoEye } from "react-icons/io5";
+import { TableUI } from "@/lib/components/tablelist/TableUI";
+import { apix } from "@/lib/utils/apix";
+import { getNumber } from "@/lib/utils/getNumber";
 
 function Page() {
+  return (
+    <TableUI
+      title="Manpower Request Overview"
+      name="Manpower Request Overview"
+      header={{
+        sideLeft: (data: any) => {
+          return <></>;
+        },
+      }}
+      column={[
+        {
+          name: "document_number",
+          header: () => <span>Document Number</span>,
+          renderCell: ({ row, name, cell }: any) => {
+            return <>{getValue(row, name)}</>;
+          },
+        },
+        {
+          name: "document_date",
+          header: () => <span>Document Date</span>,
+          renderCell: ({ row, name, cell }: any) => {
+            return <>{shortDate(new Date())}</>;
+          },
+        },
+        {
+          name: "organization_name",
+          header: () => <span>Organization</span>,
+          renderCell: ({ row, name, cell }: any) => {
+            return <>{getValue(row, name)}</>;
+          },
+        },
+        {
+          name: "requestor_name",
+          header: () => <span>Requestor</span>,
+          renderCell: ({ row, name, cell }: any) => {
+            return <>{getValue(row, name)}</>;
+          },
+        },
+        {
+          name: "job_name",
+          header: () => <span>Job Requested</span>,
+          renderCell: ({ row, name, cell }: any) => {
+            return <>{getValue(row, name)}</>;
+          },
+        },
+        {
+          name: "status",
+          header: () => <span>Status</span>,
+          renderCell: ({ row, name, cell }: any) => {
+            return <>{getStatusLabel(getValue(row, name))}</>;
+          },
+        },
+        {
+          name: "action",
+          header: () => <span>Action</span>,
+          sortable: false,
+          renderCell: ({ row, name, cell }: any) => {
+            return (
+              <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                <ButtonLink
+                  className="bg-primary"
+                  href={`/d/mpr-ceo/${row.id}/view`}
+                >
+                  <div className="flex items-center gap-x-2">
+                    <IoEye className="text-lg" />
+                  </div>
+                </ButtonLink>
+              </div>
+            );
+          },
+        },
+      ]}
+      onLoad={async (param: any) => {
+        const prm = {
+          ...param,
+          approver_type: "ceo",
+        };
+        const params = await events("onload-param", prm);
+        const result: any = await apix({
+          port: "mpp",
+          value: "data.data.mp_request_header",
+          path: `/api/mp-requests${params}`,
+          validate: "array",
+        });
+        return result;
+      }}
+      onInit={async (list: any) => {}}
+      onCount={async () => {
+        let prm = {
+          take: 1,
+          paging: 1,
+          approver_type: "ceo",
+        } as any;
+        const params = await events("onload-param", prm);
+        const result: any = await apix({
+          port: "mpp",
+          value: "data.data.total",
+          path: `/api/mp-requests${params}`,
+          validate: "object",
+        });
+        return getNumber(result);
+      }}
+    />
+  );
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col py-4 pt-0">
@@ -91,7 +197,7 @@ function Page() {
           onLoad={async (param: any) => {
             const pr = {
               ...param,
-              approver_type: "ceo"
+              approver_type: "ceo",
             };
             delete pr["sort"];
             const params = await events("onload-param", pr);

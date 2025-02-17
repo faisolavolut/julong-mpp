@@ -8,12 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog";
-import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
-import { IoEye } from "react-icons/io5";
-import { HiPlus } from "react-icons/hi";
-import api from "@/lib/axios";
-import { get_user } from "@/lib/get_user";
+} from "@/lib/components/ui/dialog";
+import { ButtonBetter } from "@/lib/components/ui/button";
+import api from "@/lib/utils/axios";
+import { get_user } from "@/lib/utils/get_user";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import get from "lodash.get";
@@ -106,7 +104,8 @@ export const AlertCeoApprove: FC<any> = ({ fm }) => {
                       <div className="flex flex-col w-full">
                         <div className="flex text-red-600 items-center">
                           <AlertTriangle className="h-4 w-4 mr-1" />
-                          Submit Failed { get(ex, "response.data.meta.message") || ex.message}.
+                          Submit Failed{" "}
+                          {get(ex, "response.data.meta.message") || ex.message}.
                         </div>
                       </div>,
                       {

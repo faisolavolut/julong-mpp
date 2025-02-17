@@ -1,14 +1,11 @@
 "use client";
-import { Field } from "@/app/components/form/Field";
-import { FormBetter } from "@/app/components/form/FormBetter";
-import { Alert } from "@/app/components/ui/alert";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import { btn } from "@/app/components/ui/button";
-import api from "@/lib/axios";
-import { getParams } from "@/lib/get-params";
-import { IoMdSave } from "react-icons/io";
+import { Field } from "@/lib/components/form/Field";
+import { FormBetter } from "@/lib/components/form/FormBetter";
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import api from "@/lib/utils/axios";
+import { getParams } from "@/lib/utils/get-params";
 function Page() {
-  const id = getParams("id")
+  const id = getParams("id");
   return (
     <FormBetter
       onTitle={(fm: any) => {
@@ -25,27 +22,22 @@ function Page() {
                     url: "/d/master-data/plafon",
                   },
                   {
-                    title: "Detail"
-                  }
+                    title: "Detail",
+                  },
                 ]}
               />
             </div>
-            <div className="flex flex-row space-x-2">
-            </div>
+            <div className="flex flex-row space-x-2"></div>
           </div>
         );
       }}
-      onSubmit={async (fm: any) => {
-        
-      }}
+      onSubmit={async (fm: any) => {}}
       onLoad={async () => {
-        
         const res: any = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons/` +
-            id
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons/` + id
         );
-        
-        return res.data.data
+
+        return res.data.data;
       }}
       header={(fm: any) => {
         return <></>;
@@ -64,8 +56,7 @@ function Page() {
                   />
                 </div>
                 <div>
-                 
-                <Field
+                  <Field
                     fm={fm}
                     name={"job_name"}
                     label={"Job"}
@@ -73,8 +64,13 @@ function Page() {
                   />
                 </div>
                 <div>
-                  <Field fm={fm}
-                    disabled={true} name={"plafon"} label={"Plafon"} type={"money"} />
+                  <Field
+                    fm={fm}
+                    disabled={true}
+                    name={"plafon"}
+                    label={"Plafon"}
+                    type={"money"}
+                  />
                 </div>
               </div>
             </div>

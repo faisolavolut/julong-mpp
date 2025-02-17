@@ -1,7 +1,7 @@
-import { ButtonLink } from "@/app/components/ui/button-link";
-import { shortDate } from "@/lib/date";
-import { getAccess } from "@/lib/getAccess";
-import { getValue } from "@/lib/getValue";
+import { ButtonLink } from "@/lib/components/ui/button-link";
+import { shortDate } from "@/lib/utils/date";
+import { getAccess } from "@/lib/utils/getAccess";
+import { getValue } from "@/lib/utils/getValue";
 import get from "lodash.get";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { IoEye } from "react-icons/io5";
@@ -29,7 +29,6 @@ export const rolesMpp = (roles: any[]) => {
       permision: ["read-mpp-dir-unit"],
     },
   ];
-
   const yourRole =
     data.find((e) => {
       if (e.name === "superadmin") {
@@ -45,7 +44,11 @@ export const rolesMpp = (roles: any[]) => {
 };
 export const columnMpp = (data: any) => {
   const access = rolesMpp(
-    typeof data?.local?.roles === "object" ? [data?.local?.roles] : []
+    Array.isArray(data?.local?.roles)
+      ? data?.local?.roles
+      : typeof data?.local?.roles === "object"
+      ? [data?.local?.roles]
+      : []
   );
   if (data?.id === "on_going") {
     switch (access) {

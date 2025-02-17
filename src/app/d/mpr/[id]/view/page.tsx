@@ -1,10 +1,9 @@
 "use client";
-import { Field } from "@/app/components/form/Field";
-import { Form } from "@/app/components/form/Form";
-import { FormBetter } from "@/app/components/form/FormBetter";
-import { TableList } from "@/app/components/tablelist/TableList";
-import { Tablist } from "@/app/components/tablist/Tablist";
-import { Alert } from "@/app/components/ui/alert";
+import { Field } from "@/lib/components/form/Field";
+import { Form } from "@/lib/components/form/Form";
+import { FormBetter } from "@/lib/components/form/FormBetter";
+import { TableList } from "@/lib/components/tablelist/TableList";
+import { Alert } from "@/lib/components/ui/alert";
 import {
   AlertDialogAction,
   AlertDialogCancel,
@@ -12,17 +11,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/app/components/ui/alert-dialog";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/app/components/ui/card";
+} from "@/lib/components/ui/alert-dialog";
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import { ButtonBetter, ButtonContainer } from "@/lib/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -30,31 +21,26 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog";
-import { PreviewImagePopup } from "@/app/components/ui/previewImage";
+} from "@/lib/components/ui/dialog";
+import { PreviewImagePopup } from "@/lib/components/ui/previewImage";
 import { statusMpp } from "@/constants/status-mpp";
-import api from "@/lib/axios";
-import { cloneFM } from "@/lib/cloneFm";
-import { showApprovel } from "@/lib/conditionalMPR";
-import { shortDate } from "@/lib/date";
-import { events } from "@/lib/event";
-import { getParams } from "@/lib/get-params";
-import { get_user } from "@/lib/get_user";
-import { getAccess, userRoleMe } from "@/lib/getAccess";
-import { getNumber } from "@/lib/getNumber";
-import { getValue } from "@/lib/getValue";
-import { isStringEmpty } from "@/lib/isStringEmpty";
-import { useLocal } from "@/lib/use-local";
-import { Breadcrumb, Button } from "flowbite-react";
+import api from "@/lib/utils/axios";
+import { showApprovel } from "@/lib/utils/conditionalMPR";
+import { shortDate } from "@/lib/utils/date";
+import { events } from "@/lib/utils/event";
+import { getParams } from "@/lib/utils/get-params";
+import { get_user } from "@/lib/utils/get_user";
+import { getAccess, userRoleMe } from "@/lib/utils/getAccess";
+import { getNumber } from "@/lib/utils/getNumber";
+import { getValue } from "@/lib/utils/getValue";
+import { isStringEmpty } from "@/lib/utils/isStringEmpty";
+import { useLocal } from "@/lib/utils/use-local";
 import get from "lodash.get";
 import { AlertTriangle, X } from "lucide-react";
-import { permission } from "process";
 import { useEffect } from "react";
 import { FiInfo } from "react-icons/fi";
-import { GoInfo } from "react-icons/go";
 import { IoMdSave } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
-import { MdDelete } from "react-icons/md";
 import { toast } from "sonner";
 
 function Page() {

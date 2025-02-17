@@ -1,38 +1,26 @@
 "use client";
-import { AlertCeoApprove } from "@/app/components/comp/AlertCeoApprove";
 import { AlertCeoApproveMPR } from "@/app/components/comp/AlertCeoApproveMPR";
-import { AlertCeoReject } from "@/app/components/comp/AlertCeoReject";
 import { AlertCeoRejectMPR } from "@/app/components/comp/AlertCeoRejectMPR";
-import { TableList } from "@/app/components/tablelist/TableList";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import { ButtonBetter } from "@/app/components/ui/button";
-import { ButtonLink } from "@/app/components/ui/button-link";
-import MyDocument from "@/app/components/ui/Document";
-import DocumentMPR from "@/app/components/ui/DocumentMPR";
-import api from "@/lib/axios";
-import { shortDate } from "@/lib/date";
-import { events } from "@/lib/event";
-import { getParams } from "@/lib/get-params";
-import { accessMe, getAccess, userRoleMe } from "@/lib/getAccess";
-import { getNumber } from "@/lib/getNumber";
-import { getValue } from "@/lib/getValue";
-import { useLocal } from "@/lib/use-local";
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import DocumentMPR from "@/lib/components/ui/DocumentMPR";
+import api from "@/lib/utils/axios";
+import { getParams } from "@/lib/utils/get-params";
+import { getAccess, userRoleMe } from "@/lib/utils/getAccess";
+import { getNumber } from "@/lib/utils/getNumber";
+import { useLocal } from "@/lib/utils/use-local";
+import { Loader2 } from "lucide-react";
+import dynamic from "next/dynamic";
+import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
   { ssr: false }
 );
-import { Button } from "flowbite-react";
-import { Loader2 } from "lucide-react";
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { useEffect, useState } from "react";
-import { IoEye } from "react-icons/io5";
 
 function Page() {
   const id = getParams("id");
-  
-    const [isReady, setIsReady] = useState(false);
+
+  const [isReady, setIsReady] = useState(false);
   const local = useLocal({
     can_add: false,
     can_edit: false,
@@ -147,7 +135,7 @@ function Page() {
                 <DocumentMPR
                   data={local.data}
                   onRender={() => {
-                    setIsReady(true)
+                    setIsReady(true);
                   }}
                 />
               </PDFViewer>

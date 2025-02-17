@@ -1,14 +1,14 @@
 "use client";
-import { Field } from "@/app/components/form/Field";
-import { FormBetter } from "@/app/components/form/FormBetter";
-import { Alert } from "@/app/components/ui/alert";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import { btn } from "@/app/components/ui/button";
-import api from "@/lib/axios";
-import { getParams } from "@/lib/get-params";
+import { Field } from "@/lib/components/form/Field";
+import { FormBetter } from "@/lib/components/form/FormBetter";
+import { Alert } from "@/lib/components/ui/alert";
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import api from "@/lib/utils/axios";
+import { getParams } from "@/lib/utils/get-params";
 import { IoMdSave } from "react-icons/io";
+import { ButtonContainer } from "@/lib/components/ui/button";
 function Page() {
-  const id = getParams("id")
+  const id = getParams("id");
   return (
     <FormBetter
       onTitle={(fm: any) => {
@@ -25,57 +25,44 @@ function Page() {
                     url: "/d/master-data/plafon",
                   },
                   {
-                    title: "Edit"
-                  }
+                    title: "Edit",
+                  },
                 ]}
               />
             </div>
             <div className="flex flex-row space-x-2 items-center">
-              {/* <Alert type={"delete"} onClick={() => {}}>
-                <div className={cx("bg-red-500", btn())}>
-                  <div className="flex items-center gap-x-0.5">
-                    <MdDelete className="text-xl" />
-                    Delete
-                  </div>
-                </div>
-              </Alert> */}
               <Alert
                 type={"save"}
                 onClick={() => {
                   fm.submit();
                 }}
               >
-                <div className={cx("bg-primary", btn())}>
-                  <div className="flex items-center gap-x-0.5">
-                    <IoMdSave className="text-xl" />
-                    Save
-                  </div>
-                </div>
+                <ButtonContainer className={"bg-primary"}>
+                  <IoMdSave className="text-xl" />
+                  Save
+                </ButtonContainer>
               </Alert>
             </div>
           </div>
         );
       }}
       onSubmit={async (fm: any) => {
-        const data = fm?.data
-        
+        const data = fm?.data;
         const param = {
           id,
           plafon: Number(data.plafon),
-          job_id: data.job_id
-        }
+          job_id: data.job_id,
+        };
         const res: any = await api.put(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons`, param
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons`,
+          param
         );
-        
       }}
       onLoad={async () => {
-        
         const res: any = await api.get(
-          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons/` +
-            id
+          `${process.env.NEXT_PUBLIC_API_MPP}/api/job-plafons/` + id
         );
-        return res.data.data
+        return res.data.data;
       }}
       header={(fm: any) => {
         return <></>;
@@ -94,8 +81,7 @@ function Page() {
                   />
                 </div>
                 <div>
-                 
-                <Field
+                  <Field
                     fm={fm}
                     name={"job_name"}
                     label={"Job"}
@@ -103,7 +89,12 @@ function Page() {
                   />
                 </div>
                 <div>
-                  <Field fm={fm} name={"plafon"} label={"Plafon"} type={"money"} />
+                  <Field
+                    fm={fm}
+                    name={"plafon"}
+                    label={"Plafon"}
+                    type={"money"}
+                  />
                 </div>
               </div>
             </div>

@@ -1,27 +1,16 @@
 "use client";
-import { AlertBatchHrdUnit } from "@/app/components/comp/AlertBatchHrdUnit";
-import { TableList } from "@/app/components/tablelist/TableList";
-import { TabHeader } from "@/app/components/tablist/TabHeader";
-import { Tablist } from "@/app/components/tablist/Tablist";
-import { ButtonBetter } from "@/app/components/ui/button";
-import { ButtonLink } from "@/app/components/ui/button-link";
-import { Card, CardContent } from "@/app/components/ui/card";
-import { Skeleton } from "@/app/components/ui/Skeleton";
-import { columnMpp, rolesMpp } from "@/constants/column-mpp";
-import { getStatusLabel } from "@/constants/status-mpp";
-import { actionToast } from "@/lib/action";
-import api from "@/lib/axios";
-import { events } from "@/lib/event";
-import { get_user } from "@/lib/get_user";
-import { getAccess, userRoleMe } from "@/lib/getAccess";
-import { getNumber } from "@/lib/getNumber";
-import { getValue } from "@/lib/getValue";
-import { useLocal } from "@/lib/use-local";
+import { columnMpp } from "@/constants/column-mpp";
+import api from "@/lib/utils/axios";
+import { events } from "@/lib/utils/event";
+import { get_user } from "@/lib/utils/get_user";
+import { access, userRoleMe } from "@/lib/utils/getAccess";
+import { getNumber } from "@/lib/utils/getNumber";
+import { useLocal } from "@/lib/utils/use-local";
 import get from "lodash.get";
-import { AlertTriangle, Check } from "lucide-react";
 import { useEffect } from "react";
-import { HiPlus } from "react-icons/hi";
-import { toast } from "sonner";
+import { AlertBatchHrdUnit } from "@/app/components/comp/AlertBatchHrdUnit";
+import { apix } from "@/lib/utils/apix";
+import { TableUI } from "@/lib/components/tablelist/TableUI";
 
 function Page() {
   const local = useLocal({
@@ -34,6 +23,10 @@ function Page() {
     batch: null as any,
     can_process: false,
     tab: "on_going",
+    list: [
+      { id: "on_going", name: "On Going", count: 0 },
+      { id: "completed", name: "Completed", count: 0 },
+    ],
   });
   useEffect(() => {
     const run = async () => {
@@ -56,149 +49,134 @@ function Page() {
           const res_line = line?.data?.data;
           if (Array.isArray(res_line) && res_line?.length) {
             local.batch_lines = res_line.map((e) => e?.id);
-            local.can_add = getAccess("create-batch-hrd-unit", roles);
+            local.can_add = access("create-batch-hrd-unit");
           }
         }
-      } catch (ex) {
-        console.log(get(ex, "message"));
-      }
+      } catch (ex) {}
+      local.roles = roles;
       // trigger munculin card batch detail
+      let prm: any = {
+        take: 1,
+        paging: 1,
+        approver_type: "manager",
+        organization_id: get_user("employee.organization_id"),
+      };
+
+      const params = await events("onload-param", prm);
+      let result: any = 0;
+      try {
+        result = await apix({
+          port: "mpp",
+          value: "data.data.total",
+          path: `/api/mp-plannings/approver-type${params}`,
+          validate: "object",
+        });
+      } catch (ex) {}
+      let completed = 0;
+      try {
+        completed = await apix({
+          port: "mpp",
+          value: "data.data.total",
+          path: `/api/mp-plannings/completed?page=1&page_size=1`,
+          validate: "object",
+        });
+      } catch (ex) {}
+      local.list = [
+        { id: "on_going", name: "On Going", count: getNumber(result) },
+        { id: "completed", name: "Completed", count: getNumber(completed) },
+      ];
       local.ready = true;
       local.render();
     };
     run();
   }, []);
+
   return (
-    <div className="flex flex-col flex-grow gap-y-4">
-      <div className="flex flex-row p-4 items-center bg-white border border-gray-300 rounded-lg">
-        <h2 className="text-xl font-semibold text-gray-900">
-          <span className="">Manpower Planning Overview</span>
-        </h2>
-        <div className="flex flex-row items-center px-4">
-          <div className="flex flex-row items-center border border-gray-300 rounded-full">
-            <TabHeader
-              disabledPagination={true}
-              onLabel={(row: any) => {
-                return row.name;
-              }}
-              onValue={(row: any) => {
-                return row.id;
-              }}
-              onLoad={async () => {
-                return [
-                  { id: "on_going", name: "On going" },
-                  { id: "completed", name: "Completed" },
-                ];
-              }}
-              onChange={(tab: any) => {
-                local.tab = tab?.id;
-                local.render();
-              }}
-              tabContent={(data: any) => {
-                return <></>;
-              }}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden border border-gray-300">
-        {!local.ready ? (
-          <div className="flex-grow flex flex-row items-center justify-center">
-            <div className="flex flex-col gap-y-2">
-              <div className="flex flex-row gap-x-2">
-                <Skeleton className="h-4 w-1/3" />
-                <Skeleton className="h-4 flex-grow" />
-              </div>
-              <Skeleton className="h-16 w-[250px]" />
-            </div>
-          </div>
-        ) : (
-          <Tablist
-            disabledPagination={true}
-            hiddenHeaderTab={true}
-            value={local.tab}
-            onLabel={(row: any) => {
-              return row.name;
-            }}
-            onValue={(row: any) => {
-              return row.id;
-            }}
-            onLoad={async () => {
-              return [
-                { id: "on_going", name: "On going" },
-                { id: "completed", name: "Completed" },
-              ];
-            }}
-            tabContent={(data: any) => {
-              const col = columnMpp({
-                ...data,
-                role: "HRD Unit",
-                local,
-              });
-              return (
-                <>
-                  <div className="w-full flex flex-col flex-grow">
-                    <div className={cx("flex flex-grow flex-col h-[380px]")}>
-                      <TableList
-                        name="Location"
-                        header={{
-                          sideLeft: () => {
-                            if (!local.can_add) return <></>;
-                            if (data?.id === "completed") return <></>;
-                            return (
-                              <>
-                                <AlertBatchHrdUnit local={local} />
-                              </>
-                            );
-                          },
-                        }}
-                        column={col}
-                        onLoad={async (param: any) => {
-                          let prm = {
-                            ...param,
-                          };
-                          try {
-                            let url = "/api/mp-plannings/approver-type";
-                            if (data?.id === "completed") {
-                              url = "/api/mp-plannings/completed";
-                            } else {
-                              const roles = "HRD Unit";
-                              url = "/api/mp-plannings/approver-type";
-                              prm = {
-                                approver_type: "manager",
-                                organization_id: get_user(
-                                  "employee.organization_id"
-                                ),
-                              };
-                            }
-                            const params = await events("onload-param", prm);
-                            const res: any = await api.get(
-                              `${process.env.NEXT_PUBLIC_API_MPP}${url}` +
-                                params
-                            );
-                            const result: any[] =
-                              url === "/api/mp-plannings"
-                                ? res.data.data.mp_planning_headers
-                                : data?.id === "completed"
-                                ? res.data.data
-                                : res.data.data.organization_locations;
-                            if (!Array.isArray(result)) return [];
-                            return result || [];
-                          } catch (ex) {
-                            return [];
-                          }
-                        }}
-                        onInit={async (list: any) => {}}
-                      />
-                    </div>
-                  </div>
-                </>
-              );
-            }}
-          />
-        )}
-      </div>
-    </div>
+    <TableUI
+      ready={local.ready}
+      tab={local.list}
+      onTab={(e: string) => {
+        local.tab = e;
+        local.render();
+      }}
+      title="Manpower Planning Overview"
+      name="Location"
+      header={{
+        sideLeft: () => {
+          if (!local.can_add) return <></>;
+          if (local?.tab === "completed") return <></>;
+          return (
+            <>
+              <AlertBatchHrdUnit local={local} />
+            </>
+          );
+        },
+      }}
+      column={() => {
+        return columnMpp({
+          id: local.tab,
+          role: "HRD Unit",
+          local,
+        });
+      }}
+      onLoad={async (param: any) => {
+        let prm = {
+          ...param,
+        };
+        try {
+          let url = "/api/mp-plannings/approver-type";
+          if (local?.tab === "completed") {
+            url = "/api/mp-plannings/completed";
+          } else {
+            const roles = "HRD Unit";
+            url = "/api/mp-plannings/approver-type";
+            prm = {
+              approver_type: "manager",
+              organization_id: get_user("employee.organization_id"),
+            };
+          }
+          const params = await events("onload-param", prm);
+          const res: any = await api.get(
+            `${process.env.NEXT_PUBLIC_API_MPP}${url}` + params
+          );
+          const result: any[] =
+            url === "/api/mp-plannings"
+              ? res.data.data.mp_planning_headers
+              : local?.tab === "completed"
+              ? res.data.data
+              : res.data.data.organization_locations;
+          if (!Array.isArray(result)) return [];
+          return result || [];
+        } catch (ex) {
+          return [];
+        }
+      }}
+      onInit={async (list: any) => {}}
+      onCount={async () => {
+        let prm = {
+          take: 1,
+          paging: 1,
+        } as any;
+        let url = "/api/mp-plannings/approver-type";
+        if (local?.tab === "completed") {
+          url = "/api/mp-plannings/completed";
+        } else {
+          url = "/api/mp-plannings/approver-type";
+          prm = {
+            approver_type: "manager",
+            organization_id: get_user("employee.organization_id"),
+          };
+        }
+        const params = await events("onload-param", prm);
+        const result: any = await apix({
+          port: "mpp",
+          value: "data.data.total",
+          path: `${url}${params}`,
+          validate: "object",
+        });
+        return getNumber(result);
+      }}
+    />
   );
 }
 

@@ -8,27 +8,26 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog";
-import { ButtonBetter, ButtonContainer } from "@/app/components/ui/button";
-import { Checkbox } from "@/app/components/ui/checkbox";
-import { IoEye } from "react-icons/io5";
-import { HiPlus } from "react-icons/hi";
-import { useLocal } from "@/lib/use-local";
-import api from "@/lib/axios";
-import { Form } from "../form/Form";
-import { Field } from "../form/Field";
-import { cloneFM } from "@/lib/cloneFm";
+} from "@/lib/components/ui/dialog";
+import { ButtonBetter } from "@/lib/components/ui/button";
+import { Checkbox } from "@/lib/components/ui/checkbox";
+import { useLocal } from "@/lib/utils/use-local";
+import api from "@/lib/utils/axios";
+import { Field } from "@/lib/components/form/Field";
+
+import { cloneFM } from "@/lib/utils/cloneFm";
 import { toast } from "sonner";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
-import { get_user } from "@/lib/get_user";
-import { events } from "@/lib/event";
+import { get_user } from "@/lib/utils/get_user";
+import { events } from "@/lib/utils/event";
 import get from "lodash.get";
+import { Form } from "@/lib/components/form/Form";
 export const AlertCeoReject: FC<any> = ({ lc }) => {
   const local = useLocal({
     organization: [] as any[],
     reject: "reject-all" as any,
     fm: null as any,
-    org: [] as string[] 
+    org: [] as string[],
   });
   useEffect(() => {
     const run = async () => {
@@ -168,11 +167,13 @@ export const AlertCeoReject: FC<any> = ({ lc }) => {
                                           : [];
                                       }
                                       fm.render();
-                                      local.org = fm.data?.organization?.length ? fm.data.organization.map((e: any) => {
-                                        return {
-                                          id:  e.id
-                                        }
-                                      }) : [];
+                                      local.org = fm.data?.organization?.length
+                                        ? fm.data.organization.map((e: any) => {
+                                            return {
+                                              id: e.id,
+                                            };
+                                          })
+                                        : [];
                                       local.render();
                                     }}
                                   />
@@ -265,7 +266,7 @@ export const AlertCeoReject: FC<any> = ({ lc }) => {
                     );
                   }
                   lc.data = null;
-                  lc.render()
+                  lc.render();
 
                   setTimeout(() => {
                     toast.success(
@@ -289,7 +290,8 @@ export const AlertCeoReject: FC<any> = ({ lc }) => {
                     <div className="flex flex-col w-full">
                       <div className="flex text-red-600 items-center">
                         <AlertTriangle className="h-4 w-4 mr-1" />
-                        Submit Failed { get(ex, "response.data.meta.message") || ex.message}.
+                        Submit Failed{" "}
+                        {get(ex, "response.data.meta.message") || ex.message}.
                       </div>
                     </div>,
                     {

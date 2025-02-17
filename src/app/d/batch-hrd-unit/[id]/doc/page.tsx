@@ -1,18 +1,18 @@
 "use client";
-import { BreadcrumbBetterLink } from "@/app/components/ui/breadcrumb-link";
-import MyDocument from "@/app/components/ui/Document";
-import api from "@/lib/axios";
-import { getParams } from "@/lib/get-params";
-import { accessMe, getAccess, userRoleMe } from "@/lib/getAccess";
-import { useLocal } from "@/lib/use-local";
-const PDFViewer = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
-  { ssr: false }
-);
+import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
+import MyDocument from "@/lib/components/ui/Document";
+import api from "@/lib/utils/axios";
+import { getParams } from "@/lib/utils/get-params";
+import { getAccess, userRoleMe } from "@/lib/utils/getAccess";
+import { useLocal } from "@/lib/utils/use-local";
 import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
+const PDFViewer = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
+  { ssr: false }
+);
 
 function Page() {
   const id = getParams("id");
@@ -32,7 +32,7 @@ function Page() {
         const res = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/need-approval?approver_type=DIRECTOR`
         );
-        console.log({res})
+        console.log({ res });
         if (res?.data?.data) {
           local.data = res?.data?.data;
           local.can_add = true;
