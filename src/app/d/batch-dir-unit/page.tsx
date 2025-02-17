@@ -72,7 +72,7 @@ function Page() {
         result = await apix({
           port: "mpp",
           value: "data.data.total",
-          path: `/api/mp-plannings/approver-type${params}`,
+          path: `/api/batch/status${params}`,
           validate: "object",
         });
       } catch (ex) {}
@@ -184,6 +184,7 @@ function Page() {
           } else {
             url = "/api/batch/status";
             prm = {
+              ...param,
               approver_type: "DIRECTOR",
               status: "NEED APPROVAL",
             };
@@ -212,14 +213,14 @@ function Page() {
         } as any;
         let url = "/api/mp-plannings/approver-type";
         if (local?.tab === "completed") {
-          url = "/api/mp-plannings/approver-type";
+          url = "/api/mp-plannings/completed";
         } else {
           prm = {
             ...prm,
             approver_type: "DIRECTOR",
             status: "NEED APPROVAL",
           };
-          url = "/api/mp-plannings/completed";
+          url = "/api/batch/status";
         }
         const params = await events("onload-param", prm);
         const result: any = await apix({
