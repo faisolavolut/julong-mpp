@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 interface RootLayoutProps {
   children: React.ReactNode;
 }
-const permision = ["read-job"];
+const permision = ["read-mpr-ceo"];
 
 const ValidateLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const [isClient, setIsClient] = useState(false);

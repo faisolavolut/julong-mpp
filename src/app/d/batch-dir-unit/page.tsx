@@ -1,9 +1,5 @@
 "use client";
-import { TableList } from "@/lib/components/tablelist/TableList";
-import { TabHeader } from "@/lib/components/tablist/TabHeader";
-import { Tablist } from "@/lib/components/tablist/Tablist";
 import { ButtonLink } from "@/lib/components/ui/button-link";
-import { Skeleton } from "@/lib/components/ui/Skeleton";
 import { columnMpp } from "@/constants/column-mpp";
 import api from "@/lib/utils/axios";
 import { shortDate } from "@/lib/utils/date";
@@ -16,6 +12,8 @@ import get from "lodash.get";
 import { useEffect } from "react";
 import { IoEye } from "react-icons/io5";
 import { AlertBatchHrdUnit } from "@/app/components/comp/AlertBatchHrdUnit";
+import { TableUI } from "@/lib/components/tablelist/TableUI";
+import { apix } from "@/lib/utils/apix";
 
 function Page() {
   const local = useLocal({
@@ -28,6 +26,10 @@ function Page() {
     batch: null as any,
     can_process: false,
     tab: "on_going",
+    list: [
+      { id: "on_going", name: "On Going", count: 0 },
+      { id: "completed", name: "Completed", count: 0 },
+    ],
   });
   useEffect(() => {
     const run = async () => {
@@ -56,199 +58,179 @@ function Page() {
       } catch (ex) {
         console.log(get(ex, "message"));
       }
-      // trigger munculin card batch detail
+
+      let prm: any = {
+        take: 1,
+        paging: 1,
+        approver_type: "DIRECTOR",
+        status: "NEED APPROVAL",
+      };
+
+      const params = await events("onload-param", prm);
+      let result: any = 0;
+      try {
+        result = await apix({
+          port: "mpp",
+          value: "data.data.total",
+          path: `/api/mp-plannings/approver-type${params}`,
+          validate: "object",
+        });
+      } catch (ex) {}
+      let completed = 0;
+      try {
+        completed = await apix({
+          port: "mpp",
+          value: "data.data.total",
+          path: `/api/mp-plannings/completed?page=1&page_size=1`,
+          validate: "object",
+        });
+      } catch (ex) {}
+      local.list = [
+        { id: "on_going", name: "On Going", count: getNumber(result) },
+        { id: "completed", name: "Completed", count: getNumber(completed) },
+      ];
       local.ready = true;
       local.render();
     };
     run();
   }, []);
   return (
-    <div className="flex flex-col flex-grow gap-y-4">
-      <div className="flex flex-row p-4 items-center bg-white border border-gray-300 rounded-lg">
-        <h2 className="text-xl font-semibold text-gray-900">
-          <span className="">Manpower Planning Overview</span>
-        </h2>
-        <div className="flex flex-row items-center px-4">
-          <div className="flex flex-row items-center border border-gray-300 rounded-full">
-            <TabHeader
-              disabledPagination={true}
-              onLabel={(row: any) => {
-                return row.name;
-              }}
-              onValue={(row: any) => {
-                return row.id;
-              }}
-              onLoad={async () => {
-                return [
-                  { id: "on_going", name: "On going" },
-                  { id: "completed", name: "Completed" },
-                ];
-              }}
-              onChange={(tab: any) => {
-                local.tab = tab?.id;
-                local.render();
-              }}
-              tabContent={(data: any) => {
-                return <></>;
-              }}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="w-full flex flex-row flex-grow bg-white rounded-lg  overflow-hidden border border-gray-300">
-        {!local.ready ? (
-          <div className="flex-grow flex flex-row items-center justify-center">
-            <div className="flex flex-col gap-y-2">
-              <div className="flex flex-row gap-x-2">
-                <Skeleton className="h-4 w-1/3" />
-                <Skeleton className="h-4 flex-grow" />
-              </div>
-              <Skeleton className="h-16 w-[250px]" />
-            </div>
-          </div>
-        ) : (
-          <Tablist
-            disabledPagination={true}
-            hiddenHeaderTab={true}
-            value={local.tab}
-            onLabel={(row: any) => {
-              return row.name;
-            }}
-            onValue={(row: any) => {
-              return row.id;
-            }}
-            onLoad={async () => {
-              return [
-                { id: "on_going", name: "On going" },
-                { id: "completed", name: "Completed" },
-              ];
-            }}
-            tabContent={(data: any) => {
-              const col = columnMpp({
-                ...data,
-                role: "Direktur Unit",
-                local,
-              });
-              return (
-                <>
-                  <div className="w-full flex flex-col flex-grow">
-                    <div className={cx("flex flex-grow flex-col h-[380px]")}>
-                      <TableList
-                        name="Location"
-                        header={{
-                          sideLeft: () => {
-                            if (!local.can_add) return <></>;
-                            return (
-                              <>
-                                <AlertBatchHrdUnit local={local} />
-                              </>
-                            );
-                          },
-                        }}
-                        column={
-                          data.id === "on_going"
-                            ? [
-                                {
-                                  name: "document_number",
-                                  header: () => <span>Batch Number</span>,
-                                  renderCell: ({ row, name, cell }: any) => {
-                                    return <>{getValue(row, name)}</>;
-                                  },
-                                },
-                                {
-                                  name: "mpp_period.title",
-                                  header: () => <span>MPP Period Name</span>,
-                                  renderCell: ({ row, name, cell }: any) => {
-                                    return <>{getValue(row, name)}</>;
-                                  },
-                                },
-                                {
-                                  name: "mpp_period.budget_start_date",
-                                  header: () => <span>Budget Start Date</span>,
-                                  renderCell: ({ row, name, cell }: any) => {
-                                    return (
-                                      <>{shortDate(getValue(row, name))}</>
-                                    );
-                                  },
-                                },
-                                {
-                                  name: "mpp_period.budget_end_date",
-                                  header: () => <span>Budget End Date</span>,
-                                  renderCell: ({ row, name, cell }: any) => {
-                                    return (
-                                      <>{shortDate(getValue(row, name))}</>
-                                    );
-                                  },
-                                },
-                                {
-                                  name: "action",
-                                  header: () => <span>Action</span>,
-                                  sortable: false,
-                                  renderCell: ({ row, name, cell }: any) => {
-                                    if (!get(row, "id")) return <></>;
-                                    return (
-                                      <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
-                                        <ButtonLink
-                                          className="bg-primary"
-                                          href={`/d/batch-dir-unit/${get(
-                                            row,
-                                            "id"
-                                          )}/doc`}
-                                        >
-                                          <div className="flex items-center gap-x-2">
-                                            <IoEye className="text-lg" />
-                                          </div>
-                                        </ButtonLink>
-                                      </div>
-                                    );
-                                  },
-                                },
-                              ]
-                            : col
-                        }
-                        onLoad={async (param: any) => {
-                          let prm = {
-                            ...param,
-                          };
-                          try {
-                            let url = "/api/mp-plannings/approver-type";
-                            if (data?.id === "completed") {
-                              url = "/api/mp-plannings/completed";
-                            } else {
-                              url = "/api/batch/status";
-                              prm = {
-                                approver_type: "DIRECTOR",
-                                status: "NEED APPROVAL",
-                              };
-                            }
-                            const params = await events("onload-param", prm);
-                            const res: any = await api.get(
-                              `${process.env.NEXT_PUBLIC_API_MPP}${url}` +
-                                params
-                            );
-                            const result: any[] =
-                              url === "/api/mp-plannings"
-                                ? res.data.data.mp_planning_headers
-                                : data?.id === "completed"
-                                ? res.data.data
-                                : res.data.data;
-                            if (!Array.isArray(result)) return [];
-                            return result || [];
-                          } catch (ex) {
-                            return [];
-                          }
-                        }}
-                        onInit={async (list: any) => {}}
-                      />
-                    </div>
+    <TableUI
+      ready={local.ready}
+      tab={local.list}
+      onTab={(e: string) => {
+        local.tab = e;
+        local.render();
+      }}
+      title="Manpower Planning Overview"
+      name="Location"
+      header={{
+        sideLeft: () => {
+          if (!local.can_add) return <></>;
+          return (
+            <>
+              <AlertBatchHrdUnit local={local} />
+            </>
+          );
+        },
+      }}
+      column={() => {
+        if (local.tab === "on_going") {
+          [
+            {
+              name: "document_number",
+              header: () => <span>Batch Number</span>,
+              renderCell: ({ row, name, cell }: any) => {
+                return <>{getValue(row, name)}</>;
+              },
+            },
+            {
+              name: "mpp_period.title",
+              header: () => <span>MPP Period Name</span>,
+              renderCell: ({ row, name, cell }: any) => {
+                return <>{getValue(row, name)}</>;
+              },
+            },
+            {
+              name: "mpp_period.budget_start_date",
+              header: () => <span>Budget Start Date</span>,
+              renderCell: ({ row, name, cell }: any) => {
+                return <>{shortDate(getValue(row, name))}</>;
+              },
+            },
+            {
+              name: "mpp_period.budget_end_date",
+              header: () => <span>Budget End Date</span>,
+              renderCell: ({ row, name, cell }: any) => {
+                return <>{shortDate(getValue(row, name))}</>;
+              },
+            },
+            {
+              name: "action",
+              header: () => <span>Action</span>,
+              sortable: false,
+              renderCell: ({ row, name, cell }: any) => {
+                if (!get(row, "id")) return <></>;
+                return (
+                  <div className="flex items-center flex-row gap-x-2 whitespace-nowrap">
+                    <ButtonLink
+                      className="bg-primary"
+                      href={`/d/batch-dir-unit/${get(row, "id")}/doc`}
+                    >
+                      <div className="flex items-center gap-x-2">
+                        <IoEye className="text-lg" />
+                      </div>
+                    </ButtonLink>
                   </div>
-                </>
-              );
-            }}
-          />
-        )}
-      </div>
-    </div>
+                );
+              },
+            },
+          ];
+        }
+        return columnMpp({
+          id: local.tab,
+          role: "Direktur",
+          local,
+        });
+      }}
+      onLoad={async (param: any) => {
+        let prm = {
+          ...param,
+        };
+        try {
+          let url = "/api/mp-plannings/approver-type";
+          if (local?.tab === "completed") {
+            url = "/api/mp-plannings/completed";
+          } else {
+            url = "/api/batch/status";
+            prm = {
+              approver_type: "DIRECTOR",
+              status: "NEED APPROVAL",
+            };
+          }
+          const params = await events("onload-param", prm);
+          const res: any = await api.get(
+            `${process.env.NEXT_PUBLIC_API_MPP}${url}` + params
+          );
+          const result: any[] =
+            url === "/api/mp-plannings"
+              ? res.data.data.mp_planning_headers
+              : local?.tab === "completed"
+              ? res.data.data
+              : res.data.data;
+          if (!Array.isArray(result)) return [];
+          return result || [];
+        } catch (ex) {
+          return [];
+        }
+      }}
+      onInit={async (list: any) => {}}
+      onCount={async () => {
+        let prm = {
+          take: 1,
+          paging: 1,
+        } as any;
+        let url = "/api/mp-plannings/approver-type";
+        if (local?.tab === "completed") {
+          url = "/api/mp-plannings/approver-type";
+        } else {
+          prm = {
+            ...prm,
+            approver_type: "DIRECTOR",
+            status: "NEED APPROVAL",
+          };
+          url = "/api/mp-plannings/completed";
+        }
+        const params = await events("onload-param", prm);
+        const result: any = await apix({
+          port: "mpp",
+          value: "data.data.total",
+          path: `${url}${params}`,
+          validate: "object",
+        });
+        return getNumber(result);
+      }}
+    />
   );
 }
 
