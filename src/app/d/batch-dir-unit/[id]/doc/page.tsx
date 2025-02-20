@@ -31,19 +31,23 @@ function Page() {
   useEffect(() => {
     const run = async () => {
       const roles = await userRoleMe();
+      console.log(1);
       try {
         const needApproval = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/status?status=NEED APPROVAL&approver_type=DIRECTOR`
         );
+        console.log(2);
+
         const res = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/find-document/${id}`
         );
+        console.log({ needApproval, res });
         if (res?.data?.data) {
           local.data = res?.data?.data;
           local.can_add = true;
 
           local.can_approval =
-            get(needApproval, "data.data[0].id") === id
+            get(needApproval, "data.data.batches[0].id") === id
               ? getAccess("approval-batch-direktur", roles)
               : false;
         }
