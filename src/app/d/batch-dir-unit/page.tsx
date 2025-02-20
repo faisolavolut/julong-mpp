@@ -116,7 +116,7 @@ function Page() {
       }}
       column={() => {
         if (local.tab === "on_going") {
-          [
+          return [
             {
               name: "document_number",
               header: () => <span>Batch Number</span>,
@@ -198,7 +198,7 @@ function Page() {
               ? res.data.data.mp_planning_headers
               : local?.tab === "completed"
               ? res.data.data
-              : res.data.data;
+              : res.data.data?.batches;
           if (!Array.isArray(result)) return [];
           return result || [];
         } catch (ex) {

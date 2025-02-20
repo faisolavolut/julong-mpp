@@ -28,16 +28,20 @@ function HomePage() {
         );
         const us = user.data.data;
         if (us) {
-          const roles = await userRoleMe();
-          const permision = get(roles, "[0].permissions");
-          const menuMe = filterMenuByPermission(configMenu, permision);
-          if (!menuMe?.length) {
-            local.access = false;
-          } else {
-            router.push(getFirstMenuWithUrl(menuMe));
+          try {
+            const roles = await userRoleMe();
+            const permision = get(roles, "[0].permissions");
+            const menuMe = filterMenuByPermission(configMenu, permision);
+            if (!menuMe?.length) {
+              local.access = false;
+            } else {
+              router.push(getFirstMenuWithUrl(menuMe));
+            }
+            local.ready = true;
+            local.render();
+          } catch (ex) {
+            navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
           }
-          local.ready = true;
-          local.render();
         } else {
           navigate(`${process.env.NEXT_PUBLIC_API_PORTAL}/login`);
         }
