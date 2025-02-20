@@ -57,6 +57,7 @@ function Page() {
         "approval-mpr-vp",
       ];
       const permision = listPermision.filter((e) => getAccess(e, roles));
+      console.log({ permision });
       local.permission = permision;
       local.render();
     };
