@@ -24,6 +24,7 @@ function Page() {
       const check = await api.get(
         `${process.env.NEXT_PUBLIC_API_MPP}/api/mpp-periods/status?status=open`
       );
+      console.log(process.env.NEXT_PUBLIC_API_MPP);
 
       if (!check.data.data?.mppperiod) local.can_add = access("create-period");
       local.can_edit = access("edit-period");
