@@ -147,7 +147,7 @@ function Page() {
       onInit={async (list: any) => {}}
       onCount={async () => {
         const result: any = await apix({
-          port: "portal",
+          port: "mpp",
           value: "data.data.total",
           path: `/api/mpp-periods?page=1&page_size=1`,
           validate: "object",
