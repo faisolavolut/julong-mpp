@@ -822,10 +822,12 @@ function Page() {
                     {
                       name: "level",
                       header: () => <span>Job Level</span>,
+                      width: 150,
                       renderCell: ({ row, name, cell, tbl }: any) => {
                         return (
                           <>
                             <Field
+                              tooltip="The job level to be selected"
                               fm={cloneFM(fm, row)}
                               hidden_label={true}
                               name={"job_level_id"}
@@ -859,12 +861,13 @@ function Page() {
                     {
                       name: "job",
                       header: () => <span>Job</span>,
-                      width: 150,
+                      width: 250,
                       renderCell: ({ row, name, cell }: any) => {
                         const fm_row = cloneFM(fm, row);
                         return (
                           <>
                             <Field
+                              tooltip="The job position to be requested"
                               fm={cloneFM(fm, row)}
                               hidden_label={true}
                               name={"job_id"}
@@ -935,11 +938,12 @@ function Page() {
                     {
                       name: "existing",
                       header: () => <span>Existing</span>,
-                      width: 50,
+                      width: 100,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
                           <>
                             <Field
+                              tooltip="The number of remaining employees in this job"
                               fm={cloneFM(fm, row)}
                               name={"existing"}
                               label={"Approved by"}
@@ -953,12 +957,13 @@ function Page() {
                     },
                     {
                       name: "suggested_recruit",
+                      width: 250,
                       header: () => <span>Suggested Recruit</span>,
-                      width: 50,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
                           <>
                             <Field
+                              tooltip="The difference between the job ceiling and the existing employees"
                               fm={cloneFM(fm, row)}
                               name={"suggested_recruit"}
                               label={"Approved by"}
@@ -973,12 +978,13 @@ function Page() {
                     {
                       name: "recruit_ph",
                       header: () => <span>Recruit PH</span>,
-                      width: 50,
+                      width: 150,
                       renderCell: ({ row, name, cell }: any) => {
                         const fm_row = cloneFM(fm, row);
                         return (
                           <>
                             <Field
+                              tooltip="Input the number of hires for Professional Hire"
                               fm={cloneFM(fm, row)}
                               name={"recruit_ph"}
                               type={"money"}
@@ -1021,12 +1027,13 @@ function Page() {
                     {
                       name: "recruit_mt",
                       header: () => <span>Recruit MT</span>,
-                      width: 50,
+                      width: 150,
                       renderCell: ({ row, name, cell }: any) => {
                         const fm_row = cloneFM(fm, row);
                         return (
                           <>
                             <Field
+                              tooltip="Input the number of hires for Management Trainee"
                               fm={cloneFM(fm, row)}
                               name={"recruit_mt"}
                               type={"money"}
@@ -1075,6 +1082,7 @@ function Page() {
                         return (
                           <>
                             <Field
+                              tooltip="The number of employees promoted from this job to another"
                               fm={cloneFM(fm, row)}
                               name={"promotion"}
                               label={"Approved by"}
@@ -1127,6 +1135,7 @@ function Page() {
                         return (
                           <>
                             <Field
+                              tooltip="(Existing + Recruit PH + Recruit MT) - Promotion"
                               fm={cloneFM(fm, row)}
                               name={"total"}
                               label={"Approved by"}

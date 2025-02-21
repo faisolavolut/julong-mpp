@@ -81,6 +81,7 @@ function Page() {
               ? "hrd_ho_unit"
               : null,
         };
+        console.log({ prm });
         const params = await events("onload-param", prm);
         const res: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests` + params
