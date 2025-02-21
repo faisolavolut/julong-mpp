@@ -906,7 +906,7 @@ function Page() {
                               onLoad={async () => {
                                 if (!row.job_level_id) return [];
                                 const res: any = await api.get(
-                                  `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/job-level/${row.job_level_id}`
+                                  `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/job-level/${row.job_level_id}?organization_id=${fm.data.organization_id}`
                                 );
                                 const data: any[] = res.data.data;
                                 if (!Array.isArray(data)) return [];
