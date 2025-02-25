@@ -323,7 +323,7 @@ function Page() {
           const res: any = await api.get(
             `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/completed` + params
           );
-          result = res.data.data;
+          result = res.data.data.batches;
         } else {
           const addtional = {
             ...param,

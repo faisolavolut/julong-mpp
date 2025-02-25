@@ -181,13 +181,29 @@ function Page() {
           let url = "/api/mp-plannings/approver-type";
           if (local?.tab === "completed") {
             url = "/api/mp-plannings/completed";
+            const params = await events("onload-param", prm);
+            const result = await apix({
+              port: "mpp",
+              value: "data.data.mp_planning_headers",
+              path: `${url}${params}`,
+              validate: "array",
+            });
+            return result;
           } else {
-            url = "/api/batch/status";
             prm = {
               ...param,
               approver_type: "DIRECTOR",
               status: "NEED APPROVAL",
             };
+            url = "/api/batch/status";
+            const params = await events("onload-param", prm);
+            const result = await apix({
+              port: "mpp",
+              value: "data.data.batches",
+              path: `${url}${params}`,
+              validate: "array",
+            });
+            return result;
           }
           const params = await events("onload-param", prm);
           const res: any = await api.get(
