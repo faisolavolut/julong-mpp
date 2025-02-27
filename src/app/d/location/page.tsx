@@ -180,7 +180,7 @@ function Page() {
         }
       }}
       onInit={async (list: any) => {}}
-      onCount={async () => {
+      onCount={async (param) => {
         let prm = {
           take: 1,
           paging: 1,
@@ -213,7 +213,7 @@ function Page() {
               };
           }
         }
-        const params = await events("onload-param", prm);
+        const params = await events("onload-param", prm, param);
         const result: any = await apix({
           port: "mpp",
           value: "data.data.total",
