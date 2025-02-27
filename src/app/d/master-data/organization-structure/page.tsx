@@ -21,21 +21,21 @@ function Page() {
       column={[
         {
           name: "organization.name",
-          header: () => <span>Organization</span>,
+          header: "Organization",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
           },
         },
         {
           name: "name",
-          header: () => <span>Name</span>,
+          header: "Name",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
           },
         },
         {
           name: "parent.name",
-          header: () => <span>Parent</span>,
+          header: "Parent",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
           },

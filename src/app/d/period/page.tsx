@@ -58,49 +58,50 @@ function Page() {
       column={[
         {
           name: "title",
-          header: () => <span>title</span>,
+          header: "title",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
           },
         },
         {
           name: "start_date",
-          header: () => <span>Start Date</span>,
+          header: "Start Date",
           renderCell: ({ row, name, cell }: any) => {
             return <>{shortDate(getValue(row, name))}</>;
           },
         },
         {
           name: "end_date",
-          header: () => <span>End Date</span>,
+          header: "End Date",
           renderCell: ({ row, name, cell }: any) => {
             return <>{shortDate(getValue(row, name))}</>;
           },
         },
         {
           name: "budget_start_date",
-          header: () => <span>Budget Start Date</span>,
+          header: "Budget Start Date",
           renderCell: ({ row, name, cell }: any) => {
             return <>{shortDate(getValue(row, name))}</>;
           },
         },
         {
           name: "budget_end_date",
-          header: () => <span>Budget End Date</span>,
+          header: "Budget End Date",
           renderCell: ({ row, name, cell }: any) => {
             return <>{shortDate(getValue(row, name))}</>;
           },
         },
         {
           name: "status",
-          header: () => <span>Status</span>,
+          header: "Status",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getStatusLabel(getValue(row, name))}</>;
           },
         },
         {
           name: "action",
-          header: () => <span>Action</span>,
+          header: "Action",
+          filter: false,
           sortable: false,
           renderCell: ({ row, name, cell }: any) => {
             if (getValue(row, "status") !== "draft") {

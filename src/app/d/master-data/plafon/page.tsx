@@ -35,14 +35,14 @@ function Page() {
       column={[
         {
           name: "organization_name",
-          header: () => <span>Organization</span>,
+          header: "Organization",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
           },
         },
         {
           name: "job_name",
-          header: () => <span>Job</span>,
+          header: "Job",
           width: 300,
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
@@ -50,7 +50,7 @@ function Page() {
         },
         {
           name: "plafon",
-          header: () => <span>Plafon</span>,
+          header: "Plafon",
           width: 50,
           renderCell: ({ row, name, cell }: any) => {
             return <div className="text-left">{getValue(row, name)}</div>;
@@ -58,7 +58,8 @@ function Page() {
         },
         {
           name: "action",
-          header: () => <span>Action</span>,
+          header: "Action",
+          filter: false,
           sortable: false,
           renderCell: ({ row, name, cell }: any) => {
             return (

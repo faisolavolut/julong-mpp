@@ -66,14 +66,14 @@ function Page() {
       column={[
         {
           name: "organization_name",
-          header: () => <span>Organization</span>,
+          header: "Organization",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
           },
         },
         {
           name: "name",
-          header: () => <span>Name</span>,
+          header: "Name",
           width: 300,
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
@@ -81,7 +81,7 @@ function Page() {
         },
         {
           name: "parent.name",
-          header: () => <span>Parent</span>,
+          header: "Parent",
           width: 300,
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;

@@ -48,30 +48,6 @@ function Page() {
 
   return (
     <TableUI
-      filter={[
-        {
-          name: "name",
-          label: "Name",
-          type: "text",
-        },
-        {
-          name: "type",
-          label: "Tipe",
-          type: "dropdown-async",
-          port: "mpp",
-          path: "/api/mp-requests/types",
-          value: "data.data.halo-dek",
-          option: {
-            label: "name",
-            value: "id",
-          },
-        },
-        {
-          name: "start_date",
-          label: "Start Date",
-          type: "date",
-        },
-      ]}
       ready={local.ready}
       header={{
         sideLeft: (data: any) => {

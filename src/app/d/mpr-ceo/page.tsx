@@ -24,49 +24,50 @@ function Page() {
       column={[
         {
           name: "document_number",
-          header: () => <span>Document Number</span>,
+          header: "Document Number",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
           },
         },
         {
           name: "document_date",
-          header: () => <span>Document Date</span>,
+          header: "Document Date",
           renderCell: ({ row, name, cell }: any) => {
             return <>{shortDate(new Date())}</>;
           },
         },
         {
           name: "organization_name",
-          header: () => <span>Organization</span>,
+          header: "Organization",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
           },
         },
         {
           name: "requestor_name",
-          header: () => <span>Requestor</span>,
+          header: "Requestor",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
           },
         },
         {
           name: "job_name",
-          header: () => <span>Job Requested</span>,
+          header: "Job Requested",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getValue(row, name)}</>;
           },
         },
         {
           name: "status",
-          header: () => <span>Status</span>,
+          header: "Status",
           renderCell: ({ row, name, cell }: any) => {
             return <>{getStatusLabel(getValue(row, name))}</>;
           },
         },
         {
           name: "action",
-          header: () => <span>Action</span>,
+          header: "Action",
+          filter: false,
           sortable: false,
           renderCell: ({ row, name, cell }: any) => {
             return (
@@ -134,49 +135,50 @@ function Page() {
           column={[
             {
               name: "document_number",
-              header: () => <span>Document Number</span>,
+              header: "Document Number",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, name)}</>;
               },
             },
             {
               name: "document_date",
-              header: () => <span>Document Date</span>,
+              header: "Document Date",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{shortDate(new Date())}</>;
               },
             },
             {
               name: "organization_name",
-              header: () => <span>Organization</span>,
+              header: "Organization",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, name)}</>;
               },
             },
             {
               name: "requestor_name",
-              header: () => <span>Requestor</span>,
+              header: "Requestor",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, name)}</>;
               },
             },
             {
               name: "job_name",
-              header: () => <span>Job Requested</span>,
+              header: "Job Requested",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, name)}</>;
               },
             },
             {
               name: "status",
-              header: () => <span>Status</span>,
+              header: "Status",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getStatusLabel(getValue(row, name))}</>;
               },
             },
             {
               name: "action",
-              header: () => <span>Action</span>,
+              header: "Action",
+              filter: false,
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
                 return (

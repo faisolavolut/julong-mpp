@@ -17,7 +17,7 @@ function Page() {
       column={[
         {
           name: "name",
-          header: () => <span>Organization</span>,
+          header: "Organization",
           renderCell: ({ row, name, cell }: any) => {
             return <>{row.name}</>;
           },

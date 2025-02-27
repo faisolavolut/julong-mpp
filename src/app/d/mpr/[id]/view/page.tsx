@@ -131,14 +131,14 @@ function Page() {
                           column={[
                             {
                               name: "approver_name",
-                              header: () => <span>Sender</span>,
+                              header: "Sender",
                               renderCell: ({ row, name, cell, tbl }: any) => {
                                 return <>{getValue(row, name)}</>;
                               },
                             },
                             {
                               name: "status",
-                              header: () => <span>Status</span>,
+                              header: "Status",
                               renderCell: ({ row, name, cell, tbl }: any) => {
                                 return (
                                   <div className="uppercase">
@@ -149,14 +149,14 @@ function Page() {
                             },
                             {
                               name: "created_at",
-                              header: () => <span>Datetime</span>,
+                              header: "Datetime",
                               renderCell: ({ row, name, cell, tbl }: any) => {
                                 return <>{shortDate(getValue(row, name))}</>;
                               },
                             },
                             {
                               name: "notes",
-                              header: () => <span>Notes</span>,
+                              header: "Notes",
                               renderCell: ({ row, name, cell, tbl }: any) => {
                                 return (
                                   <div className="uppercase">
@@ -168,7 +168,8 @@ function Page() {
 
                             {
                               name: "action",
-                              header: () => <span>Action</span>,
+                              header: "Action",
+                              filter: false,
                               sortable: false,
                               renderCell: ({ row, name, cell }: any) => {
                                 if (!row?.attachments?.length) return <></>;

@@ -253,28 +253,28 @@ function Page() {
           return [
             {
               name: "document_number",
-              header: () => <span>Batch Number</span>,
+              header: "Batch Number",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, name)}</>;
               },
             },
             {
               name: "mpp_period.title",
-              header: () => <span>MPP Period Name</span>,
+              header: "MPP Period Name",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, name)}</>;
               },
             },
             {
               name: "mpp_period.budget_start_date",
-              header: () => <span>Budget Start Date</span>,
+              header: "Budget Start Date",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{shortDate(getValue(row, name))}</>;
               },
             },
             {
               name: "mpp_period.budget_end_date",
-              header: () => <span>Budget End Date</span>,
+              header: "Budget End Date",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{shortDate(getValue(row, name))}</>;
               },
@@ -284,28 +284,28 @@ function Page() {
         return [
           {
             name: "organization_name",
-            header: () => <span>Organization</span>,
+            header: "Organization",
             renderCell: ({ row, name, cell }: any) => {
               return <>{getValue(row, name)}</>;
             },
           },
           {
             name: "name",
-            header: () => <span>Location</span>,
+            header: "Location",
             renderCell: ({ row, name, cell }: any) => {
               return <>{getValue(row, name)}</>;
             },
           },
           {
             name: "mp_planning_header.document_number",
-            header: () => <span>Document Number</span>,
+            header: "Document Number",
             renderCell: ({ row, name, cell }: any) => {
               return <>{getValue(row, name)}</>;
             },
           },
           {
             name: "mp_planning_header.status",
-            header: () => <span>Status</span>,
+            header: "Status",
             renderCell: ({ row, name, cell }: any) => {
               return <>{getValue(row, name)}</>;
             },

@@ -129,14 +129,14 @@ function Page() {
                           column={[
                             {
                               name: "approver_name",
-                              header: () => <span>Sender</span>,
+                              header: "Sender",
                               renderCell: ({ row, name, cell, tbl }: any) => {
                                 return <>{getValue(row, name)}</>;
                               },
                             },
                             {
                               name: "status",
-                              header: () => <span>Status</span>,
+                              header: "Status",
                               renderCell: ({ row, name, cell, tbl }: any) => {
                                 return (
                                   <div className="uppercase">
@@ -147,14 +147,14 @@ function Page() {
                             },
                             {
                               name: "created_at",
-                              header: () => <span>Datetime</span>,
+                              header: "Datetime",
                               renderCell: ({ row, name, cell, tbl }: any) => {
                                 return <>{shortDate(getValue(row, name))}</>;
                               },
                             },
                             {
                               name: "notes",
-                              header: () => <span>Notes</span>,
+                              header: "Notes",
                               renderCell: ({ row, name, cell, tbl }: any) => {
                                 return (
                                   <div className="uppercase">
@@ -166,7 +166,8 @@ function Page() {
 
                             {
                               name: "action",
-                              header: () => <span>Action</span>,
+                              header: "Action",
+                              filter: false,
                               sortable: false,
                               renderCell: ({ row, name, cell }: any) => {
                                 if (!row?.attachments?.length) return <></>;
@@ -477,7 +478,7 @@ function Page() {
                                     column={[
                                       {
                                         name: "name",
-                                        header: () => <span>Job Level</span>,
+                                        header: "Job Level",
                                         renderCell: ({
                                           row,
                                           name,
@@ -644,7 +645,7 @@ function Page() {
                                     column={[
                                       {
                                         name: "name",
-                                        header: () => <span>Job Level</span>,
+                                        header: "Job Level",
                                         renderCell: ({
                                           row,
                                           name,
@@ -979,7 +980,7 @@ function Page() {
                   column={[
                     {
                       name: "level",
-                      header: () => <span>Job Level</span>,
+                      header: "Job Level",
                       renderCell: ({ row, name, cell, tbl }: any) => {
                         const fm_row = cloneFM(fm, row);
                         return (
@@ -1014,7 +1015,7 @@ function Page() {
                     },
                     {
                       name: "job",
-                      header: () => <span>Job</span>,
+                      header: "Job",
                       width: 150,
                       renderCell: ({ row, name, cell }: any) => {
                         const fm_row = cloneFM(fm, row);
@@ -1066,7 +1067,7 @@ function Page() {
                     },
                     {
                       name: "existing",
-                      header: () => <span>Existing</span>,
+                      header: "Existing",
                       width: 50,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
@@ -1085,7 +1086,7 @@ function Page() {
                     },
                     {
                       name: "suggested_recruit",
-                      header: () => <span>Suggested Recruit</span>,
+                      header: "Suggested Recruit",
                       width: 50,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
@@ -1103,7 +1104,7 @@ function Page() {
                     },
                     {
                       name: "recruit_ph",
-                      header: () => <span>Recruit PH</span>,
+                      header: "Recruit PH",
                       width: 50,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
@@ -1142,7 +1143,7 @@ function Page() {
                     },
                     {
                       name: "recruit_mt",
-                      header: () => <span>Recruit MT</span>,
+                      header: "Recruit MT",
                       width: 50,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
@@ -1181,7 +1182,7 @@ function Page() {
                     },
                     {
                       name: "promotion",
-                      header: () => <span>Promotion</span>,
+                      header: "Promotion",
                       width: 50,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
@@ -1216,7 +1217,7 @@ function Page() {
                     },
                     {
                       name: "total",
-                      header: () => <span>Total</span>,
+                      header: "Total",
                       width: 50,
                       renderCell: ({ row, name, cell }: any) => {
                         return (

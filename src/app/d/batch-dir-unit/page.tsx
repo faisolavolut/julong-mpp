@@ -119,35 +119,36 @@ function Page() {
           return [
             {
               name: "document_number",
-              header: () => <span>Batch Number</span>,
+              header: "Batch Number",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, name)}</>;
               },
             },
             {
               name: "mpp_period.title",
-              header: () => <span>MPP Period Name</span>,
+              header: "MPP Period Name",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{getValue(row, name)}</>;
               },
             },
             {
               name: "mpp_period.budget_start_date",
-              header: () => <span>Budget Start Date</span>,
+              header: "Budget Start Date",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{shortDate(getValue(row, name))}</>;
               },
             },
             {
               name: "mpp_period.budget_end_date",
-              header: () => <span>Budget End Date</span>,
+              header: "Budget End Date",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{shortDate(getValue(row, name))}</>;
               },
             },
             {
               name: "action",
-              header: () => <span>Action</span>,
+              header: "Action",
+              filter: false,
               sortable: false,
               renderCell: ({ row, name, cell }: any) => {
                 if (!get(row, "id")) return <></>;
