@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from "@/lib/components/ui/dialog";
 import { ButtonBetter, ButtonContainer } from "@/lib/components/ui/button";
-import { formatMoney } from "@/lib/components/form/field/TypeInput";
 import { get_user } from "@/lib/utils/get_user";
 import api from "@/lib/utils/axios";
 import { toast } from "sonner";
@@ -38,13 +37,8 @@ export const AlertBatchHrdUnit: FC<any> = ({ local }) => {
           </DialogHeader>
           <div className="flex items-center flex-row space-x-2 flex-grow">
             <div className={cx(" flex flex-col flex-grow")}>
-              {local?.location_null
-                ? ` There are still ${formatMoney(
-                    local?.location_null
-                  )} locations without an MPP. `
-                : ``}
-              Are you sure you want to process dan batch this MPP? Keep in mind,
-              this action can't be undone!
+              Are you sure you want to process the MPP? Please check before
+              proceeding. Keep in mind, this action can't be undone!
             </div>
           </div>
           <DialogFooter className="sm:justify-end">
