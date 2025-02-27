@@ -35,10 +35,10 @@ export const configMenu = [
     ],
   },
   {
-    title: "Manpower Planning Period",
+    title: "Manpower Planning",
     icon: <RiCalendarScheduleLine />,
     children: [
-      { title: "Period", href: "/d/period", permision: ["read-period"] },
+      { title: "Master Period", href: "/d/period", permision: ["read-period"] },
       {
         title: "Manpower Planning Overview",
         href: "/d/location",
@@ -57,7 +57,16 @@ export const configMenu = [
       { title: "Batch", href: "/d/batch", permision: ["read-batch"] },
       { title: "Batch CEO", href: "/d/batch-ceo", permision: ["batch-ceo"] },
     ],
-    permision: ["read-period", "read-mpp", "read-batch", "batch-ceo", "read-mpp-hrd-location", "read-mpp-hrd-unit", "read-mpp-dir-unit", "read-mpp-rekruitmen"],
+    permision: [
+      "read-period",
+      "read-mpp",
+      "read-batch",
+      "batch-ceo",
+      "read-mpp-hrd-location",
+      "read-mpp-hrd-unit",
+      "read-mpp-dir-unit",
+      "read-mpp-rekruitmen",
+    ],
   },
   {
     title: "Manpower Request",
@@ -66,7 +75,12 @@ export const configMenu = [
       {
         title: "Manpower Request",
         href: "/d/mpr",
-        permision: ["read-mpr", "read-mpr-dept-head", "read-mpr-vp", "read-mpr-ho"],
+        permision: [
+          "read-mpr",
+          "read-mpr-dept-head",
+          "read-mpr-vp",
+          "read-mpr-ho",
+        ],
       },
       {
         title: "Manpower Request CEO",
@@ -74,6 +88,12 @@ export const configMenu = [
         permision: ["read-mpr-ceo"],
       },
     ],
-    permision: ["read-mpr", "read-mpr-ceo", "read-mpr-dept-head", "read-mpr-vp", "read-mpr-ho"],
+    permision: [
+      "read-mpr",
+      "read-mpr-ceo",
+      "read-mpr-dept-head",
+      "read-mpr-vp",
+      "read-mpr-ho",
+    ],
   },
 ];
