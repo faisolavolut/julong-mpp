@@ -583,7 +583,7 @@ function Page() {
               })
             : [],
           history: history.data.data,
-          // status: "DRAFTED",
+          status: "DRAFTED",
           // is_you: data?.
         };
       }}
@@ -972,7 +972,7 @@ function Page() {
                                   return res;
                                 }
                               }}
-                              autoRefresh={true}
+                              // autoRefresh={true}
                               onLabel={"name"}
                             />
                           </>

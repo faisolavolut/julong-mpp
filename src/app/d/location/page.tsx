@@ -169,6 +169,7 @@ function Page() {
             }
           }
           const params = await events("onload-param", prm);
+          console.log({ params });
           const result = await apix({
             port: "mpp",
             value: value,

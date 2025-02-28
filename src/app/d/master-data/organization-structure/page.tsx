@@ -54,7 +54,7 @@ function Page() {
       onCount={async (param) => {
         const result: any = await apix({
           port: "portal",
-          value: "data.data.total",
+          value: "data.data.Total",
           path: `/api/organization-structures${param}`,
           validate: "object",
         });
