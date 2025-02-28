@@ -287,6 +287,7 @@ function Page() {
                     }}
                     type={"dropdown-async"}
                     pagination={false}
+                    autoRefresh={true}
                     search="local"
                     onLabel={"document_number"}
                     onValue={"value"}

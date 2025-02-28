@@ -841,14 +841,6 @@ function Page() {
                       header: "Job Level",
                       width: 250,
                       renderCell: ({ fm_row }: any) => {
-                        // const disabled = !(
-                        //   fm.data?.status === "DRAFTED" ||
-                        //   fm.data?.status === "REJECTED"
-                        // );
-                        // if (disabled)
-                        //   return (
-                        //     <>{`${fm_row?.data?.job_level} - ${fm_row?.data?.job_level_name}`}</>
-                        //   );
                         return (
                           <>
                             <Field
@@ -909,6 +901,7 @@ function Page() {
                               target={"job_id"}
                               name={"job"}
                               label={"Job"}
+                              autoRefresh={true}
                               disabled={
                                 !(
                                   fm.data?.status === "DRAFTED" ||
@@ -944,7 +937,6 @@ function Page() {
                               }}
                               onLoad={async (param: any) => {
                                 if (!row.job_level_id) return [];
-
                                 const params = await events("onload-param", {
                                   ...param,
                                   organization_id: fm.data.organization_id,

@@ -656,6 +656,7 @@ function Page() {
                       }
                     }}
                     type={"dropdown-async"}
+                    autoRefresh={true}
                     pagination={false}
                     search="local"
                     onLabel={"document_number"}
