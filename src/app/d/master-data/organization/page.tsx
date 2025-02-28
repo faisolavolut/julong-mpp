@@ -33,11 +33,11 @@ function Page() {
         });
         return result;
       }}
-      onCount={async () => {
+      onCount={async (param) => {
         const result: any = await apix({
           port: "portal",
           value: "data.data.total",
-          path: `/api/organizations?page=1&page_size=1`,
+          path: `/api/organizations${param}`,
           validate: "object",
         });
         return getNumber(result);

@@ -133,6 +133,7 @@ function Page() {
         let prm = {
           ...param,
         };
+        let value = "data.data.mp_planning_headers";
         try {
           let url = "/api/mp-plannings/approver-type";
           if (local?.tab === "completed") {
@@ -140,9 +141,11 @@ function Page() {
           } else {
             const roles = rolesMpp([local.roles]);
             url = "/api/mp-plannings/approver-type";
+            value = "data.data.organization_locations";
             switch (roles) {
               case "HRD Location":
                 url = "/api/mp-plannings";
+                value = "data.data.mp_planning_headers";
                 break;
               case "HRD Unit":
                 prm = {
@@ -163,28 +166,20 @@ function Page() {
             }
           }
           const params = await events("onload-param", prm);
-          const res: any = await api.get(
-            `${process.env.NEXT_PUBLIC_API_MPP}${url}` + params
-          );
-
-          const result: any[] =
-            url === "/api/mp-plannings"
-              ? res.data.data.mp_planning_headers
-              : local?.tab === "completed"
-              ? res.data.data
-              : res.data.data.organization_locations;
-          if (!Array.isArray(result)) return [];
-          return result || [];
+          const result = await apix({
+            port: "mpp",
+            value: value,
+            path: `${url}${params}`,
+            validate: "array",
+          });
+          return result;
         } catch (ex) {
           return [];
         }
       }}
       onInit={async (list: any) => {}}
       onCount={async (param) => {
-        let prm = {
-          take: 1,
-          paging: 1,
-        } as any;
+        let prm = {} as any;
         let url = "/api/mp-plannings/approver-type";
         if (local?.tab === "completed") {
           url = "/api/mp-plannings/completed";

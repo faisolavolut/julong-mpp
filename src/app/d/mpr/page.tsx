@@ -81,7 +81,6 @@ function Page() {
               ? "hrd_ho_unit"
               : null,
         };
-        console.log({ prm });
         const params = await events("onload-param", prm);
         const res: any = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-requests` + params
@@ -91,10 +90,8 @@ function Page() {
         return data || [];
       }}
       onInit={async (list: any) => {}}
-      onCount={async () => {
+      onCount={async (param) => {
         let prm = {
-          take: 1,
-          paging: 1,
           approver_type:
             local.role === "Staff"
               ? "requestor"
@@ -106,7 +103,7 @@ function Page() {
               ? "hrd_ho_unit"
               : null,
         } as any;
-        const params = await events("onload-param", prm);
+        const params = await events("onload-param", prm, param);
         const result: any = await apix({
           port: "mpp",
           value: "data.data.total",

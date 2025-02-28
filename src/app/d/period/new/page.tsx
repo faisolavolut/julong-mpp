@@ -7,6 +7,7 @@ import api from "@/lib/utils/axios";
 import { normalDate } from "@/lib/utils/date";
 import { IoMdSave } from "react-icons/io";
 import { ButtonContainer } from "@/lib/components/ui/button";
+import { getLabel } from "@/lib/utils/getLabel";
 
 function Page() {
   return (
@@ -119,8 +120,10 @@ function Page() {
                     fm={fm}
                     name={"status"}
                     label={"Status"}
-                    type={"dropdown"}
                     disabled={true}
+                    type={"dropdown-async"}
+                    pagination={false}
+                    search="local"
                     onLoad={async () => {
                       return [
                         {
@@ -145,6 +148,12 @@ function Page() {
                         },
                       ];
                     }}
+                    onLabel={(item) =>
+                      typeof item !== "object"
+                        ? getLabel(item)
+                        : getLabel(item?.value)
+                    }
+                    onValue={"value"}
                   />
                 </div>
               </div>

@@ -26,10 +26,11 @@ const ValidateLayout: React.FC<RootLayoutProps> = ({ children }) => {
         let can_access = false;
         permision.map((e) => {
           if (!can_access) {
-            console.log(can_access, e, access(e));
             can_access = access(e);
           }
         });
+        try {
+        } catch (ex) {}
         local.access = can_access;
         local.ready = true;
         local.render();

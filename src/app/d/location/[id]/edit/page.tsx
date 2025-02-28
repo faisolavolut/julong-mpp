@@ -21,7 +21,6 @@ import {
 import { statusMpp } from "@/constants/status-mpp";
 import { actionToast } from "@/lib/utils/action";
 import api from "@/lib/utils/axios";
-import { cloneFM } from "@/lib/utils/cloneFm";
 import { normalDate, shortDate } from "@/lib/utils/date";
 import { events } from "@/lib/utils/event";
 import { getParams } from "@/lib/utils/get-params";
@@ -40,6 +39,7 @@ import { MdDelete } from "react-icons/md";
 import { toast } from "sonner";
 import { PreviewImagePopup } from "@/lib/components/ui/previewImage";
 import { TableEditBetter } from "@/lib/components/tablelist/TableBetter";
+import { apix } from "@/lib/utils/apix";
 
 function Page() {
   const local = useLocal({
@@ -566,8 +566,24 @@ function Page() {
           mpp_name: data?.mpp_period?.title,
           budget_year_from: data?.mpp_period?.budget_start_date,
           budget_year_to: data?.mpp_period?.budget_end_date,
-          document_line: data?.mp_planning_lines || [],
+          document_line: data?.mp_planning_lines?.length
+            ? data.mp_planning_lines.map((e: any) => {
+                return {
+                  ...e,
+                  job_level: {
+                    id: e?.job_level_id,
+                    level: e?.job_level,
+                    name: e?.job_level_name,
+                  },
+                  job: {
+                    id: e?.job_id,
+                    name: e?.job_name,
+                  },
+                };
+              })
+            : [],
           history: history.data.data,
+          // status: "DRAFTED",
           // is_you: data?.
         };
       }}
@@ -823,37 +839,50 @@ function Page() {
                     {
                       name: "level",
                       header: "Job Level",
-                      width: 150,
-                      renderCell: ({ row, name, cell, tbl }: any) => {
+                      width: 250,
+                      renderCell: ({ fm_row }: any) => {
+                        // const disabled = !(
+                        //   fm.data?.status === "DRAFTED" ||
+                        //   fm.data?.status === "REJECTED"
+                        // );
+                        // if (disabled)
+                        //   return (
+                        //     <>{`${fm_row?.data?.job_level} - ${fm_row?.data?.job_level_name}`}</>
+                        //   );
                         return (
                           <>
                             <Field
                               tooltip="The job level to be selected"
-                              fm={cloneFM(fm, row)}
+                              fm={fm_row}
                               hidden_label={true}
-                              name={"job_level_id"}
-                              label={"Organization"}
-                              type={"dropdown"}
+                              target="job_level_id"
+                              name={"job_level"}
+                              label={"Level"}
                               disabled={
                                 !(
                                   fm.data?.status === "DRAFTED" ||
                                   fm.data?.status === "REJECTED"
                                 )
                               }
-                              onLoad={async () => {
-                                const res: any = await api.get(
-                                  `${process.env.NEXT_PUBLIC_API_PORTAL}/api/job-levels/organization/${fm.data.organization_id}`
+                              search="local"
+                              pagination={false}
+                              type={"dropdown-async"}
+                              onLoad={async (param: any) => {
+                                const params = await events(
+                                  "onload-param",
+                                  param
                                 );
-                                const data: any[] = res.data.data;
-                                if (!Array.isArray(data)) return [];
-                                const result = data.map((e) => {
-                                  return {
-                                    value: e.id,
-                                    label: `${e.level} - ${e.name}`,
-                                  };
+                                const res: any = await apix({
+                                  port: "portal",
+                                  value: "data.data",
+                                  path: `/api/job-levels/organization/${fm.data.organization_id}${params}`,
+                                  validate: "array",
                                 });
-                                return result || [];
+                                return res;
                               }}
+                              onLabel={(item: any) =>
+                                `${item.level} - ${item.name}`
+                              }
                             />
                           </>
                         );
@@ -863,16 +892,23 @@ function Page() {
                       name: "job",
                       header: "Job",
                       width: 250,
-                      renderCell: ({ row, name, cell }: any) => {
-                        const fm_row = cloneFM(fm, row);
+                      renderCell: ({ fm_row, row }: any) => {
+                        // const disabled = !(
+                        //   fm.data?.status === "DRAFTED" ||
+                        //   fm.data?.status === "REJECTED"
+                        // )
+                        //   ? true
+                        //   : !fm_row.data?.job_level_id;
+                        // if (disabled) return <>{fm_row?.data?.job_name}</>;
                         return (
                           <>
                             <Field
                               tooltip="The job position to be requested"
-                              fm={cloneFM(fm, row)}
+                              fm={fm_row}
                               hidden_label={true}
-                              name={"job_id"}
-                              label={"Organization"}
+                              target={"job_id"}
+                              name={"job"}
+                              label={"Job"}
                               disabled={
                                 !(
                                   fm.data?.status === "DRAFTED" ||
@@ -881,7 +917,9 @@ function Page() {
                                   ? true
                                   : !fm_row.data?.job_level_id
                               }
-                              type={"dropdown"}
+                              search="local"
+                              pagination={false}
+                              type={"dropdown-async"}
                               onChange={(item: any) => {
                                 const existing = item.data.existing;
                                 fm_row.data.existing = existing;
@@ -904,33 +942,38 @@ function Page() {
                                 fm_row.data.total = total;
                                 fm.render();
                               }}
-                              onLoad={async () => {
+                              onLoad={async (param: any) => {
                                 if (!row.job_level_id) return [];
-                                const res: any = await api.get(
-                                  `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/job-level/${row.job_level_id}?organization_id=${fm.data.organization_id}`
-                                );
-                                const data: any[] = res.data.data;
-                                if (!Array.isArray(data)) return [];
-                                let result = data.map((e) => {
-                                  return {
-                                    value: e.id,
-                                    label: `${e.name}`,
-                                    data: e,
-                                  };
+
+                                const params = await events("onload-param", {
+                                  ...param,
+                                  organization_id: fm.data.organization_id,
+                                });
+                                const res: any = await apix({
+                                  port: "portal",
+                                  value: "data.data",
+                                  path: `/api/jobs/job-level/${row.job_level_id}${params}`,
+                                  validate: "array",
                                 });
                                 if (fm.data?.document_line?.length) {
                                   let ids = fm.data.document_line.map(
                                     (e: any) => e.job_id
                                   );
+                                  console.log({ ids });
                                   ids = ids.filter(
                                     (e: any) => e !== fm_row?.data?.job_id
                                   );
-                                  result = result.filter(
-                                    (e) => !ids.includes(e.value)
+                                  console.log({ ids });
+                                  const result = res.filter(
+                                    (e: any) => !ids.includes(e.id)
                                   );
+                                  return result || [];
+                                } else {
+                                  return res;
                                 }
-                                return result || [];
                               }}
+                              autoRefresh={true}
+                              onLabel={"name"}
                             />
                           </>
                         );
@@ -940,12 +983,12 @@ function Page() {
                       name: "existing",
                       header: "Existing",
                       width: 100,
-                      renderCell: ({ row, name, cell }: any) => {
+                      renderCell: ({ fm_row }: any) => {
                         return (
                           <>
                             <Field
                               tooltip="The number of remaining employees in this job"
-                              fm={cloneFM(fm, row)}
+                              fm={fm_row}
                               name={"existing"}
                               label={"Approved by"}
                               type={"money"}
@@ -960,12 +1003,12 @@ function Page() {
                       name: "suggested_recruit",
                       width: 250,
                       header: "Suggested Recruit",
-                      renderCell: ({ row, name, cell }: any) => {
+                      renderCell: ({ fm_row }: any) => {
                         return (
                           <>
                             <Field
                               tooltip="The difference between the job ceiling and the existing employees"
-                              fm={cloneFM(fm, row)}
+                              fm={fm_row}
                               name={"suggested_recruit"}
                               label={"Approved by"}
                               type={"money"}
@@ -980,13 +1023,12 @@ function Page() {
                       name: "recruit_ph",
                       header: "Recruit PH",
                       width: 150,
-                      renderCell: ({ row, name, cell }: any) => {
-                        const fm_row = cloneFM(fm, row);
+                      renderCell: ({ fm_row }: any) => {
                         return (
                           <>
                             <Field
                               tooltip="Input the number of hires for Professional Hire"
-                              fm={cloneFM(fm, row)}
+                              fm={fm_row}
                               name={"recruit_ph"}
                               type={"money"}
                               hidden_label={true}
@@ -999,7 +1041,6 @@ function Page() {
                                   : !fm_row.data?.job_level_id
                               }
                               onChange={() => {
-                                const fm_row = cloneFM(fm, row);
                                 const getNumber = (data: any) => {
                                   return Number(data) || 0;
                                 };
@@ -1028,14 +1069,25 @@ function Page() {
                     {
                       name: "recruit_mt",
                       header: "Recruit MT",
-                      width: 150,
-                      renderCell: ({ row, name, cell }: any) => {
-                        const fm_row = cloneFM(fm, row);
+                      width: 85,
+                      renderCell: ({ fm_row }: any) => {
+                        // const disabled = !(
+                        //   fm.data?.status === "DRAFTED" ||
+                        //   fm.data?.status === "REJECTED"
+                        // )
+                        //   ? true
+                        //   : !fm_row.data?.job_level_id;
+                        // if (disabled)
+                        //   return (
+                        //     <>
+                        //       {formatMoney(getNumber(fm_row?.data?.recruit_mt))}
+                        //     </>
+                        //   );
                         return (
                           <>
                             <Field
                               tooltip="Input the number of hires for Management Trainee"
-                              fm={cloneFM(fm, row)}
+                              fm={fm_row}
                               name={"recruit_mt"}
                               type={"money"}
                               hidden_label={true}
@@ -1048,7 +1100,6 @@ function Page() {
                                   : !fm_row.data?.job_level_id
                               }
                               onChange={() => {
-                                const fm_row = cloneFM(fm, row);
                                 const getNumber = (data: any) => {
                                   return Number(data) || 0;
                                 };
@@ -1078,13 +1129,12 @@ function Page() {
                       name: "promotion",
                       header: "Promotion",
                       width: 50,
-                      renderCell: ({ row, name, cell }: any) => {
-                        const fm_row = cloneFM(fm, row);
+                      renderCell: ({ fm_row }: any) => {
                         return (
                           <>
                             <Field
                               tooltip="The number of employees promoted from this job to another"
-                              fm={cloneFM(fm, row)}
+                              fm={fm_row}
                               name={"promotion"}
                               label={"Approved by"}
                               type={"money"}
@@ -1098,7 +1148,6 @@ function Page() {
                                   : !fm_row.data?.job_level_id
                               }
                               onChange={() => {
-                                const fm_row = cloneFM(fm, row);
                                 const getNumber = (data: any) => {
                                   return Number(data) || 0;
                                 };
@@ -1132,12 +1181,12 @@ function Page() {
                       name: "total",
                       header: "Total",
                       width: 50,
-                      renderCell: ({ row, name, cell }: any) => {
+                      renderCell: ({ fm_row }: any) => {
                         return (
                           <>
                             <Field
                               tooltip="(Existing + Recruit PH + Recruit MT) - Promotion"
-                              fm={cloneFM(fm, row)}
+                              fm={fm_row}
                               name={"total"}
                               label={"Approved by"}
                               type={"money"}

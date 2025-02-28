@@ -21,7 +21,6 @@ import {
 import { PreviewImagePopup } from "@/lib/components/ui/previewImage";
 import { statusMpp } from "@/constants/status-mpp";
 import api from "@/lib/utils/axios";
-import { cloneFM } from "@/lib/utils/cloneFm";
 import { shortDate } from "@/lib/utils/date";
 import { events } from "@/lib/utils/event";
 import { getParams } from "@/lib/utils/get-params";
@@ -31,6 +30,8 @@ import { X } from "lucide-react";
 import { useEffect } from "react";
 import { FiInfo } from "react-icons/fi";
 import { IoEye } from "react-icons/io5";
+import { formatMoney } from "@/lib/components/form/field/TypeInput";
+import { getNumber } from "@/lib/utils/getNumber";
 
 function Page() {
   const id = getParams("id");
@@ -521,6 +522,9 @@ function Page() {
               .tbl-pagination {
                 display: none !important;
               }
+              .is_disable {
+                background: transparent !important;
+              }
             `)}
           >
             <div className="w-full flex flex-row">
@@ -535,110 +539,40 @@ function Page() {
                       return <></>;
                     },
                   }}
+                  filter={false}
                   column={[
                     {
                       name: "level",
                       header: "Job Level",
+                      sortable: false,
                       renderCell: ({ row, name, cell, tbl }: any) => {
-                        const fm_row = cloneFM(fm, row);
                         return (
                           <>
-                            <Field
-                              fm={cloneFM(fm, row)}
-                              hidden_label={true}
-                              name={"job_level_id"}
-                              label={"Organization"}
-                              type={"dropdown"}
-                              onChange={() => {
-                                // tbl.renderRow(fm_row.data);
-                              }}
-                              onLoad={async () => {
-                                const res: any = await api.get(
-                                  `${process.env.NEXT_PUBLIC_API_PORTAL}/api/job-levels/organization/${fm.data.organization_id}`
-                                );
-                                const data: any[] = res.data.data;
-                                if (!Array.isArray(data)) return [];
-                                const result = data.map((e) => {
-                                  return {
-                                    value: e.id,
-                                    label: `${e.level} - ${e.name}`,
-                                  };
-                                });
-                                return result || [];
-                              }}
-                            />
+                            {`${getValue(row, "job_level")}`} -{" "}
+                            {getValue(row, "job_level_name")}
                           </>
                         );
                       },
                     },
                     {
-                      name: "job",
+                      name: "job_name",
                       header: "Job",
                       width: 150,
+                      sortable: false,
                       renderCell: ({ row, name, cell }: any) => {
-                        const fm_row = cloneFM(fm, row);
-                        return (
-                          <>
-                            <Field
-                              fm={cloneFM(fm, row)}
-                              hidden_label={true}
-                              disabled={!fm_row.data?.job_level_id}
-                              name={"job_id"}
-                              label={"Organization"}
-                              type={"dropdown"}
-                              onChange={(item: any) => {
-                                const existing = item.data.existing;
-                                fm_row.data.existing = existing;
-                                fm.render();
-
-                                const getNumber = (data: any) => {
-                                  return Number(data) || 0;
-                                };
-                                const total =
-                                  getNumber(fm_row.data.existing) +
-                                  getNumber(fm_row.data.recruit_ph) +
-                                  getNumber(fm_row.data.recruit_mt) -
-                                  getNumber(fm_row.data.promotion);
-                                fm_row.data.total = total;
-                                fm.render();
-                              }}
-                              onLoad={async () => {
-                                if (!row.job_level_id) return [];
-                                const res: any = await api.get(
-                                  `${process.env.NEXT_PUBLIC_API_PORTAL}/api/jobs/job-level/${row.job_level_id}`
-                                );
-                                const data: any[] = res.data.data;
-                                if (!Array.isArray(data)) return [];
-                                const result = data.map((e) => {
-                                  return {
-                                    value: e.id,
-                                    label: `${e.name}`,
-                                    data: e,
-                                  };
-                                });
-                                return result || [];
-                              }}
-                            />
-                          </>
-                        );
+                        return <>{getValue(row, name)}</>;
                       },
                     },
                     {
                       name: "existing",
                       header: "Existing",
                       width: 50,
+                      sortable: false,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
-                          <>
-                            <Field
-                              fm={cloneFM(fm, row)}
-                              name={"existing"}
-                              label={"Approved by"}
-                              type={"money"}
-                              disabled={true}
-                              hidden_label={true}
-                            />
-                          </>
+                          <div className="text-right">
+                            {formatMoney(getNumber(getValue(row, name)))}
+                          </div>
                         );
                       },
                     },
@@ -646,17 +580,12 @@ function Page() {
                       name: "suggested_recruit",
                       header: "Suggested Recruit",
                       width: 50,
+                      sortable: false,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
-                          <>
-                            <Field
-                              fm={cloneFM(fm, row)}
-                              name={"suggested_recruit"}
-                              label={"Approved by"}
-                              type={"money"}
-                              hidden_label={true}
-                            />
-                          </>
+                          <div className="text-right">
+                            {formatMoney(getNumber(getValue(row, name)))}
+                          </div>
                         );
                       },
                     },
@@ -664,38 +593,12 @@ function Page() {
                       name: "recruit_ph",
                       header: "Recruit PH",
                       width: 50,
+                      sortable: false,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
-                          <>
-                            <Field
-                              fm={cloneFM(fm, row)}
-                              name={"recruit_ph"}
-                              type={"money"}
-                              hidden_label={true}
-                              onChange={() => {
-                                const fm_row = cloneFM(fm, row);
-                                const getNumber = (data: any) => {
-                                  return Number(data) || 0;
-                                };
-                                const total =
-                                  getNumber(fm_row.data.existing) +
-                                  getNumber(fm_row.data.recruit_ph) +
-                                  getNumber(fm_row.data.recruit_mt) -
-                                  getNumber(fm_row.data.promotion);
-
-                                const recruit = fm.data.document_line
-                                  .map(
-                                    (e: any) =>
-                                      getNumber(e.recruit_ph) +
-                                      getNumber(e.recruit_mt)
-                                  )
-                                  .reduce((a: any, b: any) => a + b, 0);
-                                fm.data.total_recruit = recruit;
-                                fm_row.data.total = total;
-                                fm.render();
-                              }}
-                            />
-                          </>
+                          <div className="text-right">
+                            {formatMoney(getNumber(getValue(row, name)))}
+                          </div>
                         );
                       },
                     },
@@ -703,38 +606,12 @@ function Page() {
                       name: "recruit_mt",
                       header: "Recruit MT",
                       width: 50,
+                      sortable: false,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
-                          <>
-                            <Field
-                              fm={cloneFM(fm, row)}
-                              name={"recruit_mt"}
-                              type={"money"}
-                              hidden_label={true}
-                              onChange={() => {
-                                const fm_row = cloneFM(fm, row);
-                                const getNumber = (data: any) => {
-                                  return Number(data) || 0;
-                                };
-                                const total =
-                                  getNumber(fm_row.data.existing) +
-                                  getNumber(fm_row.data.recruit_ph) +
-                                  getNumber(fm_row.data.recruit_mt) -
-                                  getNumber(fm_row.data.promotion);
-
-                                const recruit = fm.data.document_line
-                                  .map(
-                                    (e: any) =>
-                                      getNumber(e.recruit_ph) +
-                                      getNumber(e.recruit_mt)
-                                  )
-                                  .reduce((a: any, b: any) => a + b, 0);
-                                fm.data.total_recruit = recruit;
-                                fm_row.data.total = total;
-                                fm.render();
-                              }}
-                            />
-                          </>
+                          <div className="text-right">
+                            {formatMoney(getNumber(getValue(row, name)))}
+                          </div>
                         );
                       },
                     },
@@ -742,34 +619,12 @@ function Page() {
                       name: "promotion",
                       header: "Promotion",
                       width: 50,
+                      sortable: false,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
-                          <>
-                            <Field
-                              fm={cloneFM(fm, row)}
-                              name={"promotion"}
-                              label={"Approved by"}
-                              type={"money"}
-                              hidden_label={true}
-                              onChange={() => {
-                                const fm_row = cloneFM(fm, row);
-                                const getNumber = (data: any) => {
-                                  return Number(data) || 0;
-                                };
-                                const total =
-                                  getNumber(fm_row.data.existing) +
-                                  getNumber(fm_row.data.recruit_ph) +
-                                  getNumber(fm_row.data.recruit_mt) -
-                                  getNumber(fm_row.data.promotion);
-                                const totalPromotion = fm.data.document_line
-                                  .map((e: any) => getNumber(e.promotion))
-                                  .reduce((a: any, b: any) => a + b, 0);
-                                fm.data.total_promote = totalPromotion;
-                                fm_row.data.total = total;
-                                fm.render();
-                              }}
-                            />
-                          </>
+                          <div className="text-right">
+                            {formatMoney(getNumber(getValue(row, name)))}
+                          </div>
                         );
                       },
                     },
@@ -777,18 +632,12 @@ function Page() {
                       name: "total",
                       header: "Total",
                       width: 50,
+                      sortable: false,
                       renderCell: ({ row, name, cell }: any) => {
                         return (
-                          <>
-                            <Field
-                              fm={cloneFM(fm, row)}
-                              name={"total"}
-                              label={"Approved by"}
-                              type={"money"}
-                              disabled={true}
-                              hidden_label={true}
-                            />
-                          </>
+                          <div className="text-right">
+                            {formatMoney(getNumber(getValue(row, name)))}
+                          </div>
                         );
                       },
                     },
@@ -797,6 +646,7 @@ function Page() {
                     return fm.data.document_line;
                   }}
                   onInit={async (list: any) => {}}
+                  take={1000}
                 />
               </div>
             </div>

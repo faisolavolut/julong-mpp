@@ -146,11 +146,11 @@ function Page() {
         return result;
       }}
       onInit={async (list: any) => {}}
-      onCount={async () => {
+      onCount={async (param) => {
         const result: any = await apix({
           port: "mpp",
           value: "data.data.total",
-          path: `/api/mpp-periods?page=1&page_size=1`,
+          path: `/api/mpp-periods${param}`,
           validate: "object",
         });
         return getNumber(result);

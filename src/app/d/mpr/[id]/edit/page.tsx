@@ -466,8 +466,8 @@ function Page() {
           vp_gm_director: data.vp_gm_director,
           hrd_ho_unit: data.hrd_ho_unit,
           ceo: data.ceo,
-          organization_location_id: data.location,
-          for_organization_location_id: data.location,
+          organization_location_id: data.for_organization_location_id,
+          for_organization_location_id: data.for_organization_location_id,
           for_organization_structure_id: data.organization_structure_id,
           organization_structure_id: data.organization_structure_id,
           certificate: data.certificate, // Optional
@@ -571,7 +571,7 @@ function Page() {
           );
           history = hst?.data?.data || [];
         } catch (ex) {}
-        return {
+        const result = {
           id,
           ...data,
           categories: categories,
@@ -593,7 +593,28 @@ function Page() {
             : [],
           enable_majors,
           history: history?.data?.data,
+          for_organization: {
+            id: data?.for_organization_id,
+            name: data?.for_organization_name,
+          },
+          for_organization_structure: {
+            id: data?.for_organization_structure_id,
+            name: data?.for_organization_structure,
+          },
+          job: {
+            id: data?.job_id,
+            name: data?.job_name,
+          },
+          for_organization_location: {
+            id: data?.for_organization_location_id,
+            name: data?.for_organization_location,
+          },
+          emp_organization: {
+            id: data?.emp_organization_id,
+            name: data?.emp_organization_name,
+          },
         };
+        return result;
       }}
       children={(fm: any) => {
         return (
@@ -623,9 +644,9 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"mp_planning_header_id"}
                     label={"MPP Reference Number"}
-                    type={"dropdown"}
+                    target="mp_planning_header_id"
+                    name={"mp_planning_header"}
                     onChange={(e: any) => {
                       const line = e?.data.mp_planning_lines;
                       fm.data["lines"] = line;
@@ -634,6 +655,11 @@ function Page() {
                         fm.fields.job_id.reload();
                       }
                     }}
+                    type={"dropdown-async"}
+                    pagination={false}
+                    search="local"
+                    onLabel={"document_number"}
+                    onValue={"value"}
                     onLoad={async () => {
                       try {
                         if (!fm.data?.mpp_period_id) {
@@ -678,7 +704,18 @@ function Page() {
                     fm={fm}
                     name={"recruitment_type"}
                     label={"Recruitment Type"}
-                    type={"dropdown"}
+                    type={"dropdown-async"}
+                    pagination={false}
+                    search="local"
+                    onLabel={(e) => {
+                      const label = {
+                        "MT_Management Trainee": "Management Trainee",
+                        "PH_Professional Hire": "Professional Hire",
+                        "NS_Non Staff to Staff": "Non Staff to Staff",
+                      };
+                      return get(label, e) ? get(label, e) : e?.label;
+                    }}
+                    onValue={"value"}
                     onChange={() => {
                       const lines = fm.data?.lines || [];
                       const jobs =
@@ -716,34 +753,28 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"for_organization_id"}
+                    target={"for_organization_id"}
+                    name={"for_organization"}
                     label={"For Organization"}
-                    type={"dropdown"}
                     disabled={!fm.data?.recruitment_type}
+                    type={"dropdown-async"}
+                    // pagination={false}
+                    // search="local"
+                    onLabel={"name"}
                     onChange={(e: any) => {
                       const locations = e.data?.organization_locations;
                       fm.data["list_location"] = locations;
                       fm.render();
                     }}
-                    onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                      };
+                    onLoad={async (param) => {
                       const params = await events("onload-param", param);
                       const res: any = await api.get(
                         `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations` +
                           params
                       );
-                      const data: any[] = res.data.data.organizations;
+                      const data: any[] = res?.data?.data?.organizations;
                       if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.name,
-                          data: e,
-                        };
-                      });
+                      return data;
                     }}
                   />
                 </div>
@@ -751,15 +782,15 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"emp_organization_id"}
+                    target={"emp_organization_id"}
+                    name={"emp_organization"}
                     label={"Employment Org"}
-                    type={"dropdown"}
+                    type={"dropdown-async"}
+                    // pagination={false}
+                    // search="local"
+                    onLabel={"name"}
                     disabled={!fm.data?.for_organization_id}
-                    onLoad={async () => {
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                      };
+                    onLoad={async (param) => {
                       const params = await events("onload-param", param);
                       const res: any = await api.get(
                         `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organizations` +
@@ -767,13 +798,7 @@ function Page() {
                       );
                       const data: any[] = res.data.data.organizations;
                       if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.name,
-                          data: e,
-                        };
-                      });
+                      return data;
                     }}
                   />
                 </div>
@@ -781,9 +806,14 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"job_id"}
+                    target={"job_id"}
+                    name={"job"}
                     label={"Job Position"}
-                    type={"dropdown"}
+                    type={"dropdown-async"}
+                    // pagination={false}
+                    // search="local"
+                    onLabel={"name"}
+                    autoRefresh={true}
                     disabled={!fm.data?.for_organization_id}
                     onChange={(e: any) => {
                       const organization_structure_name =
@@ -810,12 +840,8 @@ function Page() {
                       fm.data.remaining_balance = remaining_balance;
                       fm.render();
                     }}
-                    onLoad={async () => {
+                    onLoad={async (param) => {
                       if (!fm.data?.for_organization_id) return [];
-                      const param = {
-                        paging: 1,
-                        take: 500,
-                      };
                       const params = await events("onload-param", param);
                       try {
                         const res: any = fm.data?.mp_planning_header_id
@@ -829,13 +855,7 @@ function Page() {
                             );
                         const data: any[] = res.data.data;
                         if (!Array.isArray(data)) return [];
-                        return data.map((e) => {
-                          return {
-                            value: e.id,
-                            label: e.name,
-                            data: e,
-                          };
-                        });
+                        return data;
                       } catch (ex) {
                         return [];
                       }
@@ -855,16 +875,17 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
-                    name={"location"}
+                    target={"for_organization_location_id"}
+                    name={"for_organization_location"}
                     label={"Location"}
-                    type={"dropdown"}
+                    type={"dropdown-async"}
+                    pagination={false}
+                    search="local"
+                    onLabel={"name"}
+                    autoRefresh={true}
                     disabled={!fm.data?.for_organization_id}
-                    onLoad={async () => {
+                    onLoad={async (param) => {
                       if (!fm.data?.for_organization_id) return [];
-                      const param = {
-                        paging: 1,
-                        take: 1000,
-                      };
                       const params = await events("onload-param", param);
                       const res: any = await api.get(
                         `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organization-locations/organization/${fm.data?.for_organization_id}` +
@@ -872,13 +893,7 @@ function Page() {
                       );
                       const data: any[] = res.data.data;
                       if (!Array.isArray(data)) return [];
-                      return data.map((e) => {
-                        return {
-                          value: e.id,
-                          label: e.name,
-                          data: e,
-                        };
-                      });
+                      return data;
                     }}
                   />
                 </div>
@@ -947,7 +962,17 @@ function Page() {
                     fm={fm}
                     name={"is_replacement"}
                     label={"Request Category"}
-                    type={"dropdown"}
+                    type={"dropdown-async"}
+                    pagination={false}
+                    search="local"
+                    onLabel={(e) => {
+                      const label = {
+                        penambahan: "Penambahan",
+                        penggantian: "Penggantian",
+                      };
+                      return get(label, e) ? get(label, e) : e?.label;
+                    }}
+                    onValue={"value"}
                     onLoad={() => {
                       return [
                         {
@@ -1034,7 +1059,18 @@ function Page() {
                     fm={fm}
                     name={"marital_status"}
                     label={"Marital Status"}
-                    type={"dropdown"}
+                    type={"dropdown-async"}
+                    pagination={false}
+                    search="local"
+                    onLabel={(e) => {
+                      const label = {
+                        single: "Single",
+                        married: "Married",
+                        any: "No Rules",
+                      };
+                      return get(label, e) ? get(label, e) : e?.label;
+                    }}
+                    onValue={"value"}
                     onLoad={() => {
                       return [
                         {
@@ -1074,8 +1110,28 @@ function Page() {
                     fm={fm}
                     name={"minimum_education"}
                     label={"Minimum Education"}
-                    type={"dropdown"}
+                    type={"dropdown-async"}
+                    pagination={false}
+                    search="local"
+                    onLabel={(e) => {
+                      const labelMap: Record<string, string> = {
+                        "1 - Doctoral / Professor": "1 - Doctoral / Professor",
+                        "2 - Master Degree": "2 - Master Degree",
+                        "3 - Bachelor": "3 - Bachelor",
+                        "4 - Diploma 1": "4 - Diploma 1",
+                        "5 - Diploma 2": "5 - Diploma 2",
+                        "6 - Diploma 3": "6 - Diploma 3",
+                        "7 - Diploma 4": "7 - Diploma 4",
+                        "8 - Elementary School": "8 - Elementary School",
+                        "9 - Senior High School": "9 - Senior High School",
+                        "10 - Junior High School": "10 - Junior High School",
+                        "11 - Unschooled": "11 - Unschooled",
+                      };
+
+                      return labelMap[e] || e?.label || e;
+                    }}
                     onChange={() => {
+                      fm.data.major_ids = [];
                       const run = async () => {
                         if (fm.data?.minimum_education) {
                           fm.data.enable_majors = false;
@@ -1098,6 +1154,7 @@ function Page() {
                       };
                       run();
                     }}
+                    onValue={"value"}
                     onLoad={() => {
                       return [
                         {

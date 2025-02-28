@@ -99,11 +99,11 @@ function Page() {
         return result;
       }}
       onInit={async (list: any) => {}}
-      onCount={async () => {
+      onCount={async (param) => {
         const result: any = await apix({
           port: "portal",
           value: "data.data.total",
-          path: `/api/jobs?page=1&page_size=1`,
+          path: `/api/jobs${param}`,
           validate: "object",
         });
         return getNumber(result);
