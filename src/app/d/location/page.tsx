@@ -149,18 +149,21 @@ function Page() {
                 break;
               case "HRD Unit":
                 prm = {
+                  ...prm,
                   approver_type: "manager",
                   organization_id: get_user("employee.organization_id"),
                 };
                 break;
               case "Direktur Unit":
                 prm = {
+                  ...prm,
                   approver_type: "direktur",
                   organization_id: get_user("employee.organization_id"),
                 };
                 break;
               default:
                 prm = {
+                  ...prm,
                   approver_type: "admin",
                 };
             }

@@ -223,11 +223,8 @@ function Page() {
         }
       }}
       onInit={async (list: any) => {}}
-      onCount={async () => {
-        let prm = {
-          take: 1,
-          paging: 1,
-        } as any;
+      onCount={async (param) => {
+        let prm = {} as any;
         let url = "/api/mp-plannings/approver-type";
         if (local?.tab === "completed") {
           url = "/api/mp-plannings/completed";
@@ -239,7 +236,7 @@ function Page() {
           };
           url = "/api/batch/status";
         }
-        const params = await events("onload-param", prm);
+        const params = await events("onload-param", prm, param);
         const result: any = await apix({
           port: "mpp",
           value: "data.data.total",

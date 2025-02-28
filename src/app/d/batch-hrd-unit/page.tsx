@@ -131,6 +131,7 @@ function Page() {
             const roles = "HRD Unit";
             url = "/api/mp-plannings/approver-type";
             prm = {
+              ...prm,
               approver_type: "manager",
               organization_id: get_user("employee.organization_id"),
             };
@@ -143,7 +144,7 @@ function Page() {
             url === "/api/mp-plannings"
               ? res.data.data.mp_planning_headers
               : local?.tab === "completed"
-              ? res.data.data
+              ? res.data.data?.mp_planning_headers
               : res.data.data.organization_locations;
           if (!Array.isArray(result)) return [];
           return result || [];
@@ -152,11 +153,8 @@ function Page() {
         }
       }}
       onInit={async (list: any) => {}}
-      onCount={async () => {
-        let prm = {
-          take: 1,
-          paging: 1,
-        } as any;
+      onCount={async (param) => {
+        let prm = {} as any;
         let url = "/api/mp-plannings/approver-type";
         if (local?.tab === "completed") {
           url = "/api/mp-plannings/completed";
@@ -167,7 +165,7 @@ function Page() {
             organization_id: get_user("employee.organization_id"),
           };
         }
-        const params = await events("onload-param", prm);
+        const params = await events("onload-param", prm, param);
         const result: any = await apix({
           port: "mpp",
           value: "data.data.total",
