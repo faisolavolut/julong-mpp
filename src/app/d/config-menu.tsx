@@ -1,7 +1,14 @@
+import { FaChartSimple } from "react-icons/fa6";
 import { HiCubeTransparent } from "react-icons/hi";
 import { RiCalendarScheduleLine, RiTeamFill } from "react-icons/ri";
 
 export const configMenu = [
+  {
+    title: "Home",
+    icon: <FaChartSimple />,
+    href: "/d/home",
+    permision: ["read-home-mpp"],
+  },
   {
     title: "Master Data",
     icon: <HiCubeTransparent />,
