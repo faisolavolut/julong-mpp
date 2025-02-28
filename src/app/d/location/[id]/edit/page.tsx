@@ -583,7 +583,7 @@ function Page() {
               })
             : [],
           history: history.data.data,
-          status: "DRAFTED",
+          // status: "DRAFTED",
           // is_you: data?.
         };
       }}
