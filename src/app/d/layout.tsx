@@ -12,6 +12,8 @@ import { SidebarProvider } from "@/lib/context/SidebarContext";
 import { Navbar } from "flowbite-react";
 import { siteurl } from "@/lib/utils/siteurl";
 import SidebarBetterTree from "@/lib/components/partials/SidebarBetter";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -19,7 +21,7 @@ interface RootLayoutProps {
 const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const [mini, setMini] = useState(false);
   const [isClient, setIsClient] = useState(false);
-
+  const pathname = usePathname();
   const local = useLocal({
     user: null as any,
     data: [] as any[],
@@ -141,13 +143,25 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
           )}
         </div>
       </div>
-      <div className="flex  bg-layer flex-grow flex-col py-3">
+      <div
+        className={cn(
+          `flex  bg-layer flex-grow flex-col py-3 ${
+            pathname === "/d/home" ? "pb-0" : ""
+          }`
+        )}
+      >
         <div className="flex flex-row flex-grow  flex-grow">
           <div
             id="main-content"
             className="flex-grow  relative overflow-y-auto flex flex-row"
           >
-            <div className="w-full h-full absolute top-0 lef-0 flex flex-row  p-4 pb-0 pt-0 pr-6 pl-3">
+            <div
+              className={cn(
+                `flex-grow relative overflow-y-auto flex flex-row p-4 pb-0 pt-0 pr-6 pl-3 ${
+                  pathname === "/d/home" ? "p-0" : ""
+                }`
+              )}
+            >
               {isClient ? (
                 <main className="flex-grow flex flex-col">{children}</main>
               ) : (
