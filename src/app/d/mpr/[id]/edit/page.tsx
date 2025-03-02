@@ -677,13 +677,7 @@ function Page() {
 
                         const data: any[] = res.data.data;
                         if (!Array.isArray(data)) return [];
-                        return data.map((e) => {
-                          return {
-                            value: e.id,
-                            label: e.document_number,
-                            data: e,
-                          };
-                        });
+                        return data;
                       } catch (ex) {
                         return [];
                       }
