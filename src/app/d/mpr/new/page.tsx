@@ -290,7 +290,6 @@ function Page() {
                     autoRefresh={true}
                     search="local"
                     onLabel={"document_number"}
-                    onValue={"value"}
                     onLoad={async () => {
                       try {
                         if (!fm.data?.mpp_period_id) {
