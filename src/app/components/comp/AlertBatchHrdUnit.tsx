@@ -93,6 +93,7 @@ export const AlertBatchHrdUnit: FC<any> = ({ local }) => {
                     );
                     local.can_add = false;
                     local.render();
+                    window.location.reload();
                   }
                   setTimeout(() => {
                     toast.success(

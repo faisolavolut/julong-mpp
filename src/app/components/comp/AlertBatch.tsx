@@ -138,6 +138,8 @@ export const AlertBatch: FC<any> = ({ local }) => {
                         </div>
                       </div>
                     );
+
+                    window.location.reload();
                   }, 1000);
                 } catch (ex: any) {
                   toast.error(

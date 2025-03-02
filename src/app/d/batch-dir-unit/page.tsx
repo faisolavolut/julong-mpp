@@ -18,6 +18,7 @@ import { apix } from "@/lib/utils/apix";
 function Page() {
   const local = useLocal({
     can_add: false,
+    tbl: null as any,
     can_edit: false,
     roles: "Direktur Unit" as any,
     ready: false as boolean,
@@ -222,7 +223,10 @@ function Page() {
           return [];
         }
       }}
-      onInit={async (list: any) => {}}
+      onInit={async (list: any) => {
+        local.tbl = list;
+        local.render();
+      }}
       onCount={async (param) => {
         let prm = {} as any;
         let url = "/api/mp-plannings/approver-type";
