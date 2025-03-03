@@ -94,7 +94,7 @@ function Page() {
               url: "/d/mpr",
             },
             {
-              title: "Detail",
+              title: "Document",
             },
           ]}
         />

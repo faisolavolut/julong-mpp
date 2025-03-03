@@ -1,8 +1,9 @@
 "use client";
 import { AlertBatch } from "@/app/components/comp/AlertBatch";
 import { TableUI } from "@/lib/components/tablelist/TableUI";
-import { ButtonBetter } from "@/lib/components/ui/button";
+import { ButtonBetter, ButtonBetterTooltip } from "@/lib/components/ui/button";
 import { Card, CardContent } from "@/lib/components/ui/card";
+import { Pdf } from "@/lib/svg/Pdf";
 import { apix } from "@/lib/utils/apix";
 import api from "@/lib/utils/axios";
 import { shortDate } from "@/lib/utils/date";
@@ -277,6 +278,23 @@ function Page() {
               header: "Budget End Date",
               renderCell: ({ row, name, cell }: any) => {
                 return <>{shortDate(getValue(row, name))}</>;
+              },
+            },
+            {
+              name: "action",
+              header: "Action",
+              renderCell: ({ row, name, cell }: any) => {
+                return (
+                  <>
+                    {" "}
+                    <ButtonBetterTooltip
+                      tooltip={"View PDF"}
+                      href={`/d/batch/${row.id}/doc`}
+                    >
+                      <Pdf className="text-lg" />
+                    </ButtonBetterTooltip>
+                  </>
+                );
               },
             },
           ];
