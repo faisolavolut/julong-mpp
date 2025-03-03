@@ -4,9 +4,10 @@ import MyDocument from "@/lib/components/ui/Document";
 import { apix } from "@/lib/utils/apix";
 import { getParams } from "@/lib/utils/get-params";
 import { useLocal } from "@/lib/utils/use-local";
+import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
@@ -15,6 +16,7 @@ const PDFViewer = dynamic(
 
 function Page() {
   const id = getParams("id");
+  const [isReady, setIsReady] = useState(false);
   const local = useLocal({
     can_add: false,
     can_edit: false,
@@ -63,9 +65,38 @@ function Page() {
         {local.ready && (
           <div className="flex flex-grow flex-col">
             {local.data ? (
-              <div className="flex flex-grow bg-[#525659] overflow-y-scroll flex-col items-center relative">
+              <div
+                className={cx(
+                  isReady ? "bg-[#525659]" : "bg-[#b8b8b8]",
+                  "flex relative flex-grow  overflow-y-scroll flex-col items-center relative"
+                )}
+              >
+                {!isReady && (
+                  <div
+                    className={cx(
+                      "absolute flex flex-col items-center justify-center",
+                      css`
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                      `
+                    )}
+                  >
+                    <div className="flex flex-col items-center justify-center bg-white p-4 w-48 rounded-md shadow-md">
+                      <p className="text-center text-sm mb-2">
+                        Please wait while the document is loading.
+                      </p>
+                      <Loader2 className={cx("h-8 w-8 animate-spin")} />
+                    </div>
+                  </div>
+                )}
                 <PDFViewer className="flex-grow w-full">
-                  <MyDocument data={local.data} />
+                  <MyDocument
+                    data={local.data}
+                    onRender={() => {
+                      setIsReady(true);
+                    }}
+                  />
                 </PDFViewer>
               </div>
             ) : (
