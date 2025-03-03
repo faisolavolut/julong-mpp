@@ -369,6 +369,7 @@ function Page() {
                         : false;
                       fm.render();
                       if (isOnBudget) {
+                        // on budget
                         if (isYou) {
                           if (!local.head) {
                             fm.data.status = "IN PROGRESS";
@@ -1215,6 +1216,7 @@ function Page() {
                 <div className="col-span-2">
                   <Field
                     fm={fm}
+                    required={true}
                     name={"experiences"}
                     label={"Work Experience"}
                     type={"textarea"}
@@ -1224,6 +1226,7 @@ function Page() {
                 <div className="col-span-2">
                   <Field
                     fm={fm}
+                    required={true}
                     name={"required_qualification"}
                     label={"Required Qualification"}
                     type={"textarea"}
@@ -1269,6 +1272,7 @@ function Page() {
                 <div className="col-span-2">
                   <Field
                     fm={fm}
+                    required={true}
                     name={"jobdesc"}
                     label={"Job Desc"}
                     type={"textarea"}
