@@ -13,7 +13,11 @@ import {
   AlertDialogTitle,
 } from "@/lib/components/ui/alert-dialog";
 import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
-import { ButtonBetter, ButtonContainer } from "@/lib/components/ui/button";
+import {
+  ButtonBetter,
+  ButtonBetterTooltip,
+  ButtonContainer,
+} from "@/lib/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -42,6 +46,7 @@ import { FiInfo } from "react-icons/fi";
 import { IoMdSave } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { toast } from "sonner";
+import { Pdf } from "@/lib/svg/Pdf";
 
 function Page() {
   const id = getParams("id");
@@ -559,6 +564,18 @@ function Page() {
                     </ButtonContainer>
                   </Alert>
                 </>
+              )}
+              {fm?.data?.status === "COMPLETED" ? (
+                <>
+                  <ButtonBetterTooltip
+                    tooltip={"View PDF"}
+                    href={`/d/mpr/${id}/doc`}
+                  >
+                    <Pdf className="text-lg" /> PDF
+                  </ButtonBetterTooltip>
+                </>
+              ) : (
+                <></>
               )}
             </div>
           </div>
