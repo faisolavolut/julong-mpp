@@ -640,6 +640,7 @@ function Page() {
                     name={"document_date"}
                     label={"Document Date"}
                     type={"date"}
+                    required={true}
                   />
                 </div>
                 <div>
@@ -805,8 +806,8 @@ function Page() {
                     name={"job"}
                     label={"Job Position"}
                     type={"dropdown-async"}
-                    // pagination={false}
-                    // search="local"
+                    pagination={false}
+                    search="local"
                     onLabel={"name"}
                     autoRefresh={true}
                     disabled={!fm.data?.for_organization_id}
