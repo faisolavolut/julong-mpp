@@ -126,7 +126,7 @@ export const AlertCeoReject: FC<any> = ({ lc }) => {
                     children={(fm: any) => {
                       return (
                         <div className="flex flex-col gap-y-2 flex-grow pl-6 max-h-[250px] overflow-y-scroll">
-                          {local.organization.map((item) => {
+                          {local.organization.map((item, idx) => {
                             const is_check = fm.data?.organization?.length
                               ? fm.data.organization.find(
                                   (org: any) => org?.id === item.id
@@ -240,13 +240,29 @@ export const AlertCeoReject: FC<any> = ({ lc }) => {
                     {"Saving..."}
                   </>
                 );
+                if (typeof local?.fm.render === "function") local.fm.render();
                 try {
                   const isPartial = local.reject === "reject-partially";
                   if (isPartial) {
-                    const partial = local?.org || [];
+                    const partial: any = local?.org;
+                    const data = local?.fm?.data?.organization || [];
+                    const re = partial?.length
+                      ? partial.map((e: any) => {
+                          const findNotes = data?.length
+                            ? data.find((ex: any) => ex.id === e?.id)
+                            : null;
+                          return {
+                            ...e,
+                            notes: findNotes?.notes,
+                          };
+                        })
+                      : [];
                     const res = await api.put(
                       `${process.env.NEXT_PUBLIC_API_MPP}/api/mp-plannings/lines/reject-partial-pt`,
-                      { approver_id: get_user("employee.id"), payload: partial }
+                      {
+                        approver_id: get_user("employee.id"),
+                        payload: re,
+                      }
                     );
                   } else {
                     const batch = await api.get(
