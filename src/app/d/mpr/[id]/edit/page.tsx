@@ -702,6 +702,7 @@ function Page() {
                     label={"Recruitment Type"}
                     type={"dropdown-async"}
                     pagination={false}
+                    required={true}
                     search="local"
                     onLabel={(e) => {
                       const label = {
@@ -752,6 +753,7 @@ function Page() {
                     target={"for_organization_id"}
                     name={"for_organization"}
                     label={"For Organization"}
+                    required={true}
                     disabled={!fm.data?.recruitment_type}
                     type={"dropdown-async"}
                     // pagination={false}
@@ -780,6 +782,7 @@ function Page() {
                     fm={fm}
                     target={"emp_organization_id"}
                     name={"emp_organization"}
+                    required={true}
                     label={"Employment Org"}
                     type={"dropdown-async"}
                     // pagination={false}
@@ -804,6 +807,7 @@ function Page() {
                     fm={fm}
                     target={"job_id"}
                     name={"job"}
+                    required={true}
                     label={"Job Position"}
                     type={"dropdown-async"}
                     pagination={false}
@@ -870,6 +874,7 @@ function Page() {
                 </div>
                 <div>
                   <Field
+                    required={true}
                     fm={fm}
                     target={"for_organization_location_id"}
                     name={"for_organization_location"}
@@ -1029,6 +1034,7 @@ function Page() {
                     <div className="flex-grow">
                       <Field
                         fm={fm}
+                        required={true}
                         name={"minimum_age"}
                         type={"money"}
                         hidden_label={true}
@@ -1041,6 +1047,7 @@ function Page() {
                     <div className="flex-grow">
                       <Field
                         fm={fm}
+                        required={true}
                         name={"maximum_age"}
                         type={"money"}
                         hidden_label={true}
@@ -1057,6 +1064,7 @@ function Page() {
                     label={"Marital Status"}
                     type={"dropdown-async"}
                     pagination={false}
+                    required={true}
                     search="local"
                     onLabel={(e) => {
                       const label = {
@@ -1089,6 +1097,7 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
+                    required={true}
                     name={"expected_date"}
                     label={"Expected Start Date"}
                     type={"date"}
@@ -1107,6 +1116,7 @@ function Page() {
                     name={"minimum_education"}
                     label={"Minimum Education"}
                     type={"dropdown-async"}
+                    required={true}
                     pagination={false}
                     search="local"
                     onLabel={(e) => {
@@ -1289,6 +1299,7 @@ function Page() {
                         fm={fm}
                         name={"salary_min"}
                         type={"text"}
+                        required={true}
                         hidden_label={true}
                         placeholder="Min"
                       />
@@ -1301,6 +1312,7 @@ function Page() {
                         fm={fm}
                         name={"salary_max"}
                         type={"text"}
+                        required={true}
                         hidden_label={true}
                         placeholder="Max"
                       />

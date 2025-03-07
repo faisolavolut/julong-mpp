@@ -331,6 +331,7 @@ function Page() {
                     label={"Recruitment Type"}
                     type={"dropdown-async"}
                     pagination={false}
+                    required={true}
                     search="local"
                     onLabel={(e) => {
                       const label = {
