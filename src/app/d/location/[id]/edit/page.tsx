@@ -40,6 +40,8 @@ import { toast } from "sonner";
 import { PreviewImagePopup } from "@/lib/components/ui/previewImage";
 import { TableEditBetter } from "@/lib/components/tablelist/TableBetter";
 import { apix } from "@/lib/utils/apix";
+import { TooltipBetter } from "@/lib/components/ui/tooltip-better";
+import { formatMoney } from "@/lib/components/form/field/TypeInput";
 
 function Page() {
   const local = useLocal({
@@ -626,6 +628,7 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
+                    required={true}
                     name={"document_date"}
                     label={"Document Date"}
                     type={"date"}
@@ -1172,20 +1175,19 @@ function Page() {
                     {
                       name: "total",
                       header: "Total",
-                      width: 50,
+                      width: 80,
                       renderCell: ({ fm_row }: any) => {
                         return (
-                          <>
-                            <Field
-                              tooltip="(Existing + Recruit PH + Recruit MT) - Promotion"
-                              fm={fm_row}
-                              name={"total"}
-                              label={"Approved by"}
-                              type={"money"}
-                              disabled={true}
-                              hidden_label={true}
-                            />
-                          </>
+                          <TooltipBetter
+                            content={
+                              "(Existing + Recruit PH + Recruit MT) - Promotion"
+                            }
+                            side="bottom"
+                          >
+                            <div className="py-2 px-2 w-full text-right bg-gray-100 rounded-md">
+                              {formatMoney(getValue(fm_row?.data, "total"))}
+                            </div>
+                          </TooltipBetter>
                         );
                       },
                     },
@@ -1193,6 +1195,7 @@ function Page() {
                     {
                       name: "action",
                       header: "Action",
+                      width: 25,
                       filter: false,
                       sortable: false,
                       renderCell: ({ row, name, cell, tbl }: any) => {

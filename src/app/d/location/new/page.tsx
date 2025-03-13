@@ -196,6 +196,7 @@ function Page() {
                     name={"document_date"}
                     label={"Document Date"}
                     type={"date"}
+                    required={true}
                     disabled={false}
                   />
                 </div>

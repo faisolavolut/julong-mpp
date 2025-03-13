@@ -927,7 +927,8 @@ function Page() {
                     onChange={() => {
                       fm.data.total_needs =
                         getNumber(fm?.data?.male_needs) +
-                        getNumber(fm?.data?.female_needs);
+                        getNumber(fm?.data?.female_needs) +
+                        getNumber(fm?.data?.any_gender);
                       fm.render();
                     }}
                   />
@@ -942,12 +943,27 @@ function Page() {
                     onChange={() => {
                       fm.data.total_needs =
                         getNumber(fm?.data?.male_needs) +
-                        getNumber(fm?.data?.female_needs);
+                        getNumber(fm?.data?.female_needs) +
+                        getNumber(fm?.data?.any_gender);
                       fm.render();
                     }}
                   />
                 </div>
-
+                <div>
+                  <Field
+                    fm={fm}
+                    name={"any_gender"}
+                    label={"Any Needs"}
+                    type={"money"}
+                    onChange={() => {
+                      fm.data.total_needs =
+                        getNumber(fm?.data?.male_needs) +
+                        getNumber(fm?.data?.female_needs) +
+                        getNumber(fm?.data?.any_gender);
+                      fm.render();
+                    }}
+                  />
+                </div>
                 <div>
                   <Field
                     fm={fm}
@@ -957,7 +973,6 @@ function Page() {
                     type={"money"}
                   />
                 </div>
-                <div></div>
                 <div>
                   <Field
                     fm={fm}

@@ -146,12 +146,19 @@ function Page() {
             <div className={cx("flex flex-col flex-wrap px-4 py-2")}>
               <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8">
                 <div>
-                  <Field fm={fm} name={"title"} label={"Name"} type={"text"} />
+                  <Field
+                    fm={fm}
+                    name={"title"}
+                    label={"Name"}
+                    type={"text"}
+                    required={true}
+                  />
                 </div>
                 <div></div>
                 <div>
                   <Field
                     fm={fm}
+                    required={true}
                     name={"start_date"}
                     label={"Start Date"}
                     type={"date"}
@@ -160,6 +167,7 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
+                    required={true}
                     name={"end_date"}
                     label={"End Date"}
                     type={"date"}
@@ -168,6 +176,7 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
+                    required={true}
                     name={"budget_start_date"}
                     label={"Budget Start date"}
                     type={"date"}
@@ -176,6 +185,7 @@ function Page() {
                 <div>
                   <Field
                     fm={fm}
+                    required={true}
                     name={"budget_end_date"}
                     label={"Budget End Date"}
                     type={"date"}
