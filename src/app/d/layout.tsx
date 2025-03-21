@@ -18,6 +18,7 @@ import { Bell, Home } from "lucide-react";
 import { SheetBetter } from "@/lib/components/ui/sheet";
 import { Menu } from "@/lib/svg/Menu";
 import { IoIosArrowBack } from "react-icons/io";
+import { NotificationSheet } from "@/lib/components/ui/notification";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -206,16 +207,12 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
             </ButtonLink>
           </div>
 
-          <button
-            onClick={() => setCurrentPage("/d/notification")}
-            className={cx(
-              currentPage === "/d/notification"
-                ? "text-primary"
-                : "text-gray-500"
-            )}
-          >
-            <Bell size={24} />
-          </button>
+          <div className={cx("text-gray-500 flex flex-row items-center")}>
+            <NotificationSheet
+              className="text-gray-500"
+              children={<Bell size={24} />}
+            />
+          </div>
           <SheetBetter
             open={isOpen}
             contentOpen={
