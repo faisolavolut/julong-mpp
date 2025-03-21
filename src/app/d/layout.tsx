@@ -190,16 +190,14 @@ const AdminLayout: React.FC<RootLayoutProps> = ({ children }) => {
           <div className="flex flex-row items-center">
             <ButtonLink
               variant="clean"
-              href="/d/dashboard"
+              href="/d/home"
               onClick={() => {
-                setCurrentPage("/d/dashboard");
+                setCurrentPage("/d/home");
               }}
             >
               <div
                 className={cx(
-                  currentPage === "/d/dashboard"
-                    ? "text-primary"
-                    : "text-gray-500"
+                  currentPage === "/d/home" ? "text-primary" : "text-gray-500"
                 )}
               >
                 <Home className="w-6 h-6" />
