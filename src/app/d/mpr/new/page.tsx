@@ -4,6 +4,7 @@ import { FormBetter } from "@/lib/components/form/FormBetter";
 import { Alert } from "@/lib/components/ui/alert";
 import { BreadcrumbBetterLink } from "@/lib/components/ui/breadcrumb-link";
 import { ButtonContainer } from "@/lib/components/ui/button";
+import { apix } from "@/lib/utils/apix";
 import api from "@/lib/utils/axios";
 import { normalDate } from "@/lib/utils/date";
 import { events } from "@/lib/utils/event";
@@ -550,17 +551,19 @@ function Page() {
                     search="local"
                     onLabel={"name"}
                     autoRefresh={true}
-                    disabled={!fm.data?.job_level}
+                    disabled={!fm.data?.job_level_id}
                     onLoad={async (param) => {
-                      if (!fm.data?.job_level) return [];
+                      if (!fm.data?.job_level_id) return [];
                       const params = await events("onload-param", param);
-                      const res: any = await api.get(
-                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organization-locations/organization/${fm.data?.for_organization_id}` +
-                          params
-                      );
-                      const data: any[] = res.data.data;
-                      if (!Array.isArray(data)) return [];
-                      return data;
+                      const res: any = await apix({
+                        port: "portal",
+                        value: "data.data",
+                        path:
+                          `/api/grades/job-level/${fm.data?.job_level_id}` +
+                          params,
+                        validate: "array",
+                      });
+                      return res;
                     }}
                   />
                 </div>

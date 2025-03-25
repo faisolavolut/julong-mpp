@@ -20,6 +20,7 @@ import {
 } from "@/lib/components/ui/dialog";
 import { PreviewImagePopup } from "@/lib/components/ui/previewImage";
 import { actionToast } from "@/lib/utils/action";
+import { apix } from "@/lib/utils/apix";
 import api from "@/lib/utils/axios";
 import { normalDate, shortDate } from "@/lib/utils/date";
 import { events } from "@/lib/utils/event";
@@ -685,7 +686,6 @@ function Page() {
                     }}
                   />
                 </div>
-
                 <div>
                   <Field
                     fm={fm}
@@ -746,7 +746,6 @@ function Page() {
                   />
                 </div>
                 <div></div>
-
                 <div>
                   <Field
                     fm={fm}
@@ -776,7 +775,6 @@ function Page() {
                     }}
                   />
                 </div>
-
                 <div>
                   <Field
                     fm={fm}
@@ -801,7 +799,6 @@ function Page() {
                     }}
                   />
                 </div>
-
                 <div>
                   <Field
                     fm={fm}
@@ -862,7 +859,6 @@ function Page() {
                     }}
                   />
                 </div>
-
                 <div>
                   <Field
                     fm={fm}
@@ -898,7 +894,6 @@ function Page() {
                     }}
                   />
                 </div>
-
                 <div>
                   <Field
                     fm={fm}
@@ -906,6 +901,34 @@ function Page() {
                     label={"Job Level"}
                     type={"text"}
                     disabled={true}
+                  />
+                </div>{" "}
+                <div>
+                  <Field
+                    fm={fm}
+                    required={true}
+                    target={"grade_id"}
+                    name={"grade"}
+                    label={"Grade"}
+                    type={"dropdown-async"}
+                    pagination={false}
+                    search="local"
+                    onLabel={"name"}
+                    autoRefresh={true}
+                    disabled={!fm.data?.job_level_id}
+                    onLoad={async (param) => {
+                      if (!fm.data?.job_level_id) return [];
+                      const params = await events("onload-param", param);
+                      const res: any = await apix({
+                        port: "portal",
+                        value: "data.data",
+                        path:
+                          `/api/grades/job-level/${fm.data?.job_level_id}` +
+                          params,
+                        validate: "array",
+                      });
+                      return res;
+                    }}
                   />
                 </div>
                 <div>
@@ -933,7 +956,6 @@ function Page() {
                     }}
                   />
                 </div>
-
                 <div>
                   <Field
                     fm={fm}
@@ -1040,7 +1062,6 @@ function Page() {
                 ) : (
                   <></>
                 )}
-
                 <div className="flex flex-col gap-y-1">
                   <div className="block mb-2 text-md font-medium text-gray-900 text-sm inline">
                     Age (Min/Max)
@@ -1071,7 +1092,6 @@ function Page() {
                     </div>
                   </div>
                 </div>
-
                 <div>
                   <Field
                     fm={fm}
@@ -1108,7 +1128,6 @@ function Page() {
                     }}
                   />
                 </div>
-
                 <div>
                   <Field
                     fm={fm}
