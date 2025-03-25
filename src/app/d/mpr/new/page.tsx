@@ -537,6 +537,33 @@ function Page() {
                     disabled={true}
                   />
                 </div>
+
+                <div>
+                  <Field
+                    fm={fm}
+                    required={true}
+                    target={"grade_id"}
+                    name={"grade"}
+                    label={"Grade"}
+                    type={"dropdown-async"}
+                    pagination={false}
+                    search="local"
+                    onLabel={"name"}
+                    autoRefresh={true}
+                    disabled={!fm.data?.job_level}
+                    onLoad={async (param) => {
+                      if (!fm.data?.job_level) return [];
+                      const params = await events("onload-param", param);
+                      const res: any = await api.get(
+                        `${process.env.NEXT_PUBLIC_API_PORTAL}/api/organization-locations/organization/${fm.data?.for_organization_id}` +
+                          params
+                      );
+                      const data: any[] = res.data.data;
+                      if (!Array.isArray(data)) return [];
+                      return data;
+                    }}
+                  />
+                </div>
                 <div>
                   <Field
                     fm={fm}
@@ -643,7 +670,7 @@ function Page() {
                 {["penggantian", "penambahan"].includes(
                   fm.data?.is_replacement
                 ) ? (
-                  <div className="col-span-2">
+                  <div className="md:col-span-2">
                     <Field
                       hidden_label={true}
                       fm={fm}
@@ -868,7 +895,7 @@ function Page() {
                     }}
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="md:col-span-2">
                   <Field
                     fm={fm}
                     required={true}
@@ -878,7 +905,7 @@ function Page() {
                   />
                 </div>
                 <div></div>
-                <div className="col-span-2">
+                <div className="md:col-span-2">
                   <Field
                     fm={fm}
                     required={true}
@@ -924,7 +951,7 @@ function Page() {
                     type={"text"}
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="md:col-span-2">
                   <Field
                     fm={fm}
                     required={true}

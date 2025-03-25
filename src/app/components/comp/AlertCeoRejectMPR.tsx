@@ -66,7 +66,7 @@ export const AlertCeoRejectMPR: FC<any> = ({ lc }) => {
                 return (
                   <div className={cx("flex flex-col flex-wrap")}>
                     <div className="grid gap-4 mb-4 md:gap-6 md:grid-cols-2 sm:mb-8">
-                      <div className="col-span-2">
+                      <div className="md:col-span-2">
                         <Field
                           fm={fm}
                           name={"notes"}
