@@ -7,6 +7,7 @@ import { getNumber } from "@/lib/utils/getNumber";
 function Page() {
   return (
     <TableUI
+      filter={false}
       title="Organizations"
       name="Organization"
       header={{

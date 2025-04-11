@@ -63,7 +63,7 @@ export const columnMpr = (data: any) => {
           name: "document_date",
           header: "Document Date",
           renderCell: ({ row, name, cell }: any) => {
-            return <>{shortDate(new Date())}</>;
+            return <>{shortDate(getValue(row, name))}</>;
           },
         },
         {
@@ -309,7 +309,7 @@ export const columnMpr = (data: any) => {
           name: "document_date",
           header: "Document Date",
           renderCell: ({ row, name, cell }: any) => {
-            return <>{shortDate(new Date())}</>;
+            return <>{shortDate(getValue(row, name))}</>;
           },
         },
         {
