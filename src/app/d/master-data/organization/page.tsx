@@ -23,6 +23,20 @@ function Page() {
             return <>{row.name}</>;
           },
         },
+        {
+          name: "region",
+          header: "Region",
+          renderCell: ({ row, name, cell }: any) => {
+            return <>{row.name}</>;
+          },
+        },
+        {
+          name: "OrganizationType.name",
+          header: "Organization Type",
+          renderCell: ({ row, name, cell }: any) => {
+            return <>{row.name}</>;
+          },
+        },
       ]}
       onLoad={async (param: any) => {
         const params = await events("onload-param", param);
