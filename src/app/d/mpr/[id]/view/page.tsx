@@ -625,6 +625,12 @@ function Page() {
         return {
           id,
           ...data,
+          grade: data?.grade_id
+            ? {
+                id: data?.grade_id,
+                name: data?.grade_name,
+              }
+            : null,
           categories: categories,
           divisi: data.for_organization_structure,
           job_level: data.job_level_name,

@@ -442,6 +442,12 @@ function Page() {
         const prm: any = {
           id,
           grade_id: data?.grade_id,
+          grade: data?.grade_id
+            ? {
+                id: data?.grade_id,
+                name: data?.grade_name,
+              }
+            : null,
           document_number: data.document_number,
           document_date: normalDate(data.document_date),
           mpp_period_id: data.mpp_period_id,
