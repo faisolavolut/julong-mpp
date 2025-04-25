@@ -66,6 +66,9 @@ function Page() {
         {
           name: "start_date",
           header: "Start Date",
+          type: "date",
+          labelFilter: "Date",
+          nameFilter: ["start_date", "end_date"],
           renderCell: ({ row, name, cell }: any) => {
             return <>{shortDate(getValue(row, name))}</>;
           },
@@ -73,6 +76,7 @@ function Page() {
         {
           name: "end_date",
           header: "End Date",
+          filter: false,
           renderCell: ({ row, name, cell }: any) => {
             return <>{shortDate(getValue(row, name))}</>;
           },
@@ -80,6 +84,9 @@ function Page() {
         {
           name: "budget_start_date",
           header: "Budget Start Date",
+          type: "date",
+          labelFilter: "Budget Date",
+          nameFilter: ["budget_start_date", "budget_end_date"],
           renderCell: ({ row, name, cell }: any) => {
             return <>{shortDate(getValue(row, name))}</>;
           },
@@ -87,6 +94,7 @@ function Page() {
         {
           name: "budget_end_date",
           header: "Budget End Date",
+          filter: false,
           renderCell: ({ row, name, cell }: any) => {
             return <>{shortDate(getValue(row, name))}</>;
           },
