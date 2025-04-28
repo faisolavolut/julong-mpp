@@ -78,6 +78,8 @@ export const columnMpp = (data: any) => {
           {
             name: "document_date",
             header: "Document Date",
+            labelFilter: "Document Date",
+            type: "date",
             renderCell: ({ row, name, cell }: any) => {
               return <>{shortDate(new Date(getValue(row, name)))}</>;
             },
@@ -151,6 +153,8 @@ export const columnMpp = (data: any) => {
           {
             name: "mp_planning_header.document_date",
             header: "Document Date",
+            labelFilter: "Document Date",
+            type: "date",
             renderCell: ({ row, name, cell }: any) => {
               return <>{shortDate(new Date(getValue(row, name)))}</>;
             },
@@ -223,6 +227,9 @@ export const columnMpp = (data: any) => {
           {
             name: "mpp_period.budget_start_date",
             header: "Budget Start Date",
+            type: "date",
+            labelFilter: "Budget Date",
+            nameFilter: ["budget_start_date", "budget_end_date"],
             renderCell: ({ row, name, cell }: any) => {
               return <>{shortDate(getValue(row, name))}</>;
             },
@@ -230,6 +237,7 @@ export const columnMpp = (data: any) => {
           {
             name: "mpp_period.budget_end_date",
             header: "Budget End Date",
+            filter: false,
             renderCell: ({ row, name, cell }: any) => {
               return <>{shortDate(getValue(row, name))}</>;
             },
@@ -269,6 +277,8 @@ export const columnMpp = (data: any) => {
           {
             name: "mp_planning_header.document_date",
             header: "Document Date",
+            type: "date",
+            labelFilter: "Document Date",
             renderCell: ({ row, name, cell }: any) => {
               return <>{shortDate(new Date(getValue(row, name)))}</>;
             },
@@ -372,6 +382,8 @@ export const columnMpp = (data: any) => {
           {
             name: "document_date",
             header: "Document Date",
+            type: "date",
+            labelFilter: "Document Date",
             renderCell: ({ row, name, cell }: any) => {
               return <>{shortDate(new Date(getValue(row, name)))}</>;
             },
@@ -443,6 +455,8 @@ export const columnMpp = (data: any) => {
           {
             name: "document_date",
             header: "Document Date",
+            type: "date",
+            labelFilter: "Document Date",
             renderCell: ({ row, name, cell }: any) => {
               return <>{shortDate(new Date(getValue(row, name)))}</>;
             },
@@ -514,6 +528,8 @@ export const columnMpp = (data: any) => {
           {
             name: "document_date",
             header: "Document Date",
+            type: "date",
+            labelFilter: "Document Date",
             renderCell: ({ row, name, cell }: any) => {
               return <>{shortDate(new Date(getValue(row, name)))}</>;
             },
@@ -566,6 +582,8 @@ export const columnMpp = (data: any) => {
           {
             name: "document_date",
             header: "Document Date",
+            type: "date",
+            labelFilter: "Document Date",
             renderCell: ({ row, name, cell }: any) => {
               return <>{shortDate(new Date(getValue(row, name)))}</>;
             },
