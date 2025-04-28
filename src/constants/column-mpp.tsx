@@ -6,6 +6,7 @@ import get from "lodash.get";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { IoEye } from "react-icons/io5";
 import { getStatusLabel } from "./status-mpp";
+import { Column } from "@/lib/components/tablelist/TableList";
 export const rolesMpp = (roles: any[]) => {
   const data = [
     {
@@ -42,7 +43,7 @@ export const rolesMpp = (roles: any[]) => {
   if (getAccess("read-mpp", roles)) return "superadmin";
   return yourRole;
 };
-export const columnMpp = (data: any) => {
+export const columnMpp = <T,>(data: any): Column<T>[] => {
   const access = rolesMpp(
     Array.isArray(data?.local?.roles)
       ? data?.local?.roles
