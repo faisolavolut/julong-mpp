@@ -66,7 +66,6 @@ function Page() {
           path: "/api/users/me",
           method: "get",
         });
-        console.log({ res });
         local.profile = {
           ...res,
           verif: res?.verified_user_profile !== "ACTIVE" ? false : true,

@@ -32,7 +32,6 @@ function Page() {
         const res = await api.get(
           `${process.env.NEXT_PUBLIC_API_MPP}/api/batch/need-approval?approver_type=DIRECTOR`
         );
-        console.log({ res });
         if (res?.data?.data) {
           local.data = res?.data?.data;
           local.can_add = true;
